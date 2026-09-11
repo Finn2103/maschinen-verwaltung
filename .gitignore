@@ -44,3 +44,7 @@ supabase/.temp/
 Thumbs.db
 .idea/
 *.swp
+
+# drawio Auto-Backups, Office-Sperrdateien
+.$*.bkp
+~$*

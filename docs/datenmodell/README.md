@@ -4,9 +4,13 @@ Reihenfolge: fachliches Bild zuerst, Tabellen danach.
 
 | Datei | Inhalt | Status |
 | --- | --- | --- |
-| `erd-chen.md` | ERD in Chen-Notation — Entitäten, Beziehungen, Kardinalitäten, Schlüssel | offen |
+| `ERD-Maschinenverwaltung.drawio` | ERD in Chen-Notation, Arbeitsstand (drawio-Quelle) | Entwurf |
+| `erd_maschinenverleih_chen.svg` | Export des ERD zum Ansehen ohne drawio | Entwurf |
 | `relational.md` | Überführung in Relationen, Normalisierung (3. NF), Schlüssel und Fremdschlüssel | offen |
 | `schema.sql` | Explizites SQL-DDL für PostgreSQL | offen |
+
+Die drawio-Datei ist die Quelle — das SVG wird daraus exportiert und bei
+Änderungen mit erneuert, damit beide zusammenpassen.
 
 ## Vorgaben, die hier gelten
 

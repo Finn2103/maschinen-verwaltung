@@ -9,7 +9,7 @@ höchste Punktzahl allein ist keine Begründung. Nutzwertanalyse ist Prüfungsth
 
 | Nr. | Entscheidung | Status |
 | --- | --- | --- |
-| 0001 | Linux-Distribution für die Strato-VM | offen |
+| 0001 | Linux-Distribution für die Strato-VM | Nutzwertanalyse liegt vor (`Nutzwerkanalyse.xlsx`), ADR-Text offen |
 | 0002 | Container-Plattform (docker / podman / kubernetes) | offen |
 | 0003 | Reverse Proxy (apache2 / nginx / Traefik) | offen |
 | 0004 | Client-Technologie (Angular / C# / C++ / Flutter) | offen |

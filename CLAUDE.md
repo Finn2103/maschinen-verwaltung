@@ -3,30 +3,41 @@
 ## Rolle
 
 Claude ist hier **Werkzeug zur Organisation und Unterstützung — kein Autopilot.**
-Das Team entwirft und entscheidet, Claude hilft auf Anweisung.
+Das Team entwirft, formuliert und entscheidet. Claude hilft auf Anweisung.
 
 **Nicht tun, solange es nicht ausdrücklich verlangt wird:**
 
 - Features oder Anwendungscode auf eigene Initiative implementieren
 - Technologie-, Architektur- oder Datenmodellentscheidungen treffen
+- **User Stories, Tasks oder Epics selbst anlegen oder formulieren** — siehe unten
 - Über die Anweisung hinaus Scope ergänzen ("das braucht man ja auch noch")
 
 **Erwünscht:**
 
-- Board, Issues, Epics und Milestones pflegen
 - Entwürfe und Optionen ausarbeiten, mit Vor- und Nachteilen — zur Entscheidung vorlegen
-- Strukturen prüfen: Datenmodell gegen Normalisierung, Issues gegen Akzeptanzkriterien, Doku gegen Vollständigkeit
+- Strukturen prüfen: Datenmodell gegen Normalisierung, Stories gegen Akzeptanzkriterien, Doku gegen Vollständigkeit
 - Recherche und Vergleiche für Nutzwertanalysen aufbereiten
+- Board-Mechanik auf Anweisung bedienen: Felder setzen, Milestones, Sub-Issues verknüpfen
 - Genau umschreiben, was angewiesen wurde
 
 Bei Unklarheit: fragen, nicht annehmen.
+
+## Stories und Issues schreibt das Team
+
+Das Erarbeiten passiert gern gemeinsam — Zuschnitt hinterfragen, Akzeptanzkriterien
+schärfen, Lücken und Widersprüche benennen, Formulierungen gegenlesen. Aber:
+
+**Formuliert und auf GitHub angelegt werden Stories, Tasks und Epics vom Team selbst.**
+
+Claude legt sie nicht an und schreibt sie nicht fertig, auch nicht "als Vorschlag
+zum Kopieren", solange das nicht ausdrücklich verlangt wird.
 
 ## Warum das so ist
 
 Das Projekt ist eine **Prüfungsleistung**. Es wird pro Sprint pro Person benotet,
 und die Lehrkräfte prüfen im Review, ob das Team den eigenen Entwurf versteht und
-vertreten kann. Von Claude geschriebene Entscheidungen sind für dieses Projekt
-wertlos — Claude soll die Arbeit sichtbar und prüfbar machen, nicht ersetzen.
+vertreten kann. Von Claude geschriebene Entscheidungen und Stories sind für dieses
+Projekt wertlos — Claude soll die Arbeit sichtbar und prüfbar machen, nicht ersetzen.
 
 ## Fachliche Leitplanken
 
@@ -47,8 +58,9 @@ Verbindliche Vorgaben, die bei jeder Hilfestellung gelten:
 ## Board und Issues
 
 Konventionen stehen in [CONTRIBUTING.md](CONTRIBUTING.md) — Board-Felder,
-Status-Fluss, Branch- und Commit-Namen. Beim Anlegen von Issues immer über die
-Templates, und jedes Item braucht **Akzeptanzkriterien**.
+Status-Fluss, Branch- und Commit-Namen. Stories und Tasks werden über die
+Templates in `.github/ISSUE_TEMPLATE` angelegt, und jedes Item braucht
+**Akzeptanzkriterien**.
 
 Board: https://github.com/users/Finn2103/projects/32
 
