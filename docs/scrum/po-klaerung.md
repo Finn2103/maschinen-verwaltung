@@ -5,8 +5,13 @@ keine Entscheidungen des Teams — die Punkte 1, 2 und 6 sind formal Sache des
 Product Owners.
 
 **Stand:** Board [Maschinenverwaltung-IHK](https://github.com/users/Finn2103/projects/32)
-mit 15 Items, alle im Status `Backlog`. Repo steht, Branch-Schutz auf `main` aktiv.
+mit 19 Items, alle im Status `Backlog`. Repo steht, Branch-Schutz auf `main` aktiv.
 `prio` und `story-points` sind noch leer.
+
+Die Items wurden im Refinement neu gefasst — Begründung je Item in
+[`backlog-neufassung.md`](backlog-neufassung.md). Die Punkte 3 bis 5 unten sind
+dadurch **als Vorschlag bereits umgesetzt** und brauchen nur noch die Bestätigung
+des Product Owners.
 
 ---
 
@@ -36,9 +41,13 @@ Review klar ist, warum etwas fehlt.
 
 ## 2. #3 Predictive Maintenance hat im Team keine Fachrichtung
 
-Das Item trägt `fachrichtung-DP` und ist mit XL (> 16 Std.) geschätzt. Unser Team
-besteht aus einer Anwendungsentwicklung und drei Systemintegrationen — Daten- und
+Das Item trägt `fachrichtung-DP` und ist mit XL (> 16 Std.) geschätzt. Gruppe 11
+besteht aus einer Anwendungsentwicklung und vier Systemintegrationen — Daten- und
 Prozessanalyse ist nicht besetzt.
+
+Dazu kommt: Lernfeld LF10c fordert ausdrücklich *Werkzeuge des maschinellen Lernens*.
+Die Akzeptanzkriterien lassen sich auch regelbasiert erfüllen — dann wäre LF10c aber
+nicht abgedeckt.
 
 **Frage:** Wie soll damit umgegangen werden?
 
@@ -73,8 +82,11 @@ Echte User Stories mit einer Produktrolle sind #1 (Kunde), #2 (Verleih-Mitarbeit
 #3 (Werkstattplaner), #7 (Verleih-Mitarbeiter), #8 (Systemverantwortlicher) und
 #9 (Kunde) — also sechs von fünfzehn.
 
-**Frage:** Sollen die neun technischen Items auf `work-type = Task` umgestellt werden?
-Das wäre näher an der Vorgabe. Oder ist die Story-Form für alles gewollt?
+**Umgesetzt als Vorschlag:** Die neun Items stehen jetzt als `work-type = Task` mit
+Ziel/Umfang statt einer erfundenen Rolle. Der Originaltext ist als Kommentar unter
+jedem Issue gesichert.
+
+**Frage:** Wird das bestätigt, oder ist die Story-Form für alles gewollt?
 
 ---
 
@@ -84,12 +96,12 @@ Das wäre näher an der Vorgabe. Oder ist die Story-Form für alles gewollt?
 Daueraufgabe — Monitoring, Updates, Incident Response. Ein Sprint-Backlog-Item muss
 innerhalb eines Sprints fertig werden können. Dieses kann das nicht: es ist nie fertig.
 
-**Frage:** Wie soll das geführt werden?
+**Umgesetzt als Vorschlag:** Aufgeteilt in vier abschließbare Items — #14 Monitoring,
+#17 Update-Prozess, #18 Incident Response, #19 Zugriffslogs.
 
-- in abschließbare Teile schneiden („Monitoring eingerichtet", „Update-Prozess
-  dokumentiert", „Incident-Response-Ablauf steht"), oder
-- als Daueraufgabe außerhalb des Sprint-Backlogs, oder
-- als Teil der Definition of Done der anderen Infrastruktur-Items
+**Frage:** Wird das bestätigt? Alternativen wären, die Daueraufgabe außerhalb des
+Sprint-Backlogs zu führen oder sie in die Definition of Done der anderen
+Infrastruktur-Items zu ziehen.
 
 ---
 
@@ -98,16 +110,23 @@ innerhalb eines Sprints fertig werden können. Dieses kann das nicht: es ist nie
 Beide Items sind Nutzwertanalysen — Datenbanksystem beziehungsweise Mailserver
 auswählen. Am Ende steht ein dokumentierter Beschluss, keine lauffähige Funktion.
 
-**Frage:** Als eigene Items führen (dann `work-type = Task`), oder als Vorarbeit in
-#11 und #13 hineinziehen? Da die Nutzwertanalyse selbst Prüfungsthema ist, sprechen
-wir uns für eigene, sichtbare Items aus — aber das ist eine Frage, nicht unsere
-Entscheidung.
+**Umgesetzt als Vorschlag:** Beide bleiben eigene Items, jetzt als Task mit Label
+`entscheidung` — weil die Nutzwertanalyse selbst Prüfungsthema ist und sichtbar
+bleiben soll.
+
+Bei **#10** kommt ein Widerspruch dazu: Folie 08 gibt die Supabase-APIs vor, und die
+laufen ausschließlich auf PostgreSQL. Eine ergebnisoffene Wahl zwischen drei
+Datenbanksystemen gibt es damit nicht.
+
+**Frage:** Ist die Datenbank tatsächlich frei wählbar, oder gilt die Architektur von
+Folie 08? Die Nutzwertanalyse ist vorerst so formuliert, dass sie die vorgegebene Wahl
+begründet.
 
 ---
 
 ## 6. Priorisierung des Backlogs
 
-Das Feld `prio` ist bei allen 15 Items leer. Das Ordnen des Product Backlog ist
+Das Feld `prio` ist bei allen 19 Items leer. Das Ordnen des Product Backlog ist
 Aufgabe des Product Owners. Delegieren ist möglich, die Verantwortung bleibt beim PO.
 
 **Frage:** Gibt der PO die Reihenfolge vor, oder soll das Team priorisieren und sich
@@ -125,8 +144,8 @@ Rechnet man die fünf Items ohne Fachrichtung nach Inhalt zu, ergibt sich:
 
 | | Items | Aufwand | Personen | je Person |
 | --- | --- | --- | --- | --- |
-| Anwendungsentwicklung | #1 #2 #6 #7 #8 #9 | ~88 Std. | 1 | ~88 Std. |
-| Systemintegration | #4 #5 #10–#15 | ~96 Std. | 3 | ~32 Std. |
+| Anwendungsentwicklung | #1 #2 #6 #7 #8 #9 #20 | ~88 Std. | 1 | ~88 Std. |
+| Systemintegration | #4 #5 #10–#15, #17–#19 | ~96 Std. | 4 | ~24 Std. |
 | Daten-/Prozessanalyse | #3 | > 16 Std. | 0 | — |
 
 Dieselbe Person, die die gesamte Anwendungsentwicklung trägt, ist auch Scrum Master.
@@ -155,7 +174,8 @@ Zu bedenken sind die Herbstferien, die in einen Sprint fallen.
 
 ## Was wir mitbringen
 
-- Board mit 15 Items, Feldern und zwei Sichten
+- Board mit 19 Items, Feldern und zwei Sichten
+- Neufassung aller Items mit Begründung je Änderung (`docs/scrum/backlog-neufassung.md`)
 - ERD in Chen-Notation, Arbeitsstand (`docs/datenmodell`)
 - Nutzwertanalyse Linux-Distribution (`docs/adr`)
 - Entwurf der Definition of Done (`docs/scrum/definition-of-done.md`)

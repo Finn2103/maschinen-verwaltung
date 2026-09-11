@@ -58,12 +58,18 @@ Sprints à 2–3 Wochen, Review und Retrospektive in Präsenz.
 
 ## Team
 
-| Rolle | Person |
-| --- | --- |
-| Scrum Master, Anwendungsentwicklung | Finn2103 |
-| Systemintegration | _tbd_ |
-| Systemintegration | _tbd_ |
-| Systemintegration | _tbd_ |
+Gruppe 11 — fünf Personen, eine Anwendungsentwicklung, vier Systemintegration.
+
+| Rolle | Person | GitHub |
+| --- | --- | --- |
+| Scrum Master, Anwendungsentwicklung | Finn Jendras | [@Finn2103](https://github.com/Finn2103) |
+| Systemintegration | Nico Laeser | [@nicolaeser](https://github.com/nicolaeser) |
+| Systemintegration | Alexa Börsch | _offen_ |
+| Systemintegration | Laurin Schmitz | _offen_ |
+| Systemintegration | Justin Kelm | _offen_ |
+
+[@WinOnWave](https://github.com/WinOnWave) ist bereits Collaborator, im Profil steht
+aber kein Name — die Zuordnung fehlt noch.
 
 ## Dokumentation
 
