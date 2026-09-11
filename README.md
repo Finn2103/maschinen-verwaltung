@@ -58,12 +58,19 @@ Sprints à 2–3 Wochen, Review und Retrospektive in Präsenz.
 
 ## Team
 
-| Rolle | Person |
-| --- | --- |
-| Scrum Master, Anwendungsentwicklung | Finn2103 |
-| Systemintegration | _tbd_ |
-| Systemintegration | _tbd_ |
-| Systemintegration | _tbd_ |
+Gruppe 11 — fünf Personen, eine Anwendungsentwicklung, vier Systemintegration.
+
+| Rolle | Person | GitHub |
+| --- | --- | --- |
+| Scrum Master, Anwendungsentwicklung | Finn Jendras | [@Finn2103](https://github.com/Finn2103) |
+| Systemintegration | Alexa Börsch | [@WinOnWave](https://github.com/WinOnWave) |
+| Systemintegration | Nico Laeser | [@nicolaeser](https://github.com/nicolaeser) |
+| Systemintegration | Laurin Schmitz | [@24it5schmitz](https://github.com/24it5schmitz) |
+| Systemintegration | Justin Kelm | [@Justin24it5](https://github.com/Justin24it5) |
+
+Die Anwendungsentwicklung ist einfach besetzt. Ein Teil dieser Arbeit wird an die
+Systemintegration abgegeben — die Aufteilung macht das Team im ersten Sprint Planning
+am **Donnerstag, 17.09.2026**.
 
 ## Dokumentation
 
@@ -72,4 +79,4 @@ Sprints à 2–3 Wochen, Review und Retrospektive in Präsenz.
 | [docs/datenmodell](docs/datenmodell) | ERD (Chen), relationales Modell, SQL-DDL |
 | [docs/uml](docs/uml) | Use-Case-, Klassen-, Sequenz-, Komponentendiagramme |
 | [docs/adr](docs/adr) | Architekturentscheidungen, Nutzwertanalysen |
-| [docs/scrum](docs/scrum) | Definition of Done, Sprint-Reviews, Retrospektiven |
+| [docs/scrum](docs/scrum) | Definition of Done, Backlog-Neufassung, PO-Klärung, Kickoff-Übersicht, Reviews und Retrospektiven |
