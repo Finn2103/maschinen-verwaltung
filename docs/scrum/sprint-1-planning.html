@@ -254,22 +254,38 @@
       <li><label><input type="checkbox" data-k="v1"><span><b>Board prüfen</b>
         <span class="sub">19 Items, alle auf <code>Backlog</code>. Milestones Sprint 1–6 liegen an.
         Alle vier Kollegen haben Schreibrecht auf dem Board.</span></span></label></li>
-      <li><label><input type="checkbox" data-k="v2"><span><b>Die PO-Fragen sind raus</b>
-        <span class="sub">Die acht Punkte aus <code>docs/scrum/po-klaerung.md</code>. Besonders:
-        Abrechnung/Shop/Marketing fehlen im Backlog, und <code>prio</code> ist bei allen Items leer.
-        Ohne Antwort planen wir nach technischer Abhängigkeit statt nach Wert.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="v2"><span><b>Entscheidungslog gelesen</b>
+        <span class="sub"><code>docs/scrum/entscheidungen.md</code> — was vom Product Owner kommt,
+        was das Team geändert hat, und was noch offen ist. Wichtig für heute: <b>der Product Owner
+        priorisiert nicht mit</b>, das macht das Team. Und die drei fehlenden Bereiche gehören zum
+        Auftrag, es gibt nur keine Stories dafür.</span></span></label></li>
       <li><label><input type="checkbox" data-k="v3"><span><b>Entwurf der Definition of Done gelesen</b>
         <span class="sub">Alle fünf, vor dem Termin. Heute wird sie beschlossen, nicht
         erstmals vorgelesen.</span></span></label></li>
     </ul>
     <div class="callout warn">
-      <span class="ctag">Der Product Owner ist nicht im Raum</span>
+      <span class="ctag">Der Product Owner ist nicht im Raum — und priorisiert auch nicht</span>
       <p>Topic One des Sprint Plannings — „warum ist dieser Sprint wertvoll?" — gehört laut
-        Scrum Guide dem Product Owner. Die Lehrkräfte werden nicht dabeisitzen.</p>
-      <p><b>Also:</b> Das Sprint Goal als <i>Vorschlag</i> formulieren und nach dem Termin
-        bestätigen lassen. Nicht als eigene Entscheidung hinschreiben — und im Termin
-        festhalten, dass es ein Vorschlag ist. Das kostet zwei Sätze und rettet die
-        Argumentation im Review.</p>
+        Scrum Guide dem Product Owner, ebenso das Ordnen des Product Backlog. Die Lehrkräfte
+        machen aber nur Reviews und geben Feedback. Beides fällt damit faktisch ans Team.</p>
+      <p><b>Das ist zulässig</b> — der Product Owner darf delegieren und bleibt verantwortlich.
+        Es muss nur <b>als Delegation dokumentiert</b> sein und nicht so aussehen, als hätte
+        sich das Team die Backlog-Hoheit genommen. Steht als Punkt 6 in
+        <code>docs/scrum/entscheidungen.md</code>.</p>
+      <p><b>Praktisch heute:</b> Sprint Goal und Reihenfolge selbst festlegen, beides als
+        Vorschlag markieren und im nächsten Review bestätigen lassen. Zwei Sätze Aufwand,
+        und die Argumentation steht.</p>
+    </div>
+    <div class="callout">
+      <span class="ctag">Der Technologie-Stack ist frei</span>
+      <p>Verbindlich sind nur fünf Punkte: objektorientierter Ansatz · Client-Server-Architektur
+        und Datenbank-API · kein implizit erzeugtes Schema · Infrastructure as Code ·
+        IT-Grundschutz, ISO&nbsp;9241, UML. Das Architekturbild der Aufgabenstellung
+        (Authelia, Kong, Supabase, PostgreSQL) ist <b>Orientierung, keine Vorgabe</b>.</p>
+      <p>Heißt für heute: <b>#10 Datenbankwahl und #12 Mailserverwahl sind echte, offene
+        Entscheidungen.</b> Die Pflichtliste liefert dabei die Ausschlusskriterien — was sich
+        nicht über eine Datenbank-API ansprechen lässt oder das Schema implizit erzeugt, fällt
+        aus der Bewertung, egal wie gut die Punktzahl ist.</p>
     </div>
   </section>
 
@@ -392,13 +408,15 @@
 
     <div class="callout warn">
       <span class="ctag">Die Zahl, die heute alles bestimmt</span>
-      <p>Eine Person hat je Sprint <b>12 bis 18 Stunden</b> Entwicklungszeit — je nachdem, wie
-        viel Freitag übrig bleibt. Ein Item mit <b>L (16 Std.)</b> ist damit praktisch der
-        ganze Sprint dieser Person, ein <b>XL</b> passt gar nicht.</p>
-      <p>Betroffen: <b>L bei #1, #5, #6, #7, #8, #11, #13</b> und <b>XL bei #3 und #9</b> — neun
-        von neunzehn Items. Die müssen <b>geteilt oder zu zweit bearbeitet</b> werden. Nur die
-        M-Items (#2, #4, #10, #12, #15) passen einer Person in einen Sprint, und auch das nur,
-        wenn sie sonst nichts nimmt.</p>
+      <p>Die „Std." der Vorlage sind <b>Schulstunden</b> — das ist geklärt. Gerechnet wird in
+        Zeitstunden, also <b>M = 6,0 h · L = 12,0 h · XL = über 12,0 h</b>.</p>
+      <p>Eine Person hat je Sprint <b>12 bis 18 Zeitstunden</b>. Ein <b>L-Item füllt damit den
+        ganzen Sprint einer Person</b>, wenn der Freitag knapp ist, und zwei Drittel, wenn er
+        gut ist. Ein <b>XL-Item passt nicht</b> in einen Sprint — das betrifft <b>#3</b> und
+        <b>#9</b>, die müssen geteilt oder zu zweit bearbeitet werden.</p>
+      <p>Insgesamt entspannter als befürchtet: das Backlog summiert sich auf ≈ 150 Zeitstunden
+        gegen 360 bis 540 Kapazität. <b>Rund ein Drittel ist belegt</b> — Platz für Abrechnung,
+        Shop und Marketing, die laut Product Owner dazugehören und nur noch keine Stories haben.</p>
       <p><b>Nachfragen:</b> Ob die „Std." der Vorlage Schul- oder Zeitstunden sind, steht
         nirgends. Bei Schulstunden wäre L ≈ 12 Zeitstunden — also immer noch fast ein
         kompletter Sprint für eine Person. Die Schlussfolgerung bleibt dieselbe.</p>
@@ -428,10 +446,11 @@
     <div class="callout ok">
       <span class="ctag">Der Blick auf das Ganze</span>
       <p>Über sechs Sprints kommt das Team auf <b>360 bis 540 Zeitstunden</b> Entwicklungszeit
-        bis zum 09.12. Die Schätzung der Vorlage summiert sich auf <b>etwa 200 Stunden</b> — und
-        darin fehlen Abrechnung, Shop und Marketing noch vollständig.</p>
-      <p>Machbar, aber nicht großzügig. Wenn die drei fehlenden Bereiche dazukommen, wird es
-        eng — genau das steht als Punkt 1 in <code>po-klaerung.md</code>.</p>
+        bis zum 09.12. Die Schätzung der Vorlage entspricht <b>etwa 150 Zeitstunden</b> — also
+        rund einem Drittel.</p>
+      <p>Der Rest ist nicht frei: Abrechnung, Shop und Marketing gehören zum Auftrag, haben aber
+        noch keine Stories. Die schreibt das Team selbst, und zwar rechtzeitig — nicht erst im
+        letzten Sprint.</p>
     </div>
   </section>
 
@@ -618,7 +637,7 @@
         besprochen</b> werden, nicht erst, wenn es ab Sprint 2 drückt.</li>
       <li><b>Die offene Lernfeld-Frage.</b> Zählt eine Story mit AE-Lernfeld für die Note der
         Person, die sie tatsächlich umsetzt? Solange das nicht geklärt ist, keine feste
-        Zusage über Sprint 1 hinaus. Steht als Punkt 7 in <code>po-klaerung.md</code>.</li>
+        Zusage über Sprint 1 hinaus. Steht als Punkt 7 in <code>entscheidungen.md</code>.</li>
       <li><b>Wer den Server anfasst.</b> Es gibt eine VM. Wenn vier Leute gleichzeitig
         konfigurieren, ist am Abend niemand mehr sicher, was wirkt. Absprechen, wer schreibt —
         und alles sofort als Code ins Repo, sonst ist es morgen nicht reproduzierbar.</li>

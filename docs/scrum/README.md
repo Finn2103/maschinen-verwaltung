@@ -8,7 +8,7 @@ Pro Sprint eine Note je Person — die Fachnote besteht zu 50 % aus dem Projekt.
 | --- | --- | --- |
 | `projektstart.html` | Projektüberblick zum Vorstellen im Team — Quelle des geteilten Artefakts | laufend |
 | `sprint-1-planning.html` | Moderationsleitfaden für das erste Sprint Planning am 17.09. | bereit |
-| `po-klaerung.md` | Offene Fragen an die Lehrkräfte als Product Owner | offen |
+| `entscheidungen.md` | Was vom Product Owner kommt, was das Team geändert hat, was offen ist | laufend |
 | `backlog-neufassung.md` | Neugefasste Items mit Begründung je Änderung | Vorschlag fürs Refinement |
 | `definition-of-done.md` | Wann ein Item fertig ist | Entwurf |
 | `sprint-<n>/review.md` | Was im Review gezeigt und abgenommen wurde | pro Sprint |
@@ -51,7 +51,7 @@ Schultage**, und der erste geht für Review, Retrospektive und Planning weg.
 Anwesenheit: **Donnerstag 7:55–14:40** (8 Schulstunden, reiner Projekttag),
 **Freitag 7:55–12:55** (6 Schulstunden, davon Wirtschaft). Entwicklungszeit je Person
 und Sprint: **12 bis 18 Zeitstunden**, je nach Projektanteil am Freitag — Team 60 bis 90
-je Sprint. Die Rechnung steht in `po-klaerung.md` Punkt 7.
+je Sprint. Die Rechnung steht in `entscheidungen.md` Punkt 7.
 
 Die Termine der NRW-Herbstferien 2026 sind noch nicht geprüft — sie fallen
 voraussichtlich in Sprint 3. Vor dem Planning von Sprint 2 klären und den Sprint
