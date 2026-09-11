@@ -7,6 +7,7 @@ Pro Sprint eine Note je Person — die Fachnote besteht zu 50 % aus dem Projekt.
 | Datei | Inhalt | Status |
 | --- | --- | --- |
 | `po-klaerung.md` | Offene Fragen an die Lehrkräfte als Product Owner | offen |
+| `backlog-neufassung.md` | Neugefasste Items mit Begründung je Änderung | Vorschlag fürs Refinement |
 | `definition-of-done.md` | Wann ein Item fertig ist | Entwurf |
 | `sprint-<n>/review.md` | Was im Review gezeigt und abgenommen wurde | pro Sprint |
 | `sprint-<n>/retro.md` | Was wir beibehalten, was wir ändern | pro Sprint |
