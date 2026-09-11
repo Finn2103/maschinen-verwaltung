@@ -18,25 +18,25 @@ Die Aufteilungen von #7 und #14 haben neue Issue-Nummern bekommen:
 
 | hier | Issue | Typ | Titel |
 | --- | --- | --- | --- |
-| #1 | [#1](../../issues/1) | User Story | Maschinen nach Verfügbarkeit suchen und reservieren |
-| #2 | [#2](../../issues/2) | User Story | Maschinenstammdaten erfassen und pflegen |
-| #3 | [#3](../../issues/3) | User Story | Wartungsbedarf je Maschine vorhersagen und anzeigen |
-| #7a | [#7](../../issues/7) | User Story | Kundenstammdaten anlegen, ändern und suchen |
-| #8 | [#8](../../issues/8) | User Story | Rollen- und Zugriffsrechte verwalten |
-| #9 | [#9](../../issues/9) | User Story | Buchung zu einem verbindlichen Auftrag mit Audit-Trail |
-| #4 | [#4](../../issues/4) | Task | Server nach IT-Grundschutz absichern |
-| #5 | [#5](../../issues/5) | Task | Infrastruktur automatisiert bereitstellen |
-| #6 | [#6](../../issues/6) | Task | Client-Server-Grundgerüst mit Datenbankanbindung |
-| #7b | **[#20](../../issues/20)** | Task | Kundenstammdaten aus dem Altsystem übernehmen |
-| #10 | [#10](../../issues/10) | Entscheidungs-Task | Datenbanksystem festlegen und begründen |
-| #11 | [#11](../../issues/11) | Task | Datenbank-Server produktiv bereitstellen |
-| #12 | [#12](../../issues/12) | Entscheidungs-Task | Mailserver-System kriteriengeleitet auswählen |
-| #13 | [#13](../../issues/13) | Task | Mailserver produktiv bereitstellen |
-| #14a | [#14](../../issues/14) | Task | Monitoring für Datenbank- und Mailserver einrichten |
-| #14b | **[#17](../../issues/17)** | Task | Update- und Patch-Prozess festlegen und dokumentieren |
-| #14c | **[#18](../../issues/18)** | Task | Incident-Response-Ablauf dokumentieren |
-| #14d | **[#19](../../issues/19)** | Task | Zugriffslogs revisionssicher aufbewahren |
-| #15 | [#15](../../issues/15) | Task | TLS-Verschlüsselung automatisiert verwalten |
+| #1 | [#1](https://github.com/Finn2103/maschinen-verwaltung/issues/1) | User Story | Maschinen nach Verfügbarkeit suchen und reservieren |
+| #2 | [#2](https://github.com/Finn2103/maschinen-verwaltung/issues/2) | User Story | Maschinenstammdaten erfassen und pflegen |
+| #3 | [#3](https://github.com/Finn2103/maschinen-verwaltung/issues/3) | User Story | Wartungsbedarf je Maschine vorhersagen und anzeigen |
+| #7a | [#7](https://github.com/Finn2103/maschinen-verwaltung/issues/7) | User Story | Kundenstammdaten anlegen, ändern und suchen |
+| #8 | [#8](https://github.com/Finn2103/maschinen-verwaltung/issues/8) | User Story | Rollen- und Zugriffsrechte verwalten |
+| #9 | [#9](https://github.com/Finn2103/maschinen-verwaltung/issues/9) | User Story | Buchung zu einem verbindlichen Auftrag mit Audit-Trail |
+| #4 | [#4](https://github.com/Finn2103/maschinen-verwaltung/issues/4) | Task | Server nach IT-Grundschutz absichern |
+| #5 | [#5](https://github.com/Finn2103/maschinen-verwaltung/issues/5) | Task | Infrastruktur automatisiert bereitstellen |
+| #6 | [#6](https://github.com/Finn2103/maschinen-verwaltung/issues/6) | Task | Client-Server-Grundgerüst mit Datenbankanbindung |
+| #7b | **[#20](https://github.com/Finn2103/maschinen-verwaltung/issues/20)** | Task | Kundenstammdaten aus dem Altsystem übernehmen |
+| #10 | [#10](https://github.com/Finn2103/maschinen-verwaltung/issues/10) | Entscheidungs-Task | Datenbanksystem festlegen und begründen |
+| #11 | [#11](https://github.com/Finn2103/maschinen-verwaltung/issues/11) | Task | Datenbank-Server produktiv bereitstellen |
+| #12 | [#12](https://github.com/Finn2103/maschinen-verwaltung/issues/12) | Entscheidungs-Task | Mailserver-System kriteriengeleitet auswählen |
+| #13 | [#13](https://github.com/Finn2103/maschinen-verwaltung/issues/13) | Task | Mailserver produktiv bereitstellen |
+| #14a | [#14](https://github.com/Finn2103/maschinen-verwaltung/issues/14) | Task | Monitoring für Datenbank- und Mailserver einrichten |
+| #14b | **[#17](https://github.com/Finn2103/maschinen-verwaltung/issues/17)** | Task | Update- und Patch-Prozess festlegen und dokumentieren |
+| #14c | **[#18](https://github.com/Finn2103/maschinen-verwaltung/issues/18)** | Task | Incident-Response-Ablauf dokumentieren |
+| #14d | **[#19](https://github.com/Finn2103/maschinen-verwaltung/issues/19)** | Task | Zugriffslogs revisionssicher aufbewahren |
+| #15 | [#15](https://github.com/Finn2103/maschinen-verwaltung/issues/15) | Task | TLS-Verschlüsselung automatisiert verwalten |
 
 Auf dem Board tragen die 13 Tasks jetzt `work-type = Task` und das Label `task`;
 #10 und #12 zusätzlich `entscheidung`.
