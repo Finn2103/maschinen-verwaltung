@@ -63,13 +63,14 @@ Gruppe 11 — fünf Personen, eine Anwendungsentwicklung, vier Systemintegration
 | Rolle | Person | GitHub |
 | --- | --- | --- |
 | Scrum Master, Anwendungsentwicklung | Finn Jendras | [@Finn2103](https://github.com/Finn2103) |
+| Systemintegration | Alexa Börsch | [@WinOnWave](https://github.com/WinOnWave) |
 | Systemintegration | Nico Laeser | [@nicolaeser](https://github.com/nicolaeser) |
-| Systemintegration | Alexa Börsch | _offen_ |
-| Systemintegration | Laurin Schmitz | _offen_ |
-| Systemintegration | Justin Kelm | _offen_ |
+| Systemintegration | Laurin Schmitz | [@24it5schmitz](https://github.com/24it5schmitz) |
+| Systemintegration | Justin Kelm | [@Justin24it5](https://github.com/Justin24it5) |
 
-[@WinOnWave](https://github.com/WinOnWave) ist bereits Collaborator, im Profil steht
-aber kein Name — die Zuordnung fehlt noch.
+Die Anwendungsentwicklung ist einfach besetzt. Ein Teil dieser Arbeit wird an die
+Systemintegration abgegeben — die Aufteilung macht das Team im ersten Sprint Planning
+am **Donnerstag, 17.09.2026**.
 
 ## Dokumentation
 

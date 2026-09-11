@@ -152,8 +152,19 @@ Dieselbe Person, die die gesamte Anwendungsentwicklung trägt, ist auch Scrum Ma
 Wenn es knapp wird, fällt zuerst die Scrum-Master-Arbeit weg — und die wird pro Sprint
 benotet.
 
-**Frage:** Ist diese Verteilung so beabsichtigt? Und falls die Bereiche aus Punkt 1
-noch dazukommen: wer soll sie tragen?
+**Wie das Team damit umgeht:** Ein Teil der Anwendungsentwicklung wird an die
+Systemintegration abgegeben. Wer was übernimmt, entscheidet das Team im ersten Sprint
+Planning am **Donnerstag, 17.09.2026** — das ist Selbstorganisation der Developers und
+braucht keine Zustimmung des PO.
+
+**Frage an den PO — aber die Folge davon schon:** Wenn ein Auszubildender der
+Systemintegration eine Story mit `fachrichtung-AE` und einem AE-Lernfeld umsetzt
+(LF10a, LF11a, LF12a) — zählt diese Arbeit für seine Leistungsbewertung, und wird das
+Lernfeld dann für ihn als abgedeckt geführt? Umgekehrt dasselbe für die
+Anwendungsentwicklung bei SI-Lernfeldern.
+
+Das ist keine Formfrage: die Lernfeld-Zuordnung stammt aus der Vorlage und betrifft die
+Noten. Wenn Abgeben die Bewertung verschlechtert, müsste anders aufgeteilt werden.
 
 ---
 
