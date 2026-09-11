@@ -157,34 +157,46 @@ benotet.
 Unterricht ist nur Donnerstag und Freitag. Ein zweiwöchiger Sprint hat damit **vier
 Schultage**, und der erste davon geht für Review, Retrospektive und Planning weg:
 
-| Posten | Schulstunden | ≈ Zeitstunden |
-| --- | --- | --- |
-| 2× Donnerstag (reiner Projekttag, 8 Std.) | 16 | 12,0 |
-| 2× Freitag (Projekt + Wirtschaft, ~3 Std.) | 6 | 4,5 |
-| **Rohkapazität je Person** | **22** | **16,5** |
-| − Review, Retrospektive, Planning | −5 | −3,8 |
-| **Entwicklungszeit je Person und Sprint** | **17** | **≈ 12,8** |
-| **Team, fünf Personen** | **85** | **≈ 64** |
+| Tag | Anwesenheit | Schulstunden | netto |
+| --- | --- | --- | --- |
+| Donnerstag, reiner Projekttag | 7:55 – 14:40 | 8 | 6,0 h |
+| Freitag, Projekt + Wirtschaft | 7:55 – 12:55 | 6 | 4,5 h |
 
-Über sechs Sprints ergibt das **rund 380 Zeitstunden** Entwicklungszeit für das ganze
-Team. Die Aufwandsschätzungen der Vorlage summieren sich auf **etwa 200 Stunden** — und
-darin fehlen Abrechnung, Shop und Marketing vollständig.
+Der Donnerstag geht vollständig ins Projekt. Vom Freitag geht Wirtschaft ab — wie viele
+Stunden dort auf das Projekt fallen, ist die einzige offene Größe:
+
+| Freitag, Projektanteil | je Person und Sprint | Team ×5 | über 6 Sprints |
+| --- | --- | --- | --- |
+| 2 Schulstunden | 12,0 h | 60 h | 360 h |
+| 3 Schulstunden | 13,5 h | 68 h | 405 h |
+| 4 Schulstunden | 15,0 h | 75 h | 450 h |
+| 6 Schulstunden | 18,0 h | 90 h | 540 h |
+
+Jeweils abzüglich rund 3 Stunden je Sprint für Review, Retrospektive und Planning.
+Bei Homeschooling bleibt die Tageszeit gleich, die Kapazität ändert sich also nicht.
+
+Die Aufwandsschätzungen der Vorlage summieren sich auf **etwa 200 Stunden** — darin
+fehlen Abrechnung, Shop und Marketing vollständig.
 
 **Frage A — Umfang:** Passen die drei fehlenden Bereiche aus Punkt 1 überhaupt in diese
 Kapazität, oder müssen sie aus dem Umfang bleiben? Dieselbe Frage wie Punkt 1, jetzt mit
 Zahlen.
 
 **Frage B — Einheit der Schätzung:** Sind die „Std." in der Aufwandsschätzung **Schul-
-oder Zeitstunden**? Bei Zeitstunden ist ein L-Item (16 Std.) mehr, als eine Person in
-einem ganzen Sprint zur Verfügung hat. Sieben der neunzehn Items sind L, zwei sind XL —
-die müssten dann durchweg geteilt oder zu zweit bearbeitet werden.
+oder Zeitstunden**? Eine Person hat je Sprint 12 bis 18 Zeitstunden. Ein L-Item (16 Std.)
+ist damit praktisch ihr ganzer Sprint, ein XL passt nicht. Neun der neunzehn Items sind L
+oder XL — die müssten durchweg geteilt oder zu zweit bearbeitet werden.
+
+**Frage C — Projektanteil am Freitag:** Wie viele der sechs Freitagsstunden gehören dem
+Projekt und wie viele dem Wirtschaftsunterricht? Davon hängt die gesamte
+Kapazitätsrechnung ab.
 
 **Wie das Team damit umgeht:** Ein Teil der Anwendungsentwicklung wird an die
 Systemintegration abgegeben. Wer was übernimmt, entscheidet das Team im ersten Sprint
 Planning am **Donnerstag, 17.09.2026** — das ist Selbstorganisation der Developers und
 braucht keine Zustimmung des PO.
 
-**Frage an den PO — aber die Folge davon schon:** Wenn ein Auszubildender der
+**Frage D — Bewertung:** Wenn ein Auszubildender der
 Systemintegration eine Story mit `fachrichtung-AE` und einem AE-Lernfeld umsetzt
 (LF10a, LF11a, LF12a) — zählt diese Arbeit für seine Leistungsbewertung, und wird das
 Lernfeld dann für ihn als abgedeckt geführt? Umgekehrt dasselbe für die
