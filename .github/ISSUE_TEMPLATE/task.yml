@@ -1,0 +1,64 @@
+name: Task
+description: Technische Arbeit ohne eigenes Nutzerverhalten (Systemintegration, Datenverarbeitung)
+title: ""
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Nach dem Anlegen auf dem Board setzen: `work-type` = Task,
+        `domain`, `prio`. `story-points` kommen im Planning dazu.
+  - type: textarea
+    id: ziel
+    attributes:
+      label: Ziel
+      description: Was soll danach funktionieren?
+      placeholder: "Reverse Proxy terminiert TLS für alle öffentlichen Endpunkte."
+    validations:
+      required: true
+  - type: textarea
+    id: umfang
+    attributes:
+      label: Umfang
+      description: Was gehört dazu, was ausdrücklich nicht?
+    validations:
+      required: true
+  - type: textarea
+    id: akzeptanzkriterien
+    attributes:
+      label: Akzeptanzkriterien
+      description: Überprüfbar formuliert — daran wird abgenommen.
+      placeholder: |
+        - [ ] Aufruf über http wird auf https umgeleitet
+        - [ ] Zertifikat wird automatisch von Let's Encrypt erneuert
+        - [ ] Konfiguration liegt als Code im Repo und ist reproduzierbar
+    validations:
+      required: true
+  - type: textarea
+    id: epic
+    attributes:
+      label: Epic
+      placeholder: "#12"
+    validations:
+      required: true
+  - type: textarea
+    id: abhaengigkeiten
+    attributes:
+      label: Abhängigkeiten
+      placeholder: "#34, #56 oder keine"
+    validations:
+      required: false
+  - type: checkboxes
+    id: pruefung
+    attributes:
+      label: Nachweis
+      options:
+        - label: Als Code im Repo (IaC), nicht nur auf dem Server
+        - label: Umgebung lässt sich zerstören und neu aufbauen
+        - label: Dokumentiert (UML / ADR / README)
+  - type: textarea
+    id: links
+    attributes:
+      label: Links
+    validations:
+      required: false

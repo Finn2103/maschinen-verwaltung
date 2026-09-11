@@ -1,0 +1,41 @@
+name: Epic
+description: Klammer über mehrere User Stories und Tasks
+title: "Epic: "
+labels:
+  - epic
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Nach dem Anlegen auf dem Board setzen: `work-type` = Epic, `domain`, `prio`.
+        Stories und Tasks als Sub-Issues verknüpfen — dann zählt "Sub-issues progress".
+  - type: textarea
+    id: ziel
+    attributes:
+      label: Ziel
+      description: Welche fachliche Fähigkeit entsteht hier insgesamt?
+    validations:
+      required: true
+  - type: textarea
+    id: umfang
+    attributes:
+      label: Umfang
+      description: Was gehört dazu, was ausdrücklich nicht?
+    validations:
+      required: true
+  - type: textarea
+    id: fertig
+    attributes:
+      label: Wann ist dieses Epic fertig?
+      description: Ergebnisse, nicht Aufgaben.
+      placeholder: |
+        - [ ] ...
+    validations:
+      required: true
+  - type: textarea
+    id: links
+    attributes:
+      label: Links
+      description: Datenmodell, UML, ADR
+    validations:
+      required: false

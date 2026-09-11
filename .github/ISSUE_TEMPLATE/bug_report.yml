@@ -1,0 +1,52 @@
+name: Bug
+description: Fehler im bereits gebauten Verhalten
+title: ""
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Nach dem Anlegen auf dem Board setzen: `work-type` = Bug, `domain`, `prio`.
+  - type: textarea
+    id: zusammenfassung
+    attributes:
+      label: Zusammenfassung
+      description: Ein Satz.
+    validations:
+      required: true
+  - type: textarea
+    id: schritte
+    attributes:
+      label: Schritte zur Reproduktion
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: erwartet
+    attributes:
+      label: Erwartetes Verhalten
+    validations:
+      required: true
+  - type: textarea
+    id: tatsaechlich
+    attributes:
+      label: Tatsächliches Verhalten
+    validations:
+      required: true
+  - type: input
+    id: umgebung
+    attributes:
+      label: Umgebung
+      placeholder: "Browser / Client, Server, Commit oder Branch"
+    validations:
+      required: false
+  - type: textarea
+    id: kontext
+    attributes:
+      label: Logs, Screenshots, Kontext
+    validations:
+      required: false

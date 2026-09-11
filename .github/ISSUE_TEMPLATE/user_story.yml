@@ -1,0 +1,65 @@
+name: User Story
+description: Fachliche Anforderung aus Nutzersicht (Anwendungsentwicklung, Datenanalyse)
+title: "Als <Rolle> möchte ich "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Nach dem Anlegen auf dem Board setzen: `work-type` = User Story,
+        `domain`, `prio`. `story-points` kommen im Planning dazu.
+  - type: textarea
+    id: story
+    attributes:
+      label: Story
+      description: Eine Sache, aus Nutzersicht.
+      placeholder: "Als Kunde möchte ich eine Maschine für einen Zeitraum reservieren, damit sie mir sicher zur Verfügung steht."
+    validations:
+      required: true
+  - type: textarea
+    id: nutzen
+    attributes:
+      label: Nutzen
+      description: Welches Problem löst das, und warum jetzt?
+    validations:
+      required: true
+  - type: textarea
+    id: akzeptanzkriterien
+    attributes:
+      label: Akzeptanzkriterien
+      description: Überprüfbar formuliert — daran wird abgenommen.
+      placeholder: |
+        - [ ] Reservierung über einen Zeitraum ist nur möglich, wenn die Maschine in diesem Zeitraum frei ist
+        - [ ] Überlappende Reservierung wird mit einer verständlichen Meldung abgelehnt
+        - [ ] Die Reservierung erscheint in der Bestellhistorie des Kunden
+    validations:
+      required: true
+  - type: textarea
+    id: epic
+    attributes:
+      label: Epic
+      description: Zu welchem Epic gehört das?
+      placeholder: "#12"
+    validations:
+      required: true
+  - type: textarea
+    id: abhaengigkeiten
+    attributes:
+      label: Abhängigkeiten
+      placeholder: "#34, #56 oder keine"
+    validations:
+      required: false
+  - type: textarea
+    id: ui
+    attributes:
+      label: UI-Anforderungen
+      description: Lade-, Leer- und Fehlerzustände. Barrierefreiheit nach ISO 9241.
+    validations:
+      required: false
+  - type: textarea
+    id: links
+    attributes:
+      label: Links
+      description: Datenmodell, UML, ADR, Mockups
+    validations:
+      required: false

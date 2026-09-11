@@ -1,0 +1,46 @@
+# Secrets / Umgebung
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# Abhängigkeiten
+node_modules/
+dist/
+build/
+out/
+.angular/
+
+# Build-Artefakte .NET
+bin/
+obj/
+
+# Flutter / Dart
+.dart_tool/
+.packages
+*.iml
+
+# Logs & Laufzeit
+*.log
+npm-debug.log*
+pnpm-debug.log*
+coverage/
+.nyc_output/
+
+# Supabase lokal
+supabase/.branches/
+supabase/.temp/
+
+# Terraform / Ansible State
+*.tfstate
+*.tfstate.*
+.terraform/
+*.retry
+
+# Editor & OS
+.DS_Store
+Thumbs.db
+.idea/
+*.swp
