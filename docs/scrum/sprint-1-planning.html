@@ -1,0 +1,719 @@
+<title>Sprint 1 Planning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --paper:      #edefee;
+    --surface:    #f8f9f8;
+    --surface-2:  #e3e7e6;
+    --ink:        #191d20;
+    --ink-2:      #56606a;
+    --ink-3:      #7b858d;
+    --rule:       #ccd2d1;
+    --rule-soft:  #dbe0df;
+    --steel:      #2f4a5c;
+    --steel-soft: #dde5ea;
+    --plakette:   #b35f12;
+    --plak-soft:  #f6e4d3;
+    --signal:     #a8301c;
+    --sig-soft:   #f4dcd7;
+    --gruen:      #2f6246;
+    --gruen-soft: #d9e7df;
+
+    --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --body:    "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    --mono:    "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+    --wide: 1060px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:      #14181a;
+      --surface:    #1c2124;
+      --surface-2:  #232a2d;
+      --ink:        #e6eae9;
+      --ink-2:      #9aa6ad;
+      --ink-3:      #79858c;
+      --rule:       #2e3639;
+      --rule-soft:  #242b2e;
+      --steel:      #8bb2cc;
+      --steel-soft: #1e2b34;
+      --plakette:   #e0904a;
+      --plak-soft:  #31241a;
+      --signal:     #e38470;
+      --sig-soft:   #331f1c;
+      --gruen:      #74b791;
+      --gruen-soft: #1a2a22;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper:      #14181a;
+    --surface:    #1c2124;
+    --surface-2:  #232a2d;
+    --ink:        #e6eae9;
+    --ink-2:      #9aa6ad;
+    --ink-3:      #79858c;
+    --rule:       #2e3639;
+    --rule-soft:  #242b2e;
+    --steel:      #8bb2cc;
+    --steel-soft: #1e2b34;
+    --plakette:   #e0904a;
+    --plak-soft:  #31241a;
+    --signal:     #e38470;
+    --sig-soft:   #331f1c;
+    --gruen:      #74b791;
+    --gruen-soft: #1a2a22;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--body); font-size: 16px; line-height: 1.58;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: var(--wide); margin: 0 auto; padding: 0 26px 90px; }
+
+  /* masthead */
+  .mast { padding: 50px 0 26px; border-bottom: 2px solid var(--ink); }
+  .eyebrow {
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--ink-2); margin: 0 0 16px;
+  }
+  h1 {
+    font-family: var(--display); font-weight: 700;
+    font-size: clamp(2.1rem, 5vw, 3.1rem); line-height: 1.04;
+    letter-spacing: -.022em; margin: 0 0 16px; text-wrap: balance;
+  }
+  h1 .thin { display: block; color: var(--steel); font-weight: 600; font-size: .55em; letter-spacing: -.01em; margin-top: 6px; }
+  .standfirst { font-size: 1.06rem; color: var(--ink-2); margin: 0; max-width: 60ch; }
+
+  .facts {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+    gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin: 30px 0 0;
+  }
+  .fact { background: var(--surface); padding: 12px 14px; }
+  .fact dt {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--ink-3); margin: 0 0 4px;
+  }
+  .fact dd { margin: 0; font-weight: 500; font-size: .93rem; font-variant-numeric: tabular-nums; }
+
+  /* sections */
+  section { padding: 52px 0 0; }
+  .shead { display: flex; align-items: baseline; gap: 13px; margin: 0 0 6px; }
+  .snum {
+    font-family: var(--mono); font-size: .82rem; color: var(--steel);
+    border-bottom: 2px solid var(--steel); padding-bottom: 1px; flex: none;
+  }
+  h2 {
+    font-family: var(--display); font-weight: 600;
+    font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+    letter-spacing: -.014em; line-height: 1.16; margin: 0; text-wrap: balance;
+  }
+  .sdek { color: var(--ink-2); margin: 0 0 24px; max-width: 64ch; font-size: 1.01rem; }
+  h3 { font-family: var(--display); font-weight: 600; font-size: 1.04rem; margin: 28px 0 9px; }
+  p { margin: 0 0 13px; max-width: 72ch; }
+  a { color: var(--steel); }
+  code {
+    font-family: var(--mono); font-size: .88em; background: var(--surface-2);
+    padding: 1px 5px; border: 1px solid var(--rule-soft);
+  }
+  :focus-visible { outline: 2px solid var(--plakette); outline-offset: 2px; }
+
+  /* run of show */
+  .ros { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
+  .ros > li {
+    display: grid; grid-template-columns: 62px 1fr; gap: 18px;
+    padding: 16px 2px; border-bottom: 1px solid var(--rule-soft); align-items: start;
+  }
+  .ros .min {
+    font-family: var(--mono); font-size: .95rem; font-variant-numeric: tabular-nums;
+    color: var(--steel); font-weight: 500; padding-top: 1px;
+  }
+  .ros .min small { display: block; font-size: .62rem; letter-spacing: .1em; color: var(--ink-3); text-transform: uppercase; }
+  .ros b { display: block; font-weight: 600; margin-bottom: 3px; }
+  .ros .what { color: var(--ink-2); font-size: .95rem; }
+  .ros .who {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--plakette); margin-top: 6px; display: block;
+  }
+
+  /* topic table */
+  .tablewrap { overflow-x: auto; border: 1px solid var(--rule); background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: .89rem; }
+  thead th {
+    text-align: left; font-family: var(--mono); font-size: 10px; letter-spacing: .11em;
+    text-transform: uppercase; color: var(--ink-3); font-weight: 500;
+    padding: 10px 12px; border-bottom: 1px solid var(--rule); background: var(--surface-2);
+    white-space: nowrap;
+  }
+  tbody td { padding: 10px 12px; border-bottom: 1px solid var(--rule-soft); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: 0; }
+  td.k { font-family: var(--mono); color: var(--ink-2); white-space: nowrap; }
+  td.fill { color: var(--ink-3); font-family: var(--mono); }
+
+  /* checkable lists */
+  .check { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
+  .check li { border-bottom: 1px solid var(--rule-soft); }
+  .check label {
+    display: grid; grid-template-columns: 22px 1fr; gap: 12px;
+    padding: 12px 2px; cursor: pointer; align-items: start;
+  }
+  .check input { margin: 3px 0 0; width: 16px; height: 16px; accent-color: var(--steel); }
+  .check b { font-weight: 600; }
+  .check .sub { display: block; color: var(--ink-2); font-size: .93rem; margin-top: 2px; }
+  .check input:checked ~ span b { color: var(--ink-3); text-decoration: line-through; }
+
+  /* callouts */
+  .callout { border-left: 3px solid var(--plakette); background: var(--plak-soft); padding: 15px 18px; margin: 24px 0 0; }
+  .callout.warn { border-left-color: var(--signal); background: var(--sig-soft); }
+  .callout.ok   { border-left-color: var(--gruen);  background: var(--gruen-soft); }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout .ctag {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--plakette); display: block; margin-bottom: 6px;
+  }
+  .callout.warn .ctag { color: var(--signal); }
+  .callout.ok .ctag   { color: var(--gruen); }
+
+  /* goal candidates */
+  .cands { display: grid; gap: 16px; margin-top: 6px; }
+  .cand { border: 1px solid var(--rule); background: var(--surface); padding: 16px 18px; }
+  .cand .cname {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--steel); margin: 0 0 8px;
+  }
+  .cand .goal {
+    font-family: var(--display); font-size: 1.04rem; font-weight: 600;
+    line-height: 1.4; margin: 0 0 11px;
+  }
+  .cand dl { margin: 0; display: grid; grid-template-columns: 88px 1fr; gap: 4px 12px; font-size: .92rem; }
+  .cand dt {
+    font-family: var(--mono); font-size: 10px; letter-spacing: .09em;
+    text-transform: uppercase; color: var(--ink-3); padding-top: 3px;
+  }
+  .cand dd { margin: 0; color: var(--ink-2); }
+
+  /* figure */
+  figure { margin: 6px 0 0; }
+  figure svg { display: block; width: 100%; height: auto; }
+  figcaption {
+    font-size: .87rem; color: var(--ink-2); margin-top: 11px;
+    padding-top: 10px; border-top: 1px solid var(--rule); max-width: 74ch;
+  }
+
+  /* sprint calendar */
+  .cal { display: grid; grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+  .cal div { background: var(--surface); padding: 12px 13px; }
+  .cal div.now { background: var(--steel-soft); }
+  .cal .s { font-family: var(--display); font-weight: 600; font-size: .98rem; }
+  .cal .d { font-family: var(--mono); font-size: .78rem; color: var(--ink-2); margin-top: 3px; font-variant-numeric: tabular-nums; }
+  .cal .n { font-family: var(--mono); font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--plakette); margin-top: 5px; }
+
+  footer {
+    margin-top: 60px; padding-top: 18px; border-top: 2px solid var(--ink);
+    font-size: .85rem; color: var(--ink-2); display: flex; flex-wrap: wrap; gap: 8px 24px;
+  }
+  footer .mono { font-family: var(--mono); }
+
+  @media (max-width: 620px) {
+    .wrap { padding: 0 17px 66px; }
+    .ros > li { grid-template-columns: 52px 1fr; gap: 12px; }
+    .cand dl { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="wrap">
+
+  <header class="mast">
+    <p class="eyebrow">Gruppe 11 · Maschinenverleih · Moderationsleitfaden</p>
+    <h1>Sprint 1 Planning<span class="thin">Donnerstag, 17.09.2026</span></h1>
+    <p class="standfirst">Ablauf, Zeitkasten und die Stellen, an denen es schiefgeht.
+      Finn moderiert — entschieden wird von den Developers, also von allen fünf.</p>
+    <dl class="facts">
+      <div class="fact"><dt>Sprintlänge</dt><dd>2 Wochen</dd></div>
+      <div class="fact"><dt>Sprint 1</dt><dd>17.09. – 30.09.</dd></div>
+      <div class="fact"><dt>Schultage im Sprint</dt><dd>4 · 2× Do, 2× Fr</dd></div>
+      <div class="fact"><dt>Timebox heute</dt><dd>120 Minuten</dd></div>
+      <div class="fact"><dt>Moderation</dt><dd>Finn (Scrum Master)</dd></div>
+      <div class="fact"><dt>Ergebnis</dt><dd>Sprint Backlog</dd></div>
+    </dl>
+  </header>
+
+  <!-- 00 -->
+  <section id="vorher">
+    <div class="shead"><span class="snum">00</span><h2>Vor dem Termin</h2></div>
+    <p class="sdek">Drei Dinge, die heute Morgen erledigt sein sollten — sonst kostet es
+      im Termin Zeit.</p>
+    <ul class="check">
+      <li><label><input type="checkbox" data-k="v1"><span><b>Board prüfen</b>
+        <span class="sub">19 Items, alle auf <code>Backlog</code>. Milestones Sprint 1–6 liegen an.
+        Alle vier Kollegen haben Schreibrecht auf dem Board.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="v2"><span><b>Die PO-Fragen sind raus</b>
+        <span class="sub">Die acht Punkte aus <code>docs/scrum/po-klaerung.md</code>. Besonders:
+        Abrechnung/Shop/Marketing fehlen im Backlog, und <code>prio</code> ist bei allen Items leer.
+        Ohne Antwort planen wir nach technischer Abhängigkeit statt nach Wert.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="v3"><span><b>Entwurf der Definition of Done gelesen</b>
+        <span class="sub">Alle fünf, vor dem Termin. Heute wird sie beschlossen, nicht
+        erstmals vorgelesen.</span></span></label></li>
+    </ul>
+    <div class="callout warn">
+      <span class="ctag">Der Product Owner ist nicht im Raum</span>
+      <p>Topic One des Sprint Plannings — „warum ist dieser Sprint wertvoll?" — gehört laut
+        Scrum Guide dem Product Owner. Die Lehrkräfte werden nicht dabeisitzen.</p>
+      <p><b>Also:</b> Das Sprint Goal als <i>Vorschlag</i> formulieren und nach dem Termin
+        bestätigen lassen. Nicht als eigene Entscheidung hinschreiben — und im Termin
+        festhalten, dass es ein Vorschlag ist. Das kostet zwei Sätze und rettet die
+        Argumentation im Review.</p>
+    </div>
+  </section>
+
+  <!-- 01 -->
+  <section id="ablauf">
+    <div class="shead"><span class="snum">01</span><h2>Ablauf, 120 Minuten</h2></div>
+    <p class="sdek">Der Scrum Guide setzt für einen Zwei-Wochen-Sprint maximal rund vier Stunden.
+      120 Minuten reichen, wenn niemand abschweift — zwei Blöcke fallen künftig weg.</p>
+    <ol class="ros">
+      <li><span class="min">10<small>min</small></span><span>
+        <b>Rahmen setzen</b>
+        <span class="what">Was am Ende vorliegt, wie lange es dauert, wer was entscheidet.
+          Ausdrücklich sagen: die Aufteilung macht das Team, nicht der Scrum Master.</span>
+        <span class="who">Finn · moderiert</span></span></li>
+      <li><span class="min">15<small>min</small></span><span>
+        <b>Definition of Done beschließen</b>
+        <span class="what">Den Entwurf durchgehen, Punkt für Punkt. Danach gilt sie unverändert —
+          Änderungen nur in der Retrospektive. Einmalig, ab Sprint 2 entfällt dieser Block.</span>
+        <span class="who">alle fünf · beschließen</span></span></li>
+      <li><span class="min">15<small>min</small></span><span>
+        <b>Kapazität rechnen</b>
+        <span class="what">Wie viele Stunden hat jede Person in diesen zwei Wochen wirklich?
+          Tabelle in Abschnitt 03 ausfüllen. Einmalig — ab Sprint 2 gibt es Velocity.</span>
+        <span class="who">alle fünf · rechnen</span></span></li>
+      <li><span class="min">20<small>min</small></span><span>
+        <b>Topic One — Sprint Goal</b>
+        <span class="what">Ein Satz, der sagt, was am 30.09. anders ist. Kandidaten in
+          Abschnitt 04. Muss vor dem Ende des Plannings stehen.</span>
+        <span class="who">alle fünf · PO bestätigt nach</span></span></li>
+      <li><span class="min">40<small>min</small></span><span>
+        <b>Topic Two — was kommt rein</b>
+        <span class="what">Items auswählen, schätzen, gegen die Kapazität halten.
+          Abhängigkeiten in Abschnitt 05, Schätzverfahren in Abschnitt 06.</span>
+        <span class="who">Developers · wählen aus</span></span></li>
+      <li><span class="min">20<small>min</small></span><span>
+        <b>Topic Three — wie</b>
+        <span class="what">Jedes gewählte Item in Schritte zerlegen, die an einem Tag machbar sind.
+          Dabei ergibt sich von selbst, wer was nimmt.</span>
+        <span class="who">Developers · allein zuständig</span></span></li>
+    </ol>
+    <div class="callout">
+      <span class="ctag">Wenn die Zeit nicht reicht</span>
+      <p>Dann kommen <b>weniger Items</b> in den Sprint — nicht mehr Minuten in den Termin.
+        Ein überzogenes Planning ist reparierbar, ein überfüllter Sprint nicht.</p>
+      <p>Und es kostet echte Zeit: diese 120 Minuten sind rund ein Achtel der gesamten
+        Entwicklungszeit von Sprint 1. Deshalb der Timebox.</p>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section id="topics">
+    <div class="shead"><span class="snum">02</span><h2>Wer bei welchem Topic entscheidet</h2></div>
+    <p class="sdek">Aus dem Scrum Guide 2020. Die dritte Spalte ist die, an der es im Termin hängt.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Topic</th><th>Frage</th><th>Wer entscheidet</th><th>Ergebnis</th></tr></thead>
+        <tbody>
+          <tr><td class="k">One</td><td>Warum ist dieser Sprint wertvoll?</td>
+              <td>Product Owner schlägt vor, <b>das ganze Team formuliert</b></td><td>Sprint Goal</td></tr>
+          <tr><td class="k">Two</td><td>Was kann in diesem Sprint fertig werden?</td>
+              <td><b>Developers</b> wählen aus — niemand sonst</td><td>Auswahl aus dem Product Backlog</td></tr>
+          <tr><td class="k">Three</td><td>Wie wird die Arbeit erledigt?</td>
+              <td><b>Developers</b>, ausschließlich</td><td>Plan je Item</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:14px">Sprint Goal plus Auswahl plus Plan ist das <b>Sprint Backlog</b>.
+      Das gehört den Developers, nicht dem Product Owner und nicht dem Scrum Master.</p>
+  </section>
+
+  <!-- 03 -->
+  <section id="kapazitaet">
+    <div class="shead"><span class="snum">03</span><h2>Kapazität: vier Schultage, nicht zwei Wochen</h2></div>
+    <p class="sdek">Der Sprint läuft zwei Wochen, aber Schule ist nur Donnerstag und Freitag.
+      Das sind <b>vier Schultage je Sprint</b> — und der erste davon geht für Review,
+      Retrospektive und Planning weg. Distanztage gibt es noch nicht.</p>
+
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Posten</th><th>Rechnung</th><th>Schulstunden</th><th>≈ Zeitstunden</th></tr></thead>
+        <tbody>
+          <tr><td>2× Donnerstag</td><td class="k">reiner Projekttag, 8 Std.</td><td class="k">16</td><td class="k">12,0</td></tr>
+          <tr><td>2× Freitag</td><td class="k">Projekt + Wirtschaft, ~3 Std.</td><td class="k">6</td><td class="k">4,5</td></tr>
+          <tr><td><b>Rohkapazität je Person</b></td><td class="k">—</td><td class="k"><b>22</b></td><td class="k"><b>16,5</b></td></tr>
+          <tr><td>− Review, Retro, Planning</td><td class="k">erster Donnerstag im Sprint</td><td class="k">−5</td><td class="k">−3,8</td></tr>
+          <tr><td><b>Entwicklungszeit je Person</b></td><td class="k">—</td><td class="k"><b>17</b></td><td class="k"><b>≈ 12,8</b></td></tr>
+          <tr><td><b>Team, fünf Personen</b></td><td class="k">—</td><td class="k"><b>85</b></td><td class="k"><b>≈ 64</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:12px">Die Annahmen zu Donnerstag und Freitag sind geschätzt —
+      <b>im Termin durch die echten Stundenzahlen ersetzen</b> und hier eintragen:</p>
+
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Person</th><th>Fachrichtung</th><th>2× Do</th><th>2× Fr</th><th>Abzüge</th><th>Summe</th></tr></thead>
+        <tbody>
+          <tr><td>Finn Jendras</td><td class="k">AE · SM</td><td class="fill">___</td><td class="fill">___</td><td class="fill">___</td><td class="fill">___ h</td></tr>
+          <tr><td>Alexa Börsch</td><td class="k">SI</td><td class="fill">___</td><td class="fill">___</td><td class="fill">___</td><td class="fill">___ h</td></tr>
+          <tr><td>Nico Laeser</td><td class="k">SI</td><td class="fill">___</td><td class="fill">___</td><td class="fill">___</td><td class="fill">___ h</td></tr>
+          <tr><td>Laurin Schmitz</td><td class="k">SI</td><td class="fill">___</td><td class="fill">___</td><td class="fill">___</td><td class="fill">___ h</td></tr>
+          <tr><td>Justin Kelm</td><td class="k">SI</td><td class="fill">___</td><td class="fill">___</td><td class="fill">___</td><td class="fill">___ h</td></tr>
+          <tr><td colspan="5"><b>Team gesamt</b></td><td class="fill"><b>___ h</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout warn">
+      <span class="ctag">Die Zahl, die heute alles bestimmt</span>
+      <p>Ein Item mit <b>L (16 Std.)</b> ist mehr, als eine Person in einem ganzen Sprint an
+        Entwicklungszeit hat (≈ 12,8 h). Das betrifft <b>#1, #5, #6, #7, #8, #11, #13</b> —
+        und XL bei <b>#3</b> und <b>#9</b> erst recht.</p>
+      <p>Heißt: fast jedes Item muss <b>geteilt oder zu zweit bearbeitet</b> werden, sonst wird
+        es in zwei Wochen nicht fertig. Nur die M-Items (#2, #4, #10, #12, #15) passen einer
+        Person in einen Sprint.</p>
+      <p><b>Nachfragen:</b> Ob die „Std." der Vorlage Schul- oder Zeitstunden sind, steht
+        nirgends. Bei Schulstunden wäre L ≈ 12 Zeitstunden — also immer noch fast ein
+        kompletter Sprint für eine Person. Die Schlussfolgerung bleibt dieselbe.</p>
+    </div>
+
+    <div class="callout">
+      <span class="ctag">Was zwei Wochen kosten</span>
+      <p>Review, Retro und Planning fallen jeden Sprint an — bei vier Schultagen sind das
+        <b>rund ein Viertel der Sprintzeit für Zeremonie</b>. Bei dreiwöchigen Sprints wären es
+        sechs Schultage bei gleichem Aufwand, also etwa ein Sechstel.</p>
+      <p>Ihr habt zwei Wochen gewählt und bekommt dafür sechs Noten statt vier. Vertretbarer
+        Tausch — aber die Zeremonie muss dann <b>wirklich in den Timebox passen</b>, sonst
+        frisst sie den Sprint.</p>
+    </div>
+
+    <h3>Zwischen den Schultagen: der Daily</h3>
+    <p>Scrum verlangt ein Daily Scrum an <b>jedem Tag</b> des Sprints. Ihr seid an vier von
+      vierzehn Tagen zusammen. Das ist keine Nachlässigkeit, sondern eine Rahmenbedingung —
+      aber sie braucht eine bewusste Antwort, und die Lehrkräfte werden danach fragen.</p>
+    <p><b>Vorschlag zur Diskussion:</b> Daily in Präsenz am Donnerstag und Freitag, je 15
+      Minuten zu Beginn. An den übrigen Tagen ein kurzer schriftlicher Stand im Teams-Chat von
+      jedem, der etwas gemacht hat — keine Anwesenheitspflicht, aber wer arbeitet, schreibt.
+      So bleibt der Fortschritt sichtbar, ohne Termine zu erfinden, die niemand einhalten kann.</p>
+    <p>Wie ihr es macht, entscheidet das Team. <b>Aber es gehört heute beschlossen und
+      dokumentiert</b> — mit der Begründung, warum vom täglichen Daily abgewichen wird.</p>
+
+    <div class="callout ok">
+      <span class="ctag">Der Blick auf das Ganze</span>
+      <p>Sechs Sprints × ≈ 64 Zeitstunden ergeben <b>rund 380 Zeitstunden Entwicklungszeit</b>
+        für das ganze Team bis zum 09.12. Die Schätzung der Vorlage summiert sich auf
+        <b>etwa 200 Stunden</b> — und darin fehlen Abrechnung, Shop und Marketing noch
+        vollständig.</p>
+      <p>Machbar, aber nicht großzügig. Wenn die drei fehlenden Bereiche dazukommen, wird es
+        eng — genau das steht als Punkt 1 in <code>po-klaerung.md</code>.</p>
+    </div>
+  </section>
+
+  <!-- 04 -->
+  <section id="goal">
+    <div class="shead"><span class="snum">04</span><h2>Topic One: das Sprint Goal</h2></div>
+    <p class="sdek">Ein Satz. Kein Titel, keine Liste von Items. Er sagt, was am 30.09. anders
+      ist als heute — und zwar als Ergebnis, nicht als Tätigkeit.</p>
+    <p><b>Prüffrage:</b> Könnte man am Sprint-Ende jemandem in einem Satz sagen, ob das Ziel
+      erreicht ist oder nicht? Wenn die Antwort „teilweise" lautet, ist das Ziel eine Liste
+      und kein Ziel.</p>
+
+    <h3>Zwei Kandidaten als Diskussionsmaterial</h3>
+    <p>Nicht beschlossen — Vorlage für das Gespräch. Beide folgen der technischen
+      Abhängigkeit, weil ohne Fundament keine fachliche Story gebaut werden kann.</p>
+    <div class="cands">
+      <div class="cand">
+        <p class="cname">Kandidat A — schmal</p>
+        <p class="goal">„Am 30.09. läuft auf unserem Strato-Server eine reproduzierbar
+          aufgesetzte Umgebung, in der eine Testanfrage über Reverse Proxy und Datenbank-API
+          bis in die PostgreSQL und zurück kommt."</p>
+        <dl>
+          <dt>Items</dt><dd>#4 Grundschutz · #5 IaC · #10 DB festlegen · #11 DB bereitstellen · #6 Grundgerüst</dd>
+          <dt>Dafür</dt><dd>Erreichbar. Am Sprint-Ende gibt es etwas Vorzeigbares, das man live klicken kann. Danach ist die Anwendungsentwicklung nicht mehr blockiert.</dd>
+          <dt>Dagegen</dt><dd>Der Kunde sieht nichts. Im Review muss erklärt werden, warum das trotzdem Wert ist.</dd>
+        </dl>
+      </div>
+      <div class="cand">
+        <p class="cname">Kandidat B — breiter</p>
+        <p class="goal">„Am 30.09. steht die Umgebung, und das Datenmodell ist als
+          handgeschriebenes SQL-DDL in der Datenbank angelegt."</p>
+        <dl>
+          <dt>Items</dt><dd>wie A, plus die Datenmodell-Arbeit</dd>
+          <dt>Dafür</dt><dd>Löst die größte Abhängigkeit überhaupt: ohne Schema kann keine fachliche Story anfangen. Deckt gleichzeitig Aufgabe 05 aus dem Projektauftakt ab.</dd>
+          <dt>Dagegen</dt><dd>Mehr Risiko. Und: <b>für das Datenmodell gibt es noch kein Backlog-Item</b> — siehe Hinweis unten.</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="callout warn">
+      <span class="ctag">Eine Lücke im Backlog, die heute auffallen wird</span>
+      <p>Die Arbeit am Datenmodell — ERD fertigstellen, in Relationen überführen, als SQL-DDL
+        schreiben — ist <b>in keinem Item abgebildet</b>. #6 verlangt nur, dass das Schema aus
+        einer handgeschriebenen DDL-Datei angelegt <i>wird</i>; das Modellieren selbst steht
+        nirgends.</p>
+      <p>Das ist die wichtigste Arbeit der ersten Wochen und sie hängt an einer Person. Wenn
+        Kandidat B gewählt wird, braucht es dafür ein Item. <b>Das schreibt das Team</b> —
+        aber jemand muss es heute anlegen, sonst ist die Arbeit unsichtbar und zählt im Review
+        nicht.</p>
+    </div>
+
+    <div class="callout ok">
+      <span class="ctag">Festhalten</span>
+      <p>Sprint Goal notieren in <code>docs/scrum/sprint-1/review.md</code> und als Beschreibung
+        am Milestone <b>Sprint 1</b>. Dann steht es dort, wo im Review hingeschaut wird.</p>
+    </div>
+  </section>
+
+  <!-- 05 -->
+  <section id="reihenfolge">
+    <div class="shead"><span class="snum">05</span><h2>Topic Two: was überhaupt reinpassen kann</h2></div>
+    <p class="sdek">Der Product Owner hat noch nicht priorisiert — <code>prio</code> ist bei allen
+      19 Items leer. Bis dahin plant das Team nach technischer Abhängigkeit. Die sagt nicht,
+      was wichtig ist, aber sehr klar, was zuerst <i>geht</i>.</p>
+    <figure>
+      <svg viewBox="0 0 900 300" role="img"
+           aria-label="Abhängigkeitskette: Grundschutz ermöglicht die IaC-Umgebung, diese die PostgreSQL-Bereitstellung, die wiederum das Client-Server-Grundgerüst. Die Datenbank-Entscheidung fließt in die Bereitstellung ein, TLS hängt an der IaC-Umgebung. Erst hinter dieser Kette liegen die fachlichen Stories und die Betriebsthemen.">
+        <defs>
+          <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+          </marker>
+        </defs>
+
+        <text x="8" y="16" font-family="IBM Plex Mono, monospace" font-size="11.5"
+              fill="var(--plakette)">KANDIDATEN FÜR SPRINT 1 — die Kette, ohne die nichts geht</text>
+        <rect x="8" y="24" width="640" height="226" fill="none" stroke="var(--plakette)"
+              stroke-width="1" stroke-dasharray="6 5"/>
+
+        <!-- Entscheidung oben -->
+        <rect x="320" y="40" width="120" height="42" fill="none" stroke="var(--plakette)" stroke-width="1.6"/>
+        <text x="380" y="59" text-anchor="middle" font-family="Archivo, sans-serif" font-size="12.5" font-weight="600" fill="currentColor">DB festlegen</text>
+        <text x="380" y="74" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="var(--plakette)">#10 Entscheidung</text>
+        <line x1="380" y1="82" x2="380" y2="114" stroke="currentColor" stroke-width="1.4" marker-end="url(#a)"/>
+
+        <!-- Kette -->
+        <rect x="20" y="118" width="120" height="50" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <text x="80" y="139" text-anchor="middle" font-family="Archivo, sans-serif" font-size="12.5" font-weight="600" fill="currentColor">Grundschutz</text>
+        <text x="80" y="155" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="currentColor" opacity=".7">#4</text>
+
+        <line x1="140" y1="143" x2="166" y2="143" stroke="currentColor" stroke-width="1.4" marker-end="url(#a)"/>
+
+        <rect x="170" y="118" width="120" height="50" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <text x="230" y="139" text-anchor="middle" font-family="Archivo, sans-serif" font-size="12.5" font-weight="600" fill="currentColor">IaC-Umgebung</text>
+        <text x="230" y="155" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="currentColor" opacity=".7">#5 Container + Proxy</text>
+
+        <line x1="290" y1="143" x2="316" y2="143" stroke="currentColor" stroke-width="1.4" marker-end="url(#a)"/>
+
+        <rect x="320" y="118" width="120" height="50" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <text x="380" y="139" text-anchor="middle" font-family="Archivo, sans-serif" font-size="12.5" font-weight="600" fill="currentColor">PostgreSQL</text>
+        <text x="380" y="155" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="currentColor" opacity=".7">#11</text>
+
+        <line x1="440" y1="143" x2="466" y2="143" stroke="currentColor" stroke-width="1.4" marker-end="url(#a)"/>
+
+        <rect x="470" y="118" width="120" height="50" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <text x="530" y="139" text-anchor="middle" font-family="Archivo, sans-serif" font-size="12.5" font-weight="600" fill="currentColor">Grundgerüst</text>
+        <text x="530" y="155" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="currentColor" opacity=".7">#6 + SQL-DDL</text>
+
+        <!-- TLS-Zweig -->
+        <line x1="230" y1="168" x2="230" y2="196" stroke="currentColor" stroke-width="1.4" marker-end="url(#a)"/>
+        <rect x="170" y="200" width="120" height="42" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".75"/>
+        <text x="230" y="219" text-anchor="middle" font-family="Archivo, sans-serif" font-size="12.5" font-weight="600" fill="currentColor">TLS</text>
+        <text x="230" y="234" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="currentColor" opacity=".7">#15 optional</text>
+
+        <!-- danach -->
+        <line x1="648" y1="85" x2="672" y2="85" stroke="currentColor" stroke-width="1.4" marker-end="url(#a)"/>
+        <text x="660" y="76" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="currentColor">danach</text>
+        <rect x="676" y="40" width="210" height="90" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".6"/>
+        <text x="690" y="60" font-family="Archivo, sans-serif" font-size="12.5" font-weight="600" fill="currentColor">Fachliche Stories</text>
+        <text x="690" y="78" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="currentColor" opacity=".75">#1 #2 #7 #8 #9 #20</text>
+        <text x="690" y="96" font-family="IBM Plex Mono, monospace" font-size="10" fill="currentColor" opacity=".6">brauchen alle das</text>
+        <text x="690" y="111" font-family="IBM Plex Mono, monospace" font-size="10" fill="currentColor" opacity=".6">Grundgerüst und das Schema</text>
+
+        <line x1="648" y1="205" x2="672" y2="205" stroke="currentColor" stroke-width="1.4" marker-end="url(#a)"/>
+        <text x="660" y="196" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="currentColor">danach</text>
+        <rect x="676" y="160" width="210" height="90" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".6"/>
+        <text x="690" y="180" font-family="Archivo, sans-serif" font-size="12.5" font-weight="600" fill="currentColor">Mail und Betrieb</text>
+        <text x="690" y="198" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="currentColor" opacity=".75">#12 #13 #14 #17 #18 #19</text>
+        <text x="690" y="216" font-family="IBM Plex Mono, monospace" font-size="10" fill="currentColor" opacity=".6">brauchen laufende Dienste,</text>
+        <text x="690" y="231" font-family="IBM Plex Mono, monospace" font-size="10" fill="currentColor" opacity=".6">die man überwachen kann</text>
+      </svg>
+      <figcaption>Dreizehn der neunzehn Items sitzen hinter dieser Kette. Deshalb ist Sprint 1
+        zwangsläufig Infrastruktur — nicht weil es das Wichtigste ist, sondern weil nichts
+        anderes vorher gehen kann. #3 Predictive Maintenance hängt zusätzlich an #2, braucht
+        also erfasste Maschinendaten.</figcaption>
+    </figure>
+    <div class="callout">
+      <span class="ctag">Gute Nachricht für die Aufteilung</span>
+      <p>Die Sprint-1-Kette ist fast vollständig Systemintegration — also vierfach besetzt.
+        Nur #6 ist Anwendungsentwicklung. Sprint 1 ist damit der Sprint, in dem die
+        Lastverteilung <b>ausnahmsweise passt</b>. Ab Sprint 2 dreht sich das, und dann muss
+        die Abgabe von AE-Arbeit stehen.</p>
+    </div>
+  </section>
+
+  <!-- 06 -->
+  <section id="schaetzen">
+    <div class="shead"><span class="snum">06</span><h2>Schätzen in Story Points</h2></div>
+    <p class="sdek">Die T-Shirt-Größen im Backlog stammen aus der Vorlage der Lehrkräfte — das ist
+      <b>nicht</b> eure Schätzung. Das Board rechnet in Points: 1, 2, 3, 5, 8, 13.</p>
+    <ol style="max-width:72ch">
+      <li><b>Referenz festlegen.</b> Ein Item aussuchen, das alle verstehen, und es auf <code>3</code>
+        setzen. Alles andere wird dagegen verglichen — nicht in Stunden gerechnet.</li>
+      <li><b>Gleichzeitig zeigen.</b> Jeder nennt seine Zahl im selben Moment, damit niemand
+        dem Lautesten folgt.</li>
+      <li><b>Nur bei Abstand reden.</b> Wenn zwei Schätzungen weit auseinanderliegen, erklären
+        beide warum — meistens hat einer etwas gesehen, das die anderen übersehen haben.
+        Das ist der eigentliche Gewinn am Schätzen.</li>
+      <li><b>Über 13 heißt teilen.</b> Kein Item kommt mit mehr als 13 in einen Sprint.</li>
+      <li><b>Gegen die Kapazität halten.</b> Vier Schultage, ≈ 12,8 Zeitstunden je Person.
+        Was eine Person allein nicht in einem Sprint schafft, wird geteilt oder zu zweit
+        gemacht — siehe Abschnitt 03.</li>
+    </ol>
+    <div class="callout">
+      <span class="ctag">Bei #4, #5 und #11 wird es wackeln</span>
+      <p>Server, Container und Datenbank hat noch niemand von euch auf diesem Server aufgesetzt.
+        Solche Items schätzt man zu niedrig. Wenn die Gruppe unsicher ist: eine Stufe höher
+        nehmen, nicht niedriger.</p>
+    </div>
+  </section>
+
+  <!-- 07 -->
+  <section id="aufteilung">
+    <div class="shead"><span class="snum">07</span><h2>Topic Three: wer nimmt was</h2></div>
+    <p class="sdek">Hier entscheidet das Team, nicht der Scrum Master. Laut Scrum Guide sind
+      Scrum-Teams selbstorganisiert — „they internally decide who does what, when, and how".</p>
+    <p><b>Wie es praktisch geht:</b> Item für Item durchgehen, kurz zerlegen („was sind die
+      Schritte?"), dann fragen <i>„wer nimmt das?"</i> — und die Antwort abwarten.
+      Nicht zuweisen, nicht vorschlagen, nicht das Schweigen füllen. Das erste Mal ist es
+      unangenehm; ab dem zweiten Sprint läuft es.</p>
+    <h3>Was hier hineinspielt</h3>
+    <ul style="max-width:72ch">
+      <li><b>Die Abgabe von AE-Arbeit.</b> In Sprint 1 fällt sie kaum an, weil die Kette fast
+        reine Systemintegration ist. Das heißt aber: sie muss <b>in diesem Termin schon
+        besprochen</b> werden, nicht erst, wenn es ab Sprint 2 drückt.</li>
+      <li><b>Die offene Lernfeld-Frage.</b> Zählt eine Story mit AE-Lernfeld für die Note der
+        Person, die sie tatsächlich umsetzt? Solange das nicht geklärt ist, keine feste
+        Zusage über Sprint 1 hinaus. Steht als Punkt 7 in <code>po-klaerung.md</code>.</li>
+      <li><b>Wer den Server anfasst.</b> Es gibt eine VM. Wenn vier Leute gleichzeitig
+        konfigurieren, ist am Abend niemand mehr sicher, was wirkt. Absprechen, wer schreibt —
+        und alles sofort als Code ins Repo, sonst ist es morgen nicht reproduzierbar.</li>
+    </ul>
+  </section>
+
+  <!-- 08 -->
+  <section id="ende">
+    <div class="shead"><span class="snum">08</span><h2>Was am Ende vorliegen muss</h2></div>
+    <p class="sdek">Wenn einer dieser Punkte fehlt, ist das Planning nicht fertig — auch wenn
+      die Zeit um ist.</p>
+    <ul class="check">
+      <li><label><input type="checkbox" data-k="e1"><span><b>Sprint Goal steht in einem Satz</b>
+        <span class="sub">Notiert in <code>docs/scrum/sprint-1/review.md</code> und als Beschreibung
+        am Milestone Sprint 1. Als Vorschlag markiert, bis der PO bestätigt.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="e2"><span><b>Items ausgewählt und auf dem Board eingetragen</b>
+        <span class="sub">Milestone <code>Sprint 1</code>, Status <code>Todo</code>,
+        <code>story-points</code> gesetzt. Was nicht im Sprint ist, bleibt auf
+        <code>Backlog</code>.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="e3"><span><b>Jedes gewählte Item hat einen Plan</b>
+        <span class="sub">Schritte, die an einem Tag machbar sind. Als Checkliste im Issue oder als
+        Kommentar — irgendwo sichtbar, nicht nur im Kopf.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="e4"><span><b>Definition of Done ist beschlossen</b>
+        <span class="sub">Das Wort „Entwurf" raus aus
+        <code>docs/scrum/definition-of-done.md</code>, Datum des Beschlusses rein.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="e5"><span><b>Zu jedem Item ist ein Assignee eingetragen</b>
+        <span class="sub">Vom Team gezogen, nicht vom Scrum Master verteilt.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="e6"><span><b>Kapazität ist festgehalten</b>
+        <span class="sub">Damit in der Retrospektive vergleichbar ist, was ihr erwartet und was
+        ihr geschafft habt.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="e7"><span><b>Nächste Termine stehen</b>
+        <span class="sub">Daily: wann und wie lange. Review und Retrospektive: Do 01.10.
+        Direkt danach Planning für Sprint 2.</span></span></label></li>
+    </ul>
+  </section>
+
+  <!-- 09 -->
+  <section id="fallen">
+    <div class="shead"><span class="snum">09</span><h2>Fallen für den Scrum Master</h2></div>
+    <p class="sdek">Sechs Stellen, an denen es in einem ersten Planning regelmäßig kippt.</p>
+    <ul class="check">
+      <li><label><input type="checkbox" data-k="f1"><span><b>Du verteilst die Arbeit</b>
+        <span class="sub">Die häufigste Falle, und sie fühlt sich wie Hilfsbereitschaft an.
+        Fragen und warten, statt zuweisen.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="f2"><span><b>Du nimmst alle AE-Items selbst</b>
+        <span class="sub">Weil es schneller geht und du es am besten kannst. Damit ist die Abgabe
+        vertagt — und ab Sprint 2 nicht mehr nachholbar.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="f3"><span><b>Kein Sprint Goal</b>
+        <span class="sub">Es fühlt sich formal an, wenn die Item-Liste schon steht. Ohne Ziel ist
+        der Sprint aber nur eine Aufgabenliste, und im Review fehlt der Maßstab.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="f4"><span><b>Zu viel commitment</b>
+        <span class="sub">Fünf Leute, zwei Wochen, das klingt nach viel. Es ist der erste Sprint
+        auf einem unbekannten Server.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="f5"><span><b>Timebox reißt</b>
+        <span class="sub">Wenn Topic Two ausläuft: weniger Items, nicht mehr Zeit.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="f6"><span><b>Du entscheidest, was der PO entscheiden müsste</b>
+        <span class="sub">Priorisierung und Scope gehören den Lehrkräften. Vorschlagen ja,
+        beschließen nein — und den Unterschied schriftlich festhalten.</span></span></label></li>
+    </ul>
+  </section>
+
+  <!-- 10 -->
+  <section id="kalender">
+    <div class="shead"><span class="snum">10</span><h2>Die sechs Sprints bis zur Abgabe</h2></div>
+    <p class="sdek">Zwei Wochen je Sprint, Start und Ende Donnerstag auf Mittwoch — aber nur
+      vier Schultage darin. Das sind <b>24 Schultage bis zum 09.12.</b>, dazu Do 10.12. für das
+      Abschluss-Review und Fr 11.12. für die Abgabe. Milestones liegen im Repo an.</p>
+    <div class="cal">
+      <div class="now"><div class="s">Sprint 1</div><div class="d">Do 17.09. · Fr 18.09.<br>Do 24.09. · Fr 25.09.</div><div class="n">Planning heute</div></div>
+      <div><div class="s">Sprint 2</div><div class="d">Do 01.10. · Fr 02.10.<br>Do 08.10. · Fr 09.10.</div></div>
+      <div><div class="s">Sprint 3</div><div class="d">Do 15.10. · Fr 16.10.<br>Do 22.10. · Fr 23.10.</div><div class="n">Ferien prüfen</div></div>
+      <div><div class="s">Sprint 4</div><div class="d">Do 29.10. · Fr 30.10.<br>Do 05.11. · Fr 06.11.</div></div>
+      <div><div class="s">Sprint 5</div><div class="d">Do 12.11. · Fr 13.11.<br>Do 19.11. · Fr 20.11.</div></div>
+      <div><div class="s">Sprint 6</div><div class="d">Do 26.11. · Fr 27.11.<br>Do 03.12. · Fr 04.12.</div><div class="n">Abgabe 11.12.</div></div>
+    </div>
+    <div class="callout warn">
+      <span class="ctag">Herbstferien</span>
+      <p>Die Termine der NRW-Herbstferien 2026 habe ich nicht geprüft — sie fallen aber
+        voraussichtlich in Sprint 3. Wenn ja: entweder diesen Sprint überspringen oder ihn auf
+        die verfügbaren Tage kürzen und den Umfang entsprechend senken.
+        <b>Vor dem Planning von Sprint 2 klären</b>, dann bleibt Zeit zum Umplanen.</p>
+    </div>
+  </section>
+
+  <footer>
+    <span class="mono">Gruppe 11 · Maschinenverleih</span>
+    <span class="mono">Projektüberblick: separates Artefakt</span>
+    <span class="mono">Board: Maschinenverwaltung-IHK · 19 Items</span>
+  </footer>
+
+</div>
+
+<script>
+  // Haken bleiben pro Gerät erhalten - reine Bequemlichkeit fuer den Termin.
+  (function () {
+    var boxes = document.querySelectorAll('input[type="checkbox"][data-k]');
+    try {
+      var saved = JSON.parse(localStorage.getItem('sprint1-planning') || '{}');
+      boxes.forEach(function (b) { if (saved[b.dataset.k]) b.checked = true; });
+    } catch (e) { /* privates Fenster o. ae. - Seite funktioniert ohne */ }
+    boxes.forEach(function (b) {
+      b.addEventListener('change', function () {
+        try {
+          var s = {};
+          boxes.forEach(function (x) { if (x.checked) s[x.dataset.k] = 1; });
+          localStorage.setItem('sprint1-planning', JSON.stringify(s));
+        } catch (e) { /* nicht speicherbar - egal */ }
+      });
+    });
+  })();
+</script>

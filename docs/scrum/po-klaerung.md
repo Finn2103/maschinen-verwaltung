@@ -152,6 +152,33 @@ Dieselbe Person, die die gesamte Anwendungsentwicklung trägt, ist auch Scrum Ma
 Wenn es knapp wird, fällt zuerst die Scrum-Master-Arbeit weg — und die wird pro Sprint
 benotet.
 
+### Was ein Sprint tatsächlich hergibt
+
+Unterricht ist nur Donnerstag und Freitag. Ein zweiwöchiger Sprint hat damit **vier
+Schultage**, und der erste davon geht für Review, Retrospektive und Planning weg:
+
+| Posten | Schulstunden | ≈ Zeitstunden |
+| --- | --- | --- |
+| 2× Donnerstag (reiner Projekttag, 8 Std.) | 16 | 12,0 |
+| 2× Freitag (Projekt + Wirtschaft, ~3 Std.) | 6 | 4,5 |
+| **Rohkapazität je Person** | **22** | **16,5** |
+| − Review, Retrospektive, Planning | −5 | −3,8 |
+| **Entwicklungszeit je Person und Sprint** | **17** | **≈ 12,8** |
+| **Team, fünf Personen** | **85** | **≈ 64** |
+
+Über sechs Sprints ergibt das **rund 380 Zeitstunden** Entwicklungszeit für das ganze
+Team. Die Aufwandsschätzungen der Vorlage summieren sich auf **etwa 200 Stunden** — und
+darin fehlen Abrechnung, Shop und Marketing vollständig.
+
+**Frage A — Umfang:** Passen die drei fehlenden Bereiche aus Punkt 1 überhaupt in diese
+Kapazität, oder müssen sie aus dem Umfang bleiben? Dieselbe Frage wie Punkt 1, jetzt mit
+Zahlen.
+
+**Frage B — Einheit der Schätzung:** Sind die „Std." in der Aufwandsschätzung **Schul-
+oder Zeitstunden**? Bei Zeitstunden ist ein L-Item (16 Std.) mehr, als eine Person in
+einem ganzen Sprint zur Verfügung hat. Sieben der neunzehn Items sind L, zwei sind XL —
+die müssten dann durchweg geteilt oder zu zweit bearbeitet werden.
+
 **Wie das Team damit umgeht:** Ein Teil der Anwendungsentwicklung wird an die
 Systemintegration abgegeben. Wer was übernimmt, entscheidet das Team im ersten Sprint
 Planning am **Donnerstag, 17.09.2026** — das ist Selbstorganisation der Developers und
@@ -168,24 +195,49 @@ Noten. Wenn Abgeben die Bewertung verschlechtert, müsste anders aufgeteilt werd
 
 ---
 
-## 8. Sprintlänge
+## 8. Sprintlänge — entschieden
 
-Vorgegeben sind 2–3 Wochen. Vom 14.09. bis zum 11.12.2026 sind es rund 12 Wochen.
+Das Team hat sich auf **zwei Wochen** festgelegt, innerhalb der vorgegebenen Spanne von
+2–3 Wochen. Ergibt sechs Sprints und sechs Noten je Person. Die Milestones liegen an.
 
-| Länge | Sprints | Noten je Person |
+| Sprint | Zeitraum | Review + Retro |
 | --- | --- | --- |
-| 2 Wochen | 6 | 6 |
-| 3 Wochen | 4 | 4 |
+| 1 | Do 17.09. – Mi 30.09. | Do 01.10. |
+| 2 | Do 01.10. – Mi 14.10. | Do 15.10. |
+| 3 | Do 15.10. – Mi 28.10. | Do 29.10. |
+| 4 | Do 29.10. – Mi 11.11. | Do 12.11. |
+| 5 | Do 12.11. – Mi 25.11. | Do 26.11. |
+| 6 | Do 26.11. – Mi 09.12. | Do 10.12. |
 
-Zu bedenken sind die Herbstferien, die in einen Sprint fallen.
+**Frage — nur eine:** Wann sind die NRW-Herbstferien 2026? Sie fallen voraussichtlich in
+Sprint 3. Wir würden den Sprint dann auf die verfügbaren Tage kürzen und den Umfang
+entsprechend senken.
 
-**Frage:** Welche Länge erwartet der PO? Danach legen wir die Milestones an.
+**Hinweis:** Die Sprintlänge legt das Scrum Team fest, nicht der Product Owner allein —
+deshalb steht sie hier als Information, nicht als Frage.
+
+---
+
+## 9. Daily Scrum bei zwei Schultagen pro Woche
+
+Der Scrum Guide verlangt ein Daily Scrum an **jedem Tag** des Sprints. Wir sind an vier
+von vierzehn Tagen gemeinsam in der Schule. Ein tägliches Daily ist damit nicht
+durchführbar — das ist eine Rahmenbedingung des Bildungsgangs, keine Entscheidung des
+Teams.
+
+**Was wir vorhaben:** Daily in Präsenz am Donnerstag und Freitag, je 15 Minuten zu
+Beginn. An den übrigen Tagen ein kurzer schriftlicher Stand im Teams-Chat von jedem, der
+etwas gemacht hat — ohne Anwesenheitspflicht.
+
+**Frage:** Ist diese Anpassung so akzeptiert, und wie soll sie dokumentiert werden? Wir
+würden sie als bewusste Abweichung mit Begründung festhalten, damit im Review nicht der
+Eindruck entsteht, das Daily sei einfach weggelassen worden.
 
 ---
 
 ## Was wir mitbringen
 
-- Board mit 19 Items, Feldern und zwei Sichten
+- Board mit 19 Items, Feldern, zwei Sichten und den Milestones Sprint 1–6
 - Neufassung aller Items mit Begründung je Änderung (`docs/scrum/backlog-neufassung.md`)
 - ERD in Chen-Notation, Arbeitsstand (`docs/datenmodell`)
 - Nutzwertanalyse Linux-Distribution (`docs/adr`)
