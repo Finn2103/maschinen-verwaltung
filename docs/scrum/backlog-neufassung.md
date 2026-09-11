@@ -7,7 +7,39 @@ Item, mit Bezug auf den jeweiligen Maßstab.
 
 Vorgehen nach Scrum: Das Product Backlog verantwortet der Product Owner. Das Team
 schlägt hier Neufassungen vor, entschieden werden sie im Refinement gemeinsam.
-Der Originaltext bleibt in den Issues #1–#15 erhalten, damit die Änderung belegbar ist.
+
+**Stand:** Die Neufassung ist auf die Issues übertragen. Der **Originaltext steht
+unverändert als erster Kommentar unter jedem Issue #1–#15**, damit jede Änderung
+belegbar bleibt. Jedes Issue verweist außerdem auf dieses Dokument.
+
+### Zuordnung zu den Issues
+
+Die Aufteilungen von #7 und #14 haben neue Issue-Nummern bekommen:
+
+| hier | Issue | Typ | Titel |
+| --- | --- | --- | --- |
+| #1 | [#1](../../issues/1) | User Story | Maschinen nach Verfügbarkeit suchen und reservieren |
+| #2 | [#2](../../issues/2) | User Story | Maschinenstammdaten erfassen und pflegen |
+| #3 | [#3](../../issues/3) | User Story | Wartungsbedarf je Maschine vorhersagen und anzeigen |
+| #7a | [#7](../../issues/7) | User Story | Kundenstammdaten anlegen, ändern und suchen |
+| #8 | [#8](../../issues/8) | User Story | Rollen- und Zugriffsrechte verwalten |
+| #9 | [#9](../../issues/9) | User Story | Buchung zu einem verbindlichen Auftrag mit Audit-Trail |
+| #4 | [#4](../../issues/4) | Task | Server nach IT-Grundschutz absichern |
+| #5 | [#5](../../issues/5) | Task | Infrastruktur automatisiert bereitstellen |
+| #6 | [#6](../../issues/6) | Task | Client-Server-Grundgerüst mit Datenbankanbindung |
+| #7b | **[#20](../../issues/20)** | Task | Kundenstammdaten aus dem Altsystem übernehmen |
+| #10 | [#10](../../issues/10) | Entscheidungs-Task | Datenbanksystem festlegen und begründen |
+| #11 | [#11](../../issues/11) | Task | Datenbank-Server produktiv bereitstellen |
+| #12 | [#12](../../issues/12) | Entscheidungs-Task | Mailserver-System kriteriengeleitet auswählen |
+| #13 | [#13](../../issues/13) | Task | Mailserver produktiv bereitstellen |
+| #14a | [#14](../../issues/14) | Task | Monitoring für Datenbank- und Mailserver einrichten |
+| #14b | **[#17](../../issues/17)** | Task | Update- und Patch-Prozess festlegen und dokumentieren |
+| #14c | **[#18](../../issues/18)** | Task | Incident-Response-Ablauf dokumentieren |
+| #14d | **[#19](../../issues/19)** | Task | Zugriffslogs revisionssicher aufbewahren |
+| #15 | [#15](../../issues/15) | Task | TLS-Verschlüsselung automatisiert verwalten |
+
+Auf dem Board tragen die 13 Tasks jetzt `work-type = Task` und das Label `task`;
+#10 und #12 zusätzlich `entscheidung`.
 
 ---
 
@@ -479,5 +511,12 @@ Diese Punkte sind mit der Neufassung **nicht** gelöst, sondern nur schärfer be
 | Sprintlänge | po-klaerung.md Punkt 8 |
 
 Nicht geändert wurden **Lernfeld- und Fachrichtungszuordnungen** — sie stammen aus der
-Vorlage und betreffen die Leistungsbewertung. Einzige Ausnahme: #2 verliert durch den
-entfallenen Import den Bezug zu LF8, der stattdessen bei #7b liegt.
+Vorlage und betreffen die Leistungsbewertung. Zwei Folgen der Aufteilungen ließen sich
+nicht vermeiden:
+
+- **#7** trug LF8 (*Daten systemübergreifend bereitstellen*). Nach der Trennung liegt LF8
+  bei der Import-Schnittstelle **#7b**, während **#7a** (Kunden pflegen) sachlich zu LF5
+  gehört — wie #2. #2 selbst behält LF5 unverändert.
+- **Aufwandsschätzungen** sind bei #7a/#7b und #14a–#14d entfernt. Die Vorlage schätzte
+  #7 und #14 jeweils als Ganzes auf L; für die Teile gilt das nicht, und Schätzen ist
+  Sache der Developers im Planning.

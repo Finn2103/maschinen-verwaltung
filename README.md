@@ -72,4 +72,4 @@ Sprints à 2–3 Wochen, Review und Retrospektive in Präsenz.
 | [docs/datenmodell](docs/datenmodell) | ERD (Chen), relationales Modell, SQL-DDL |
 | [docs/uml](docs/uml) | Use-Case-, Klassen-, Sequenz-, Komponentendiagramme |
 | [docs/adr](docs/adr) | Architekturentscheidungen, Nutzwertanalysen |
-| [docs/scrum](docs/scrum) | Definition of Done, Sprint-Reviews, Retrospektiven |
+| [docs/scrum](docs/scrum) | Definition of Done, Backlog-Neufassung, PO-Klärung, Kickoff-Übersicht, Reviews und Retrospektiven |
