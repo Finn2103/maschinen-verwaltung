@@ -345,23 +345,36 @@
     <div class="shead"><span class="snum">03</span><h2>Kapazität: vier Schultage, nicht zwei Wochen</h2></div>
     <p class="sdek">Der Sprint läuft zwei Wochen, aber Schule ist nur Donnerstag und Freitag.
       Das sind <b>vier Schultage je Sprint</b> — und der erste davon geht für Review,
-      Retrospektive und Planning weg. Distanztage gibt es noch nicht.</p>
+      Retrospektive und Planning weg.</p>
 
     <div class="tablewrap">
       <table>
-        <thead><tr><th>Posten</th><th>Rechnung</th><th>Schulstunden</th><th>≈ Zeitstunden</th></tr></thead>
+        <thead><tr><th>Tag</th><th>Anwesenheit</th><th>Brutto</th><th>Schulstunden</th><th>Netto ohne Pausen</th></tr></thead>
         <tbody>
-          <tr><td>2× Donnerstag</td><td class="k">reiner Projekttag, 8 Std.</td><td class="k">16</td><td class="k">12,0</td></tr>
-          <tr><td>2× Freitag</td><td class="k">Projekt + Wirtschaft, ~3 Std.</td><td class="k">6</td><td class="k">4,5</td></tr>
-          <tr><td><b>Rohkapazität je Person</b></td><td class="k">—</td><td class="k"><b>22</b></td><td class="k"><b>16,5</b></td></tr>
-          <tr><td>− Review, Retro, Planning</td><td class="k">erster Donnerstag im Sprint</td><td class="k">−5</td><td class="k">−3,8</td></tr>
-          <tr><td><b>Entwicklungszeit je Person</b></td><td class="k">—</td><td class="k"><b>17</b></td><td class="k"><b>≈ 12,8</b></td></tr>
-          <tr><td><b>Team, fünf Personen</b></td><td class="k">—</td><td class="k"><b>85</b></td><td class="k"><b>≈ 64</b></td></tr>
+          <tr><td>Donnerstag</td><td class="k">7:55 – 14:40</td><td class="k">6:45</td><td class="k">8</td><td class="k">6,0 h</td></tr>
+          <tr><td>Freitag</td><td class="k">7:55 – 12:55</td><td class="k">5:00</td><td class="k">6</td><td class="k">4,5 h</td></tr>
         </tbody>
       </table>
     </div>
-    <p style="margin-top:12px">Die Annahmen zu Donnerstag und Freitag sind geschätzt —
-      <b>im Termin durch die echten Stundenzahlen ersetzen</b> und hier eintragen:</p>
+    <p style="margin-top:12px">Der Donnerstag ist reiner Projekttag — 8 Schulstunden, 6,0 Zeitstunden.
+      Der Freitag hat 6 Schulstunden, davon geht <b>Wirtschaft</b> ab. Wie viele Stunden
+      am Freitag wirklich auf das Projekt gehen, ist die einzige offene Größe:</p>
+
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Freitag, Projektanteil</th><th>pro Woche</th><th>pro Sprint</th><th>− Events</th><th>je Person</th><th>Team ×5</th><th>6 Sprints</th></tr></thead>
+        <tbody>
+          <tr><td class="k">2 Schulstd. · 1,5 h</td><td class="k">7,5 h</td><td class="k">15,0 h</td><td class="k">−3,0</td><td class="k"><b>12,0 h</b></td><td class="k">60 h</td><td class="k">360 h</td></tr>
+          <tr><td class="k">3 Schulstd. · 2,25 h</td><td class="k">8,25 h</td><td class="k">16,5 h</td><td class="k">−3,0</td><td class="k"><b>13,5 h</b></td><td class="k">68 h</td><td class="k">405 h</td></tr>
+          <tr><td class="k">4 Schulstd. · 3,0 h</td><td class="k">9,0 h</td><td class="k">18,0 h</td><td class="k">−3,0</td><td class="k"><b>15,0 h</b></td><td class="k">75 h</td><td class="k">450 h</td></tr>
+          <tr><td class="k">6 Schulstd. · 4,5 h</td><td class="k">10,5 h</td><td class="k">21,0 h</td><td class="k">−3,0</td><td class="k"><b>18,0 h</b></td><td class="k">90 h</td><td class="k">540 h</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:12px"><b>Events</b> heißt Review, Retrospektive und Planning — sie fallen
+      einmal je Sprint am ersten Donnerstag an, zusammen rund 3 Stunden. Bei Homeschooling
+      bleibt die Tageszeit gleich, die Kapazität ändert sich also nicht.</p>
+    <p><b>Im Termin die passende Zeile markieren</b> und je Person eintragen, wer davon abweicht:</p>
 
     <div class="tablewrap">
       <table>
@@ -379,12 +392,13 @@
 
     <div class="callout warn">
       <span class="ctag">Die Zahl, die heute alles bestimmt</span>
-      <p>Ein Item mit <b>L (16 Std.)</b> ist mehr, als eine Person in einem ganzen Sprint an
-        Entwicklungszeit hat (≈ 12,8 h). Das betrifft <b>#1, #5, #6, #7, #8, #11, #13</b> —
-        und XL bei <b>#3</b> und <b>#9</b> erst recht.</p>
-      <p>Heißt: fast jedes Item muss <b>geteilt oder zu zweit bearbeitet</b> werden, sonst wird
-        es in zwei Wochen nicht fertig. Nur die M-Items (#2, #4, #10, #12, #15) passen einer
-        Person in einen Sprint.</p>
+      <p>Eine Person hat je Sprint <b>12 bis 18 Stunden</b> Entwicklungszeit — je nachdem, wie
+        viel Freitag übrig bleibt. Ein Item mit <b>L (16 Std.)</b> ist damit praktisch der
+        ganze Sprint dieser Person, ein <b>XL</b> passt gar nicht.</p>
+      <p>Betroffen: <b>L bei #1, #5, #6, #7, #8, #11, #13</b> und <b>XL bei #3 und #9</b> — neun
+        von neunzehn Items. Die müssen <b>geteilt oder zu zweit bearbeitet</b> werden. Nur die
+        M-Items (#2, #4, #10, #12, #15) passen einer Person in einen Sprint, und auch das nur,
+        wenn sie sonst nichts nimmt.</p>
       <p><b>Nachfragen:</b> Ob die „Std." der Vorlage Schul- oder Zeitstunden sind, steht
         nirgends. Bei Schulstunden wäre L ≈ 12 Zeitstunden — also immer noch fast ein
         kompletter Sprint für eine Person. Die Schlussfolgerung bleibt dieselbe.</p>
@@ -413,10 +427,9 @@
 
     <div class="callout ok">
       <span class="ctag">Der Blick auf das Ganze</span>
-      <p>Sechs Sprints × ≈ 64 Zeitstunden ergeben <b>rund 380 Zeitstunden Entwicklungszeit</b>
-        für das ganze Team bis zum 09.12. Die Schätzung der Vorlage summiert sich auf
-        <b>etwa 200 Stunden</b> — und darin fehlen Abrechnung, Shop und Marketing noch
-        vollständig.</p>
+      <p>Über sechs Sprints kommt das Team auf <b>360 bis 540 Zeitstunden</b> Entwicklungszeit
+        bis zum 09.12. Die Schätzung der Vorlage summiert sich auf <b>etwa 200 Stunden</b> — und
+        darin fehlen Abrechnung, Shop und Marketing noch vollständig.</p>
       <p>Machbar, aber nicht großzügig. Wenn die drei fehlenden Bereiche dazukommen, wird es
         eng — genau das steht als Punkt 1 in <code>po-klaerung.md</code>.</p>
     </div>

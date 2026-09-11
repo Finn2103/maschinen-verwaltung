@@ -48,8 +48,10 @@ Schultage**, und der erste geht für Review, Retrospektive und Planning weg.
 24 Schultage bis zum 09.12., dazu **Do 10.12.** für das Abschluss-Review und
 **Fr 11.12.** für die Abgabe in der 8. Stunde.
 
-Entwicklungszeit je Person und Sprint: **≈ 12,8 Zeitstunden**, Team ≈ 64. Über sechs
-Sprints ≈ 380 Zeitstunden. Die Rechnung steht in `po-klaerung.md` Punkt 7.
+Anwesenheit: **Donnerstag 7:55–14:40** (8 Schulstunden, reiner Projekttag),
+**Freitag 7:55–12:55** (6 Schulstunden, davon Wirtschaft). Entwicklungszeit je Person
+und Sprint: **12 bis 18 Zeitstunden**, je nach Projektanteil am Freitag — Team 60 bis 90
+je Sprint. Die Rechnung steht in `po-klaerung.md` Punkt 7.
 
 Die Termine der NRW-Herbstferien 2026 sind noch nicht geprüft — sie fallen
 voraussichtlich in Sprint 3. Vor dem Planning von Sprint 2 klären und den Sprint
