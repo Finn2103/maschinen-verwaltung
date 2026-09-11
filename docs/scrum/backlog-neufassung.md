@@ -51,8 +51,9 @@ Auf dem Board tragen die 13 Tasks jetzt `work-type = Task` und das Label `task`;
 | **INVEST** (Bill Wake, 2003) | Items sind **V**aluable — Nutzen für jemanden, der das Produkt benutzt — und **T**estable — am Kriterium ist objektiv prüfbar, ob es erfüllt ist. |
 | **Connextra-Format** | „Als *Rolle* möchte ich *Ziel*, damit *Nutzen*" — die Rolle ist ein Beteiligter am Produkt, nicht das Entwicklungsteam. |
 | **Projektauftakt, Folie 09** | „User Stories für AE und DP, **Tickets für SI und DV** — mit Akzeptanzkriterien." |
+| **Projektauftakt, Folie 09 — Pflichtliste** | Objektorientierter Ansatz · Client-Server-Architektur und Datenbank-API · kein implizit erzeugtes Schema · Infrastructure as Code · IT-Grundschutz, ISO 9241, UML. **Nur diese Punkte sind verbindlich.** |
 | **Projektauftakt, Folie 07** | „Der Excel-Bestand wird über eine selbst programmierte Schnittstelle übernommen. **Maschinendaten werden neu erfasst.**" |
-| **Projektauftakt, Folie 08** | Vorgegebene Architektur: Authelia für Authentifizierung, Kong vor den Supabase APIs, PostgreSQL als Datenbank. |
+| **Projektauftakt, Folie 08 — Architekturbild** | **Orientierung, keine Vorgabe.** Der Technologie-Stack ist frei wählbar, solange die Pflichtliste erfüllt ist. |
 
 ---
 
@@ -68,9 +69,8 @@ Auf dem Board tragen die 13 Tasks jetzt `work-type = Task` und das Label `task`;
 | #5 | Rolle im „Als …" ist das Team | INVEST · Valuable · Folie 09 |
 | #6 | Rolle im „Als …" ist das Team | INVEST · Valuable |
 | #7 | Vermischt Nutzerfunktion und technische Schnittstelle | INVEST · Independent |
-| #8 | Fordert eigene Passwortspeicherung | **Widerspruch zu Folie 08 (Authelia)** |
+| #8 | Rechteprüfung nur beschrieben, nicht serverseitig verlangt | INVEST · Testable |
 | #9 | „kann nicht rückwirkend manipuliert werden" ohne prüfbare Bedingung | INVEST · Testable |
-| #10 | Freie DBMS-Wahl, obwohl die Architektur PostgreSQL vorgibt | **Widerspruch zu Folie 08** |
 | #10 | Ergebnis ist ein Beschluss, kein Inkrement | Folie 09 |
 | #11 | Rolle im „Als …" ist das Team | INVEST · Valuable · Folie 09 |
 | #12 | Ergebnis ist ein Beschluss, kein Inkrement | Folie 09 |
@@ -79,52 +79,58 @@ Auf dem Board tragen die 13 Tasks jetzt `work-type = Task` und das Label `task`;
 | #15 | Rolle im „Als …" ist das Team | INVEST · Valuable · Folie 09 |
 
 Zusammengefasst: 6 der 15 Items sind echte User Stories, 9 sind technische Aufgaben in
-Story-Form, 1 ist nicht abschließbar, und 4 widersprechen der Aufgabenstellung selbst.
+Story-Form, 1 ist nicht abschließbar, und 1 steht im Widerspruch zur Aufgabenstellung
+selbst. Zwei weitere Befunde habe ich nach Rückfrage **zurückgezogen** — siehe unten.
 
 ---
 
-## Die vier Widersprüche zur Aufgabenstellung
+## Befunde gegen die Aufgabenstellung
 
-Diese vier sind keine Formfragen. Sie müssen mit dem Product Owner geklärt werden,
-weil sonst Arbeit entsteht, die der eigenen Vorgabe zuwiderläuft.
+Einer steht, einer ist offen, **zwei sind zurückgezogen**. Die Rücknahmen stehen hier
+bewusst mit drin: sie zeigen, dass geprüft wurde — auch die eigenen Befunde.
 
-### 1. Maschinendaten: Import oder Neuerfassung? (#2)
-
-Folie 07 sagt ausdrücklich, die Maschinendaten werden **neu erfasst** und nur der
-Excel-Bestand an Kunden- und Vorgangsdaten übernommen. #2 fordert dagegen eine
-Importschnittstelle für Maschinendaten.
-
-→ In der Neufassung ist der Import aus #2 entfernt. Falls der PO den Import doch
-will, wird er ein eigenes Item, analog zu #7b.
-
-### 2. Passwörter: Authelia oder eigene Speicherung? (#8)
-
-Die Architektur gibt **Authelia** für die Authentifizierung vor. #8 fordert, dass die
-Anwendung Passwörter selbst hasht und speichert. Beides zugleich hieße zwei
-Benutzerverwaltungen — und selbstgebaute Passwortspeicherung widerspricht dem
-IT-Grundschutz-Gedanken der Aufgabe.
-
-→ In der Neufassung macht die Anwendung **Autorisierung** (wer darf was),
-die **Authentifizierung** (wer ist das) bleibt bei Authelia.
-
-### 3. Datenbank: wirklich frei wählbar? (#10)
-
-Die Architektur gibt die **Supabase APIs** vor (PostgREST, pg_graphql, pg-meta) und
-zeigt **PostgreSQL** in der Datenhaltung. Diese API-Schicht läuft ausschließlich auf
-PostgreSQL. Eine ergebnisoffene Wahl zwischen drei Datenbanksystemen gibt es damit
-nicht — die Entscheidung ist durch die Architektur schon getroffen.
-
-→ Die Neufassung behält die Nutzwertanalyse (sie ist Prüfungsthema), formuliert sie
-aber als **Begründung der vorgegebenen Wahl** mit benannter Randbedingung. So bleibt
-die Methode erhalten, ohne eine Entscheidung zu behaupten, die nicht offen ist.
-
-### 4. #14 kann nie fertig werden
+### 1. #14 kann nie fertig werden — steht
 
 „Betrieb und Sicherheit gewährleisten" beschreibt Monitoring, Updates und Incident
-Response als Dauerzustand. Ein Item, das die Definition of Done nie erfüllen kann,
-darf laut Scrum Guide im Review nicht gezeigt werden — es wäre in jedem Sprint offen.
+Response als Dauerzustand. Ein Item, das die Definition of Done nie erfüllen kann, darf
+laut Scrum Guide im Review nicht gezeigt werden — es wäre in jedem Sprint offen.
 
-→ Aufgeteilt in vier abschließbare Items (#14a–#14d).
+→ Aufgeteilt in vier abschließbare Items (#14a–#14d). Vom Scrum Master bestätigt.
+
+### 2. Maschinendaten: Import oder Neuerfassung? (#2) — offen
+
+Folie 07 sagt, die Maschinendaten werden **neu erfasst**, und nur der Excel-Bestand an
+Kunden- und Vorgangsdaten wird übernommen. #2 fordert dagegen eine Importschnittstelle
+für Maschinendaten.
+
+→ In der Neufassung ist der Import aus #2 entfernt. Wenn er doch gewollt ist, wird er
+ein eigenes Item, analog zu #20. **Noch nicht entschieden.**
+
+### Zurückgezogen: Passwortspeicherung in #8
+
+Der Befund lautete, #8 widerspreche der Architektur, weil dort Authelia die
+Authentifizierung übernimmt. **Das war falsch.** Das Architekturbild auf Folie 08 ist
+Orientierung, keine Vorgabe — verbindlich ist allein die Pflichtliste. Ein selbst
+gebautes Anmeldeverfahren ist damit zulässig, und das Kriterium zur sicheren
+Passwortspeicherung steht wieder in #8.
+
+Was inhaltlich bleibt: unter **IT-Grundschutz** ist eine fertige Identitätsverwaltung die
+sicherere Wahl, weil selbst gebaute Anmeldeverfahren die häufigste Fehlerquelle sind.
+Das ist aber eine **Architekturentscheidung des Teams**, kein Verstoß gegen die Vorgabe —
+und gehört damit in einen ADR, nicht in eine Befundliste.
+
+### Zurückgezogen: freie Datenbankwahl in #10
+
+Derselbe Denkfehler: der Befund nahm an, die Supabase-APIs seien vorgegeben und legten
+PostgreSQL fest. **Auch das war falsch** — das Architekturbild bindet nicht. Die Wahl des
+Datenbanksystems ist **wirklich offen**, und die Nutzwertanalyse in #10 ist eine echte
+Entscheidung.
+
+Was daraus für #10 folgt und dort eingebaut ist: die Pflichtliste liefert die
+**Ausschlusskriterien** der Nutzwertanalyse. Ein System, das sich nicht über eine
+Datenbank-API ansprechen lässt, das Schema implizit erzeugt, sich nicht containerisieren
+und per Infrastructure as Code aufsetzen lässt oder nicht nach IT-Grundschutz absicherbar
+ist, fällt aus der Bewertung — unabhängig von seiner Punktzahl.
 
 ---
 
@@ -196,9 +202,10 @@ die ursprünglichen Issues, damit die Zuordnung nachvollziehbar bleibt.
 >
 > **Offen beim PO:** Die Kriterien lassen sich auch regelbasiert erfüllen
 > (Intervall aus Betriebsstunden). Das Lernfeld LF10c fordert aber ausdrücklich
-> *Werkzeuge des maschinellen Lernens*. Ob ein ML-Verfahren verlangt ist, muss der PO
-> sagen — davon hängt ab, ob LF10c abgedeckt ist. Dazu kommt: das Item trägt
-> `fachrichtung-DP`, und diese Fachrichtung ist im Team nicht besetzt.
+> *Werkzeuge des maschinellen Lernens*. Das Team geht davon aus, dass ein solches
+> Verfahren gebraucht wird, hat es aber noch nicht entschieden — und jedenfalls nicht für
+> die ersten Sprints. Dazu kommt: das Item trägt `fachrichtung-DP`, und diese Fachrichtung
+> ist im Team nicht besetzt.
 
 ---
 
@@ -250,19 +257,25 @@ Nicht dazu: Maschinendaten (werden neu erfasst), Vorgangsdaten.
 **damit** jede Nutzergruppe nur auf die für sie vorgesehenen Daten und Funktionen zugreift.
 
 **Akzeptanzkriterien**
+- [ ] Die Anmeldung erfordert gültige Zugangsdaten; Passwörter werden nur als Hash gespeichert, niemals im Klartext
 - [ ] Die Rollen Kunde, Mitarbeiter und Admin existieren mit je festgelegten Rechten
 - [ ] Ein Kunde sieht ausschließlich eigene Reservierungen, Aufträge und Rechnungen
 - [ ] Der Zugriff auf fremde Daten wird serverseitig abgelehnt — auch bei direktem Aufruf der API
 - [ ] Jeder abgelehnte Zugriffsversuch wird mit Zeitpunkt, Benutzer und Ziel protokolliert
 - [ ] Die Rollenzuweisung ist zur Laufzeit änderbar, ohne Code anzupassen
 
-> **Geändert:** Das Kriterium zur eigenen Passwortspeicherung ist entfernt — die
-> Authentifizierung macht laut Architektur Authelia (siehe Widerspruch 2). Diese Story
-> ist damit **Autorisierung**. Neu und wichtig: die Prüfung muss serverseitig greifen,
-> auch bei direktem API-Aufruf — sonst ist die Rechteprüfung reine UI-Kosmetik.
+> **Geändert:** Neu und wichtig ist das serverseitige Kriterium — die Rechteprüfung muss
+> auch bei direktem Aufruf der Datenbank-API greifen, sonst ist sie reine Oberflächen-Kosmetik.
+> Das Kriterium zur Passwortspeicherung ist präzisiert: „nur als Hash, niemals im Klartext"
+> statt „sicher gespeichert".
 >
-> **Offen beim PO:** Wie Authelia und die Rollen im System zusammenspielen (Rollen aus
-> dem Token oder in der Datenbank geführt) ist eine Architekturfrage für das Team.
+> **Zurückgezogen:** In einer früheren Fassung war die Passwortspeicherung entfernt, weil
+> angeblich Authelia die Authentifizierung vorgibt. Das Architekturbild ist aber nur
+> Orientierung — das Kriterium ist wieder drin.
+>
+> **Architekturentscheidung fürs Team:** Anmeldeverfahren selbst bauen oder eine fertige
+> Identitätsverwaltung nutzen (Authelia, Supabase GoTrue oder etwas anderes). Unter
+> IT-Grundschutz spricht viel für eine fertige Lösung. Gehört in einen ADR.
 
 ---
 
@@ -356,19 +369,21 @@ dokumentiert, bevor die Datenbank produktiv aufgesetzt wird.
 
 **Akzeptanzkriterien**
 - [ ] Mindestens drei Datenbanksysteme sind recherchiert und gegenübergestellt
-- [ ] Die Kriterien sind vor der Bewertung festgelegt und gewichtet
+- [ ] Die vier Ausschlusskriterien aus der Pflichtliste sind je System geprüft: über eine Datenbank-API ansprechbar · erzeugt das Schema nicht implizit · containerisierbar und per Infrastructure as Code aufsetzbar · nach IT-Grundschutz absicherbar
+- [ ] Die Bewertungskriterien sind vor der Bewertung festgelegt und gewichtet
 - [ ] Der Nutzwert ist berechnet und das Ergebnis interpretiert — die Punktzahl allein gilt nicht als Begründung
-- [ ] Die Randbedingung aus der vorgegebenen Architektur ist benannt und bewertet: die Supabase APIs setzen PostgreSQL voraus
 - [ ] Das Ergebnis liegt als ADR in `docs/adr` vor
 
 > **Geändert:** Typ auf Entscheidungs-Task — das Ergebnis ist ein Beschluss, kein
-> Inkrement. Inhaltlich ergänzt um die Randbedingung: die vorgegebene API-Schicht
-> läuft nur auf PostgreSQL, die Wahl ist also nicht ergebnisoffen (siehe
-> Widerspruch 3). Die Nutzwertanalyse bleibt vollständig erhalten — sie ist
-> Prüfungsthema — begründet aber die vorgegebene Wahl statt eine freie zu behaupten.
+> Inkrement. Neu: die Pflichtliste der Aufgabenstellung liefert vier
+> **Ausschlusskriterien**. Ein System, das eines davon reißt, fällt unabhängig von seiner
+> Punktzahl aus der Bewertung. Das ist der Punkt, an dem die Nutzwertanalyse mit den
+> verbindlichen Vorgaben verzahnt wird.
 >
-> **Offen beim PO:** Ist die Datenbank tatsächlich frei wählbar, oder gilt die
-> Architektur von Folie 08?
+> **Zurückgezogen:** In einer früheren Fassung war dieses Item so umformuliert, dass es
+> die „vorgegebene" Wahl PostgreSQL begründen sollte — aus der Annahme, das
+> Architekturbild auf Folie 08 sei verbindlich. Das ist es nicht. **Die Wahl ist offen**,
+> und dieses Item ist eine echte Entscheidung.
 
 ---
 
@@ -498,17 +513,18 @@ nachträglich nicht unbemerkt verändert werden können.
 
 ---
 
-## Was weiterhin beim Product Owner liegt
+## Was noch offen ist
 
-Diese Punkte sind mit der Neufassung **nicht** gelöst, sondern nur schärfer benannt:
+Die meisten Punkte sind inzwischen entschieden — der Stand steht in
+[`entscheidungen.md`](entscheidungen.md). Offen bleibt:
 
-| Punkt | Siehe |
+| Punkt | Wer entscheidet |
 | --- | --- |
-| Abrechnung, Shop und Marketing haben kein Item | [po-klaerung.md](po-klaerung.md) Punkt 1 |
-| #3 braucht eine Entscheidung zu ML vs. Regelwerk und eine Besetzung | Punkt 2 · #3 oben |
-| Ist die Datenbank frei wählbar oder gilt Folie 08? | Widerspruch 3 |
-| Reihenfolge des Backlogs | po-klaerung.md Punkt 6 |
-| Sprintlänge | po-klaerung.md Punkt 8 |
+| #2: Import der Maschinendaten — doch gewollt oder nicht? | Team, mit Blick auf Folie 07 |
+| #3: maschinelles Lernen oder Regelwerk, und wer macht es? | Team, nicht in den ersten Sprints |
+| Abrechnung, Shop und Marketing: Stories formulieren | Team, gegen Ende des Projekts |
+| Reihenfolge des Backlogs | Team — der Product Owner priorisiert nicht mit |
+| Termine der Herbstferien 2026 | nachsehen, betrifft Sprint 3 |
 
 Nicht geändert wurden **Lernfeld- und Fachrichtungszuordnungen** — sie stammen aus der
 Vorlage und betreffen die Leistungsbewertung. Zwei Folgen der Aufteilungen ließen sich
