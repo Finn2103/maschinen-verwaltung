@@ -13,8 +13,10 @@ Ein Item ist fertig, wenn:
 5. **Infrastruktur** liegt als Code im Repo — die Umgebung ließe sich damit neu aufbauen.
 6. **Keine Secrets** im Repo.
 7. **Dokumentation** ist nachgezogen, wo sie betroffen ist (UML, ADR, README).
-8. Bei UI: **Lade-, Leer- und Fehlerzustand** vorhanden, Bedienung per Tastatur
-   möglich, Kontraste ausreichend (ISO 9241).
+8. Bei UI: **Lade-, Leer- und Fehlerzustand** vorhanden, und die Oberfläche erfüllt die
+   **Barrierefreiheits-Checkliste des Projekts nach ISO 9241** (`docs/adr`). ISO 9241
+   steht in der Pflichtliste der Aufgabenstellung — die Checkliste legt einmalig fest,
+   was das konkret heißt, damit es je Item prüfbar ist statt jedes Mal neu verhandelt.
 9. Das Board-Item steht auf **Done** und ist dem richtigen Sprint-Milestone zugeordnet.
 
 ## Was nicht als "fertig" gilt
