@@ -1,0 +1,1046 @@
+<title>Maschinenpark Mockups</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* ============ Seite (folgt dem Theme des Betrachters) ============ */
+  :root {
+    --paper:#edefee; --surface:#f8f9f8; --surface-2:#e3e7e6;
+    --ink:#191d20; --ink-2:#56606a; --ink-3:#7b858d;
+    --rule:#ccd2d1; --rule-soft:#dbe0df;
+    --steel:#2f4a5c; --steel-soft:#dde5ea;
+    --plakette:#b35f12; --plak-soft:#f6e4d3;
+    --signal:#a8301c; --sig-soft:#f4dcd7;
+    --gruen:#2f6246; --gruen-soft:#d9e7df;
+    --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+    --body:"Barlow","Segoe UI",system-ui,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+    --wide:1180px;
+
+    /* ---- App-Palette: bewusst fest, das Produkt ist hell entworfen ---- */
+    --a-bg:#f4f6f5; --a-surface:#ffffff; --a-surface-2:#eef1f0;
+    --a-ink:#14191a; --a-ink-2:#4e5a5e; --a-ink-3:#7a868a;
+    --a-line:#d5dad9; --a-line-2:#e6eae9;
+    --a-primary:#0f4c5c; --a-primary-soft:#e0edf0;
+    --a-ok:#1f6f43; --a-ok-soft:#e2f0e8;
+    --a-warn:#a8620d; --a-warn-soft:#fbeedd;
+    --a-err:#b3261e; --a-err-soft:#fce9e7;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:#14181a; --surface:#1c2124; --surface-2:#232a2d;
+      --ink:#e6eae9; --ink-2:#9aa6ad; --ink-3:#79858c;
+      --rule:#2e3639; --rule-soft:#242b2e;
+      --steel:#8bb2cc; --steel-soft:#1e2b34;
+      --plakette:#e0904a; --plak-soft:#31241a;
+      --signal:#e38470; --sig-soft:#331f1c;
+      --gruen:#74b791; --gruen-soft:#1a2a22;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper:#14181a; --surface:#1c2124; --surface-2:#232a2d;
+    --ink:#e6eae9; --ink-2:#9aa6ad; --ink-3:#79858c;
+    --rule:#2e3639; --rule-soft:#242b2e;
+    --steel:#8bb2cc; --steel-soft:#1e2b34;
+    --plakette:#e0904a; --plak-soft:#31241a;
+    --signal:#e38470; --sig-soft:#331f1c;
+    --gruen:#74b791; --gruen-soft:#1a2a22;
+  }
+
+  * { box-sizing:border-box; }
+  body {
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:var(--body); font-size:16px; line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap { max-width:var(--wide); margin:0 auto; padding:0 26px 90px; }
+
+  .mast { padding:50px 0 24px; border-bottom:2px solid var(--ink); }
+  .eyebrow {
+    font-family:var(--mono); font-size:11.5px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--ink-2); margin:0 0 15px;
+  }
+  h1 {
+    font-family:var(--display); font-weight:700;
+    font-size:clamp(2.1rem,5vw,3.1rem); line-height:1.03;
+    letter-spacing:-.022em; margin:0 0 15px; text-wrap:balance;
+  }
+  h1 .thin { display:block; color:var(--steel); font-weight:600; }
+  .standfirst { font-size:1.05rem; color:var(--ink-2); margin:0; max-width:64ch; }
+
+  .storyrow {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:1px; background:var(--rule); border:1px solid var(--rule); margin:28px 0 0;
+  }
+  .storyrow div { background:var(--surface); padding:12px 14px; }
+  .storyrow dt {
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.11em;
+    text-transform:uppercase; color:var(--ink-3); margin:0 0 4px;
+  }
+  .storyrow dd { margin:0; font-size:.92rem; font-weight:500; }
+
+  section { padding:52px 0 0; }
+  .shead { display:flex; align-items:baseline; gap:13px; margin:0 0 6px; }
+  .snum {
+    font-family:var(--mono); font-size:.82rem; color:var(--steel);
+    border-bottom:2px solid var(--steel); padding-bottom:1px; flex:none;
+  }
+  h2 {
+    font-family:var(--display); font-weight:600;
+    font-size:clamp(1.35rem,2.4vw,1.8rem);
+    letter-spacing:-.014em; line-height:1.15; margin:0; text-wrap:balance;
+  }
+  .sdek { color:var(--ink-2); margin:0 0 26px; max-width:66ch; font-size:1rem; }
+  p { margin:0 0 12px; max-width:74ch; }
+  a { color:var(--steel); }
+  :focus-visible { outline:2px solid var(--plakette); outline-offset:2px; }
+
+  .callout { border-left:3px solid var(--plakette); background:var(--plak-soft); padding:15px 18px; margin:0 0 28px; }
+  .callout.ok { border-left-color:var(--gruen); background:var(--gruen-soft); }
+  .callout p:last-child { margin-bottom:0; }
+  .callout .ctag {
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--plakette); display:block; margin-bottom:6px;
+  }
+  .callout.ok .ctag { color:var(--gruen); }
+
+  /* ============ Rahmen um jeden Bildschirm ============ */
+  .screen { margin:0 0 42px; }
+  .cap { display:flex; flex-wrap:wrap; align-items:baseline; gap:10px; margin:0 0 9px; }
+  .cap .nr {
+    font-family:var(--mono); font-size:.8rem; color:var(--steel);
+    border:1px solid var(--steel); padding:1px 7px; flex:none;
+  }
+  .cap .ct { font-family:var(--display); font-weight:600; font-size:1.02rem; }
+  .cap .cw {
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.07em;
+    text-transform:uppercase; color:var(--plakette);
+  }
+  .proves {
+    font-size:.88rem; color:var(--ink-2); margin:0 0 11px;
+    padding-left:11px; border-left:2px solid var(--gruen); max-width:78ch;
+  }
+
+  .frame { border:1px solid var(--rule); background:var(--a-bg); overflow:hidden; }
+  .chrome {
+    display:flex; align-items:center; gap:8px; padding:8px 12px;
+    background:var(--a-surface-2); border-bottom:1px solid var(--a-line);
+  }
+  .chrome i { width:9px; height:9px; border-radius:50%; background:var(--a-line); display:block; }
+  .chrome .url {
+    font-family:var(--mono); font-size:10.5px; color:var(--a-ink-3);
+    background:var(--a-surface); border:1px solid var(--a-line);
+    padding:2px 9px; margin-left:6px; flex:1; max-width:380px;
+  }
+
+  /* ============ App-Bausteine (feste Farben) ============ */
+  .app { color:var(--a-ink); font-size:14px; line-height:1.5; }
+  .topbar {
+    display:flex; align-items:center; gap:22px; flex-wrap:wrap;
+    padding:12px 20px; background:var(--a-surface); border-bottom:1px solid var(--a-line);
+  }
+  .brand { font-family:var(--display); font-weight:700; font-size:1.02rem; letter-spacing:-.01em; }
+  .brand span { color:var(--a-primary); }
+  .navlinks { display:flex; gap:18px; font-size:.86rem; font-weight:500; }
+  .navlinks a { color:var(--a-ink-2); text-decoration:none; padding-bottom:2px; }
+  .navlinks a.on { color:var(--a-primary); border-bottom:2px solid var(--a-primary); }
+  .who { margin-left:auto; font-size:.8rem; color:var(--a-ink-3); font-family:var(--mono); }
+
+  .shell { display:grid; grid-template-columns:186px 1fr; }
+  .side { background:var(--a-surface); border-right:1px solid var(--a-line); padding:14px 0; }
+  .side a {
+    display:block; padding:8px 20px; font-size:.86rem; color:var(--a-ink-2);
+    text-decoration:none; font-weight:500; border-left:3px solid transparent;
+  }
+  .side a.on { color:var(--a-primary); background:var(--a-primary-soft); border-left-color:var(--a-primary); }
+  .side .grp {
+    font-family:var(--mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--a-ink-3); padding:14px 20px 5px;
+  }
+  .main { padding:22px 24px 26px; }
+
+  .ph { display:flex; align-items:flex-end; gap:14px; flex-wrap:wrap; margin:0 0 16px; }
+  .ph h3 { font-family:var(--display); font-weight:600; font-size:1.2rem; margin:0; letter-spacing:-.01em; }
+  .ph .sub { font-family:var(--mono); font-size:.78rem; color:var(--a-ink-3); }
+  .ph .right { margin-left:auto; display:flex; gap:9px; }
+
+  .filters {
+    display:flex; gap:14px; flex-wrap:wrap; align-items:flex-end;
+    background:var(--a-surface); border:1px solid var(--a-line); padding:14px 16px; margin:0 0 16px;
+  }
+  .field { display:flex; flex-direction:column; gap:4px; min-width:130px; }
+  .field > label { font-size:.78rem; font-weight:600; color:var(--a-ink-2); }
+  .field > label .req { color:var(--a-err); }
+  .inp {
+    font-family:var(--body); font-size:.87rem; color:var(--a-ink);
+    background:var(--a-surface); border:1px solid #9aa5a8; padding:7px 10px; min-height:34px;
+  }
+  .inp.mono { font-family:var(--mono); font-size:.83rem; }
+  .inp.sel::after { content:"▾"; float:right; color:var(--a-ink-3); }
+  .hint { font-size:.76rem; color:var(--a-ink-3); }
+  .field.bad .inp { border:2px solid var(--a-err); background:var(--a-err-soft); }
+  .field.bad > label { color:var(--a-err); }
+  .errmsg {
+    font-size:.79rem; color:var(--a-err); font-weight:500;
+    display:flex; gap:5px; align-items:flex-start;
+  }
+  .errmsg b { flex:none; }
+  .field.focus .inp { border:1px solid var(--a-primary); outline:3px solid #8fc0cc; outline-offset:1px; }
+
+  .btn {
+    font-family:var(--body); font-size:.86rem; font-weight:600; padding:8px 15px;
+    border:1px solid var(--a-line); background:var(--a-surface); color:var(--a-ink);
+    min-height:34px; display:inline-flex; align-items:center; gap:7px; white-space:nowrap;
+  }
+  .btn.primary { background:var(--a-primary); border-color:var(--a-primary); color:#fff; }
+  .btn.sm { font-size:.79rem; padding:5px 11px; min-height:28px; }
+
+  .badge {
+    font-family:var(--mono); font-size:10px; letter-spacing:.05em; padding:2px 7px;
+    border:1px solid; white-space:nowrap; text-transform:uppercase;
+  }
+  .badge.free { color:var(--a-ok); border-color:var(--a-ok); background:var(--a-ok-soft); }
+  .badge.out  { color:var(--a-warn); border-color:var(--a-warn); background:var(--a-warn-soft); }
+  .badge.serv { color:var(--a-err); border-color:var(--a-err); background:var(--a-err-soft); }
+  .badge.done { color:var(--a-ink-3); border-color:var(--a-line); }
+
+  .tbl { width:100%; border-collapse:collapse; background:var(--a-surface); border:1px solid var(--a-line); }
+  .tbl th {
+    text-align:left; font-family:var(--mono); font-size:9.5px; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--a-ink-3); font-weight:500;
+    padding:9px 12px; border-bottom:1px solid var(--a-line); background:var(--a-surface-2);
+    white-space:nowrap;
+  }
+  .tbl td { padding:10px 12px; border-bottom:1px solid var(--a-line-2); font-size:.86rem; vertical-align:middle; }
+  .tbl tr:last-child td { border-bottom:0; }
+  .tbl td.m { font-family:var(--mono); font-size:.82rem; color:var(--a-ink-2); white-space:nowrap; }
+  .tbl td.num { font-family:var(--mono); font-size:.82rem; text-align:right; font-variant-numeric:tabular-nums; }
+  .tbl td.r { text-align:right; }
+  .tblwrap { overflow-x:auto; }
+
+  .banner { display:flex; gap:11px; padding:12px 15px; margin:0 0 16px; border:1px solid; align-items:flex-start; }
+  .banner .bi { font-weight:700; flex:none; font-family:var(--mono); }
+  .banner.ok { background:var(--a-ok-soft); border-color:var(--a-ok); color:#14512f; }
+  .banner.bad { background:var(--a-err-soft); border-color:var(--a-err); color:#7f1b15; }
+  .banner b { font-weight:700; }
+  .banner a { color:inherit; }
+  .banner p { margin:0; font-size:.86rem; max-width:none; }
+
+  .cards { display:grid; gap:10px; }
+  .card {
+    display:flex; gap:16px; align-items:center; flex-wrap:wrap;
+    background:var(--a-surface); border:1px solid var(--a-line); padding:13px 16px;
+  }
+  .card .thumb { width:52px; height:52px; background:var(--a-surface-2); border:1px solid var(--a-line); flex:none; }
+  .card .cmain { flex:1; min-width:170px; }
+  .card .cname { font-weight:600; font-size:.95rem; }
+  .card .cmeta { font-family:var(--mono); font-size:.78rem; color:var(--a-ink-3); }
+  .card .cprice { text-align:right; }
+  .card .cprice .p { font-family:var(--mono); font-weight:500; font-size:.95rem; }
+  .card .cprice .u { font-size:.75rem; color:var(--a-ink-3); }
+
+  .empty { background:var(--a-surface); border:1px solid var(--a-line); padding:28px 26px; }
+  .empty h4 { font-family:var(--display); font-size:1.05rem; margin:0 0 8px; font-weight:600; }
+  .empty p { font-size:.88rem; color:var(--a-ink-2); margin:0 0 12px; max-width:62ch; }
+  .empty ul { margin:0; padding-left:19px; font-size:.86rem; color:var(--a-ink-2); }
+  .empty li { margin-bottom:4px; }
+
+  .specs { display:grid; grid-template-columns:repeat(auto-fit,minmax(122px,1fr)); gap:1px; background:var(--a-line); border:1px solid var(--a-line); margin:0 0 18px; }
+  .specs div { background:var(--a-surface); padding:10px 13px; }
+  .specs dt { font-family:var(--mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--a-ink-3); margin:0 0 3px; }
+  .specs dd { margin:0; font-size:.9rem; font-weight:500; font-variant-numeric:tabular-nums; }
+
+  .formbox { background:var(--a-surface); border:1px solid var(--a-line); padding:18px 20px; }
+  .formbox h4 { font-family:var(--display); font-size:1rem; margin:0 0 4px; font-weight:600; }
+  .formbox .fh { font-size:.82rem; color:var(--a-ink-3); margin:0 0 15px; }
+  .grid2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:15px; }
+  .sumline {
+    display:flex; justify-content:space-between; align-items:baseline; gap:14px;
+    border-top:1px solid var(--a-line); margin-top:16px; padding-top:13px;
+  }
+  .sumline .lab { font-size:.85rem; color:var(--a-ink-2); }
+  .sumline .val { font-family:var(--mono); font-size:1.02rem; font-weight:500; }
+  .formfoot { display:flex; gap:10px; margin-top:16px; align-items:center; flex-wrap:wrap; }
+  .formfoot .note { font-size:.79rem; color:var(--a-ink-3); }
+  .legend { font-size:.78rem; color:var(--a-ink-3); margin:0 0 14px; }
+  .legend .req { color:var(--a-err); font-weight:700; }
+
+  .login { padding:44px 20px; display:flex; justify-content:center; }
+  .logincard { width:100%; max-width:370px; background:var(--a-surface); border:1px solid var(--a-line); padding:26px 26px 24px; }
+  .logincard .brand { font-size:1.15rem; margin:0 0 3px; }
+  .logincard .lsub { font-size:.83rem; color:var(--a-ink-3); margin:0 0 20px; }
+
+  .matrix td.c { text-align:center; font-family:var(--mono); font-weight:500; }
+  .matrix td.c.y { color:var(--a-ok); }
+  .matrix td.c.n { color:var(--a-ink-3); }
+
+  footer {
+    margin-top:58px; padding-top:18px; border-top:2px solid var(--ink);
+    font-size:.85rem; color:var(--ink-2); display:flex; flex-wrap:wrap; gap:8px 24px;
+  }
+  footer .mono { font-family:var(--mono); }
+
+  @media (max-width:760px) {
+    .shell { grid-template-columns:1fr; }
+    .side { border-right:0; border-bottom:1px solid var(--a-line); display:flex; flex-wrap:wrap; padding:8px; }
+    .side .grp { display:none; }
+    .side a { border-left:0; border-bottom:2px solid transparent; padding:6px 11px; }
+    .side a.on { border-left:0; border-bottom-color:var(--a-primary); }
+  }
+  @media (prefers-reduced-motion:reduce) { * { transition:none !important; animation:none !important; } }
+</style>
+
+<div class="wrap">
+
+  <header class="mast">
+    <p class="eyebrow">Gruppe 11 · Maschinenverleih · Mockups zu Sprint 1</p>
+    <h1>Maschinenpark<span class="thin">Oberflächen-Entwurf</span></h1>
+    <p class="standfirst">Dreizehn Bildschirme zu den drei Stories der Anwendungsentwicklung.
+      Jeder ist an ein Akzeptanzkriterium gebunden — es ist nichts erfunden, was nicht im
+      Backlog steht. „Maschinenpark" ist ein Arbeitsname.</p>
+    <dl class="storyrow">
+      <div><dt>Issue #1 · Kunde</dt><dd>Maschinen suchen und reservieren — Bildschirm 1–5</dd></div>
+      <div><dt>Issue #2 · Mitarbeiter</dt><dd>Maschinenstammdaten pflegen — Bildschirm 6–9</dd></div>
+      <div><dt>Issue #8 · Verwaltung</dt><dd>Rollen und Zugriffsrechte — Bildschirm 10–13</dd></div>
+    </dl>
+  </header>
+
+  <section id="kunde">
+    <div class="shead"><span class="snum">#1</span><h2>Kundenportal</h2></div>
+    <p class="sdek">Der Kunde sucht ohne Anmeldung beim Vermieter, sieht nur wirklich freie
+      Maschinen und reserviert verbindlich.</p>
+
+    <div class="callout">
+      <span class="ctag">Was hier Vorgabe ist und nicht Geschmack</span>
+      <p>Jedes Eingabefeld hat ein <b>sichtbares Label</b> statt nur Platzhaltertext, und jede
+        Fehlermeldung steht <b>am betroffenen Feld</b>. Beides steht wörtlich in den
+        Akzeptanzkriterien von #1. Bildschirm 3 zeigt zusätzlich einen sichtbaren
+        <b>Fokusrahmen</b> — sonst lässt sich Tastaturbedienbarkeit im Entwurf nicht zeigen.</p>
+    </div>
+
+    <!-- 1 -->
+    <div class="screen">
+      <div class="cap"><span class="nr">01</span><span class="ct">Suche und Ergebnisliste</span><span class="cw">Kunde</span></div>
+      <p class="proves">Zeigt: Filter für Kategorie, Zeitraum und Standort · die Liste enthält
+        nur Maschinen, die im gewählten Zeitraum frei sind.</p>
+      <div class="frame">
+        <div class="chrome"><i></i><i></i><i></i><span class="url">maschinenpark.de/suche</span></div>
+        <div class="app">
+          <div class="topbar">
+            <span class="brand">Maschinen<span>park</span></span>
+            <nav class="navlinks"><a href="#kunde" class="on">Suchen</a><a href="#kunde">Meine Reservierungen</a></nav>
+            <span class="who">Bauunternehmung Reuter GmbH</span>
+          </div>
+          <div class="main">
+            <div class="ph"><h3>Maschine finden</h3></div>
+            <div class="filters">
+              <div class="field" style="min-width:160px">
+                <label for="f1">Kategorie</label>
+                <div class="inp sel" id="f1">Erdbewegung</div>
+              </div>
+              <div class="field">
+                <label for="f2">Verfügbar von</label>
+                <div class="inp mono" id="f2">24.09.2026</div>
+              </div>
+              <div class="field">
+                <label for="f3">Verfügbar bis</label>
+                <div class="inp mono" id="f3">28.09.2026</div>
+              </div>
+              <div class="field" style="min-width:150px">
+                <label for="f4">Standort</label>
+                <div class="inp sel" id="f4">Gummersbach</div>
+              </div>
+              <button class="btn primary">Suchen</button>
+            </div>
+            <p style="font-size:.86rem;color:var(--a-ink-2);margin:0 0 12px">
+              <b>3 Maschinen</b> sind vom 24.09. bis 28.09.2026 in Gummersbach frei.</p>
+            <div class="cards">
+              <div class="card">
+                <span class="thumb"></span>
+                <div class="cmain">
+                  <div class="cname">Minibagger 1,8 t</div>
+                  <div class="cmeta">MV-0142 · Baujahr 2021 · Gummersbach</div>
+                </div>
+                <span class="badge free">frei</span>
+                <div class="cprice"><div class="p">89,00 €</div><div class="u">je Tag, netto</div></div>
+                <button class="btn sm">Details und reservieren</button>
+              </div>
+              <div class="card">
+                <span class="thumb"></span>
+                <div class="cmain">
+                  <div class="cname">Radlader 0,9 m³</div>
+                  <div class="cmeta">MV-0166 · Baujahr 2022 · Gummersbach</div>
+                </div>
+                <span class="badge free">frei</span>
+                <div class="cprice"><div class="p">124,00 €</div><div class="u">je Tag, netto</div></div>
+                <button class="btn sm">Details und reservieren</button>
+              </div>
+              <div class="card">
+                <span class="thumb"></span>
+                <div class="cmain">
+                  <div class="cname">Rüttelplatte 90 kg</div>
+                  <div class="cmeta">MV-0087 · Baujahr 2019 · Gummersbach</div>
+                </div>
+                <span class="badge free">frei</span>
+                <div class="cprice"><div class="p">42,00 €</div><div class="u">je Tag, netto</div></div>
+                <button class="btn sm">Details und reservieren</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="screen">
+      <div class="cap"><span class="nr">02</span><span class="ct">Kein Treffer im Zeitraum</span><span class="cw">Kunde</span></div>
+      <p class="proves">Zeigt das Gegenstück zu Bildschirm 1: belegte Maschinen erscheinen nicht
+        in der Liste. Ohne diesen Zustand wäre das Kriterium unsichtbar.</p>
+      <div class="frame">
+        <div class="chrome"><i></i><i></i><i></i><span class="url">maschinenpark.de/suche</span></div>
+        <div class="app">
+          <div class="topbar">
+            <span class="brand">Maschinen<span>park</span></span>
+            <nav class="navlinks"><a href="#kunde" class="on">Suchen</a><a href="#kunde">Meine Reservierungen</a></nav>
+            <span class="who">Bauunternehmung Reuter GmbH</span>
+          </div>
+          <div class="main">
+            <div class="ph"><h3>Maschine finden</h3></div>
+            <div class="filters">
+              <div class="field" style="min-width:160px">
+                <label for="g1">Kategorie</label><div class="inp sel" id="g1">Erdbewegung</div>
+              </div>
+              <div class="field"><label for="g2">Verfügbar von</label><div class="inp mono" id="g2">01.10.2026</div></div>
+              <div class="field"><label for="g3">Verfügbar bis</label><div class="inp mono" id="g3">15.10.2026</div></div>
+              <div class="field" style="min-width:150px"><label for="g4">Standort</label><div class="inp sel" id="g4">Waldbröl</div></div>
+              <button class="btn primary">Suchen</button>
+            </div>
+            <div class="empty">
+              <h4>Keine Maschine in diesem Zeitraum frei</h4>
+              <p>Vom 01.10. bis 15.10.2026 ist in Waldbröl keine Maschine der Kategorie
+                Erdbewegung durchgehend verfügbar.</p>
+              <ul>
+                <li>Zeitraum verkürzen — gesucht sind derzeit 15 Tage in Folge</li>
+                <li>Anderen Standort wählen</li>
+                <li>Kategorie erweitern</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="screen">
+      <div class="cap"><span class="nr">03</span><span class="ct">Maschinendetail und Reservierung</span><span class="cw">Kunde</span></div>
+      <p class="proves">Zeigt: verbindliche Reservierung mit Zeitraum · Hinweis auf die
+        Bestätigung per E-Mail · Labels über den Feldern · <b>sichtbarer Fokusrahmen</b> am Feld
+        „Reservieren bis".</p>
+      <div class="frame">
+        <div class="chrome"><i></i><i></i><i></i><span class="url">maschinenpark.de/maschine/MV-0142</span></div>
+        <div class="app">
+          <div class="topbar">
+            <span class="brand">Maschinen<span>park</span></span>
+            <nav class="navlinks"><a href="#kunde" class="on">Suchen</a><a href="#kunde">Meine Reservierungen</a></nav>
+            <span class="who">Bauunternehmung Reuter GmbH</span>
+          </div>
+          <div class="main">
+            <div class="ph">
+              <h3>Minibagger 1,8 t</h3>
+              <span class="sub">MV-0142 · Gummersbach</span>
+              <span class="badge free" style="margin-bottom:4px">frei</span>
+            </div>
+            <dl class="specs">
+              <div><dt>Baujahr</dt><dd>2021</dd></div>
+              <div><dt>Betriebsstunden</dt><dd>1.240 h</dd></div>
+              <div><dt>Einsatzgewicht</dt><dd>1.800 kg</dd></div>
+              <div><dt>Grabtiefe</dt><dd>2,30 m</dd></div>
+              <div><dt>Tagessatz netto</dt><dd>89,00 €</dd></div>
+            </dl>
+            <div class="formbox">
+              <h4>Zeitraum reservieren</h4>
+              <p class="fh">Die Reservierung ist nach dem Absenden verbindlich.</p>
+              <p class="legend"><span class="req">*</span> Pflichtfeld</p>
+              <div class="grid2">
+                <div class="field">
+                  <label for="r1">Reservieren von <span class="req">*</span></label>
+                  <div class="inp mono" id="r1">24.09.2026</div>
+                </div>
+                <div class="field focus">
+                  <label for="r2">Reservieren bis <span class="req">*</span></label>
+                  <div class="inp mono" id="r2">28.09.2026</div>
+                  <span class="hint">Tastaturfokus — hier sichtbar hervorgehoben</span>
+                </div>
+                <div class="field">
+                  <label for="r3">Lieferung</label>
+                  <div class="inp sel" id="r3">Selbstabholung</div>
+                </div>
+              </div>
+              <div class="sumline">
+                <span class="lab">5 Tage × 89,00 € netto</span>
+                <span class="val">445,00 €</span>
+              </div>
+              <div class="formfoot">
+                <button class="btn primary">Verbindlich reservieren</button>
+                <button class="btn">Abbrechen</button>
+                <span class="note">Sie erhalten anschließend eine Bestätigung per E-Mail.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="screen">
+      <div class="cap"><span class="nr">04</span><span class="ct">Zeitraum belegt — Reservierung abgelehnt</span><span class="cw">Kunde</span></div>
+      <p class="proves">Zeigt das fachlich schwierigste Kriterium von #1: eine Reservierung auf
+        einen belegten Zeitraum wird <b>abgelehnt und der Konflikt benannt</b>. Die Meldung steht
+        am Feld, nicht nur gesammelt oben.</p>
+      <div class="frame">
+        <div class="chrome"><i></i><i></i><i></i><span class="url">maschinenpark.de/maschine/MV-0142</span></div>
+        <div class="app">
+          <div class="topbar">
+            <span class="brand">Maschinen<span>park</span></span>
+            <nav class="navlinks"><a href="#kunde" class="on">Suchen</a><a href="#kunde">Meine Reservierungen</a></nav>
+            <span class="who">Bauunternehmung Reuter GmbH</span>
+          </div>
+          <div class="main">
+            <div class="ph"><h3>Minibagger 1,8 t</h3><span class="sub">MV-0142 · Gummersbach</span></div>
+            <div class="banner bad">
+              <span class="bi">!</span>
+              <p><b>Die Reservierung wurde nicht gespeichert.</b> Ein Feld muss korrigiert
+                werden: <a href="#kunde">Reservieren bis</a>.</p>
+            </div>
+            <div class="formbox">
+              <h4>Zeitraum reservieren</h4>
+              <p class="legend"><span class="req">*</span> Pflichtfeld</p>
+              <div class="grid2">
+                <div class="field">
+                  <label for="k1">Reservieren von <span class="req">*</span></label>
+                  <div class="inp mono" id="k1">24.09.2026</div>
+                </div>
+                <div class="field bad">
+                  <label for="k2">Reservieren bis <span class="req">*</span></label>
+                  <div class="inp mono" id="k2">30.09.2026</div>
+                  <span class="errmsg"><b>!</b><span>Die Maschine ist vom <b>26.09. bis 30.09.2026</b>
+                    bereits reserviert. Bitte wählen Sie einen Zeitraum, der davor endet, oder
+                    einen späteren Beginn.</span></span>
+                </div>
+                <div class="field">
+                  <label for="k3">Lieferung</label>
+                  <div class="inp sel" id="k3">Selbstabholung</div>
+                </div>
+              </div>
+              <div class="sumline">
+                <span class="lab">Belegt in diesem Zeitraum</span>
+                <span class="val" style="font-size:.86rem;color:var(--a-err)">26.09. – 30.09.2026</span>
+              </div>
+              <div class="formfoot">
+                <button class="btn primary">Verbindlich reservieren</button>
+                <button class="btn">Abbrechen</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="screen">
+      <div class="cap"><span class="nr">05</span><span class="ct">Meine Reservierungen</span><span class="cw">Kunde</span></div>
+      <p class="proves">Zeigt: die gespeicherte Reservierung ist in der Übersicht des Kunden
+        sichtbar · die Bestätigung per E-Mail ist ausgelöst · ein Kunde sieht ausschließlich
+        eigene Vorgänge (Kriterium aus #8).</p>
+      <div class="frame">
+        <div class="chrome"><i></i><i></i><i></i><span class="url">maschinenpark.de/meine-reservierungen</span></div>
+        <div class="app">
+          <div class="topbar">
+            <span class="brand">Maschinen<span>park</span></span>
+            <nav class="navlinks"><a href="#kunde">Suchen</a><a href="#kunde" class="on">Meine Reservierungen</a></nav>
+            <span class="who">Bauunternehmung Reuter GmbH</span>
+          </div>
+          <div class="main">
+            <div class="banner ok">
+              <span class="bi">✓</span>
+              <p><b>Reservierung R-2026-0188 ist gespeichert.</b> Eine Bestätigung ist an
+                einkauf@reuter-bau.de unterwegs.</p>
+            </div>
+            <div class="ph"><h3>Meine Reservierungen</h3><span class="sub">3 Vorgänge</span></div>
+            <div class="tblwrap">
+              <table class="tbl">
+                <thead><tr><th>Reservierung</th><th>Maschine</th><th>Zeitraum</th><th>Tage</th><th>Netto</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr><td class="m">R-2026-0188</td><td>Minibagger 1,8 t <span class="m">MV-0142</span></td>
+                      <td class="m">24.09. – 28.09.2026</td><td class="num">5</td><td class="num">445,00 €</td>
+                      <td><span class="badge free">bestätigt</span></td></tr>
+                  <tr><td class="m">R-2026-0185</td><td>Rüttelplatte 90 kg <span class="m">MV-0087</span></td>
+                      <td class="m">17.09. – 19.09.2026</td><td class="num">3</td><td class="num">126,00 €</td>
+                      <td><span class="badge out">läuft</span></td></tr>
+                  <tr><td class="m">R-2026-0161</td><td>Bohrhammer SDS-max <span class="m">MV-0055</span></td>
+                      <td class="m">28.08. – 30.08.2026</td><td class="num">3</td><td class="num">87,00 €</td>
+                      <td><span class="badge done">abgeschlossen</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="backoffice">
+    <div class="shead"><span class="snum">#2</span><h2>Backoffice — Maschinenstammdaten</h2></div>
+    <p class="sdek">Der Verleih-Mitarbeiter pflegt den Maschinenpark. Jede Änderung ist
+      nachvollziehbar.</p>
+
+    <!-- 6 -->
+    <div class="screen">
+      <div class="cap"><span class="nr">06</span><span class="ct">Maschinenliste</span><span class="cw">Mitarbeiter</span></div>
+      <p class="proves">Zeigt: Maschinen sind über Inventarnummer, Typ und Standort auffindbar.</p>
+      <div class="frame">
+        <div class="chrome"><i></i><i></i><i></i><span class="url">maschinenpark.de/verwaltung/maschinen</span></div>
+        <div class="app">
+          <div class="topbar">
+            <span class="brand">Maschinen<span>park</span></span>
+            <span class="who">a.boersch@maschinenpark.de · Mitarbeiter</span>
+          </div>
+          <div class="shell">
+            <nav class="side">
+              <span class="grp">Stammdaten</span>
+              <a href="#backoffice" class="on">Maschinen</a>
+              <a href="#backoffice">Kunden</a>
+              <span class="grp">Vorgänge</span>
+              <a href="#backoffice">Reservierungen</a>
+              <a href="#backoffice">Rechnungen</a>
+              <span class="grp">System</span>
+              <a href="#backoffice">Verwaltung</a>
+            </nav>
+            <div class="main">
+              <div class="ph">
+                <h3>Maschinen</h3><span class="sub">14 Datensätze</span>
+                <span class="right"><button class="btn primary">Maschine anlegen</button></span>
+              </div>
+              <div class="filters">
+                <div class="field" style="min-width:290px">
+                  <label for="s1">Suche</label>
+                  <div class="inp" id="s1">Inventarnummer, Maschinentyp oder Standort</div>
+                </div>
+                <div class="field" style="min-width:140px">
+                  <label for="s2">Status</label><div class="inp sel" id="s2">Alle</div>
+                </div>
+                <button class="btn">Suchen</button>
+              </div>
+              <div class="tblwrap">
+                <table class="tbl">
+                  <thead><tr><th>Inventarnr.</th><th>Maschinentyp</th><th>Baujahr</th>
+                    <th style="text-align:right">Betriebsst.</th><th>Standort</th><th>Status</th><th></th></tr></thead>
+                  <tbody>
+                    <tr><td class="m">MV-0142</td><td>Minibagger 1,8 t</td><td class="num">2021</td>
+                        <td class="num">1.240</td><td>Gummersbach</td><td><span class="badge out">verliehen</span></td>
+                        <td class="r"><button class="btn sm">Bearbeiten</button></td></tr>
+                    <tr><td class="m">MV-0087</td><td>Rüttelplatte 90 kg</td><td class="num">2019</td>
+                        <td class="num">860</td><td>Gummersbach</td><td><span class="badge free">verfügbar</span></td>
+                        <td class="r"><button class="btn sm">Bearbeiten</button></td></tr>
+                    <tr><td class="m">MV-0211</td><td>Hubarbeitsbühne 12 m</td><td class="num">2023</td>
+                        <td class="num">310</td><td>Köln-Ossendorf</td><td><span class="badge free">verfügbar</span></td>
+                        <td class="r"><button class="btn sm">Bearbeiten</button></td></tr>
+                    <tr><td class="m">MV-0034</td><td>Kettensäge 40 cm</td><td class="num">2018</td>
+                        <td class="num">2.105</td><td>Bergneustadt</td><td><span class="badge serv">in Wartung</span></td>
+                        <td class="r"><button class="btn sm">Bearbeiten</button></td></tr>
+                    <tr><td class="m">MV-0166</td><td>Radlader 0,9 m³</td><td class="num">2022</td>
+                        <td class="num">1.775</td><td>Gummersbach</td><td><span class="badge free">verfügbar</span></td>
+                        <td class="r"><button class="btn sm">Bearbeiten</button></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7 -->
+    <div class="screen">
+      <div class="cap"><span class="nr">07</span><span class="ct">Maschine anlegen</span><span class="cw">Mitarbeiter</span></div>
+      <p class="proves">Zeigt: Pflichtfelder Inventarnummer, Maschinentyp und Baujahr sind
+        gekennzeichnet · Betriebsstunden und Wartungsintervall werden als Zahl erfasst.</p>
+      <div class="frame">
+        <div class="chrome"><i></i><i></i><i></i><span class="url">maschinenpark.de/verwaltung/maschinen/neu</span></div>
+        <div class="app">
+          <div class="topbar">
+            <span class="brand">Maschinen<span>park</span></span>
+            <span class="who">a.boersch@maschinenpark.de · Mitarbeiter</span>
+          </div>
+          <div class="shell">
+            <nav class="side">
+              <span class="grp">Stammdaten</span>
+              <a href="#backoffice" class="on">Maschinen</a><a href="#backoffice">Kunden</a>
+              <span class="grp">Vorgänge</span>
+              <a href="#backoffice">Reservierungen</a><a href="#backoffice">Rechnungen</a>
+            </nav>
+            <div class="main">
+              <div class="ph"><h3>Maschine anlegen</h3></div>
+              <div class="formbox">
+                <p class="legend"><span class="req">*</span> Pflichtfeld</p>
+                <div class="grid2">
+                  <div class="field">
+                    <label for="m1">Inventarnummer <span class="req">*</span></label>
+                    <div class="inp mono" id="m1">MV-0212</div>
+                    <span class="hint">Format MV-0000, muss eindeutig sein</span>
+                  </div>
+                  <div class="field">
+                    <label for="m2">Maschinentyp <span class="req">*</span></label>
+                    <div class="inp sel" id="m2">Rüttelplatte 90 kg</div>
+                  </div>
+                  <div class="field">
+                    <label for="m3">Baujahr <span class="req">*</span></label>
+                    <div class="inp mono" id="m3">2026</div>
+                  </div>
+                  <div class="field">
+                    <label for="m4">Betriebsstunden</label>
+                    <div class="inp mono" id="m4">0</div>
+                    <span class="hint">Ganze Stunden, keine negativen Werte</span>
+                  </div>
+                  <div class="field">
+                    <label for="m5">Wartungsintervall</label>
+                    <div class="inp mono" id="m5">500</div>
+                    <span class="hint">In Betriebsstunden</span>
+                  </div>
+                  <div class="field">
+                    <label for="m6">Standort</label>
+                    <div class="inp sel" id="m6">Gummersbach</div>
+                  </div>
+                  <div class="field">
+                    <label for="m7">Tagessatz netto</label>
+                    <div class="inp mono" id="m7">42,00</div>
+                  </div>
+                </div>
+                <div class="formfoot">
+                  <button class="btn primary">Speichern</button>
+                  <button class="btn">Abbrechen</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8 -->
+    <div class="screen">
+      <div class="cap"><span class="nr">08</span><span class="ct">Zwei Validierungsfehler</span><span class="cw">Mitarbeiter</span></div>
+      <p class="proves">Zeigt beide Prüfungen von #2 gleichzeitig: eine <b>zweite Maschine mit
+        derselben Inventarnummer wird abgelehnt</b>, und <b>negative Betriebsstunden werden
+        abgelehnt</b>. Zwei Fehler in einem Formular ist der ehrliche Fall — nicht einer.</p>
+      <div class="frame">
+        <div class="chrome"><i></i><i></i><i></i><span class="url">maschinenpark.de/verwaltung/maschinen/neu</span></div>
+        <div class="app">
+          <div class="topbar">
+            <span class="brand">Maschinen<span>park</span></span>
+            <span class="who">a.boersch@maschinenpark.de · Mitarbeiter</span>
+          </div>
+          <div class="shell">
+            <nav class="side">
+              <span class="grp">Stammdaten</span>
+              <a href="#backoffice" class="on">Maschinen</a><a href="#backoffice">Kunden</a>
+            </nav>
+            <div class="main">
+              <div class="ph"><h3>Maschine anlegen</h3></div>
+              <div class="banner bad">
+                <span class="bi">!</span>
+                <p><b>2 Felder müssen korrigiert werden.</b>
+                  <a href="#backoffice">Inventarnummer</a> · <a href="#backoffice">Betriebsstunden</a></p>
+              </div>
+              <div class="formbox">
+                <p class="legend"><span class="req">*</span> Pflichtfeld</p>
+                <div class="grid2">
+                  <div class="field bad">
+                    <label for="v1">Inventarnummer <span class="req">*</span></label>
+                    <div class="inp mono" id="v1">MV-0142</div>
+                    <span class="errmsg"><b>!</b><span>Die Inventarnummer <b>MV-0142</b> ist
+                      bereits an <b>Minibagger 1,8 t</b> vergeben.</span></span>
+                  </div>
+                  <div class="field">
+                    <label for="v2">Maschinentyp <span class="req">*</span></label>
+                    <div class="inp sel" id="v2">Rüttelplatte 90 kg</div>
+                  </div>
+                  <div class="field">
+                    <label for="v3">Baujahr <span class="req">*</span></label>
+                    <div class="inp mono" id="v3">2026</div>
+                  </div>
+                  <div class="field bad">
+                    <label for="v4">Betriebsstunden</label>
+                    <div class="inp mono" id="v4">-50</div>
+                    <span class="errmsg"><b>!</b><span>Betriebsstunden können nicht negativ sein.</span></span>
+                  </div>
+                  <div class="field">
+                    <label for="v5">Wartungsintervall</label>
+                    <div class="inp mono" id="v5">500</div>
+                  </div>
+                  <div class="field">
+                    <label for="v6">Standort</label>
+                    <div class="inp sel" id="v6">Gummersbach</div>
+                  </div>
+                </div>
+                <div class="formfoot">
+                  <button class="btn primary">Speichern</button>
+                  <button class="btn">Abbrechen</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9 -->
+    <div class="screen">
+      <div class="cap"><span class="nr">09</span><span class="ct">Änderungsprotokoll</span><span class="cw">Mitarbeiter</span></div>
+      <p class="proves">Zeigt: jede Änderung ist mit <b>Zeitpunkt, Benutzer, Feld, altem und
+        neuem Wert</b> protokolliert — genau die fünf Angaben aus dem Kriterium.</p>
+      <div class="frame">
+        <div class="chrome"><i></i><i></i><i></i><span class="url">maschinenpark.de/verwaltung/maschinen/MV-0142/protokoll</span></div>
+        <div class="app">
+          <div class="topbar">
+            <span class="brand">Maschinen<span>park</span></span>
+            <span class="who">a.boersch@maschinenpark.de · Mitarbeiter</span>
+          </div>
+          <div class="shell">
+            <nav class="side">
+              <span class="grp">Stammdaten</span>
+              <a href="#backoffice" class="on">Maschinen</a><a href="#backoffice">Kunden</a>
+            </nav>
+            <div class="main">
+              <div class="ph">
+                <h3>Änderungsprotokoll</h3>
+                <span class="sub">Minibagger 1,8 t · MV-0142</span>
+                <span class="right"><button class="btn sm">Zurück zur Maschine</button></span>
+              </div>
+              <div class="tblwrap">
+                <table class="tbl">
+                  <thead><tr><th>Zeitpunkt</th><th>Benutzer</th><th>Feld</th><th>Vorher</th><th>Nachher</th></tr></thead>
+                  <tbody>
+                    <tr><td class="m">17.09.2026 11:42</td><td class="m">f.jendras</td><td>Betriebsstunden</td>
+                        <td class="m">1.180</td><td class="m">1.240</td></tr>
+                    <tr><td class="m">12.09.2026 08:15</td><td class="m">a.boersch</td><td>Standort</td>
+                        <td class="m">Bergneustadt</td><td class="m">Gummersbach</td></tr>
+                    <tr><td class="m">12.09.2026 08:14</td><td class="m">a.boersch</td><td>Tagessatz netto</td>
+                        <td class="m">82,00 €</td><td class="m">89,00 €</td></tr>
+                    <tr><td class="m">04.09.2026 14:03</td><td class="m">f.jendras</td><td>Datensatz angelegt</td>
+                        <td class="m" style="color:var(--a-ink-3)">—</td><td class="m">MV-0142</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="verwaltung">
+    <div class="shead"><span class="snum">#8</span><h2>Verwaltung — Rollen und Zugriffsrechte</h2></div>
+    <p class="sdek">Anmeldung, Rollen und der Nachweis, dass abgelehnte Zugriffe protokolliert
+      werden.</p>
+
+    <!-- 10 -->
+    <div class="screen">
+      <div class="cap"><span class="nr">10</span><span class="ct">Anmeldung, mit Fehlerzustand</span><span class="cw">alle Rollen</span></div>
+      <p class="proves">Zeigt: die Anmeldung erfordert gültige Zugangsdaten. Die Meldung nennt
+        absichtlich <b>nicht</b>, welches der beiden Felder falsch war — das wäre ein Hinweis
+        darauf, welche E-Mail-Adressen im System existieren.</p>
+      <div class="frame">
+        <div class="chrome"><i></i><i></i><i></i><span class="url">maschinenpark.de/anmelden</span></div>
+        <div class="app" style="background:var(--a-bg)">
+          <div class="login">
+            <div class="logincard">
+              <p class="brand">Maschinen<span>park</span></p>
+              <p class="lsub">Anmeldung für Kunden und Mitarbeiter</p>
+              <div class="banner bad" style="margin-bottom:18px">
+                <span class="bi">!</span>
+                <p>E-Mail-Adresse oder Passwort ist falsch.</p>
+              </div>
+              <div style="display:grid;gap:15px">
+                <div class="field">
+                  <label for="l1">E-Mail-Adresse <span class="req">*</span></label>
+                  <div class="inp" id="l1">einkauf@reuter-bau.de</div>
+                </div>
+                <div class="field">
+                  <label for="l2">Passwort <span class="req">*</span></label>
+                  <div class="inp mono" id="l2">••••••••••</div>
+                </div>
+                <button class="btn primary" style="width:100%;justify-content:center">Anmelden</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 11 -->
+    <div class="screen">
+      <div class="cap"><span class="nr">11</span><span class="ct">Benutzer und Rollen</span><span class="cw">Admin</span></div>
+      <p class="proves">Zeigt: die <b>Rollenzuweisung ist zur Laufzeit änderbar, ohne Code
+        anzupassen</b> — die Rolle steht als Auswahlfeld direkt in der Zeile.</p>
+      <div class="frame">
+        <div class="chrome"><i></i><i></i><i></i><span class="url">maschinenpark.de/verwaltung/benutzer</span></div>
+        <div class="app">
+          <div class="topbar">
+            <span class="brand">Maschinen<span>park</span></span>
+            <span class="who">f.jendras@maschinenpark.de · Admin</span>
+          </div>
+          <div class="shell">
+            <nav class="side">
+              <span class="grp">Stammdaten</span>
+              <a href="#verwaltung">Maschinen</a><a href="#verwaltung">Kunden</a>
+              <span class="grp">System</span>
+              <a href="#verwaltung" class="on">Benutzer und Rollen</a>
+              <a href="#verwaltung">Rechte</a>
+              <a href="#verwaltung">Zugriffsprotokoll</a>
+            </nav>
+            <div class="main">
+              <div class="ph">
+                <h3>Benutzer und Rollen</h3><span class="sub">4 von 27 angezeigt</span>
+                <span class="right"><button class="btn sm">Benutzer einladen</button></span>
+              </div>
+              <div class="tblwrap">
+                <table class="tbl">
+                  <thead><tr><th>Benutzer</th><th>E-Mail</th><th>Rolle</th><th>Letzte Anmeldung</th></tr></thead>
+                  <tbody>
+                    <tr><td>Finn Jendras</td><td class="m">f.jendras@maschinenpark.de</td>
+                        <td><div class="inp sel" style="min-height:28px;padding:3px 9px;font-size:.82rem">Admin</div></td>
+                        <td class="m">17.09.2026 07:58</td></tr>
+                    <tr><td>Alexa Börsch</td><td class="m">a.boersch@maschinenpark.de</td>
+                        <td><div class="inp sel" style="min-height:28px;padding:3px 9px;font-size:.82rem">Mitarbeiter</div></td>
+                        <td class="m">17.09.2026 08:02</td></tr>
+                    <tr><td>Bauunternehmung Reuter GmbH</td><td class="m">einkauf@reuter-bau.de</td>
+                        <td><div class="inp sel" style="min-height:28px;padding:3px 9px;font-size:.82rem">Kunde</div></td>
+                        <td class="m">16.09.2026 16:20</td></tr>
+                    <tr><td>GaLaBau Thelen</td><td class="m">t.thelen@galabau-thelen.de</td>
+                        <td><div class="inp sel" style="min-height:28px;padding:3px 9px;font-size:.82rem">Kunde</div></td>
+                        <td class="m">15.09.2026 09:41</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p style="font-size:.82rem;color:var(--a-ink-3);margin:12px 0 0">
+                Eine geänderte Rolle wirkt ab der nächsten Anfrage des Benutzers.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 12 -->
+    <div class="screen">
+      <div class="cap"><span class="nr">12</span><span class="ct">Rechte je Rolle</span><span class="cw">Admin</span></div>
+      <p class="proves">Zeigt: die Rollen <b>Kunde, Mitarbeiter und Admin mit je festgelegten
+        Rechten</b>. Die Zeile „Fremde Reservierungen sehen" ist die, an der das Kriterium
+        „ein Kunde sieht ausschließlich eigene Vorgänge" hängt.</p>
+      <div class="frame">
+        <div class="chrome"><i></i><i></i><i></i><span class="url">maschinenpark.de/verwaltung/rechte</span></div>
+        <div class="app">
+          <div class="topbar">
+            <span class="brand">Maschinen<span>park</span></span>
+            <span class="who">f.jendras@maschinenpark.de · Admin</span>
+          </div>
+          <div class="shell">
+            <nav class="side">
+              <span class="grp">System</span>
+              <a href="#verwaltung">Benutzer und Rollen</a>
+              <a href="#verwaltung" class="on">Rechte</a>
+              <a href="#verwaltung">Zugriffsprotokoll</a>
+            </nav>
+            <div class="main">
+              <div class="ph"><h3>Rechte je Rolle</h3><span class="sub">7 Rechte · 3 Rollen</span></div>
+              <div class="tblwrap">
+                <table class="tbl matrix">
+                  <thead><tr><th>Recht</th><th style="text-align:center">Kunde</th>
+                    <th style="text-align:center">Mitarbeiter</th><th style="text-align:center">Admin</th></tr></thead>
+                  <tbody>
+                    <tr><td>Maschinen suchen</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+                    <tr><td>Eigene Reservierungen sehen</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+                    <tr><td>Fremde Reservierungen sehen</td><td class="c n">—</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+                    <tr><td>Maschinenstammdaten bearbeiten</td><td class="c n">—</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+                    <tr><td>Änderungsprotokoll einsehen</td><td class="c n">—</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+                    <tr><td>Benutzerrollen ändern</td><td class="c n">—</td><td class="c n">—</td><td class="c y">✓</td></tr>
+                    <tr><td>Zugriffsprotokoll einsehen</td><td class="c n">—</td><td class="c n">—</td><td class="c y">✓</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 13 -->
+    <div class="screen">
+      <div class="cap"><span class="nr">13</span><span class="ct">Protokoll abgelehnter Zugriffe</span><span class="cw">Admin</span></div>
+      <p class="proves">Zeigt: <b>jeder abgelehnte Zugriffsversuch ist mit Zeitpunkt, Benutzer
+        und Ziel protokolliert</b>. Die Ziele sind API-Pfade — genau der Fall „auch bei direktem
+        Aufruf der Datenbank-API serverseitig abgelehnt".</p>
+      <div class="frame">
+        <div class="chrome"><i></i><i></i><i></i><span class="url">maschinenpark.de/verwaltung/zugriffsprotokoll</span></div>
+        <div class="app">
+          <div class="topbar">
+            <span class="brand">Maschinen<span>park</span></span>
+            <span class="who">f.jendras@maschinenpark.de · Admin</span>
+          </div>
+          <div class="shell">
+            <nav class="side">
+              <span class="grp">System</span>
+              <a href="#verwaltung">Benutzer und Rollen</a><a href="#verwaltung">Rechte</a>
+              <a href="#verwaltung" class="on">Zugriffsprotokoll</a>
+            </nav>
+            <div class="main">
+              <div class="ph"><h3>Abgelehnte Zugriffe</h3><span class="sub">letzte 24 Stunden</span></div>
+              <div class="tblwrap">
+                <table class="tbl">
+                  <thead><tr><th>Zeitpunkt</th><th>Benutzer</th><th>Rolle</th><th>Ziel</th><th>Grund</th></tr></thead>
+                  <tbody>
+                    <tr><td class="m">17.09.2026 09:14</td><td class="m">einkauf@reuter-bau.de</td>
+                        <td>Kunde</td><td class="m">/api/reservierungen/R-2026-0171</td>
+                        <td>fremde Reservierung</td></tr>
+                    <tr><td class="m">17.09.2026 08:37</td><td class="m">a.boersch@maschinenpark.de</td>
+                        <td>Mitarbeiter</td><td class="m">/api/benutzer/rollen</td>
+                        <td>Recht fehlt für diese Rolle</td></tr>
+                    <tr><td class="m">16.09.2026 22:03</td><td class="m" style="color:var(--a-ink-3)">nicht angemeldet</td>
+                        <td class="m" style="color:var(--a-ink-3)">—</td><td class="m">/api/maschinen</td>
+                        <td>keine Anmeldung</td></tr>
+                    <tr><td class="m">16.09.2026 14:47</td><td class="m">t.thelen@galabau-thelen.de</td>
+                        <td>Kunde</td><td class="m">/api/rechnungen/RE-2026-0093</td>
+                        <td>fremde Rechnung</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="offen">
+    <div class="shead"><span class="snum">→</span><h2>Was hier bewusst fehlt</h2></div>
+    <p class="sdek">Damit der Entwurf keinen Umfang vortäuscht, den niemand zugesagt hat.</p>
+    <div class="callout ok">
+      <span class="ctag">Nicht entworfen, weil noch kein Item dafür existiert</span>
+      <p><b>Rechnung, Zahlung und Umsatzsteuer</b> — gehören zum Auftrag, haben aber noch keine
+        Story. <b>Online-Shop für Verbrauchsmaterial</b> — dito. <b>Wartungsübersicht und
+        Prognose</b> (#3) liegt bei der Daten- und Prozessanalyse und ist nicht besetzt.
+        <b>Kundenstammdaten</b> (#7) und der <b>Excel-Import</b> (#20) stehen im Backlog, aber
+        nicht in diesem Sprint.</p>
+      <p><b>Dunkle Darstellung der Anwendung</b> ist nicht entworfen — diese Seite folgt dem
+        Theme des Betrachters, die Bildschirme darin sind bewusst hell. Ob die Anwendung eine
+        dunkle Variante bekommt, ist eine eigene Entscheidung.</p>
+    </div>
+  </section>
+
+  <footer>
+    <span class="mono">Gruppe 11 · Maschinenverleih</span>
+    <span class="mono">Issues #1 · #2 · #8</span>
+    <span class="mono">Arbeitsname „Maschinenpark" · Beispieldaten erfunden</span>
+  </footer>
+
+</div>
