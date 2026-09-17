@@ -7,7 +7,8 @@ Pro Sprint eine Note je Person — die Fachnote besteht zu 50 % aus dem Projekt.
 | Datei | Inhalt | Status |
 | --- | --- | --- |
 | `projektstart.html` | Projektüberblick zum Vorstellen im Team — Quelle des geteilten Artefakts | laufend |
-| `sprint-1-planning.html` | Moderationsleitfaden für das erste Sprint Planning am 17.09. | bereit |
+| `sprint-1-planning.html` | Moderationsleitfaden für das erste Sprint Planning am 17.09. | erledigt |
+| `ist-stand.html` | Vorstellung für die Lehrkräfte: Ist-Stand, Stack-Entscheidung, offene Fragen | laufend |
 | `entscheidungen.md` | Was vom Product Owner kommt, was das Team geändert hat, was offen ist | laufend |
 | `backlog-neufassung.md` | Neugefasste Items mit Begründung je Änderung | Vorschlag fürs Refinement |
 | `definition-of-done.md` | Wann ein Item fertig ist | Entwurf |
@@ -63,6 +64,7 @@ anpassen.
 | --- | --- |
 | [Projektstart Maschinenverleih](https://claude.ai/code/artifact/8ca8c394-e3bc-474a-88e7-79a3b48765fd) | Überblick über das ganze Projekt |
 | [Sprint 1 Planning](https://claude.ai/code/artifact/31892c2f-aa82-468f-88dc-a00d3ed1ff8f) | Moderationsleitfaden für den 17.09. |
+| [Ist-Stand und Technologiewahl](https://claude.ai/artifact/ErEZ6XdPHv5hJ7XguEZXcH) | Vorstellung für die Lehrkräfte |
 
 Beide werden aus den HTML-Dateien in diesem Ordner veröffentlicht. Änderungen gehen
 **in die Datei**; die Seite wird danach unter derselben Adresse neu veröffentlicht.
