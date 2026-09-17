@@ -1,0 +1,566 @@
+<title>Ist-Stand und Technologiewahl</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --paper:#edefee; --surface:#f8f9f8; --surface-2:#e3e7e6;
+    --ink:#191d20; --ink-2:#56606a; --ink-3:#7b858d;
+    --rule:#ccd2d1; --rule-soft:#dbe0df;
+    --steel:#2f4a5c; --steel-soft:#dde5ea;
+    --plakette:#b35f12; --plak-soft:#f6e4d3;
+    --signal:#a8301c; --sig-soft:#f4dcd7;
+    --gruen:#2f6246; --gruen-soft:#d9e7df;
+    --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+    --body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+    --wide:1060px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:#14181a; --surface:#1c2124; --surface-2:#232a2d;
+      --ink:#e6eae9; --ink-2:#9aa6ad; --ink-3:#79858c;
+      --rule:#2e3639; --rule-soft:#242b2e;
+      --steel:#8bb2cc; --steel-soft:#1e2b34;
+      --plakette:#e0904a; --plak-soft:#31241a;
+      --signal:#e38470; --sig-soft:#331f1c;
+      --gruen:#74b791; --gruen-soft:#1a2a22;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper:#14181a; --surface:#1c2124; --surface-2:#232a2d;
+    --ink:#e6eae9; --ink-2:#9aa6ad; --ink-3:#79858c;
+    --rule:#2e3639; --rule-soft:#242b2e;
+    --steel:#8bb2cc; --steel-soft:#1e2b34;
+    --plakette:#e0904a; --plak-soft:#31241a;
+    --signal:#e38470; --sig-soft:#331f1c;
+    --gruen:#74b791; --gruen-soft:#1a2a22;
+  }
+
+  * { box-sizing:border-box; }
+  body {
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:var(--body); font-size:16px; line-height:1.58;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap { max-width:var(--wide); margin:0 auto; padding:0 26px 90px; }
+
+  .mast { padding:50px 0 26px; border-bottom:2px solid var(--ink); }
+  .eyebrow {
+    font-family:var(--mono); font-size:11.5px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--ink-2); margin:0 0 16px;
+  }
+  h1 {
+    font-family:var(--display); font-weight:700;
+    font-size:clamp(2.1rem,5vw,3.2rem); line-height:1.03;
+    letter-spacing:-.022em; margin:0 0 16px; text-wrap:balance;
+  }
+  h1 .thin { display:block; color:var(--steel); font-weight:600; }
+  .standfirst { font-size:1.07rem; color:var(--ink-2); margin:0; max-width:62ch; }
+
+  .facts {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(142px,1fr));
+    gap:1px; background:var(--rule); border:1px solid var(--rule); margin:30px 0 0;
+  }
+  .fact { background:var(--surface); padding:12px 14px; }
+  .fact dt {
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--ink-3); margin:0 0 4px;
+  }
+  .fact dd { margin:0; font-weight:500; font-size:.93rem; font-variant-numeric:tabular-nums; }
+
+  section { padding:54px 0 0; }
+  .shead { display:flex; align-items:baseline; gap:13px; margin:0 0 6px; }
+  .snum {
+    font-family:var(--mono); font-size:.82rem; color:var(--steel);
+    border-bottom:2px solid var(--steel); padding-bottom:1px; flex:none;
+  }
+  h2 {
+    font-family:var(--display); font-weight:600;
+    font-size:clamp(1.4rem,2.5vw,1.9rem);
+    letter-spacing:-.014em; line-height:1.15; margin:0; text-wrap:balance;
+  }
+  .sdek { color:var(--ink-2); margin:0 0 24px; max-width:66ch; font-size:1.01rem; }
+  h3 { font-family:var(--display); font-weight:600; font-size:1.05rem; margin:28px 0 9px; }
+  p { margin:0 0 13px; max-width:74ch; }
+  a { color:var(--steel); }
+  code {
+    font-family:var(--mono); font-size:.88em; background:var(--surface-2);
+    padding:1px 5px; border:1px solid var(--rule-soft);
+  }
+  :focus-visible { outline:2px solid var(--plakette); outline-offset:2px; }
+
+  .tablewrap { overflow-x:auto; border:1px solid var(--rule); background:var(--surface); }
+  table { border-collapse:collapse; width:100%; min-width:620px; font-size:.89rem; }
+  thead th {
+    text-align:left; font-family:var(--mono); font-size:10px; letter-spacing:.11em;
+    text-transform:uppercase; color:var(--ink-3); font-weight:500;
+    padding:10px 12px; border-bottom:1px solid var(--rule);
+    background:var(--surface-2); white-space:nowrap;
+  }
+  tbody td { padding:11px 12px; border-bottom:1px solid var(--rule-soft); vertical-align:top; }
+  tbody tr:last-child td { border-bottom:0; }
+  td.k { font-family:var(--mono); color:var(--ink-2); white-space:nowrap; }
+  td.n { font-family:var(--mono); font-variant-numeric:tabular-nums; color:var(--ink-2); white-space:nowrap; }
+  td.pf { font-weight:600; min-width:190px; }
+
+  .chip {
+    display:inline-block; font-family:var(--mono); font-size:10.5px; letter-spacing:.04em;
+    padding:2px 7px; border:1px solid var(--rule); color:var(--ink-2); white-space:nowrap;
+  }
+  .chip.p0 { color:var(--signal); border-color:var(--signal); background:var(--sig-soft); }
+  .chip.p1 { color:var(--plakette); border-color:var(--plakette); background:var(--plak-soft); }
+  .chip.p2 { color:var(--ink-3); }
+  .chip.on { color:var(--gruen); border-color:var(--gruen); background:var(--gruen-soft); }
+
+  /* Stack-Karten */
+  .stack { display:grid; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); gap:18px; }
+  .layer { border:1px solid var(--rule); background:var(--surface); padding:17px 19px; }
+  .layer .lname {
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.11em;
+    text-transform:uppercase; color:var(--ink-3); margin:0 0 7px;
+  }
+  .layer .lpick { font-family:var(--display); font-weight:600; font-size:1.1rem; margin:0 0 9px; }
+  .layer p { font-size:.93rem; color:var(--ink-2); margin:0; }
+
+  figure { margin:8px 0 0; }
+  figure svg { display:block; width:100%; height:auto; }
+  figcaption {
+    font-size:.87rem; color:var(--ink-2); margin-top:12px;
+    padding-top:11px; border-top:1px solid var(--rule); max-width:76ch;
+  }
+
+  .callout { border-left:3px solid var(--plakette); background:var(--plak-soft); padding:15px 18px; margin:24px 0 0; }
+  .callout.warn { border-left-color:var(--signal); background:var(--sig-soft); }
+  .callout.ok { border-left-color:var(--gruen); background:var(--gruen-soft); }
+  .callout p:last-child { margin-bottom:0; }
+  .callout .ctag {
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--plakette); display:block; margin-bottom:6px;
+  }
+  .callout.warn .ctag { color:var(--signal); }
+  .callout.ok .ctag { color:var(--gruen); }
+
+  /* Risiken */
+  .risks { list-style:none; margin:0; padding:0; counter-reset:r; border-top:1px solid var(--rule); }
+  .risks li {
+    display:grid; grid-template-columns:32px 1fr; gap:15px;
+    padding:16px 2px; border-bottom:1px solid var(--rule-soft); align-items:start;
+  }
+  .risks li::before {
+    counter-increment:r; content:counter(r,decimal-leading-zero);
+    font-family:var(--mono); font-size:.82rem; color:var(--signal); padding-top:3px;
+  }
+  .risks b { display:block; font-weight:600; margin-bottom:3px; }
+  .risks .t { color:var(--ink-2); font-size:.95rem; }
+  .risks .h {
+    display:block; margin-top:7px; font-size:.93rem;
+    padding-left:11px; border-left:2px solid var(--gruen); color:var(--ink-2);
+  }
+
+  /* Fragen */
+  .asks { list-style:none; margin:0; padding:0; }
+  .asks li { border:1px solid var(--rule); background:var(--surface); padding:16px 18px; margin-bottom:14px; }
+  .asks li:last-child { margin-bottom:0; }
+  .asks .q { font-family:var(--display); font-weight:600; font-size:1.05rem; margin:0 0 8px; }
+  .asks .w { color:var(--ink-2); font-size:.94rem; margin:0; }
+  .asks .own {
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--plakette); display:block; margin-top:9px;
+  }
+
+  footer {
+    margin-top:62px; padding-top:18px; border-top:2px solid var(--ink);
+    font-size:.85rem; color:var(--ink-2); display:flex; flex-wrap:wrap; gap:8px 24px;
+  }
+  footer .mono { font-family:var(--mono); }
+
+  @media (max-width:620px) {
+    .wrap { padding:0 17px 66px; }
+    .risks li { grid-template-columns:24px 1fr; gap:10px; }
+  }
+  @media (prefers-reduced-motion:reduce) { * { transition:none !important; animation:none !important; } }
+</style>
+
+<div class="wrap">
+
+  <header class="mast">
+    <p class="eyebrow">Gruppe 11 · Maschinenverleih · Stand 17.09.2026, nach dem Sprint-1-Planning</p>
+    <h1>Ist-Stand<span class="thin">und Technologiewahl</span></h1>
+    <p class="standfirst">Was seit dem Auftakt entstanden ist, welchen Technologie-Stack wir
+      gewählt haben und wie er die Pflichtvorgaben erfüllt — samt der vier Punkte, die wir
+      daran selbst kritisch sehen.</p>
+    <dl class="facts">
+      <div class="fact"><dt>Sprint 1</dt><dd>17.09. – 30.09.</dd></div>
+      <div class="fact"><dt>Backlog</dt><dd>19 Items</dd></div>
+      <div class="fact"><dt>Im Sprint</dt><dd>11 Items</dd></div>
+      <div class="fact"><dt>Sprintlänge</dt><dd>2 Wochen · 6 Sprints</dd></div>
+      <div class="fact"><dt>Team</dt><dd>1× AE · 4× SI</dd></div>
+      <div class="fact"><dt>Abgabe</dt><dd>Fr 11.12.2026</dd></div>
+    </dl>
+  </header>
+
+  <!-- 01 -->
+  <section id="stand">
+    <div class="shead"><span class="snum">01</span><h2>Was seit dem Auftakt steht</h2></div>
+    <p class="sdek">Zwei Wochen nach dem Projektauftakt. Alles Folgende ist im Repository
+      nachprüfbar, nicht nur behauptet.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Bereich</th><th>Stand</th><th>Wo</th></tr></thead>
+        <tbody>
+          <tr><td class="pf">Repository</td>
+              <td>Branch-Schutz auf <code>main</code>: Pull Request erzwungen, eine Review verlangt,
+                  Force-Push und Löschen gesperrt. Konventionen für Branches, Commits und Reviews
+                  schriftlich.</td>
+              <td class="k">CONTRIBUTING.md</td></tr>
+          <tr><td class="pf">Board</td>
+              <td>19 Items mit Typ, Domäne, Priorität und Zuweisung. Zwei Sichten, sechs
+                  Sprint-Milestones bis zur Abgabe.</td>
+              <td class="k">GitHub Projects</td></tr>
+          <tr><td class="pf">Backlog</td>
+              <td>Alle 15 Items der Vorlage geprüft und neu gefasst, vier davon aufgeteilt.
+                  Jede Änderung mit Begründung dokumentiert, der Originaltext steht als
+                  Kommentar unter jedem Issue.</td>
+              <td class="k">backlog-neufassung.md</td></tr>
+          <tr><td class="pf">Datenmodell</td>
+              <td>ERD in Chen-Notation als Arbeitsstand: neun Entitäten, Beziehungen mit
+                  Kardinalitäten. Überführung in Relationen und SQL-DDL steht an.</td>
+              <td class="k">docs/datenmodell</td></tr>
+          <tr><td class="pf">Nutzwertanalysen</td>
+              <td>Linux-Distribution abgeschlossen (acht Kandidaten, gewichtete Kriterien) →
+                  <b>Debian 13</b>. Datenbanksystem läuft gerade.</td>
+              <td class="k">docs/adr</td></tr>
+          <tr><td class="pf">Scrum</td>
+              <td>Zwei Wochen Sprintlänge, sechs Sprints. Definition of Done im Planning
+                  behandelt. Daily in Präsenz Donnerstag und Freitag, an den übrigen Tagen
+                  schriftlich — vier Schultage je Sprint lassen kein tägliches Daily zu.</td>
+              <td class="k">docs/scrum</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section id="stack">
+    <div class="shead"><span class="snum">02</span><h2>Der gewählte Stack</h2></div>
+    <p class="sdek">Das Architekturbild der Aufgabenstellung verstehen wir als Orientierung.
+      Verbindlich ist die Pflichtliste — und die erfüllen wir mit diesem Stack.</p>
+    <div class="stack">
+      <div class="layer">
+        <p class="lname">Oberfläche</p>
+        <p class="lpick">React mit Next.js</p>
+        <p>TypeScript. Next.js bringt neben der Oberfläche eine eigene Serverschicht mit —
+          genau die brauchen wir für die Client-Server-Pflicht.</p>
+      </div>
+      <div class="layer">
+        <p class="lname">Serverschicht</p>
+        <p class="lpick">Next.js Route Handlers</p>
+        <p>Hier liegt die objektorientierte Domänenschicht: Maschine, Reservierung, Rechnung
+          als Klassen mit ihrem Verhalten. Der Browser sieht die Datenbank nie.</p>
+      </div>
+      <div class="layer">
+        <p class="lname">Daten</p>
+        <p class="lpick">Supabase</p>
+        <p>PostgreSQL mit Datenbank-API, Anmeldung und Dateiablage. Zunächst als Cloud, mit
+          der Rückfallebene, sie selbst auf der Strato-VM zu betreiben.</p>
+      </div>
+      <div class="layer">
+        <p class="lname">Server</p>
+        <p class="lpick">Debian 13</p>
+        <p>Auf der Strato-VM, kriteriengeleitet gewählt. Darauf Container, Reverse Proxy mit
+          Let's Encrypt und der Mailserver.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <span class="ctag">Warum React und nicht Angular</span>
+      <p>Die Aufgabenstellung nennt als Client-Technologie <b>Angular, C#/C++ oder Flutter</b>.
+        React mit Next.js steht dort nicht — wir weichen an dieser Stelle also bewusst vom
+        Architekturbild ab. Zulässig ist das, weil der Stack frei wählbar ist, solange die
+        Pflichtliste erfüllt wird.</p>
+      <p>Der Grund für die Wahl ist die <b>Serverschicht</b>: Angular und Flutter sind reine
+        Client-Technologien, wir bräuchten zusätzlich einen eigenen Backend-Dienst. Next.js
+        bringt beides mit, und damit liegt die Client-Server-Grenze innerhalb eines Projekts
+        statt über zwei getrennte Anwendungen verteilt. Dazu kommen Vorkenntnisse im Team.
+        Die vollständige Begründung kommt als Architekturentscheidung in
+        <code>docs/adr</code>.</p>
+    </div>
+
+    <h3>Wie die Teile zusammenhängen</h3>
+    <figure>
+      <svg viewBox="0 0 900 340" role="img"
+           aria-label="Der Browser spricht über HTTPS nur mit dem Reverse Proxy auf der Strato-VM, dieser mit dem Next.js-Server, und erst der Next.js-Server greift über die Datenbank-API auf Supabase mit PostgreSQL, Anmeldung und Dateiablage zu. Ein direkter Zugriff aus dem Browser auf Supabase ist als nicht zulässig markiert.">
+        <defs>
+          <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+          </marker>
+          <marker id="arx" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="var(--signal)"/>
+          </marker>
+        </defs>
+
+        <!-- Browser -->
+        <rect x="30" y="20" width="190" height="52" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <text x="46" y="42" font-family="Archivo, sans-serif" font-size="14" font-weight="600" fill="currentColor">Browser</text>
+        <text x="46" y="60" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="currentColor" opacity=".7">React · Next.js · TypeScript</text>
+
+        <!-- nicht zulaessig -->
+        <text x="455" y="30" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="var(--signal)">direkt aus dem Browser: nicht zulässig</text>
+        <polyline points="222,46 700,46 700,166" fill="none" stroke="var(--signal)" stroke-width="1.4"
+                  stroke-dasharray="6 4" marker-end="url(#arx)"/>
+        <line x1="447" y1="38" x2="463" y2="54" stroke="var(--signal)" stroke-width="2"/>
+        <line x1="463" y1="38" x2="447" y2="54" stroke="var(--signal)" stroke-width="2"/>
+
+        <!-- Strato VM -->
+        <text x="20" y="102" font-family="IBM Plex Mono, monospace" font-size="11.5" fill="var(--plakette)">STRATO-VM · DEBIAN 13 · CONTAINER · INFRASTRUCTURE AS CODE</text>
+        <rect x="20" y="110" width="430" height="200" fill="none" stroke="var(--plakette)"
+              stroke-width="1" stroke-dasharray="6 5"/>
+
+        <line x1="125" y1="72" x2="125" y2="141" stroke="currentColor" stroke-width="1.4" marker-end="url(#ar)"/>
+        <text x="135" y="104" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">HTTPS · 443</text>
+
+        <rect x="45" y="145" width="190" height="54" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <text x="61" y="167" font-family="Archivo, sans-serif" font-size="14" font-weight="600" fill="currentColor">Reverse Proxy</text>
+        <text x="61" y="185" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="currentColor" opacity=".7">TLS · Let's Encrypt</text>
+
+        <line x1="140" y1="199" x2="140" y2="228" stroke="currentColor" stroke-width="1.4" marker-end="url(#ar)"/>
+
+        <rect x="45" y="232" width="190" height="62" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <text x="61" y="253" font-family="Archivo, sans-serif" font-size="14" font-weight="600" fill="currentColor">Next.js Server</text>
+        <text x="61" y="270" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="currentColor" opacity=".7">Route Handlers</text>
+        <text x="61" y="286" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="var(--gruen)">OO-Domänenschicht</text>
+
+        <line x1="235" y1="263" x2="556" y2="263" stroke="currentColor" stroke-width="1.4" marker-end="url(#ar)"/>
+        <text x="396" y="255" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">Datenbank-API</text>
+
+        <!-- Supabase -->
+        <text x="560" y="162" font-family="IBM Plex Mono, monospace" font-size="11.5" fill="currentColor" opacity=".65">SUPABASE — CLOUD, RÜCKFALLEBENE SELBST GEHOSTET</text>
+        <rect x="560" y="170" width="310" height="150" fill="none" stroke="currentColor" stroke-width="1.6"/>
+
+        <rect x="576" y="192" width="130" height="30" fill="none" stroke="currentColor" stroke-width="1" opacity=".55"/>
+        <text x="641" y="211" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">PostgreSQL</text>
+        <rect x="716" y="192" width="138" height="30" fill="none" stroke="currentColor" stroke-width="1" opacity=".55"/>
+        <text x="785" y="211" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">PostgREST</text>
+        <rect x="576" y="232" width="130" height="30" fill="none" stroke="currentColor" stroke-width="1" opacity=".55"/>
+        <text x="641" y="251" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">Anmeldung</text>
+        <rect x="716" y="232" width="138" height="30" fill="none" stroke="currentColor" stroke-width="1" opacity=".55"/>
+        <text x="785" y="251" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">Dateiablage</text>
+        <text x="576" y="290" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="var(--gruen)">Schema: handgeschriebenes SQL-DDL,</text>
+        <text x="576" y="305" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="var(--gruen)">versioniert im Repository</text>
+      </svg>
+      <figcaption>Der entscheidende Punkt ist die rote Linie: Supabase lässt sich auch direkt
+        aus dem Browser ansprechen, und fast jede Anleitung im Netz macht genau das. Dann gäbe
+        es keine eigene Serverschicht und die Client-Server-Pflicht wäre verletzt. Bei uns
+        läuft jeder Datenzugriff über die Route Handlers des Next.js-Servers — dort liegt auch
+        die objektorientierte Domänenschicht. Der Mailserver für Bestätigungen und
+        Rechnungsversand läuft ebenfalls auf der Strato-VM, im Bild weggelassen.</figcaption>
+    </figure>
+  </section>
+
+  <!-- 03 -->
+  <section id="pflicht">
+    <div class="shead"><span class="snum">03</span><h2>Wie die Pflichtvorgaben erfüllt werden</h2></div>
+    <p class="sdek">Die fünf verbindlichen Punkte der Aufgabenstellung, jeder mit der konkreten
+      Antwort dieses Stacks.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Pflicht</th><th>Wie wir sie erfüllen</th></tr></thead>
+        <tbody>
+          <tr><td class="pf">Objektorientierter Ansatz</td>
+              <td>Die Domänenschicht im Next.js-Server ist objektorientiert: <b>Maschine,
+                  Reservierung, Rechnung, Zahlung als Klassen mit ihrem Verhalten</b> — nicht als
+                  lose Funktionen über Datensätzen. React-Komponenten sind Oberfläche, nicht
+                  Modell. Das Klassendiagramm in <code>docs/uml</code> zeigt denselben Aufbau
+                  wie der Code.</td></tr>
+          <tr><td class="pf">Client-Server-Architektur<br>und Datenbank-API</td>
+              <td>Der Browser spricht <b>ausschließlich</b> mit unserem Next.js-Server. Der
+                  Server spricht über die <b>Datenbank-API</b> (PostgREST) mit PostgreSQL.
+                  Kein Datenbankzugriff aus dem Browser — siehe Diagramm oben.</td></tr>
+          <tr><td class="pf">Kein implizit erzeugtes<br>Datenbankschema</td>
+              <td>Das Schema wird <b>von Hand als SQL-DDL geschrieben</b> und im Repository
+                  versioniert. Kein Zusammenklicken in der Verwaltungsoberfläche, kein Werkzeug,
+                  das Tabellen aus Code erzeugt. Das Grundgerüst-Item verlangt genau diesen
+                  Nachweis.</td></tr>
+          <tr><td class="pf">Infrastructure as Code</td>
+              <td>Debian 13, Container-Laufzeit, Reverse Proxy und Mailserver entstehen per
+                  Skript aus dem Repository. Der Nachweis ist <b>durchgeführt</b>, nicht
+                  zugesagt: die Umgebung wird einmal vollständig gelöscht und mit einem Befehl
+                  wiederhergestellt, protokolliert.</td></tr>
+          <tr><td class="pf">IT-Grundschutz ·<br>ISO 9241 · UML</td>
+              <td><b>Grundschutz:</b> SSH nur per Schlüssel, Firewall auf benötigte Ports,
+                  automatische Sicherheitsupdates, Schutzbedarfsanalyse — eigenes Ticket.
+                  <b>ISO 9241:</b> eine Barrierefreiheits-Checkliste, in der Definition of Done
+                  verankert, damit sie für jede Oberfläche gilt und prüfbar ist.
+                  <b>UML:</b> Use-Case-, Klassen-, Sequenz- und Komponentendiagramm als
+                  Quelltext im Repository.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 04 -->
+  <section id="risiken">
+    <div class="shead"><span class="snum">04</span><h2>Vier Punkte, die wir selbst kritisch sehen</h2></div>
+    <p class="sdek">Lieber von uns benannt als im Review gefunden. Zu jedem steht, wie wir damit
+      umgehen.</p>
+    <ul class="risks">
+      <li><span>
+        <b>Supabase Cloud verlegt die Datenhaltung von der Strato-VM weg</b>
+        <span class="t">Uns wurde eine eigene VM zugewiesen, damit jedes Team seine Umgebung
+          selbst betreibt. Mit der Cloud-Variante liegt der Kern — die Datenbank — nicht mehr
+          dort.</span>
+        <span class="h">Wir haben eine Rückfallebene: Supabase lässt sich selbst hosten, und
+          dann läuft alles auf der VM. Ob die Cloud zulässig ist, ist unsere erste Frage an
+          Sie. Die Entscheidung kostet uns wenig, wenn sie jetzt fällt — später viel.</span>
+      </span></li>
+      <li><span>
+        <b>Steuerrelevante Daten in einer Cloud</b>
+        <span class="t">Rechnung, Zahlung und Umsatzsteuer unterliegen UStG und GoBD. Dazu
+          gehört, benennen zu können, wo die Daten liegen, wer darauf zugreift und wie
+          Änderungen nachvollziehbar bleiben. Bei einem fremden Anbieter ist das eine
+          zusätzliche Frage, die bei eigener Hardware nicht entsteht.</span>
+        <span class="h">Wir würden die Region festlegen, den Punkt in einer
+          Architekturentscheidung dokumentieren — und ihn als zweites Argument für die
+          Rückfallebene führen.</span>
+      </span></li>
+      <li><span>
+        <b>Der bequeme Supabase-Weg verletzt die Client-Server-Pflicht</b>
+        <span class="t">Supabase ist darauf ausgelegt, direkt aus dem Browser angesprochen zu
+          werden. Fast jede Anleitung zeigt es so. Dann gibt es keine eigene Serverschicht —
+          und die Pflichtvorgabe ist gerissen, ohne dass es auffällt, weil die Anwendung
+          funktioniert.</span>
+        <span class="h">Deshalb ist es im Diagramm oben ausdrücklich rot markiert. Jeder
+          Datenzugriff läuft über die Route Handlers. Das ist Mehrarbeit und die Stelle, an der
+          wir uns in jedem Review selbst kontrollieren müssen.</span>
+      </span></li>
+      <li><span>
+        <b>Objektorientierung muss man in React suchen</b>
+        <span class="t">React arbeitet mit Funktionskomponenten, nicht mit Klassen. Wer nur auf
+          die Oberfläche schaut, sieht keinen objektorientierten Ansatz — und der ist im
+          Hinblick auf die Abschlussprüfung Pflicht.</span>
+        <span class="h">Der objektorientierte Teil liegt in der Domänenschicht auf dem Server,
+          wo er fachlich auch hingehört. Er muss dort sichtbar gebaut werden, nicht behauptet:
+          das Klassendiagramm und der Code müssen dasselbe zeigen.</span>
+      </span></li>
+    </ul>
+  </section>
+
+  <!-- 05 -->
+  <section id="sprint">
+    <div class="shead"><span class="snum">05</span><h2>Sprint 1 — was drin ist</h2></div>
+    <p class="sdek">Elf Items, priorisiert nach technischer Abhängigkeit: ohne Server, Datenbank
+      und Grundgerüst kann keine fachliche Funktion entstehen.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>#</th><th>Prio</th><th>Item</th><th>Wer</th></tr></thead>
+        <tbody>
+          <tr><td class="n">4</td><td><span class="chip p0">P0</span></td><td>Server nach IT-Grundschutz absichern</td><td class="k">Alexa · Laurin</td></tr>
+          <tr><td class="n">5</td><td><span class="chip p0">P0</span></td><td>Infrastruktur automatisiert bereitstellen</td><td class="k">Nico · Justin</td></tr>
+          <tr><td class="n">10</td><td><span class="chip p0">P0</span></td><td>Datenbanksystem festlegen und begründen <span class="chip on">läuft</span></td><td class="k">alle fünf</td></tr>
+          <tr><td class="n">11</td><td><span class="chip p0">P0</span></td><td>Datenbank-Server produktiv bereitstellen</td><td class="k">Alexa</td></tr>
+          <tr><td class="n">6</td><td><span class="chip p0">P0</span></td><td>Client-Server-Grundgerüst mit Datenbankanbindung</td><td class="k">Justin</td></tr>
+          <tr><td class="n">12</td><td><span class="chip p0">P0</span></td><td>Mailserver-System auswählen</td><td class="k">Justin</td></tr>
+          <tr><td class="n">13</td><td><span class="chip p0">P0</span></td><td>Mailserver produktiv bereitstellen</td><td class="k">Justin</td></tr>
+          <tr><td class="n">1</td><td><span class="chip p0">P0</span></td><td>Maschinen nach Verfügbarkeit suchen und reservieren</td><td class="k">Finn</td></tr>
+          <tr><td class="n">2</td><td><span class="chip p0">P0</span></td><td>Maschinenstammdaten erfassen und pflegen</td><td class="k">Finn</td></tr>
+          <tr><td class="n">8</td><td><span class="chip p1">P1</span></td><td>Rollen- und Zugriffsrechte verwalten</td><td class="k">Finn</td></tr>
+          <tr><td class="n">15</td><td><span class="chip p1">P1</span></td><td>TLS-Verschlüsselung automatisiert verwalten</td><td class="k">Laurin</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <span class="ctag">Zur Kapazität</span>
+      <p>Unterricht ist Donnerstag und Freitag — ein zweiwöchiger Sprint hat also <b>vier
+        Schultage</b>, und der erste geht für Review, Retrospektive und Planning weg. Bleiben
+        rund <b>12 bis 18 Stunden Entwicklungszeit je Person und Sprint</b>, im Team etwa 60 bis
+        90. Über sechs Sprints sind das 360 bis 540 Stunden.</p>
+      <p>Die Aufwandsschätzungen der Vorlage entsprechen etwa 150 Stunden — also knapp einem
+        Drittel. Für Abrechnung, Online-Shop und Marketingkonzept, für die es noch keine
+        Stories gibt, ist damit Platz. Die formulieren wir selbst.</p>
+    </div>
+  </section>
+
+  <!-- 06 -->
+  <section id="herkunft">
+    <div class="shead"><span class="snum">06</span><h2>Was von Ihnen kommt, was wir geändert haben</h2></div>
+    <p class="sdek">Damit im Review nachvollziehbar ist, woher jede Festlegung stammt — und
+      nicht der Eindruck entsteht, wir hätten Vorgaben eigenmächtig verändert.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Quelle</th><th>Was daraus stammt</th></tr></thead>
+        <tbody>
+          <tr><td class="pf">Aufgabenstellung</td>
+              <td>Ausgangssituation, die Pflichtliste, das Architekturbild als Orientierung,
+                  Termine, die fünf Einzelaufgaben</td></tr>
+          <tr><td class="pf">Sie als Product Owner</td>
+              <td>Das Backlog als Vorlage: 15 Items mit Akzeptanzkriterien, Lernfeld- und
+                  Fachrichtungszuordnung, Aufwandsschätzung in T-Shirt-Größen</td></tr>
+          <tr><td class="pf">Das Team</td>
+              <td>Neufassung der Items, zwei Aufteilungen, Technologie-Entscheidungen,
+                  Schätzverfahren, Sprintlänge, Daily-Regelung, Priorisierung</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Die Änderungen am Backlog</h3>
+    <p>Wir haben alle 15 Items gegen den Scrum Guide, die INVEST-Kriterien und die
+      Aufgabenstellung geprüft. Ergebnis: <b>sechs sind echte User Stories</b>, neun beschreiben
+      technische Arbeit mit dem Team als Nutznießer im „Als …" — die stehen jetzt als Tickets,
+      wie es die Aufgabenstellung für Systemintegration vorsieht.</p>
+    <p>Zwei Items waren nicht verwendbar und wurden geteilt: <b>„Betrieb und Sicherheit
+      gewährleisten"</b> beschrieb eine Daueraufgabe und hätte die Definition of Done nie
+      erfüllen können — jetzt vier abschließbare Tickets. Und die Kundendaten-Story vermischte
+      Nutzerfunktion und Importschnittstelle — jetzt getrennt.</p>
+    <p>Wir haben außerdem <b>zwei eigene Befunde zurückgezogen</b>, nachdem klar war, dass das
+      Architekturbild nur Orientierung ist. Beide Rücknahmen stehen dokumentiert im Repository.
+      Der <b>Originaltext jedes Items</b> steht unverändert als erster Kommentar unter dem
+      jeweiligen Issue.</p>
+  </section>
+
+  <!-- 07 -->
+  <section id="fragen">
+    <div class="shead"><span class="snum">07</span><h2>Was wir von Ihnen brauchen</h2></div>
+    <p class="sdek">Drei Punkte. Der erste ist zeitkritisch, weil daran die gesamte
+      Infrastruktur-Arbeit von Sprint 1 hängt.</p>
+    <ul class="asks">
+      <li>
+        <p class="q">Dürfen wir Supabase als Cloud nutzen, oder muss alles auf der Strato-VM laufen?</p>
+        <p class="w">Beides ist für uns machbar — Supabase lässt sich selbst hosten. Die
+          Cloud-Variante spart Betriebsaufwand, verlegt aber die Datenhaltung weg von der uns
+          zugewiesenen VM, und bei steuerrelevanten Daten entstehen zusätzliche Fragen. Wenn
+          Sie die Selbst-Hostung wollen, sagen Sie es bitte jetzt: die Tickets #5 und #11 werden
+          diese Woche gebaut.</p>
+        <span class="own">zeitkritisch · betrifft Sprint 1</span>
+      </li>
+      <li>
+        <p class="q">Zählt eine Story mit einem Lernfeld der Anwendungsentwicklung für die Note
+          derjenigen Person, die sie tatsächlich umsetzt?</p>
+        <p class="w">Unser Team hat eine Anwendungsentwicklung und vier Systemintegrationen. Die
+          Anwendungsentwicklung trägt knapp das Vierfache pro Kopf, also geben wir einen Teil
+          ab. Wenn abgegebene Arbeit für die abgebende oder die übernehmende Person nicht
+          zählt, müssen wir anders aufteilen — und das sollte vor Sprint 2 geklärt sein.</p>
+        <span class="own">betrifft die Leistungsbewertung</span>
+      </li>
+      <li>
+        <p class="q">Wann sind die Herbstferien?</p>
+        <p class="w">Sie fallen voraussichtlich in Sprint 3 (15.10. – 28.10.). Wir würden den
+          Sprint dann auf die verfügbaren Schultage kürzen und den Umfang entsprechend senken.</p>
+        <span class="own">vor dem Planning von Sprint 2</span>
+      </li>
+    </ul>
+    <div class="callout ok">
+      <span class="ctag">Nicht mehr offen</span>
+      <p>Umfang (Abrechnung, Shop und Marketing gehören dazu, Stories schreiben wir),
+        Technologie-Stack (frei, solange die Pflichtliste erfüllt ist), Priorisierung
+        (übernehmen wir), Einheit der Schätzung (Schulstunden), Sprintlänge und die
+        Daily-Regelung. Alles protokolliert mit Quelle im Repository.</p>
+    </div>
+  </section>
+
+  <footer>
+    <span class="mono">Gruppe 11 · Maschinenverleih</span>
+    <span class="mono">Finn Jendras · Alexa Börsch · Nico Laeser · Laurin Schmitz · Justin Kelm</span>
+    <span class="mono">github.com/Finn2103/maschinen-verwaltung</span>
+  </footer>
+
+</div>
