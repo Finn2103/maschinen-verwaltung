@@ -15,4 +15,5 @@ Closes #
 - [ ] Keine Secrets im Diff (`.env`, Schlüssel, Zugangsdaten)
 - [ ] Schemaänderungen als explizites SQL-DDL, versioniert
 - [ ] Dokumentation nachgezogen (UML / ADR / README), wenn nötig
-- [ ] Bei UI: Lade-, Leer- und Fehlerzustand vorhanden, Bedienung per Tastatur möglich
+- [ ] Bei UI: Lade-, Leer- und Fehlerzustand vorhanden; barrierefrei nach **ISO 9241**
+      gemäß der Barrierefreiheits-Checkliste des Projekts (`docs/adr`)

@@ -61,7 +61,7 @@ Auf dem Board tragen die 13 Tasks jetzt `work-type = Task` und das Label `task`;
 
 | Item | Befund | Verletzter Maßstab |
 | --- | --- | --- |
-| #1 | Kriterium „barrierefrei gemäß ISO 9241" ist nicht prüfbar | INVEST · Testable |
+| #1 | Kriterium „barrierefrei gemäß ISO 9241" ist nicht prüfbar — **Befund bleibt, der Normbezug aber auch** | INVEST · Testable |
 | #2 | Fordert Excel-Import für Maschinendaten | **Widerspruch zu Folie 07** |
 | #2 | „übernimmt Daten fehlerfrei" ist nicht prüfbar | INVEST · Testable |
 | #3 | „Wartungs-Score" ohne Aussage, was daran prüfbar ist | INVEST · Testable |
@@ -153,13 +153,24 @@ die ursprünglichen Issues, damit die Zuordnung nachvollziehbar bleibt.
 - [ ] Eine Reservierung auf einen belegten Zeitraum wird abgelehnt und der Konflikt benannt
 - [ ] Nach dem Absenden ist die Reservierung gespeichert und in der Übersicht des Kunden sichtbar
 - [ ] Der Kunde erhält eine Bestätigung per E-Mail
+- [ ] Die Oberfläche ist barrierefrei bedienbar **nach ISO 9241** — geprüft gegen die Barrierefreiheits-Checkliste des Projekts (`docs/adr`)
 - [ ] Suche und Reservierung sind vollständig per Tastatur bedienbar
 - [ ] Jedes Formularfeld hat ein zugeordnetes Label, jede Fehlermeldung ist mit ihrem Feld verknüpft
 
-> **Geändert:** „Oberfläche ist gemäß ISO 9241 barrierefrei bedienbar" war nicht
-> prüfbar — ersetzt durch zwei konkret nachweisbare Kriterien. Neu aufgenommen: die
-> Ablehnung überlappender Reservierungen, fachlich der schwierigste Teil und vorher
-> nicht gefordert. „Verbindlich gespeichert" entfernt — Verbindlichkeit ist #9.
+> **Geändert:** Neu aufgenommen ist die Ablehnung überlappender Reservierungen —
+> fachlich der schwierigste Teil und in der Vorlage nicht gefordert. Ergänzt um zwei
+> konkret nachweisbare Barrierefreiheits-Kriterien. „Verbindlich gespeichert" entfernt —
+> Verbindlichkeit ist #9.
+>
+> **Korrektur:** Das Kriterium „Oberfläche ist gemäß ISO 9241 barrierefrei bedienbar"
+> war zunächst **ersetzt** worden, weil es nicht prüfbar ist. Fehler in zwei Richtungen:
+> ISO 9241 steht in der Pflichtliste und muss im Backlog auffindbar bleiben — und zwei
+> Häkchen sind nicht dasselbe wie die Norm. Der Normbezug steht wieder drin und zeigt
+> jetzt auf eine Checkliste, die das Team einmal festlegt.
+>
+> **Offen fürs Team:** Was heißt „barrierefrei nach ISO 9241" für dieses Projekt
+> konkret? Einmal als Checkliste festlegen und als ADR ablegen — dann gilt sie für alle
+> Oberflächen-Items, nicht nur für #1.
 
 ---
 
