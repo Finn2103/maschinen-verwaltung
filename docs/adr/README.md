@@ -18,7 +18,7 @@ höchste Punktzahl allein ist keine Begründung. Nutzwertanalyse ist Prüfungsth
 | 0007 | Supabase als Cloud oder selbst gehostet | **entfällt** — in ADR 0006 mitentschieden: selbst gehostet auf der Strato-VM |
 | 0008 | Anmeldung über Supabase statt Authelia | offen, Begründung: zwei Benutzerverwaltungen vermeiden |
 | 0009 | Was „barrierefrei nach ISO 9241" für dieses Projekt heißt | offen — Checkliste, gilt dann für alle Oberflächen-Items |
-| [0010](0010-programmiersprache.md) | Programmiersprache und Typisierung | **TypeScript** — TypeScript vs. JavaScript vs. C#, Nutzwert 4,40 / 2,50 / 3,90 |
+| [0010](0010-programmiersprache.md) | Programmiersprache und Typisierung | **TypeScript** — TypeScript vs. JavaScript vs. C++, Nutzwert 4,50 / 2,95 / 2,90 |
 
 Die ADR-Texte 0004, 0006 und 0010 liegen als **Entwurf** vor — Methode und Zahlen stehen,
 die Formulierung schreibt das Team um. Der Text zu **0001** ist weiterhin Bringschuld: die
@@ -30,8 +30,9 @@ begründende Text fehlt.
 In zwei von drei Fällen gewinnt die gewählte Option **nicht** in allen Kriterien:
 
 - **Angular** ist bei Lernzuwachs und datenlastigen Formularen besser als React.
-- **C#** ist bei Typsicherheit und Objektorientierung besser als TypeScript — es verliert
-  nur, weil ADR 0004 einen JavaScript-basierten Client gewählt hat.
+- **C++** ist bei Typsicherheit und Objektorientierung besser als TypeScript — es verliert
+  an allem, was mit Weboberfläche zu tun hat. JavaScript scheitert am genau entgegengesetzten
+  Kriterium; deshalb landen beide fast gleich, ohne dass es ein Patt wäre.
 - **Oracle** gewinnt das wichtigste Einzelkriterium bei der Datenhaltung (klassisches
   SQL-DDL).
 
