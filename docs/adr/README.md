@@ -9,7 +9,7 @@ höchste Punktzahl allein ist keine Begründung. Nutzwertanalyse ist Prüfungsth
 
 | Nr. | Entscheidung | Status |
 | --- | --- | --- |
-| 0001 | Linux-Distribution für die Strato-VM | **Debian 13** entschieden, Nutzwertanalyse liegt vor (`Nutzwerkanalyse.xlsx`) — ADR-Text offen |
+| [0001](0001-linux-distribution.md) | Linux-Distribution für die Strato-VM | **Debian 13** entschieden. Nutzwertanalyse nach Markdown überführt — **gewinnt aber Ubuntu 26.04 LTS** (630 zu 540), die Abweichung ist noch nicht begründet |
 | 0002 | Container-Plattform (docker / podman / kubernetes) | offen |
 | 0003 | Reverse Proxy (apache2 / nginx / Traefik) | offen |
 | [0004](0004-client-technologie.md) | Client-Technologie | **React mit Next.js** — React vs. Angular vs. Flutter, Nutzwert 4,55 / 3,80 / 2,40 |
@@ -35,6 +35,10 @@ In zwei von drei Fällen gewinnt die gewählte Option **nicht** in allen Kriteri
   Kriterium; deshalb landen beide fast gleich, ohne dass es ein Patt wäre.
 - **Oracle** gewinnt das wichtigste Einzelkriterium bei der Datenhaltung (klassisches
   SQL-DDL).
+- **Ubuntu 26.04 LTS** gewinnt die Analyse zur Linux-Distribution sogar insgesamt —
+  entschieden wurde trotzdem Debian 13. Genau deshalb verlangt die Methode eine
+  Interpretation: die höchste Punktzahl allein ist keine Begründung. Diese Begründung fehlt
+  in ADR 0001 noch.
 
 Das ist beabsichtigt und soll so stehen bleiben. Eine Nutzwertanalyse, in der die eigene
 Wahl überall vorne liegt, ist üblicherweise rückwärts gerechnet.
