@@ -79,4 +79,5 @@ am **Donnerstag, 17.09.2026**.
 | [docs/datenmodell](docs/datenmodell) | ERD (Chen), relationales Modell, SQL-DDL |
 | [docs/uml](docs/uml) | Use-Case-, Klassen-, Sequenz-, Komponentendiagramme |
 | [docs/adr](docs/adr) | Architekturentscheidungen, Nutzwertanalysen |
-| [docs/scrum](docs/scrum) | Definition of Done, Backlog-Neufassung, PO-Klärung, Kickoff-Übersicht, Reviews und Retrospektiven |
+| [docs/scrum](docs/scrum) | Definition of Done, Entscheidungslog, Backlog-Neufassung, Reviews und Retrospektiven |
+| [docs/ki](docs/ki) | **KI-erstelltes Hilfsmaterial** — getrennt gehalten, keine Teamleistung |
