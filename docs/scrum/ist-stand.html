@@ -261,9 +261,9 @@
       </div>
       <div class="layer">
         <p class="lname">Daten</p>
-        <p class="lpick">Supabase</p>
-        <p>PostgreSQL mit Datenbank-API, Anmeldung und Dateiablage. Zunächst als Cloud, mit
-          der Rückfallebene, sie selbst auf der Strato-VM zu betreiben.</p>
+        <p class="lpick">Supabase, selbst gehostet</p>
+        <p>PostgreSQL mit Datenbank-API, Anmeldung und Dateiablage — als Container auf unserer
+          Strato-VM, nicht in einer fremden Cloud.</p>
       </div>
       <div class="layer">
         <p class="lname">Server</p>
@@ -335,7 +335,7 @@
         <text x="396" y="255" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">Datenbank-API</text>
 
         <!-- Supabase -->
-        <text x="560" y="162" font-family="IBM Plex Mono, monospace" font-size="11.5" fill="currentColor" opacity=".65">SUPABASE — CLOUD, RÜCKFALLEBENE SELBST GEHOSTET</text>
+        <text x="560" y="162" font-family="IBM Plex Mono, monospace" font-size="11.5" fill="var(--plakette)">SUPABASE — SELBST GEHOSTET, EBENFALLS AUF DER STRATO-VM</text>
         <rect x="560" y="170" width="310" height="150" fill="none" stroke="currentColor" stroke-width="1.6"/>
 
         <rect x="576" y="192" width="130" height="30" fill="none" stroke="currentColor" stroke-width="1" opacity=".55"/>
@@ -406,23 +406,24 @@
       umgehen.</p>
     <ul class="risks">
       <li><span>
-        <b>Supabase Cloud verlegt die Datenhaltung von der Strato-VM weg</b>
-        <span class="t">Uns wurde eine eigene VM zugewiesen, damit jedes Team seine Umgebung
-          selbst betreibt. Mit der Cloud-Variante liegt der Kern — die Datenbank — nicht mehr
-          dort.</span>
-        <span class="h">Wir haben eine Rückfallebene: Supabase lässt sich selbst hosten, und
-          dann läuft alles auf der VM. Ob die Cloud zulässig ist, ist unsere erste Frage an
-          Sie. Die Entscheidung kostet uns wenig, wenn sie jetzt fällt — später viel.</span>
+        <b>Der Supabase-Verbund ist groß für eine einzelne VM</b>
+        <span class="t">Selbst gehostet sind es rund zehn Container — Datenbank, API-Gateway,
+          Anmeldung, Datenbank-API, Dateiablage, Ereignisdienst. Dazu auf derselben VM noch
+          Reverse Proxy, Anwendung und Mailserver. Arbeitsspeicher und Plattenplatz könnten
+          knapp werden.</span>
+        <span class="h">Vor #11 prüfen wir, was die VM tatsächlich trägt. Dienste, die kein
+          Item fordert, werden nicht aufgesetzt — Ereignisdienst und Dateiablage brauchen wir
+          in Sprint 1 nicht.</span>
       </span></li>
       <li><span>
-        <b>Steuerrelevante Daten in einer Cloud</b>
-        <span class="t">Rechnung, Zahlung und Umsatzsteuer unterliegen UStG und GoBD. Dazu
-          gehört, benennen zu können, wo die Daten liegen, wer darauf zugreift und wie
-          Änderungen nachvollziehbar bleiben. Bei einem fremden Anbieter ist das eine
-          zusätzliche Frage, die bei eigener Hardware nicht entsteht.</span>
-        <span class="h">Wir würden die Region festlegen, den Punkt in einer
-          Architekturentscheidung dokumentieren — und ihn als zweites Argument für die
-          Rückfallebene führen.</span>
+        <b>Die Verwaltungsoberfläche von Supabase verleitet zum Pflichtverstoß</b>
+        <span class="t">In Supabase Studio lassen sich Tabellen zusammenklicken. Das wäre
+          genau das verbotene „implizit erzeugte Schema" — und es ist der bequemste Weg, der
+          sich anbietet. Die Anwendung würde danach funktionieren, der Verstoß fällt beim
+          Programmieren nicht auf.</span>
+        <span class="h">Teamregel, schriftlich in der Architekturentscheidung und in der
+          Definition of Done: das Schema entsteht ausschließlich als SQL-DDL-Datei im
+          Repository. Studio wird zum Ansehen benutzt, nicht zum Ändern.</span>
       </span></li>
       <li><span>
         <b>Der bequeme Supabase-Weg verletzt die Client-Server-Pflicht</b>
@@ -524,13 +525,14 @@
       Infrastruktur-Arbeit von Sprint 1 hängt.</p>
     <ul class="asks">
       <li>
-        <p class="q">Dürfen wir Supabase als Cloud nutzen, oder muss alles auf der Strato-VM laufen?</p>
-        <p class="w">Beides ist für uns machbar — Supabase lässt sich selbst hosten. Die
-          Cloud-Variante spart Betriebsaufwand, verlegt aber die Datenhaltung weg von der uns
-          zugewiesenen VM, und bei steuerrelevanten Daten entstehen zusätzliche Fragen. Wenn
-          Sie die Selbst-Hostung wollen, sagen Sie es bitte jetzt: die Tickets #5 und #11 werden
-          diese Woche gebaut.</p>
-        <span class="own">zeitkritisch · betrifft Sprint 1</span>
+        <p class="q">Deckt unsere Begründung der Technologiewahl das ab, was Sie erwarten?</p>
+        <p class="w">Für alle drei Entscheidungen liegt eine Nutzwertanalyse mit gewichteten
+          Kriterien, Punkten und Interpretation vor — React gegen Angular gegen Flutter,
+          TypeScript gegen JavaScript gegen C#, Supabase gegen Oracle gegen PocketBase. In zwei
+          von drei Fällen gewinnt unsere Wahl nicht in allen Kriterien; das haben wir so stehen
+          lassen. Wenn Sie eine andere Tiefe oder andere Kriterien erwarten, sagen Sie es
+          bitte, bevor wir weiterbauen.</p>
+        <span class="own">Nutzwertanalyse ist Prüfungsthema</span>
       </li>
       <li>
         <p class="q">Zählt eine Story mit einem Lernfeld der Anwendungsentwicklung für die Note
