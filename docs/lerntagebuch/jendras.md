@@ -8,29 +8,44 @@ Learned.** Ein Abschnitt pro Schultag, neueste Einträge oben.
 Hinweise zum Ausfüllen stehen in [`README.md`](README.md) — besonders der Punkt, dass für
 die Abgabe zusätzlich eine Word-Fassung im Loop-Arbeitsbereich verlangt ist.
 
-> Die kursiven Notizen unter jedem Tag sind **Gedächtnisstützen aus dem Repository** — was
-> an dem Tag nachweislich passiert ist. Sie sind nicht der Eintrag. Schreib in eigenen
-> Worten, und lösch die Stützen danach raus.
-
 ---
 
 ## 2026-09-24 · Donnerstag
 
 **Tätigkeit**
 
+- README überarbeitet nach dem ersten Gespräch mit den Lehrkräften
+- Technologie-Stack als eigene Übersicht sichtbar gemacht (`docs/TECHSTACK.md`) — was entschieden ist, womit begründet, was noch offen ist
+- Aufgabenstellung, Projektregeln und Lerntagebuch-Vorlage ins Repo aufgenommen
+- Ticket #4 in #4 und #32 aufgeteilt, weil die Projektregeln genau eine Person je Userstory verlangen
+- Lerntagebuch angelegt und die zurückliegenden Schultage nachgetragen
+- Oberflächen-Konventionen als Entwurf festgelegt: Styling- und React-Muster mit Begründung
+- Bündelungsfach-Abdeckung über alle 20 Items ausgezählt
+
+**Problem**
+
+- Im Gespräch wurde gesagt, T-Shirt-Größen seien nach Scrum dasselbe wie Story Points
+- #4 hatte zwei Personen zugewiesen, die Projektregeln verlangen genau eine je Userstory
+- Die Lehrkräfte wollen im Review nach den verwendeten React- und Styling-Mustern fragen — wer die beim Programmieren nebenbei wählt, kann sie hinterher nicht begründen
+- Im Backlog gibt es nur ein Item im Bündelungsfach GID
+- Die Projektregeln verlangen das Logbuch als Word-Datei in Loop, nicht als Markdown in Git
+
 **Lösung**
+
+- #4 in zwei gleichlautende Tickets aufgeteilt, mit Anleitung zur Absprache: beide streichen durch, was der andere übernimmt
+- Die Regeln aus den Projektregeln im Repo festgehalten, damit sie nicht wieder untergehen
+- Oberflächen-Konventionen **vor** dem Programmieren festgelegt, mit einem Abschnitt „Fragen, die im Review kommen" samt Verweis auf die Antwort
+- GID-Abdeckung und die Loop-Frage beim nächsten Termin ansprechen. Vermutlich klärt sich GID von selbst, sobald die fehlenden Userstories zu Abrechnung, Shop und Marketing geschrieben sind — dort liegen die kaufmännischen Themen
 
 **Lessons Learned**
 
-> *Aus dem Repo:* README überarbeitet nach dem ersten Gespräch mit den Lehrkräften ·
-> Technologie-Stack als eigene Übersicht sichtbar gemacht (`docs/TECHSTACK.md`) ·
-> Aufgabenstellung, Projektregeln und Lerntagebuch-Vorlage ins Repo aufgenommen ·
-> Ticket #4 in #4 und #32 aufgeteilt, weil die Projektregeln eine Person je Userstory
-> verlangen · Lerntagebuch angelegt.
->
-> *Mögliche Themen:* Das Gespräch zu T-Shirt-Größen gegen Story Points. Der Befund, dass
-> es im ganzen Backlog nur **ein** Item im Bündelungsfach GID gibt und vier von fünf
-> Personen damit auf eine 6 zulaufen. Was „ADR" heißt und wozu es gut ist.
+- Scrum schreibt **kein** Schätzverfahren vor. Der Scrum Guide nennt nur das Attribut „size" und sagt, dass die Developers schätzen — insofern sind T-Shirt-Größen und Story Points gleichermaßen „nach Scrum"
+- **Aber:** die T-Shirt-Größen der Aufgabenstellung sind in Stunden definiert (XS 1–2, S 4, M 8, L 16, XL über 16). Damit sind sie eine absolute Zeitschätzung. Story Points sind ausdrücklich keine Zeit, sondern relative Größe aus Komplexität, Aufwand und Unsicherheit
+- Story Points sind addierbar und ergeben Velocity. `S + M + L` hat keine Summe — wer mit T-Shirt-Größen prognostizieren will, muss sie erst in Zahlen übersetzen
+- Die Skala 1, 2, 3, 5, 8, 13 trägt Unsicherheit: die Abstände werden absichtlich größer, weil große Aufgaben sich nicht genau schätzen lassen. `L = 16 h` ist genau das Doppelte von `M = 8 h` und behauptet damit eine Genauigkeit, die es nicht gibt
+- Der eigentliche Einwand ist nicht die Einheit, sondern **wer geschätzt hat**: die T-Shirt-Größen kommen von den Lehrkräften, nach Scrum schätzen die Developers, die die Arbeit machen
+- Projektregeln genau lesen lohnt sich — mehrere Regeln mit Folgen für Board und Noten waren vorher nicht bekannt
+- ADR heißt *Architecture Decision Record*: eine Datei pro Entscheidung mit Kontext, Optionen, Begründung und Konsequenzen. Der Sinn ist, dass Wochen später noch nachvollziehbar ist, **warum** etwas so ist
 
 ---
 
@@ -38,13 +53,33 @@ die Abgabe zusätzlich eine Word-Fassung im Loop-Arbeitsbereich verlangt ist.
 
 **Tätigkeit**
 
+- Nutzwertanalysen zu Framework und Sprache selbst in Excel erstellt — drei Blätter: Framework-Ausschluss, Framework, Sprache
+- Ausschlusskriterien **vor** der Bewertung angewendet, statt alles über die Gewichtung zu regeln
+- Daraus die Architekturentscheidungen ADR 0004 (Client-Technologie) und ADR 0010 (Programmiersprache)
+- Nutzwertanalyse zur Linux-Distribution nach Markdown überführt (ADR 0001)
+- Entschieden: Supabase selbst gehostet auf der Strato-VM statt als Cloud-Dienst
+- KI-erstelltes Material von der Teamarbeit getrennt
+
 **Problem**
+
+- Eigene Tabelle, Blatt Sprache: die Gewichte summieren auf **1,10 statt 1,00** — dadurch Nutzwerte über 5 bei einer Skala von 1 bis 5
+- JavaScript hatte bei „Typen aus dem Datenbankschema ableitbar" **5 Punkte**, obwohl JavaScript keine Typen hat. Genau dieser Posten hob es auf Platz 2
+- Im Blatt Framework-Ausschluss stand „Client-Server-Architektur möglich" zweimal, die zweite Zeile meint vermutlich den objektorientierten Ansatz
+- In ADR 0001 gewinnt die Analyse **Ubuntu 26.04 mit 630 Punkten**, entschieden wurde **Debian 13 mit 540** — ohne dass die Abweichung begründet ist
 
 **Lösung**
 
+- Fehler in den ADRs unter „Anmerkungen zur Vorlage" benannt, statt sie stillschweigend zu korrigieren — die Zahlen bleiben meine
+- Normierte Werte gegenübergestellt: TypeScript 4,50 · JavaScript 3,77 · C# 3,45 · C++ 2,64. Die Rangfolge ändert sich durch das Normieren nicht
+- Korrektur der Tabelle und die Begründung für Debian sind noch offen
+
 **Lessons Learned**
 
-
+- Gewichte müssen auf 1,00 summieren, sonst ist der Nutzwert nicht interpretierbar — ein Wert über der Skalenobergrenze fällt sofort auf
+- Ein Kriterium, das eine Option grundsätzlich **nicht erfüllen kann**, bekommt 1 Punkt. Nicht dieselbe Punktzahl wie der Sieger
+- „Die höchste Punktzahl allein ist keine Begründung" ist keine Floskel: wer vom Sieger abweicht, muss das schriftlich begründen
+- Ausschlusskriterien vor der Bewertung sind stärker als Gewichtung allein — was eine Pflichtvorgabe reißt, fällt unabhängig von der Punktzahl heraus
+- Eine glaubwürdige Nutzwertanalyse ist die, in der die eigene Wahl **nicht** überall vorne liegt. C++ ist bei Typsicherheit und Objektorientierung besser als TypeScript und verliert nur an der Web-Eignung — das stehen zu lassen trägt weiter, als es glattzubügeln
 
 ---
 
@@ -79,6 +114,9 @@ die Abgabe zusätzlich eine Word-Fassung im Loop-Arbeitsbereich verlangt ist.
 
 - Ein nicht prüfbares Kriterium darf man nichts ersetzt, wenn es eine Pflichtvorgabe bennent. Prüfbarkeit ***und*** Nachvollziehbarkeit sind beides nötig
 - DOM und ARIA: Hilfstechnik liest den Dokumentenbaum, nicht den Bildschirm
+
+---
+
 ## 2026-09-11 · Freitag — Projektstart
 
 **Tätigkeit**
