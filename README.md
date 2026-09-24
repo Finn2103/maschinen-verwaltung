@@ -26,13 +26,16 @@ am **Donnerstag, 17.09.2026,
 
 # Dokumentation
 
-| Ordner | Inhalt |
+| Datei / Ordner | Inhalt |
 | --- | --- |
+| **[docs/TECHSTACK.md](docs/TECHSTACK.md)** | **Der entschiedene Technologie-Stack auf einen Blick** — und was noch offen ist |
+| [docs/vorgaben](docs/vorgaben) | Aufgabenstellung, Projektregeln, Lerntagebuch-Vorlage — die Originale der Lehrkräfte |
+| [docs/lerntagebuch](docs/lerntagebuch) | Logbuch je Person: Tätigkeit, Problem, Lösung, Lessons Learned |
 | [docs/datenmodell](docs/datenmodell) | ERD (Chen), relationales Modell, SQL-DDL |
 | [docs/uml](docs/uml) | Use-Case-, Klassen-, Sequenz-, Komponentendiagramme |
 | [docs/adr](docs/adr) | Architekturentscheidungen, Nutzwertanalysen |
 | [docs/scrum](docs/scrum) | Definition of Done, Entscheidungslog, Backlog-Neufassung, Reviews und Retrospektiven |
-| [docs/ki](docs/ki) | **KI-erstelltes Hilfsmaterial** , getrennt gehalten, keine Teamleistung |
+| [docs/ki](docs/ki) | **KI-Nutzung** — Ablage und Nachweis. Prompt Engineering wird laut Projektregeln bewertet |
 
 
 ## Vorgehen
