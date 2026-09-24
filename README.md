@@ -29,6 +29,7 @@ am **Donnerstag, 17.09.2026,
 | Datei / Ordner | Inhalt |
 | --- | --- |
 | **[docs/TECHSTACK.md](docs/TECHSTACK.md)** | **Der entschiedene Technologie-Stack auf einen Blick** — und was noch offen ist |
+| **[docs/frontend-konventionen.md](docs/frontend-konventionen.md)** | React- und Styling-Muster mit Begründung — Regelwerk für den Code und Vorbereitung fürs Fachgespräch |
 | [docs/vorgaben](docs/vorgaben) | Aufgabenstellung, Projektregeln, Lerntagebuch-Vorlage — die Originale der Lehrkräfte |
 | [docs/lerntagebuch](docs/lerntagebuch) | Logbuch je Person: Tätigkeit, Problem, Lösung, Lessons Learned |
 | [docs/datenmodell](docs/datenmodell) | ERD (Chen), relationales Modell, SQL-DDL |
