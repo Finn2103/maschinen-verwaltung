@@ -18,8 +18,6 @@ die Abgabe zusätzlich eine Word-Fassung im Loop-Arbeitsbereich verlangt ist.
 
 **Tätigkeit**
 
-**Problem**
-
 **Lösung**
 
 **Lessons Learned**
@@ -46,17 +44,7 @@ die Abgabe zusätzlich eine Word-Fassung im Loop-Arbeitsbereich verlangt ist.
 
 **Lessons Learned**
 
-> *Aus dem Repo:* Nutzwertanalysen zu Framework und Sprache selbst in Excel erstellt
-> (Blätter `Framework-Ausschluss`, `Framework`, `Sprache`) · daraus ADR 0004 und ADR 0010 ·
-> Nutzwertanalyse zur Linux-Distribution nach Markdown überführt (ADR 0001) ·
-> Selbst-Hostung von Supabase statt Cloud entschieden · KI-Material von der Teamarbeit
-> getrennt.
->
-> *Mögliche Themen:* Beim Prüfen der eigenen Tabelle kamen drei Fehler heraus —
-> Gewichtssumme 1,10 statt 1,00, JavaScript mit 5 Punkten bei einem Kriterium das es nicht
-> erfüllen kann, ein doppelt benanntes Ausschlusskriterium. Und in ADR 0001 gewinnt die
-> Analyse Ubuntu, entschieden wurde Debian — was das über „die höchste Punktzahl ist keine
-> Begründung" sagt.
+
 
 ---
 
@@ -64,44 +52,58 @@ die Abgabe zusätzlich eine Word-Fassung im Loop-Arbeitsbereich verlangt ist.
 
 **Tätigkeit**
 
+- Sprint 1 moderieren
+- Sprintlänge auf 2 Wochen und sechs Sprints festgesetzt
+- Tech Stack entschieden: React (next.js), typescript, supabase, debian 13
+- Prioritäten, Zuweisungen und erste Schätzungen auf dem Board gesetzt
+- ERD im Team besprochen
+- Kapazität gerechnet: viert Schultage je Sprint
+- 13 Oberflächen Entwürfe #1, #2, #8
+- ISO-9241-Bbezug in #1 zurückgeschrieben
+
 **Problem**
+
+- 2 Wöchige Sprint hat nur 4 Schultage und einer geht für Review, Retor und Planning drauf
+- Das Kriterium "Barrierefrei gemäß ISO 9241" ist nicht prüfbar, war aber durch zwei konkrete Kriterien ersetzt worden
+- Für die Arbeit am Datenmodell gibt es kein Ticket
 
 **Lösung**
 
+- Kapazität mit den echten Schulzeiten gerechnet statt geschätzt
+- Normbezug wieder in #1 aufgenommen, zeigt jetzt auf eine noch zu erstllende Barrierefreiheits-Checkliste. Die Zwei konkreten Kriterien daneben stehen
+- Datenmodel Ticket noch offen
+
 **Lessons Learned**
 
-> *Aus dem Repo:* Sprint-1-Planning durchgeführt und moderiert · Prioritäten, Zuweisungen
-> und erste Schätzungen auf dem Board gesetzt · Technologie-Stack entschieden (React mit
-> Next.js, TypeScript, Supabase selbst gehostet, Debian 13) · ISO-9241-Bezug in #1
-> zurückgeschrieben, nachdem er zu Unrecht entfernt worden war · Oberflächen-Mockups zu
-> #1, #2 und #8 erstellt.
->
-> *Mögliche Themen:* Erste Moderation als Scrum Master. Der Unterschied zwischen
-> moderieren und verteilen — die Developers entscheiden selbst, wer was nimmt. Warum ein
-> nicht prüfbares Akzeptanzkriterium („barrierefrei gemäß ISO 9241") trotzdem im Backlog
-> bleiben muss, weil es eine Pflichtvorgabe ist. DOM und ARIA.
+- Was der Scrum Master macht und was nicht: ***moderieren, nicht verteilen*** 
 
----
-
+- Ein nicht prüfbares Kriterium darf man nichts ersetzt, wenn es eine Pflichtvorgabe bennent. Prüfbarkeit ***und*** Nachvollziehbarkeit sind beides nötig
+- DOM und ARIA: Hilfstechnik liest den Dokumentenbaum, nicht den Bildschirm
 ## 2026-09-11 · Freitag — Projektstart
 
 **Tätigkeit**
 
+- Repository aufgesetz
+- Git Hub Board
+- 15 User Storys angehangen
+- Backlog gegen Scrum Guids
+- ERD + Nutzwerkanalyse
+- Milestones und Sprints
+
 **Problem**
+
+- Neun der 15 Items waren keine User Storys
 
 **Lösung**
 
+- Die neue technischen Items auf "Task" umgestellt
+- Board auf eigenes Schema umgestellt
+
 **Lessons Learned**
 
-> *Aus dem Repo:* Repository aufgesetzt mit Branch-Schutz, Issue- und PR-Vorlagen und
-> Konventionen · GitHub-Board nach dem Schema eines Firmenprojekts eingerichtet ·
-> 19 Issues aus der Vorlage der Lehrkräfte angelegt · Backlog geprüft und neu gefasst,
-> Originaltext je Issue als Kommentar gesichert · ERD und Nutzwertanalyse ins Repo.
->
-> *Mögliche Themen:* Warum neun der fünfzehn Items keine User Stories waren (im „Als …"
-> stand das Team selbst). Warum #14 in vier Tickets zerlegt werden musste — eine
-> Daueraufgabe kann die Definition of Done nie erfüllen. Kapazitätsrechnung: vier
-> Schultage je Sprint, nicht zwei Wochen.
+- Woran erkennt man, ob etwas eine UserStory ist? Die Rolle im "Als ..." muss das Produkt benutzten, nicht es bauen
+- Ein Akzeptanzkriterium muss prüfbar sein
+- Änderung an fremden Vorgaben muss man dokumentieren, nicht nur machen
 
 ---
 
