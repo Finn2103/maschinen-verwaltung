@@ -70,6 +70,10 @@ Damit hier nichts Falsches steht, der tatsächliche Stand des Branch-Schutzes au
 außer dem Admin ist die Review-Pflicht damit wirklich bindend. Der Admin kann ohne PR
 auf `main` mergen.
 
+Am 24.09.2026 nachgemessen: ein `git push origin main` als Admin geht durch, GitHub meldet
+dabei `Bypassed rule violations for refs/heads/main`. Ein Merge ohne Freigabe geht über
+`gh pr merge --admin`. Beides wird von GitHub protokolliert.
+
 Das ist Absicht: in der Aufbauphase muss eine Person durchgreifen können, ohne auf eine
 Freigabe zu warten. **Wer den Bypass nutzt, hält es fest**, in der Commit-Message oder im
 Lerntagebuch. Ein Bypass, den niemand sieht, ist ein umgangener Prozess; ein
