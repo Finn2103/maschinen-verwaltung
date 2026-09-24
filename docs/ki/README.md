@@ -19,7 +19,7 @@ Der Ordner ist also kein Abfall-Eimer, sondern ein **bewertetes Arbeitsergebnis*
 
 | Datei | Zweck | Stand |
 | --- | --- | --- |
-| `mockups-sprint-1.html` | 13 Oberflächen-Entwürfe zu #1, #2 und #8 | Orientierung — werden in Figma selbst neu gebaut |
+| `mockups-sprint-1.html` | 13 Oberflächen-Entwürfe zu #1, #2 und #8 | Orientierung, werden in Figma selbst neu gebaut |
 
 Veröffentlicht: https://claude.ai/artifact/NFTUEQY43cx78LxnBeXjj8
 
@@ -30,17 +30,17 @@ Sie sind in der Git-Historie nachvollziehbar, falls sie noch gebraucht werden.
 
 Beides ist Bringschuld und wird bewertet:
 
-- **`prompts.md`** — Nachweis der KI-Nutzung: welche Aufgabe, welcher Prompt, was kam
+- **`prompts.md`**: Nachweis der KI-Nutzung: welche Aufgabe, welcher Prompt, was kam
   zurück, was davon wurde übernommen und was verworfen. Nicht jede Zeile, aber die
   Entscheidungen: wo hat das Werkzeug getragen, wo hat es sich geirrt, wie wurde es
   geprüft.
-- **Eigener KI-Assistent für User Stories** — laut Aufgabenstellung ausdrücklich gefordert
+- **Eigener KI-Assistent für User Stories**: laut Aufgabenstellung ausdrücklich gefordert
   und noch nicht angelegt. Dazu gehört die Systemanweisung, die ihn auf die
   Story-Struktur, Lernfeld- und Bündelungsfach-Zuordnung und die T-Shirt-Schätzung
   festlegt.
 
 **Material dafür ist vorhanden.** Im Projekt sind mehrere Fälle dokumentiert, in denen
-KI-Ergebnisse geprüft und korrigiert wurden — das ist genau das, was „Bewertung der
+KI-Ergebnisse geprüft und korrigiert wurden, das ist genau das, was „Bewertung der
 generierten Ergebnisse" meint:
 
 - Zwei gemeldete Widersprüche zur Aufgabenstellung wurden **zurückgezogen**, nachdem klar
@@ -54,7 +54,7 @@ generierten Ergebnisse" meint:
   (Gewichtssumme 1,10; JavaScript mit 5 Punkten bei einem Kriterium, das es nicht erfüllen
   kann; ein doppelt benanntes Ausschlusskriterium)
 
-Diese Fälle in `prompts.md` zusammenzuziehen ist die eigentliche Arbeit — sie zeigen
+Diese Fälle in `prompts.md` zusammenzuziehen ist die eigentliche Arbeit, sie zeigen
 Prüfung statt Übernahme.
 
 ## Grenzen

@@ -1,8 +1,8 @@
 # Scrum
 
 Lehrkräfte = Product Owner. Wir = Entwicklungsteam. Scrum Master: Finn2103.
-Sprints à 2–3 Wochen, Review und Retrospektive in Präsenz.
-Pro Sprint eine Note je Person — die Fachnote besteht zu 50 % aus dem Projekt.
+Sprints à 2 bis 3 Wochen, Review und Retrospektive in Präsenz.
+Pro Sprint eine Note je Person, die Fachnote besteht zu 50 % aus dem Projekt.
 
 | Datei | Inhalt | Status |
 | --- | --- | --- |
@@ -14,9 +14,9 @@ Pro Sprint eine Note je Person — die Fachnote besteht zu 50 % aus dem Projekt.
 
 ## Termine
 
-- **Donnerstag** — reiner Projekttag, zunächst in Präsenz
-- **Freitag** — Projektstunden plus Wirtschaftsunterricht
-- **Abgabe** — Freitag 11.12.2026, 8. Stunde
+- **Donnerstag**: reiner Projekttag, zunächst in Präsenz
+- **Freitag**: Projektstunden plus Wirtschaftsunterricht
+- **Abgabe**: Freitag 11.12.2026, 8. Stunde
 
 ## Geteiltes Artefakt
 
@@ -24,34 +24,34 @@ Pro Sprint eine Note je Person — die Fachnote besteht zu 50 % aus dem Projekt.
 https://claude.ai/code/artifact/8ca8c394-e3bc-474a-88e7-79a3b48765fd
 
 Änderungen gehen **in diese Datei**; die Seite wird danach unter derselben Adresse neu
-veröffentlicht. Wer den Link hat, sieht immer den aktuellen Stand — es entsteht keine
+veröffentlicht. Wer den Link hat, sieht immer den aktuellen Stand, es entsteht keine
 neue Adresse.
 
 ## Sprints
 
 Zwei Wochen je Sprint, Start und Ende Donnerstag auf Mittwoch. Milestones liegen im Repo.
 
-Unterricht ist nur **Donnerstag und Freitag** — ein Sprint hat also nur **vier
+Unterricht ist nur **Donnerstag und Freitag**, ein Sprint hat also nur **vier
 Schultage**, und der erste geht für Review, Retrospektive und Planning weg.
 
 | Sprint | Zeitraum | Schultage | Review + Retro |
 | --- | --- | --- | --- |
-| 1 | Do 17.09. – Mi 30.09.2026 | 17.09. · 18.09. · 24.09. · 25.09. | Do 01.10. |
-| 2 | Do 01.10. – Mi 14.10.2026 | 01.10. · 02.10. · 08.10. · 09.10. | Do 15.10. |
-| 3 | Do 15.10. – Mi 28.10.2026 | 15.10. · 16.10. · 22.10. · 23.10. | Do 29.10. |
-| 4 | Do 29.10. – Mi 11.11.2026 | 29.10. · 30.10. · 05.11. · 06.11. | Do 12.11. |
-| 5 | Do 12.11. – Mi 25.11.2026 | 12.11. · 13.11. · 19.11. · 20.11. | Do 26.11. |
-| 6 | Do 26.11. – Mi 09.12.2026 | 26.11. · 27.11. · 03.12. · 04.12. | Do 10.12. |
+| 1 | Do 17.09. bis Mi 30.09.2026 | 17.09. · 18.09. · 24.09. · 25.09. | Do 01.10. |
+| 2 | Do 01.10. bis Mi 14.10.2026 | 01.10. · 02.10. · 08.10. · 09.10. | Do 15.10. |
+| 3 | Do 15.10. bis Mi 28.10.2026 | 15.10. · 16.10. · 22.10. · 23.10. | Do 29.10. |
+| 4 | Do 29.10. bis Mi 11.11.2026 | 29.10. · 30.10. · 05.11. · 06.11. | Do 12.11. |
+| 5 | Do 12.11. bis Mi 25.11.2026 | 12.11. · 13.11. · 19.11. · 20.11. | Do 26.11. |
+| 6 | Do 26.11. bis Mi 09.12.2026 | 26.11. · 27.11. · 03.12. · 04.12. | Do 10.12. |
 
 24 Schultage bis zum 09.12., dazu **Do 10.12.** für das Abschluss-Review und
 **Fr 11.12.** für die Abgabe in der 8. Stunde.
 
-Anwesenheit: **Donnerstag 7:55–14:40** (8 Schulstunden, reiner Projekttag),
-**Freitag 7:55–12:55** (6 Schulstunden, davon Wirtschaft). Entwicklungszeit je Person
-und Sprint: **12 bis 18 Zeitstunden**, je nach Projektanteil am Freitag — Team 60 bis 90
+Anwesenheit: **Donnerstag 7:55 bis 14:40** (8 Schulstunden, reiner Projekttag),
+**Freitag 7:55 bis 12:55** (6 Schulstunden, davon Wirtschaft). Entwicklungszeit je Person
+und Sprint: **12 bis 18 Zeitstunden**, je nach Projektanteil am Freitag, Team 60 bis 90
 je Sprint. Die Rechnung steht in `entscheidungen.md` Punkt 7.
 
-Die Termine der NRW-Herbstferien 2026 sind noch nicht geprüft — sie fallen
+Die Termine der NRW-Herbstferien 2026 sind noch nicht geprüft, sie fallen
 voraussichtlich in Sprint 3. Vor dem Planning von Sprint 2 klären und den Sprint
 anpassen.
 
@@ -59,4 +59,4 @@ anpassen.
 
 Die vier veröffentlichten Seiten (Projektüberblick, Planning-Leitfaden, Ist-Stand,
 Mockups) sind KI-erstelltes Hilfsmaterial und liegen getrennt in
-[`docs/ki/`](../ki/README.md) — mit den Links.
+[`docs/ki/`](../ki/README.md), mit den Links.

@@ -1,4 +1,4 @@
-# ADR 0000 — Titel der Entscheidung
+# ADR 0000: Titel der Entscheidung
 
 - **Status:** Entwurf | entschieden | überholt durch ADR-XXXX
 - **Datum:** JJJJ-MM-TT
@@ -23,11 +23,11 @@ Was steht zur Entscheidung, und warum jetzt? Welche Vorgaben schränken ein
 |  |  |  |  |  |  |
 | **Nutzwert** |  | **1,0** |  |  |  |
 
-Punkte 1–5. Nutzwert = Summe aus Gewicht × Punkte.
+Punkte 1 bis 5. Nutzwert = Summe aus Gewicht × Punkte.
 
 ## Entscheidung
 
-Welche Option, und warum — über die Punktzahl hinaus.
+Welche Option, und warum, über die Punktzahl hinaus.
 
 ## Konsequenzen
 

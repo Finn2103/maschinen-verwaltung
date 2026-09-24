@@ -1,17 +1,17 @@
-# ADR 0010 — Programmiersprache und Typisierung
+# ADR 0010: Programmiersprache und Typisierung
 
 - **Status:** Entwurf
 - **Datum:** 2026-09-18
 - **Entschieden von:** Team (Gruppe 11), im Sprint-1-Planning
 - **Betrifft:** [#6](https://github.com/Finn2103/maschinen-verwaltung/issues/6) und alle Stories der Anwendungsentwicklung
-- **Quelle:** `Nutzwerkanalysen.xlsx`, Blatt `Sprache` — Zahlen und Formulierungen unverändert übernommen
+- **Quelle:** `Nutzwerkanalysen.xlsx`, Blatt `Sprache`, Zahlen und Formulierungen unverändert übernommen
 
 ## Kontext
 
 Die Pflichtliste verlangt einen objektorientierten Ansatz, ausdrücklich im Hinblick auf die
 Abschlussprüfung. Das Datenbankschema wird als handgeschriebenes SQL-DDL geführt; Abweichungen
 zwischen Schema und Anwendung sollen auffallen. Die Wahl hängt an
-[ADR 0004](0004-client-technologie.md) — die Client-Technologie schränkt die Sprache ein.
+[ADR 0004](0004-client-technologie.md), die Client-Technologie schränkt die Sprache ein.
 
 Bewertet werden vier Kandidaten: TypeScript und JavaScript aus der Client-Entscheidung, C#
 und C++ aus der Optionsliste der Aufgabenstellung.
@@ -36,13 +36,13 @@ Bewertung 1 bis 5. Nutzwert = Summe aus Gewicht × Bewertung.
 
 **TypeScript.**
 
-> **TODO — Interpretation ergänzen.** Aus der Tabelle:
+> **TODO, Interpretation ergänzen.** Aus der Tabelle:
 >
-> - **C# und C++ gewinnen die zwei prüfungsrelevanten Kriterien** — Typsicherheit und
+> - **C# und C++ gewinnen die zwei prüfungsrelevanten Kriterien**: Typsicherheit und
 >   Objektorientierung, je 1,00 gegen 0,80. Beide verlieren an „passt zur
 >   Client-Technologie" und „Eignung für Weboberflächen", also an der Folge von ADR 0004.
 > - **C++ bekommt beim Lernzuwachs nur 1 Punkt**, weil es im Unterricht behandelt wurde.
->   Vorkenntnisse sind bei diesem Kriterium ein Nachteil — das ist der Satz, den man parat
+>   Vorkenntnisse sind bei diesem Kriterium ein Nachteil, das ist der Satz, den man parat
 >   haben sollte, wenn gefragt wird „warum nicht C++, das könnt ihr doch".
 > - Diese Entscheidung ist eine **Folge von ADR 0004**, keine eigenständige. Wer die
 >   Client-Wahl kippt, kippt diese mit.
@@ -50,7 +50,7 @@ Bewertung 1 bis 5. Nutzwert = Summe aus Gewicht × Bewertung.
 ## Konsequenzen
 
 > **TODO:** ergänzen. Zum Beispiel: TypeScript-Typen sind nach dem Übersetzen weg, also muss
-> an jeder Systemgrenze explizit validiert werden — besonders bei #8, wo die Rechteprüfung
+> an jeder Systemgrenze explizit validiert werden, besonders bei #8, wo die Rechteprüfung
 > serverseitig auch bei direktem Aufruf der Datenbank-API greifen muss.
 
 ---
@@ -79,14 +79,14 @@ Entweder ein Gewicht um 0,10 senken oder alle durch 1,10 teilen.
 
 ### 2. JavaScript bekommt bei „Typen aus dem Datenbankschema ableitbar" 5 Punkte
 
-JavaScript hat keine Typen. Dieses Kriterium kann es nicht erfüllen — hier steht
+JavaScript hat keine Typen. Dieses Kriterium kann es nicht erfüllen, hier steht
 dieselbe Punktzahl wie bei TypeScript. **Das ist der Posten, der JavaScript auf Platz 2
 hebt.** Mit 1 statt 5 Punkten:
 
-`JavaScript 3,75` — damit fällt es hinter C# (3,80) zurück, und das Bild wird schlüssig.
+`JavaScript 3,75`, damit fällt es hinter C# (3,80) zurück, und das Bild wird schlüssig.
 
 Zum Vergleich auffällig: **Lernzuwachs 4 für JavaScript**, genauso viel wie für TypeScript.
-Wer TypeScript kann, kann JavaScript — das ist schwer zu begründen.
+Wer TypeScript kann, kann JavaScript, das ist schwer zu begründen.
 
 ### 3. Kleinigkeiten
 
@@ -94,4 +94,4 @@ Wer TypeScript kann, kann JavaScript — das ist schwer zu begründen.
 - Die Kriterienspalte hat keine Überschrift (Zelle A1 ist leer)
 - Die Nutzwert-Zeile ist im Blatt verschoben: bei C++ steht die 3 in der Bewertungsspalte
   statt in der Punktespalte
-- Rechnerisch stimmen alle vier Nutzwerte zu den eingetragenen Punkten — geprüft
+- Rechnerisch stimmen alle vier Nutzwerte zu den eingetragenen Punkten, geprüft

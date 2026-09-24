@@ -28,21 +28,21 @@ am **Donnerstag, 17.09.2026,
 
 | Datei / Ordner | Inhalt |
 | --- | --- |
-| **[docs/TECHSTACK.md](docs/TECHSTACK.md)** | **Der entschiedene Technologie-Stack auf einen Blick** — und was noch offen ist |
-| **[docs/frontend-konventionen.md](docs/frontend-konventionen.md)** | React- und Styling-Muster mit Begründung — Regelwerk für den Code und Vorbereitung fürs Fachgespräch |
-| [docs/vorgaben](docs/vorgaben) | Aufgabenstellung, Projektregeln, Lerntagebuch-Vorlage — die Originale der Lehrkräfte |
+| **[docs/TECHSTACK.md](docs/TECHSTACK.md)** | **Der entschiedene Technologie-Stack auf einen Blick**, und was noch offen ist |
+| **[docs/frontend-konventionen.md](docs/frontend-konventionen.md)** | React- und Styling-Muster mit Begründung, Regelwerk für den Code und Vorbereitung fürs Fachgespräch |
+| [docs/vorgaben](docs/vorgaben) | Aufgabenstellung, Projektregeln, Lerntagebuch-Vorlage, die Originale der Lehrkräfte |
 | [docs/lerntagebuch](docs/lerntagebuch) | Logbuch je Person: Tätigkeit, Problem, Lösung, Lessons Learned |
 | [docs/datenmodell](docs/datenmodell) | ERD (Chen), relationales Modell, SQL-DDL |
 | [docs/uml](docs/uml) | Use-Case-, Klassen-, Sequenz-, Komponentendiagramme |
 | [docs/adr](docs/adr) | Architekturentscheidungen, Nutzwertanalysen |
 | [docs/scrum](docs/scrum) | Definition of Done, Entscheidungslog, Backlog-Neufassung, Reviews und Retrospektiven |
-| [docs/ki](docs/ki) | **KI-Nutzung** — Ablage und Nachweis. Prompt Engineering wird laut Projektregeln bewertet |
+| [docs/ki](docs/ki) | **KI-Nutzung**: Ablage und Nachweis. Prompt Engineering wird laut Projektregeln bewertet |
 
 
 ## Vorgehen
 
 Scrum nach Lehrbuch. Lehrkräfte = Product Owner, wir = Entwicklungsteam.
-Sprints à 2–3 Wochen, Review und Retrospektive in Präsenz.
+Sprints à 2 bis 3 Wochen, Review und Retrospektive in Präsenz.
 
 - **Board:** [Maschinenverwaltung-IHK](https://github.com/users/Finn2103/projects/32)
 - Konventionen für Board, Issues und Branches: [CONTRIBUTING.md](CONTRIBUTING.md)
@@ -74,14 +74,14 @@ IT-Consultingunternehmen für ihn; die Lehrkräfte sind Product Owner.
 
 Eigene VM bei Strato (Linux), Infrastructure as Code.
 
-- **Zugang** — Reverse Proxy (apache2, nginx oder Traefik) + Let's Encrypt, HTTPS
+- **Zugang**: Reverse Proxy (apache2, nginx oder Traefik) + Let's Encrypt, HTTPS
 
-- **API-Schicht** — API Gateway Kong vor den Supabase APIs
+- **API-Schicht**: API Gateway Kong vor den Supabase APIs
   (`/auth` GoTrue · `/pg` pg-meta · `/rest` PostgREST · `/storage` · `/graphql` pg_graphql · `/functions` Edge · `/realtime`), Supabase Studio
-- **Datenhaltung** — PostgreSQL, S3-kompatibler Object Storage (z. B. MinIO)
-- **Backend Services** — Mailserver (mailcow, docker-mailserver oder stalwart)
-- **Container-Plattform** — docker, podman oder kubernetes
-- **Client** — Angular, C#/C++ oder Flutter
+- **Datenhaltung**: PostgreSQL, S3-kompatibler Object Storage (z. B. MinIO)
+- **Backend Services**: Mailserver (mailcow, docker-mailserver oder stalwart)
+- **Container-Plattform**: docker, podman oder kubernetes
+- **Client**: Angular, C#/C++ oder Flutter
 
 # Verbindliche Spielregeln
 

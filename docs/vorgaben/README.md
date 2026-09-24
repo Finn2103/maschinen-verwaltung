@@ -1,13 +1,13 @@
 # Vorgaben der Lehrkräfte
 
 Die Originaldokumente, unverändert. Sie sind die Quelle, gegen die alles andere im Repo
-geprüft wird — wenn ein Dokument von uns etwas anderes sagt, gilt hier.
+geprüft wird. Wenn ein Dokument von uns etwas anderes sagt, gilt hier.
 
 | Datei | Inhalt |
 | --- | --- |
 | `Verleih_und_Abrechnung_Maschinen.docx` | Die Aufgabenstellung: Ausgangssituation, Projektziele, Rahmenbedingungen, Referenzarchitektur, T-Shirt-Größen |
 | `04_Projektregeln.docx` | Projektregeln: Scrum-Rollen, Board-Regeln, Benotung, Unterrichtsorganisation, Logbuch-Pflicht |
-| `03-Lerntagebuch_Vorlage.docx` | Vorlage für das Logbuch — Tabelle mit Datum, Tätigkeit, Problem, Lösung, Lessons Learned |
+| `03-Lerntagebuch_Vorlage.docx` | Vorlage für das Logbuch: Tabelle mit Datum, Tätigkeit, Problem, Lösung, Lessons Learned |
 
 ## Die Punkte, die im Projekt am leichtesten untergehen
 
@@ -51,12 +51,12 @@ Zitate aus den Projektregeln, weil sie Folgen für das Board und die Noten haben
 
 Die Referenzarchitektur ist ausdrücklich als „Überlegungen" bezeichnet, mit
 „Wahlmöglichkeiten, die kriteriengeleitet gemäß der fachlichen Projektanforderungen
-ausgewählt werden müssen" — also Orientierung, keine Vorgabe. Genau darauf stützt sich
+ausgewählt werden müssen", also Orientierung, keine Vorgabe. Genau darauf stützt sich
 [`docs/TECHSTACK.md`](../TECHSTACK.md).
 
 **Noch nicht erledigt aus der Aufgabenstellung**
 
 - Lehrkräfte einladen: `N.kabisch@bbk.schule` · `M.jab@bbk.schule` ·
-  `H.gossens@bbk.schule` · `U.linnenkugel@bbk.schule` — **Kabisch fehlt noch**
+  `H.gossens@bbk.schule` · `U.linnenkugel@bbk.schule`, **Kabisch fehlt noch**
 - „Dazu erstellen Sie zuallererst einen eigenen KI-Assistenten, der Ihnen hilft, die User
-  Stories korrekt zu formulieren." — noch nicht angelegt, siehe [`docs/ki`](../ki/README.md)
+  Stories korrekt zu formulieren." Noch nicht angelegt, siehe [`docs/ki`](../ki/README.md)

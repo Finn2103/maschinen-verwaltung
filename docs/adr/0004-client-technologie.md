@@ -1,10 +1,10 @@
-# ADR 0004 — Client-Technologie
+# ADR 0004: Client-Technologie
 
 - **Status:** Entwurf
 - **Datum:** 2026-09-18
 - **Entschieden von:** Team (Gruppe 11), im Sprint-1-Planning
 - **Betrifft:** [#1](https://github.com/Finn2103/maschinen-verwaltung/issues/1) · [#2](https://github.com/Finn2103/maschinen-verwaltung/issues/2) · [#6](https://github.com/Finn2103/maschinen-verwaltung/issues/6) · [#8](https://github.com/Finn2103/maschinen-verwaltung/issues/8)
-- **Quelle:** `Nutzwerkanalysen.xlsx`, Blätter `Framework-Ausschluss` und `Framework` — Zahlen und Formulierungen unverändert übernommen
+- **Quelle:** `Nutzwerkanalysen.xlsx`, Blätter `Framework-Ausschluss` und `Framework`, Zahlen und Formulierungen unverändert übernommen
 
 ## Kontext
 
@@ -40,14 +40,14 @@ Gewichte summieren auf 1,00. Bewertung 1 bis 5. Nutzwert = Summe aus Gewicht × 
 
 **React mit Next.js.**
 
-> **TODO — Interpretation ergänzen.** Die Aufgabenstellung verlangt sie ausdrücklich: die
+> **TODO, Interpretation ergänzen.** Die Aufgabenstellung verlangt sie ausdrücklich: die
 > höchste Punktzahl allein ist keine Begründung. Was aus der Tabelle heraussticht:
 >
-> - Der Abstand entsteht fast vollständig an **einem** Kriterium — der eigenen Serverschicht
+> - Der Abstand entsteht fast vollständig an **einem** Kriterium, der eigenen Serverschicht
 >   (React 1,00 gegen Angular 0,40 gegen Flutter 0,20).
 > - **Angular gewinnt zwei Kriterien** gegen React: datenlastige Oberflächen und
 >   Lernzuwachs. Das gehört erwähnt, sonst sieht die Analyse geschönt aus.
-> - **Flutter verliert vor allem an der Barrierefreiheit** (0,40 gegen 1,00) — also an einer
+> - **Flutter verliert vor allem an der Barrierefreiheit** (0,40 gegen 1,00): also an einer
 >   Pflichtvorgabe, nicht an Bequemlichkeit.
 
 ## Konsequenzen
@@ -64,7 +64,7 @@ Gewichte summieren auf 1,00. Bewertung 1 bis 5. Nutzwert = Summe aus Gewicht × 
 Gefunden beim Überführen, nicht verändert:
 
 - **Die Ausschlusstabelle nennt „Client-Server-Architektur möglich" zweimal** (Zeile 3 und 4).
-  Zeile 4 ist mit „ja / ja / ja" gefüllt und dürfte ein anderes Kriterium meinen —
+  Zeile 4 ist mit „ja / ja / ja" gefüllt und dürfte ein anderes Kriterium meinen, 
   vermutlich „Objektorientierter Ansatz möglich". Bitte korrigieren, doppelte Kriterien
   fallen im Review auf.
 - Zwei Schreibfehler in der Tabelle: **„Keine Erfahrenen Entwickler"** (klein: erfahrenen)

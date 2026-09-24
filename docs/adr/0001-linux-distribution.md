@@ -1,10 +1,10 @@
-# ADR 0001 — Linux-Distribution für die Strato-VM
+# ADR 0001: Linux-Distribution für die Strato-VM
 
-- **Status:** Entwurf — die Begründung unter „Entscheidung" fehlt noch
+- **Status:** Entwurf, die Begründung unter „Entscheidung" fehlt noch
 - **Datum:** Nutzwertanalyse vom 04.09.2026, überführt nach Markdown am 18.09.2026
 - **Entschieden von:** Team (Gruppe 11)
 - **Betrifft:** [#4](https://github.com/Finn2103/maschinen-verwaltung/issues/4) · [#5](https://github.com/Finn2103/maschinen-verwaltung/issues/5) · [#11](https://github.com/Finn2103/maschinen-verwaltung/issues/11) · [#13](https://github.com/Finn2103/maschinen-verwaltung/issues/13)
-- **Quelle:** `Nutzwerkanalyse.xlsx` — diese Datei ist die Überführung in Markdown, die Zahlen sind unverändert
+- **Quelle:** `Nutzwerkanalyse.xlsx`, diese Datei ist die Überführung in Markdown, die Zahlen sind unverändert
 
 ## Kontext
 
@@ -18,7 +18,7 @@ Recherchiert wurden acht Kandidaten:
 Ubuntu 24.04 LTS · Ubuntu 26.04 LTS · Debian 12 · Debian 13 ·
 Rocky Linux 8 · Rocky Linux 9 · AlmaLinux 8 · AlmaLinux 9
 
-Bewertet wurde jeweils nur die **aktuelle Hauptversion** jeder Distribution — die
+Bewertet wurde jeweils nur die **aktuelle Hauptversion** jeder Distribution, die
 Vorgängerversionen fallen in der Vorauswahl heraus.
 
 > **TODO:** Begründung der Vorauswahl ergänzen. Warum sind Ubuntu 24.04, Debian 12,
@@ -55,13 +55,13 @@ Punkte = Gewichtung × Bewertung.
 
 **Debian 13.**
 
-> **TODO — das ist die wichtigste offene Stelle dieses Dokuments.**
+> **TODO, das ist die wichtigste offene Stelle dieses Dokuments.**
 >
 > Die Nutzwertanalyse gewinnt **Ubuntu 26.04 LTS** mit 630 Punkten, entschieden wurde
 > **Debian 13** mit 540. Diese Abweichung muss begründet werden, sonst widerspricht das
 > Dokument sich selbst.
 >
-> Das ist ausdrücklich erlaubt — die Aufgabenstellung sagt: *„Ergebnis interpretieren — die
+> Das ist ausdrücklich erlaubt, die Aufgabenstellung sagt: *„Ergebnis interpretieren, die
 > höchste Punktzahl allein ist keine Begründung."* Aber sie muss dastehen.
 >
 > Mögliche Richtungen, die das Team prüfen sollte:
@@ -69,7 +69,7 @@ Punkte = Gewichtung × Bewertung.
 > - **Ist Ubuntu 26.04 LTS zum Projektzeitpunkt überhaupt verfügbar?** Wenn nein, fällt es
 >   aus der Bewertung und Debian 13 gewinnt regulär. Dann gehört das in die Vorauswahl.
 > - **Gibt es ein Ausschlusskriterium, das in der Tabelle fehlt?** Etwa der
->   Ressourcenbedarf — der selbst gehostete Supabase-Verbund aus ADR 0006 braucht
+>   Ressourcenbedarf, der selbst gehostete Supabase-Verbund aus ADR 0006 braucht
 >   Arbeitsspeicher, und Debian gilt als sparsamer.
 > - **Wurde ein Kriterium nachträglich anders gewichtet?** Dann muss die Tabelle das zeigen.
 >
@@ -86,7 +86,7 @@ Punkte = Gewichtung × Bewertung.
 Zwei Punkte, die im Review angesprochen werden könnten:
 
 - **Die Gewichtungen summieren sich auf 165**, nicht auf 100 oder 1,0. Das ist rechnerisch
-  in Ordnung, weil nur die relativen Abstände zählen — die Rangfolge ändert sich durch
+  in Ordnung, weil nur die relativen Abstände zählen, die Rangfolge ändert sich durch
   Normieren nicht. Es ist aber unüblich, und man sollte den Satz parat haben.
 - **Die Bewertungsskala reicht von 1 bis 4.** Eine gerade Skala ohne Mitte ist eine bewusste
-  Wahl (sie erzwingt eine Tendenz) — falls das beabsichtigt war, kurz erwähnen.
+  Wahl (sie erzwingt eine Tendenz), falls das beabsichtigt war, kurz erwähnen.

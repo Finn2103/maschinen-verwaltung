@@ -9,7 +9,7 @@ Reihenfolge: fachliches Bild zuerst, Tabellen danach.
 | `relational.md` | Überführung in Relationen, Normalisierung (3. NF), Schlüssel und Fremdschlüssel | offen |
 | `schema.sql` | Explizites SQL-DDL für PostgreSQL | offen |
 
-Die drawio-Datei ist die Quelle — das SVG wird daraus exportiert und bei
+Die drawio-Datei ist die Quelle, das SVG wird daraus exportiert und bei
 Änderungen mit erneuert, damit beide zusammenpassen.
 
 ## Vorgaben, die hier gelten
@@ -21,7 +21,7 @@ Die drawio-Datei ist die Quelle — das SVG wird daraus exportiert und bei
   gebuchter Belege, Änderungen nur über Storno und Neuausstellung,
   Nachvollziehbarkeit über Audit-Logs.
 - **Historisierung.** Preise und Steuersätze gelten zeitabhängig. Eine Rechnung
-  muss auch Jahre später denselben Betrag ergeben — also Konditionen auf dem Beleg
+  muss auch Jahre später denselben Betrag ergeben, also Konditionen auf dem Beleg
   festschreiben, nicht zur Laufzeit aus Stammdaten nachrechnen.
 - **Maschinendaten.** Für Predictive Maintenance fallen Messwerte in hoher Zahl an.
   Sie gehören nicht in dieselbe Tabelle wie Stammdaten.

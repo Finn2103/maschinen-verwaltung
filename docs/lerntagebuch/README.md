@@ -23,13 +23,13 @@ wird geschrieben, weil es im Editor schneller geht und in Git nachvollziehbar bl
 die Abgabe muss der Inhalt zusätzlich als Word-Datei mit dem Nachnamen als Dateiname in den
 Loop-Arbeitsbereich.
 
-**Das ist doppelte Arbeit und sollte mit den Lehrkräften geklärt werden** — entweder wird
+**Das ist doppelte Arbeit und sollte mit den Lehrkräften geklärt werden**, entweder wird
 die Markdown-Fassung als Abgabe akzeptiert, oder es bleibt beim Übertragen. Nicht einfach
 weglassen: das Logbuch ist Grundlage für die Review-Vorbereitung und damit notenrelevant.
 
 ## Dateien
 
-Eine Datei pro Person, nach Nachnamen benannt — wie in den Projektregeln gefordert:
+Eine Datei pro Person, nach Nachnamen benannt, wie in den Projektregeln gefordert:
 
 | Datei | Person |
 | --- | --- |
@@ -43,7 +43,7 @@ Aus den Projektregeln:
 > gelernt wurde."
 
 Im Review stellt das Lehrerteam **vertiefende Fragen zu den bearbeiteten Userstories,
-ähnlich einem Fachgespräch in der Abschlussprüfung** — und die Antworten gehen in die Note
+ähnlich einem Fachgespräch in der Abschlussprüfung**, und die Antworten gehen in die Note
 ein. Pro Person fünf Minuten Präsentation. Ein gepflegtes Logbuch ist genau das Material,
 aus dem diese fünf Minuten entstehen.
 
