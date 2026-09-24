@@ -1,48 +1,71 @@
-# KI-erstelltes Material
+# KI-Nutzung
 
-Alles in diesem Ordner hat **Claude (Anthropic)** auf Anweisung des Teams erstellt. Es ist
-**Hilfsmaterial, keine Teamleistung**, und liegt deshalb getrennt vom übrigen `docs/`.
+Dieser Ordner hat zwei Aufgaben: Ablage für KI-erstelltes Material **und** Nachweis, wie
+KI im Projekt eingesetzt wurde.
 
-Warum getrennt: im Review muss ohne Nachfragen unterscheidbar sein, was das Team entworfen
-hat und was ein Werkzeug produziert hat. Diese Trennung macht das sichtbar, statt es zu
-verwischen.
+Das Zweite ist nicht freiwillig. Aus den Projektregeln:
+
+> „Bei Nutzung von KI ist das Prompting bzw. die Bewertung der generierten Ergebnisse
+> nachvollziehbar zu dokumentieren. **Das Prompt Engineering wird bewertet.**"
+
+Und aus der Aufgabenstellung:
+
+> „Dazu erstellen Sie zuallererst einen **eigenen KI-Assistenten**, der Ihnen hilft, die
+> User Stories korrekt zu formulieren."
+
+Der Ordner ist also kein Abfall-Eimer, sondern ein **bewertetes Arbeitsergebnis**.
 
 ## Inhalt
 
 | Datei | Zweck | Stand |
 | --- | --- | --- |
-| `projektstart.html` | Projektüberblick: Situation, Pflichtvorgaben, Architektur, Backlog, Rollen | zum Vorstellen im Team |
-| `sprint-1-planning.html` | Moderationsleitfaden für das Sprint-1-Planning am 17.09. | **Zweck erfüllt** — kann gelöscht werden |
-| `ist-stand.html` | Vorstellung für die Lehrkräfte: Ist-Stand, Stack, offene Fragen | noch nicht vorgestellt |
-| `mockups-sprint-1.html` | 13 Oberflächen-Entwürfe zu #1, #2 und #8 | Entwurf, vor der Umsetzung |
+| `mockups-sprint-1.html` | 13 Oberflächen-Entwürfe zu #1, #2 und #8 | Orientierung — werden in Figma selbst neu gebaut |
 
-Die Seiten sind als Artefakte veröffentlicht. Die Links bleiben gültig, auch nachdem die
-Dateien hierher verschoben wurden:
+Veröffentlicht: https://claude.ai/artifact/NFTUEQY43cx78LxnBeXjj8
 
-| Seite | Link |
-| --- | --- |
-| Projektstart Maschinenverleih | https://claude.ai/code/artifact/8ca8c394-e3bc-474a-88e7-79a3b48765fd |
-| Sprint 1 Planning | https://claude.ai/code/artifact/31892c2f-aa82-468f-88dc-a00d3ed1ff8f |
-| Ist-Stand und Technologiewahl | https://claude.ai/artifact/ErEZ6XdPHv5hJ7XguEZXcH |
-| Maschinenpark Mockups | https://claude.ai/artifact/NFTUEQY43cx78LxnBeXjj8 |
+Entfernt, weil nicht genutzt: Projektüberblick, Planning-Leitfaden und Ist-Stand-Seite.
+Sie sind in der Git-Historie nachvollziehbar, falls sie noch gebraucht werden.
 
-Änderungen gehen in die Datei hier; die Seite wird danach unter derselben Adresse neu
-veröffentlicht.
+## Was hier noch fehlt
+
+Beides ist Bringschuld und wird bewertet:
+
+- **`prompts.md`** — Nachweis der KI-Nutzung: welche Aufgabe, welcher Prompt, was kam
+  zurück, was davon wurde übernommen und was verworfen. Nicht jede Zeile, aber die
+  Entscheidungen: wo hat das Werkzeug getragen, wo hat es sich geirrt, wie wurde es
+  geprüft.
+- **Eigener KI-Assistent für User Stories** — laut Aufgabenstellung ausdrücklich gefordert
+  und noch nicht angelegt. Dazu gehört die Systemanweisung, die ihn auf die
+  Story-Struktur, Lernfeld- und Bündelungsfach-Zuordnung und die T-Shirt-Schätzung
+  festlegt.
+
+**Material dafür ist vorhanden.** Im Projekt sind mehrere Fälle dokumentiert, in denen
+KI-Ergebnisse geprüft und korrigiert wurden — das ist genau das, was „Bewertung der
+generierten Ergebnisse" meint:
+
+- Zwei gemeldete Widersprüche zur Aufgabenstellung wurden **zurückgezogen**, nachdem klar
+  war, dass die Referenzarchitektur nicht bindet
+  ([`../scrum/backlog-neufassung.md`](../scrum/backlog-neufassung.md))
+- Ein Normbezug (ISO 9241) war fälschlich aus Issue #1 entfernt worden und wurde
+  zurückgeschrieben
+- In den Nutzwertanalysen wurden KI-Entwürfe durch eigene Zahlen ersetzt
+  ([ADR 0004](../adr/0004-client-technologie.md), [ADR 0010](../adr/0010-programmiersprache.md))
+- Umgekehrt fand die Prüfung eigener Zahlen drei Fehler in der Excel-Vorlage
+  (Gewichtssumme 1,10; JavaScript mit 5 Punkten bei einem Kriterium, das es nicht erfüllen
+  kann; ein doppelt benanntes Ausschlusskriterium)
+
+Diese Fälle in `prompts.md` zusammenzuziehen ist die eigentliche Arbeit — sie zeigen
+Prüfung statt Übernahme.
+
+## Grenzen
+
+Wie Claude in diesem Projekt eingesetzt wird, steht in [`CLAUDE.md`](../../CLAUDE.md):
+Werkzeug auf Anweisung, das Team entwirft und entscheidet. Stories, Tasks und Epics
+formuliert und legt das Team selbst an.
 
 ## Was hier ausdrücklich nicht liegt
 
-Die Arbeit des Teams:
-
-- **ERD** in Chen-Notation — `docs/datenmodell/`
-- **Nutzwertanalysen** als Tabelle und die daraus überführten Architekturentscheidungen — `docs/adr/`
-- **Definition of Done**, Entscheidungslog, Backlog-Neufassung — `docs/scrum/`
-- Board, Prioritäten, Zuweisungen, Schätzungen — GitHub Projects
-- Die Diskussion in den Issues
-
-## Umgang mit diesem Material
-
-Die Regeln dafür stehen in [`CLAUDE.md`](../../CLAUDE.md) im Wurzelverzeichnis: Claude ist
-Werkzeug auf Anweisung, das Team entwirft, formuliert und entscheidet. Wo Claude Texte des
-Teams oder der Lehrkräfte verändert hat, ist das dokumentiert — Item für Item in
-`docs/scrum/backlog-neufassung.md`, mit dem Originaltext als erstem Kommentar unter jedem
-Issue.
+Die Arbeit des Teams: ERD ([`../datenmodell`](../datenmodell/README.md)),
+Nutzwertanalysen und Architekturentscheidungen ([`../adr`](../adr/README.md)),
+Definition of Done und Entscheidungslog ([`../scrum`](../scrum/README.md)), Board,
+Prioritäten, Zuweisungen, Schätzungen, das Lerntagebuch.
