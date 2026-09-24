@@ -6,7 +6,7 @@ Entwicklungsteam. Scrum Master: Finn2103.
 ## Board
 
 Ein Board für das ganze Team: [Maschinenverwaltung-IHK](https://github.com/users/Finn2103/projects/32).
-Zwei Sichten — **Planner** (Tabelle, Planung) und **Board** (Kanban, laufender Sprint).
+Zwei Sichten: **Planner** (Tabelle, Planung) und **Board** (Kanban, laufender Sprint).
 
 Jedes Item trägt diese Felder:
 
@@ -29,11 +29,11 @@ noch nicht begonnen) → `In Progress` → `Testing` (PR offen, Review/Abnahme) 
 
 ### Rollen und Item-Arten
 
-- **User Story** — Anwendungsentwicklung und Datenanalyse. Aus Nutzersicht, mit Akzeptanzkriterien.
-- **Task** — Systemintegration und Datenverarbeitung. Technische Arbeit ohne eigenes Nutzerverhalten.
-- **Epic** — Klammer über mehrere Stories/Tasks. Label `epic`, Sub-Issues verknüpfen.
+- **User Story**: Anwendungsentwicklung und Datenanalyse. Aus Nutzersicht, mit Akzeptanzkriterien.
+- **Task**: Systemintegration und Datenverarbeitung. Technische Arbeit ohne eigenes Nutzerverhalten.
+- **Epic**: Klammer über mehrere Stories/Tasks. Label `epic`, Sub-Issues verknüpfen.
 
-Jedes Item braucht **Akzeptanzkriterien** — das ist Vorgabe der Lehrkräfte.
+Jedes Item braucht **Akzeptanzkriterien**. Das ist Vorgabe der Lehrkräfte.
 
 ## Issues
 
@@ -51,7 +51,7 @@ infra/<issue-nr>-kurzbeschreibung    Server, Container, Netz, IaC
 docs/<issue-nr>-kurzbeschreibung     Dokumentation, UML, ADR
 ```
 
-Ein PR pro Issue. Im PR-Text `Closes #<issue-nr>`. Das Issue schließt der PR — den
+Ein PR pro Issue. Im PR-Text `Closes #<issue-nr>`. Das Issue schließt der PR. Den
 Status auf `Done` setzt, wer die Abnahme gemacht hat.
 
 ### Was davon technisch erzwungen ist
@@ -67,18 +67,18 @@ Damit hier nichts Falsches steht, der tatsächliche Stand des Branch-Schutzes au
 
 `enforce_admins` ist **aus**. Repository-Admin ist derzeit nur der Scrum Master
 ([@Finn2103](https://github.com/Finn2103)); alle anderen haben Schreibrechte. Für alle
-außer dem Admin ist die Review-Pflicht damit wirklich bindend — der Admin kann ohne PR
+außer dem Admin ist die Review-Pflicht damit wirklich bindend. Der Admin kann ohne PR
 auf `main` mergen.
 
 Das ist Absicht: in der Aufbauphase muss eine Person durchgreifen können, ohne auf eine
-Freigabe zu warten. **Wer den Bypass nutzt, hält es fest** — in der Commit-Message oder im
+Freigabe zu warten. **Wer den Bypass nutzt, hält es fest**, in der Commit-Message oder im
 Lerntagebuch. Ein Bypass, den niemand sieht, ist ein umgangener Prozess; ein
 dokumentierter ist eine Entscheidung.
 
 ### Was noch Absprache ist, nicht Regel
 
 Wie das Team mit Git arbeitet, wird am **Fr, 25.09.2026** gemeinsam festgelegt und danach
-hier eingetragen — die meisten im Team arbeiten zum ersten Mal mit Git. Offen sind:
+hier eingetragen. Die meisten im Team arbeiten zum ersten Mal mit Git. Offen sind:
 
 - Wer reviewt wen, und wie lange darf ein PR offen liegen?
 - Ist bei reinen Doku-Änderungen ein direkter Push in Ordnung?
@@ -103,5 +103,5 @@ docs(datenmodell): ERD in Chen-Notation, erster Entwurf
 
 Das Schema wird **explizit** als SQL-DDL geschrieben und versioniert
 (`docs/datenmodell`, später Migrationen). Werkzeuge, die die Datenbank implizit
-aus Code erzeugen, sind laut Vorgabe nicht zulässig — also kein Auto-Migrate,
+aus Code erzeugen, sind laut Vorgabe nicht zulässig, also kein Auto-Migrate,
 kein Schema-aus-ORM.
