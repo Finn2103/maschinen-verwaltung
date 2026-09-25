@@ -108,16 +108,60 @@ der beides zu haben ist.
 
 ## Konsequenzen
 
-> **TODO:** Vom Team zu ergänzen. Punkte, die hier hingehören:
->
-> - Paketquellen: Debian stable ist älter. Was passiert, wenn ein benötigtes Paket zu alt
->   ist, Backports oder Container?
-> - Sicherheitsupdates: wer spielt sie ein, in welchem Takt, und wie wird das in #17
->   (Update- und Patch-Prozess) festgehalten?
-> - Der Support-Zeitraum ist der schwächste Punkt der Wahl. Wie lange trägt Debian 13, und
->   was passiert danach?
-> - Wer im Team kann die Distribution administrieren, und was passiert, wenn diese Person
->   ausfällt?
+> **Entwurf vom 25.09.2026, bitte vor dem Review gegenlesen.** Die Zahlen sind belegt, die
+> Schlüsse daraus gehören dem Team.
+
+### Support-Zeitraum
+
+Debian 13 „trixie" ist am **09.08.2025** erschienen. Der Lebenszyklus umfasst fünf Jahre:
+
+| Phase | bis |
+| --- | --- |
+| Volle Debian-Unterstützung | **09.08.2028** |
+| Long Term Support (LTS) | **30.06.2030** |
+
+Das Projekt endet am 11.12.2026 und liegt damit weit innerhalb der vollen Unterstützung.
+Der im Nutzwert schwächste Punkt der Wahl (Bewertung 2 gegen 3 bei Ubuntu) hat für die
+Projektlaufzeit **keine praktische Auswirkung**. Für einen echten Betrieb über 2028 hinaus
+wäre er relevant.
+
+Quelle: [Debian Release-Informationen](https://www.debian.org/releases/trixie/) ·
+[Freexian, Debian 13 Support](https://www.freexian.com/lts/extended/docs/debian-13-support/)
+
+### Paketquellen
+
+Debian stable führt bewusst ältere, dafür länger geprüfte Pakete. Daraus folgt für das
+Projekt:
+
+- Anwendungsnahe Software (Datenbank, Anwendung, Reverse Proxy, Mailserver) läuft in
+  **Containern** und hängt damit nicht an den Paketständen des Wirtssystems. Das entschärft
+  den Nachteil bei „Paketverfügbarkeit" (Bewertung 3 gegen 4 bei Ubuntu) deutlich.
+- Wird auf dem Wirtssystem selbst ein neueres Paket gebraucht, ist der Weg
+  **`trixie-backports`**, nicht das Einbinden fremder Paketquellen. Backports sind Teil des
+  Debian-Projekts und ändern die Systembasis nicht.
+- Jede Abweichung vom Standardpaketstand gehört als Code ins Repository, sonst bricht die
+  Vorgabe Infrastructure as Code (#5).
+
+### Sicherheitsupdates
+
+Wer sie einspielt und in welchem Takt, ist in **#17 (Update- und Patch-Prozess)** zu
+regeln. Aus dieser Entscheidung folgt dafür nur die Faktenlage: Debian liefert
+Sicherheitsaktualisierungen über `security.debian.org` getrennt vom normalen Paketstand,
+sie lassen sich also einspielen, ohne den Rest des Systems zu bewegen.
+
+### Abhängigkeit von einer Person
+
+Im Team kann derzeit **eine Person** Linux administrieren, und sie hat einen anderen
+Arbeitsschwerpunkt. Das ist ein Projektrisiko, unabhängig von der Distribution. Es wird
+nicht durch die Wahl von Debian gelöst, sondern nur dadurch, dass die Einrichtung als
+Infrastructure as Code im Repository liegt und damit nachvollziehbar und wiederholbar ist
+(#5). **Wer die Schritte nur auf dem Server ausführt und nicht ins Repository schreibt,
+stellt genau dieses Risiko wieder her.**
+
+### Architekturen
+
+Debian 13 unterstützt `i386`, `armel`, `mipsel` und `mips64el` nicht mehr. Für eine
+x86-64-VM bei STRATO ohne Bedeutung, hier nur der Vollständigkeit halber.
 
 ## Anmerkungen zur Methode
 
