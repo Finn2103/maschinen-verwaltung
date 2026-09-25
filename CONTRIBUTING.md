@@ -42,7 +42,23 @@ kein Sprint-Item ohne `story-points` und `prio`.
 
 ## Branches und PRs
 
-Gearbeitet wird auf Branches, nicht direkt auf `main`.
+**Beschlossen am 25.09.2026.** Gearbeitet wird auf Feature-Branches, die von `staging`
+abzweigen und per Pull Request nach `staging` zurückgehen. Nicht von `main`, nicht nach
+`main`.
+
+| Branch | Zweck |
+| --- | --- |
+| `main` | Abgabestand. Bekommt nur geprüfte Stände aus `staging` |
+| `staging` | Arbeitsstand des Teams. Ziel jedes Pull Requests |
+| `feat/…` `fix/…` `infra/…` `docs/…` | Ein Branch je Issue, abgezweigt von `staging` |
+
+**Vor jedem Abzweigen `git fetch` und `staging` aktualisieren.** Fünf Leute arbeiten im
+selben Repository. Wer von einem alten Stand abzweigt, baut sich einen Konflikt.
+
+```bash
+git fetch origin
+git checkout -b feat/42-reverse-proxy origin/staging
+```
 
 ```
 feat/<issue-nr>-kurzbeschreibung     neue Funktion
@@ -51,8 +67,8 @@ infra/<issue-nr>-kurzbeschreibung    Server, Container, Netz, IaC
 docs/<issue-nr>-kurzbeschreibung     Dokumentation, UML, ADR
 ```
 
-Ein PR pro Issue. Im PR-Text `Closes #<issue-nr>`. Das Issue schließt der PR. Den
-Status auf `Done` setzt, wer die Abnahme gemacht hat.
+Ein PR pro Issue, Ziel ist **`staging`**. Im PR-Text `Closes #<issue-nr>`. Das Issue
+schließt der PR. Den Status auf `Done` setzt, wer die Abnahme gemacht hat.
 
 ### Was davon technisch erzwungen ist
 
@@ -79,17 +95,16 @@ Freigabe zu warten. **Wer den Bypass nutzt, hält es fest**, in der Commit-Messa
 Lerntagebuch. Ein Bypass, den niemand sieht, ist ein umgangener Prozess; ein
 dokumentierter ist eine Entscheidung.
 
-### Was noch Absprache ist, nicht Regel
+### Was noch offen ist
 
-Wie das Team mit Git arbeitet, wird am **Fr, 25.09.2026** gemeinsam festgelegt und danach
-hier eingetragen. Die meisten im Team arbeiten zum ersten Mal mit Git. Offen sind:
+Am 25.09.2026 festgelegt wurde der Branch-Fluss. Noch nicht beschlossen:
 
 - Wer reviewt wen, und wie lange darf ein PR offen liegen?
-- Ist bei reinen Doku-Änderungen ein direkter Push in Ordnung?
-- Bleibt der Admin-Bypass, oder wird `enforce_admins` eingeschaltet?
+- Wann geht `staging` nach `main`, und wer gibt das frei?
+- Bleibt der Admin-Bypass auf `main`, oder wird `enforce_admins` eingeschaltet?
 
-Bis dahin sind die Branch- und Commit-Namen oben **Empfehlung**, das Verfahren oben
-**gesetzt**. Was beschlossen wird, kommt in
+Der Branch-Schutz oben gilt für `main`. **`staging` ist nicht geschützt**, dort zählt die
+Absprache. Was beschlossen wird, kommt in
 [`docs/scrum/entscheidungen.md`](docs/scrum/entscheidungen.md).
 
 ## Commits

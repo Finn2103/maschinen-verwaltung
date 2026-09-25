@@ -9,7 +9,7 @@ höchste Punktzahl allein ist keine Begründung. Nutzwertanalyse ist Prüfungsth
 
 | Nr. | Entscheidung | Status |
 | --- | --- | --- |
-| [0001](0001-linux-distribution.md) | Linux-Distribution für die Strato-VM | **Debian 13** entschieden. Nutzwertanalyse nach Markdown überführt, **gewinnt aber Ubuntu 26.04 LTS** (630 zu 540), die Abweichung ist noch nicht begründet |
+| [0001](0001-linux-distribution.md) | Linux-Distribution für die Strato-VM | **Debian 13** entschieden. Ubuntu 26.04 gewinnt die Analyse (625 zu 545), die Abweichung ist am 25.09.2026 begründet und zwei Annahmen extern geprüft |
 | 0002 | Container-Plattform (docker / podman / kubernetes) | offen |
 | 0003 | Reverse Proxy (apache2 / nginx / Traefik) | offen |
 | [0004](0004-client-technologie.md) | Client-Technologie | **React mit Next.js**: React vs. Angular vs. Flutter, Nutzwert 4,55 / 3,80 / 2,40 |
@@ -18,7 +18,7 @@ höchste Punktzahl allein ist keine Begründung. Nutzwertanalyse ist Prüfungsth
 | 0007 | Supabase als Cloud oder selbst gehostet | **entfällt**, in ADR 0006 mitentschieden: selbst gehostet auf der Strato-VM |
 | 0008 | Anmeldung über Supabase statt Authelia | offen, Begründung: zwei Benutzerverwaltungen vermeiden |
 | 0009 | Was „barrierefrei nach ISO 9241" für dieses Projekt heißt | offen. Die Checkliste gilt dann für alle Oberflächen-Items |
-| [0010](0010-programmiersprache.md) | Programmiersprache und Typisierung | **TypeScript**: TypeScript vs. JavaScript vs. C++, Nutzwert 4,50 / 2,95 / 2,90 |
+| [0010](0010-programmiersprache.md) | Programmiersprache und Typisierung | **TypeScript**: Nutzwert 4,45 · C# 3,70 · JavaScript 3,25 · C++ 2,80, korrigiert am 25.09.2026 |
 
 Die ADR-Texte 0004, 0006 und 0010 liegen als **Entwurf** vor, Methode und Zahlen stehen,
 die Formulierung schreibt das Team um. Der Text zu **0001** ist weiterhin Bringschuld: die
