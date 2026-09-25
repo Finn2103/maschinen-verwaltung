@@ -72,7 +72,11 @@ IT-Consultingunternehmen für ihn; die Lehrkräfte sind Product Owner.
 
 # Architektur
 
-Eigene VM bei Strato (Linux), Infrastructure as Code.
+Eigene VM bei Strato, **Debian 13**, Infrastructure as Code.
+
+Die Liste darunter ist die **Referenzarchitektur der Aufgabenstellung**, also Orientierung
+und keine Vorgabe. Was davon tatsächlich entschieden ist und womit begründet, steht in
+[docs/TECHSTACK.md](docs/TECHSTACK.md).
 
 - **Zugang**: Reverse Proxy (apache2, nginx oder Traefik) + Let's Encrypt, HTTPS
 

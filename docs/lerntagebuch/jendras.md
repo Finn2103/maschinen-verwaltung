@@ -10,6 +10,51 @@ die Abgabe zusätzlich eine Word-Fassung im Loop-Arbeitsbereich verlangt ist.
 
 ---
 
+## 2026-09-25 · Freitag
+
+**Tätigkeit**
+
+- Git-Arbeitsweise mit dem Team festgelegt und in `CONTRIBUTING.md` eingetragen: Feature-Branch von `staging`, Pull Request zurück nach `staging`
+- Die offenen Entscheidungen #39, #40 und #41 im Team durchgesprochen und moderiert
+- Nutzwertanalyse zur Programmiersprache korrigiert und neu gerechnet
+- ADR 0001 zur Linux-Distribution abgeschlossen: Entscheidung, Begründung der Abweichung, Konsequenzen
+- Zwei Annahmen der Linux-Analyse gegen externe Quellen geprüft
+- Ordner `docs/ki/prompts` für den Nachweis der KI-Nutzung angelegt (#48)
+- Zehn nachgetragene Tickets #39 bis #48 aufs Board gehängt und die Felder gesetzt
+- #39 geschlossen und auf `Done`, #45 mir zugewiesen, #42 an Nico, #43 an Laurin
+
+**Problem**
+
+- In der Nutzwertanalyse zur Sprache summierten die Gewichte auf 1,10 statt 1,00, dadurch lagen Nutzwerte über der Skalenobergrenze
+- JavaScript hatte bei „Typen aus dem Datenbankschema ableitbar" die Höchstpunktzahl, obwohl es Typen gar nicht kennt. Genau dieser Posten hob es auf Platz 2
+- Unsere Begründung für Debian stützte sich auf Vorkenntnisse im Team. Die eigene Tabelle bewertete Ubuntu bei genau diesem Kriterium aber besser
+- Die Nutzwertanalyse gewinnt Ubuntu 26.04, entschieden ist Debian 13, und der Server läuft bereits darauf
+- Der wörtliche Chatverlauf mit der KI enthält Arbeitsnotizen über die Lehrkräfte. Das Repository ist öffentlich
+- Seit dieser Woche arbeiten vier weitere Personen am selben Repository, vorher nur ich
+
+**Lösung**
+
+- Gewicht von „Passt zur Client-Technologie" von 0,20 auf 0,10 gesenkt, weil es sich inhaltlich mit „Eignung für Weboberflächen" überschneidet. Summe jetzt 1,00
+- JavaScript bekommt bei den Typen 1 Punkt statt 5. Erwogen war 0, verworfen, weil die Skala bei 1 beginnt. Neue Rangfolge: TypeScript 4,45, C# 3,70, JavaScript 3,25, C++ 2,80
+- Die Bewertung „Vorkenntnisse im Team" war vertauscht und ist korrigiert. Die Entscheidung für Debian steht jetzt auf zwei Gründen: wir kennen Debian besser, und ein Wechsel würde Sprintzeit kosten, die gegen den Abgabetermin nicht da ist
+- Ins ADR einen Abschnitt geschrieben, **was die Begründung nicht behauptet**: Debian gewinnt kein einziges Kriterium der Tabelle
+- Zwei Annahmen extern geprüft, beide bestätigt: STRATO bietet Ubuntu 26.04 nur für eine Serverklasse, Debian 13 breiter. Ubuntu ist auf Webservern tatsächlich verbreiteter als Debian (15,1 % gegen 5,8 %)
+- Prompts werden sinngemäß und geordnet dokumentiert, nicht wörtlich. Die Rohprotokolle bleiben lokal und sind auf Nachfrage vorzeigbar
+- Branch-Regeln und die Pflicht, vor jedem Abzweigen zu fetchen, in `CONTRIBUTING.md` festgeschrieben
+
+**Lessons Learned**
+
+- Eine Gewichtung nachträglich zu verschieben, bis das gewünschte Ergebnis herauskommt, ist der auffälligste Fehler in einer Nutzwertanalyse. Damit Debian allein über „Vorkenntnisse" gewinnt, hätte das Kriterium von 5 auf 45 Punkte steigen müssen und wäre damit das schwerste von allen geworden. Das hält keiner Rückfrage stand
+- Ein Argument muss zur eigenen Tabelle passen. Steht dort das Gegenteil, ist entweder das Argument falsch oder die Bewertung. Bei uns war es die Bewertung
+- Von der Rangfolge abzuweichen ist erlaubt, muss aber **als Abweichung** dastehen und nicht als Rechenergebnis getarnt werden
+- Aufzuschreiben, was die eigene Begründung **nicht** behauptet, nimmt der ersten Rückfrage im Review die Spitze
+- Annahmen in einer Nutzwertanalyse lassen sich nachprüfen. Beide Prüfungen haben unsere Zahlen bestätigt, und ein geprüfter Wert trägt weiter als ein ungeprüfter
+- Eine Skala von 1 bis 5 hat keine 0. Was eine Option grundsätzlich nicht erfüllen kann, bekommt den kleinsten Wert der Skala, nicht einen Wert außerhalb
+- Nachweis der KI-Nutzung heißt nachvollziehbare Dokumentation, nicht Mitschnitt. Was in ein öffentliches Repository kommt, entscheidet man bewusst
+- Sobald mehr als eine Person am Repository arbeitet, gehört vor jede Änderung ein `git fetch`. Sonst zweigt man von einem alten Stand ab und baut sich den Konflikt selbst
+
+---
+
 ## 2026-09-24 · Donnerstag
 
 **Tätigkeit**
