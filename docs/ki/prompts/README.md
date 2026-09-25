@@ -19,6 +19,15 @@ Zwei Dinge, und das zweite ist das schwerere:
 Eine Sammlung von Prompts ohne Punkt 2 erfüllt die Vorgabe nicht. Der Nachweis lebt von
 den Fällen, in denen ein Ergebnis **geprüft und korrigiert** wurde.
 
+## Was hier nicht pauschal landet
+
+Nicht jeder Prompt kommt in die Dokumentation. Es kommen die Fälle rein, an denen eine
+Entscheidung hing. **Jeder Eintrag wird vor dem Ablegen gegengelesen und freigegeben**,
+nichts wird automatisch übernommen.
+
+Dokumentiert wird **ab dem 25.09.2026**. Die Sitzungen davor bleiben draußen; sie sind im
+lokalen Rohprotokoll vorhanden, falls doch einmal danach gefragt wird.
+
 ## Eine Datei je Arbeitstag
 
 `JJJJ-MM-TT.md`, Aufbau nach [`vorlage.md`](vorlage.md). Je Fall vier Angaben:
@@ -48,8 +57,9 @@ Alle Prompts an Claude entstehen auf **einem** Gerät. Es gibt keine zweite Quel
 noch dazukäme. Umgekehrt gilt: was im Repository liegt und nicht aus diesen Sitzungen
 stammt, ist selbst geschrieben.
 
-Stand 25.09.2026 sind protokolliert: **11.09. (28 Eingaben) · 17.09. (6) · 18.09. (10) ·
-24.09. (9) · 25.09. (laufend)**.
+Im lokalen Rohprotokoll liegen Stand 25.09.2026: **11.09. (28 Eingaben) · 17.09. (6) ·
+18.09. (10) · 24.09. (9) · 25.09. (laufend)**. In dieser Dokumentation steht davon nur,
+was ausdrücklich freigegeben wurde.
 
 ## Grenzen der KI-Nutzung
 
