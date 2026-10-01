@@ -11,7 +11,7 @@ höchste Punktzahl allein ist keine Begründung. Nutzwertanalyse ist Prüfungsth
 | --- | --- | --- |
 | [0001](0001-linux-distribution.md) | Linux-Distribution für die Strato-VM | **Debian 13** entschieden. Ubuntu 26.04 gewinnt die Analyse (625 zu 545), die Abweichung ist am 25.09.2026 begründet und zwei Annahmen extern geprüft |
 | 0002 | Container-Plattform (docker / podman / kubernetes) | offen |
-| 0003 | Reverse Proxy (apache2 / nginx / Traefik) | offen |
+| [0003](0003-reverse-proxy.md) | Reverse Proxy (apache2 / nginx / caddy / Traefik) | **Caddy** per Nutzwertanalyse ausgewählt, aufgrund der Vorteile die es bei der IaC Configuration bietet und einfach automatisiert SSL Provisioning löst. |
 | [0004](0004-client-technologie.md) | Client-Technologie | **React mit Next.js**: React vs. Angular vs. Flutter, Nutzwert 4,55 / 3,80 / 2,40 |
 | [0005](0005-mailserver.md) | Mailserver (mailcow / docker-mailserver / stalwart) | in Arbeit. Gewichtungen begründet, Bewertung und Entscheidung fehlen. Ticket #12 |
 | [0006](0006-datenhaltung.md) | Datenhaltung und Datenbank-API | **Supabase, selbst gehostet**: Supabase vs. Oracle vs. PocketBase, Nutzwert 4,40 / 3,60 / 3,35 |
