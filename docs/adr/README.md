@@ -10,8 +10,8 @@ höchste Punktzahl allein ist keine Begründung. Nutzwertanalyse ist Prüfungsth
 | Nr. | Entscheidung | Status |
 | --- | --- | --- |
 | [0001](0001-linux-distribution.md) | Linux-Distribution für die Strato-VM | **Debian 13** entschieden. Ubuntu 26.04 gewinnt die Analyse (625 zu 545), die Abweichung ist am 25.09.2026 begründet und zwei Annahmen extern geprüft. Die Argumente des Teams trägt #55 nach |
-| [0002](0002-container-plattform.md) | Container-Plattform (docker / podman / kubernetes) | **Docker und Docker-Compose**. Nutzwertanalyse in Markdown ausgeführt und mit den Dokumentationen der anderen Tools abgeglichen |
-| 0003 | Reverse Proxy (apache2 / nginx / Traefik) | offen |
+| [0002](0002-container-plattform.md) | Container-Plattform (docker / podman / kubernetes) | **Docker mit Compose-Plugin** (4,60). Podman gewinnt Isolation. Die Mailserver-Zeile ist voraussichtlich, #12 ist offen; ohne sie bleibt Docker vorn (3,85 zu 3,30) |
+| [0003](0003-reverse-proxy.md) | Reverse Proxy (apache2 / nginx / Traefik, zusätzlich Caddy) | **Caddy** (4,70). Vierter Kandidat über die Referenzarchitektur hinaus, begründet im ADR. Traefik gewinnt das Zusammenspiel mit Compose, nginx die Angriffsfläche |
 | [0004](0004-client-technologie.md) | Client-Technologie | **React mit Next.js**: React vs. Angular vs. Flutter, Nutzwert 4,55 / 3,80 / 2,40 |
 | [0005](0005-mailserver.md) | Mailserver (mailcow / docker-mailserver / stalwart) | in Arbeit. Gewichtungen begründet, Bewertung und Entscheidung fehlen. Ticket #12 |
 | [0006](0006-datenhaltung.md) | Datenhaltung und Datenbank-API | **Supabase, selbst gehostet**: Supabase vs. Oracle vs. PocketBase, Nutzwert 4,40 / 3,60 / 3,35 |
@@ -24,8 +24,9 @@ höchste Punktzahl allein ist keine Begründung. Nutzwertanalyse ist Prüfungsth
 Interpretation und Konsequenzen stehen jeweils. Bei 0001 trägt #55 noch die Argumente des
 Teams nach, die dort stehende Begründung ist ein Entwurf.
 
-**0002** ist frisch und steht als Entwurf. **0005** hat Gewichtungen und Punkte, aber noch
-keine Entscheidung. **0006** liegt als Entwurf vor, Methode und Zahlen stehen, die
+**0002** ist entschieden. Die Zeile zum Mailserver darin ist voraussichtlich, weil #12
+offen ist. **0003** ist entschieden: Caddy. **0005** hat Gewichtungen und Punkte, aber
+noch keine Entscheidung. **0006** liegt als Entwurf vor, Methode und Zahlen stehen, die
 Formulierung schreibt das Team um.
 
 ## Was bei diesen Analysen auffällt
@@ -42,6 +43,8 @@ In den meisten Fällen gewinnt die gewählte Option **nicht** in allen Kriterien
   SQL-DDL).
 - **Podman** gewinnt bei der Container-Plattform das Kriterium Isolation (5 gegen 3), weil
   es nativ rootless läuft. Docker muss dafür umgestellt werden.
+- **Traefik** gewinnt beim Reverse Proxy das Zusammenspiel mit Docker Compose (5 gegen 4),
+  **nginx** die Angriffsfläche (5 gegen 4). Entschieden ist trotzdem Caddy.
 - **Ubuntu 26.04 LTS** gewinnt die Analyse zur Linux-Distribution insgesamt (625 zu 545),
   entschieden wurde trotzdem Debian 13. Genau deshalb verlangt die Methode eine
   Interpretation: die höchste Punktzahl allein ist keine Begründung. Die Begründung steht
