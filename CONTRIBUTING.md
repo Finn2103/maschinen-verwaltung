@@ -116,7 +116,28 @@ feat(verleih): Reservierung mit Zeitraumprüfung
 fix(abrechnung): Rundung der Umsatzsteuer auf Positionsebene
 infra(proxy): Traefik mit Let's Encrypt
 docs(datenmodell): ERD in Chen-Notation, erster Entwurf
+chore(web): Next.js-Projekt mit TypeScript und Tailwind anlegen
 ```
+
+| Typ | Wofür |
+| --- | --- |
+| `feat` | Neue Funktion, die ein Nutzer merkt |
+| `fix` | Fehlerbehebung |
+| `infra` | Server, Container, Netz, Infrastructure as Code |
+| `docs` | Dokumentation, UML, ADR, Lerntagebuch |
+| `chore` | Gerüst, Abhängigkeiten, Werkzeuge. Ändert kein Verhalten |
+
+`chore` ist der Typ für alles, was das Projekt aufbaut, ohne dass sich für einen Nutzer
+etwas ändert: das Anlegen des Anwendungsgerüsts, das Aktualisieren von Abhängigkeiten, eine
+Konfigurationsdatei für den Editor. **Kein `feat`**, solange niemand eine neue Funktion
+sieht.
+
+### KI-Anteil kennzeichnen
+
+Ein Commit, dessen Inhalt von einer KI stammt, bekommt am Ende eine `Co-Authored-By`-Zeile.
+Ein Commit, den man selbst geschrieben hat, bekommt sie **nicht**, auch nicht, wenn vorher
+mit einer KI darüber gesprochen wurde. Das Projekt ist eine Prüfungsleistung; wer die Zeile
+überall hinschreibt, gibt eigene Arbeit ab.
 
 ## Datenbank
 
