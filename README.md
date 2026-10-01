@@ -74,13 +74,13 @@ IT-Consultingunternehmen für ihn; die Lehrkräfte sind Product Owner.
 
 Eigene VM bei Strato (Linux), Infrastructure as Code.
 
-- **Zugang**: Reverse Proxy (apache2, nginx oder Traefik) + Let's Encrypt, HTTPS
+- **Zugang**: Reverse Proxy (apache2, caddy, nginx oder Traefik) + Let's Encrypt, HTTPS
 
 - **API-Schicht**: API Gateway Kong vor den Supabase APIs
   (`/auth` GoTrue · `/pg` pg-meta · `/rest` PostgREST · `/storage` · `/graphql` pg_graphql · `/functions` Edge · `/realtime`), Supabase Studio
 - **Datenhaltung**: PostgreSQL, S3-kompatibler Object Storage (z. B. MinIO)
 - **Backend Services**: Mailserver (mailcow, docker-mailserver oder stalwart)
-- **Container-Plattform**: docker, podman oder kubernetes
+- **Container-Plattform**: docker
 - **Client**: Angular, C#/C++ oder Flutter
 
 # Verbindliche Spielregeln
