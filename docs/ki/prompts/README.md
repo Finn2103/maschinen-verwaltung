@@ -28,6 +28,9 @@ nichts wird automatisch übernommen.
 Dokumentiert wird **ab dem 25.09.2026**. Die Sitzungen davor bleiben draußen; sie sind im
 lokalen Rohprotokoll vorhanden, falls doch einmal danach gefragt wird.
 
+Die Auswahl, welcher Prompt aufgenommen wird, trifft das Team und wird jeweils beim
+Arbeiten gesagt.
+
 ## Eine Datei je Arbeitstag
 
 `JJJJ-MM-TT.md`, Aufbau nach [`vorlage.md`](vorlage.md). Je Fall vier Angaben:
@@ -35,21 +38,31 @@ lokalen Rohprotokoll vorhanden, falls doch einmal danach gefragt wird.
 | Feld | Inhalt |
 | --- | --- |
 | **Aufgabe** | Was sollte erreicht werden |
-| **Prompt** | Wie gefragt wurde, sinngemäß oder gekürzt |
+| **Prompt** | **Der Prompt im Wortlaut.** Deckt ein Prompt mehrere Themen ab, wird der einschlägige Teil zitiert und als Auszug gekennzeichnet |
 | **Ergebnis** | Was zurückkam, in einem Satz |
 | **Bewertung** | Übernommen oder verworfen, und **warum**. Das ist der bewertete Teil |
 
-## Warum hier nicht der wörtliche Chatverlauf steht
+## Wörtlich als Normalfall
 
-Die vollständigen Sitzungsprotokolle liegen lokal auf dem Arbeitsgerät unter
-`~/.claude/projects/…/*.jsonl`. Sie sind der Rohbeleg und jederzeit vorzeigbar.
+**Die Prompts stehen im Wortlaut.** Paraphrasiert geht genau das verloren, was bewertet
+wird: wie eine Frage gestellt wurde, welche Grenze sie gesetzt hat, welches
+Abnahmekriterium darin stand. Sichtbar wäre sonst nur, was die KI daraus gemacht hat.
 
-**In dieses Repository kommen sie nicht.** Es ist öffentlich, und Arbeitsnotizen im
-Eifer des Gefechts sind kein Dokument, das man einem Prüfungsausschuss vorlegt. Die
-Vorgabe verlangt eine *nachvollziehbare Dokumentation*, keinen Mitschnitt. Was hier steht,
-ist also sinngemäß und geordnet, nicht wörtlich.
+Gekürzt wird nur im Ausnahmefall, und dann sichtbar: deckt ein Prompt mehrere Themen ab,
+steht der einschlägige Teil da, gekennzeichnet als Auszug.
 
-Wer den Rohbeleg sehen will, bekommt ihn auf Nachfrage am Gerät gezeigt.
+Nicht hier steht der **vollständige Chatverlauf**, also die Antworten der KI, Werkzeugaufrufe
+und Zwischenschritte. Die Vorgabe verlangt eine *nachvollziehbare Dokumentation*, keinen
+Mitschnitt. Die vollständigen Sitzungsprotokolle liegen lokal auf dem Arbeitsgerät unter
+`~/.claude/projects/…/*.jsonl` und sind auf Nachfrage vorzeigbar.
+
+## Zwei Ablageorte
+
+Jeder Eintrag steht an zwei Stellen:
+
+1. In der Tagesdatei hier im Ordner.
+2. Als **Kommentar unter dem zugehörigen Issue**. Dort wird er gesucht, wenn im
+   Fachgespräch eine Entscheidung aufgerufen wird.
 
 ## Vollständigkeit
 
