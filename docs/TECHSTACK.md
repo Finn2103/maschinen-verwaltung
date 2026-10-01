@@ -8,7 +8,7 @@ jede mit einer Nutzwertanalyse dahinter.
 
 | Ebene | Entscheidung | Begründung | Nutzwert |
 | --- | --- | --- | --- |
-| **Betriebssystem** | **Debian 13** | [ADR 0001](adr/0001-linux-distribution.md) | 540, *siehe Hinweis unten* |
+| **Betriebssystem** | **Debian 13** | [ADR 0001](adr/0001-linux-distribution.md) | 545 · Ubuntu 26.04 625, *bewusste Abweichung* |
 | **Container-Plattform** | **Docker & Docker-Compose** | [ADR 0002](adr/0002-container-plattform.md) | 4,60 |
 | **Client** | **React mit Next.js** | [ADR 0004](adr/0004-client-technologie.md) | 4,55 · Angular 3,80 · Flutter 2,40 |
 | **Sprache** | **TypeScript** | [ADR 0010](adr/0010-programmiersprache.md) | 4,45 · C# 3,70 · JavaScript 3,25 · C++ 2,80 |
@@ -30,10 +30,12 @@ Supabase läuft **auf der eigenen Strato-VM**, nicht als Cloud-Dienst.
 | **Anmeldeverfahren** | Supabase-Anmeldung oder Authelia | ADR 0008 |
 | **Barrierefreiheit** | Was „ISO 9241" konkret heißt, Checkliste | ADR 0009 |
 
-Reverse Proxy und Container-Plattform sind **beide** noch offen, nicht nur der Proxy.
-Beide werden in Ticket [#5](https://github.com/Finn2103/maschinen-verwaltung/issues/5)
-gebraucht, wer das Ticket baut, trifft die Entscheidung mit und sollte sie vorher
-kriteriengeleitet festhalten.
+Die Container-Plattform ist seit dem 01.10.2026 entschieden (ADR 0002, Docker mit
+Compose). **Der Reverse Proxy hängt daran** und ist als nächstes dran: Traefik zieht seine
+Konfiguration aus Docker-Labels, apache2 und nginx werden klassisch konfiguriert. Beides
+wird in Ticket [#5](https://github.com/Finn2103/maschinen-verwaltung/issues/5) gebraucht,
+die Entscheidung gehört in [#42](https://github.com/Finn2103/maschinen-verwaltung/issues/42)
+und vor den Aufbau.
 
 ## Wie der Stack die Pflichtvorgaben erfüllt
 
