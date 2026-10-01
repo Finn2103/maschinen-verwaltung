@@ -9,8 +9,8 @@ höchste Punktzahl allein ist keine Begründung. Nutzwertanalyse ist Prüfungsth
 
 | Nr. | Entscheidung | Status |
 | --- | --- | --- |
-| [0001](0001-linux-distribution.md) | Linux-Distribution für die Strato-VM | **Debian 13** entschieden. Ubuntu 26.04 gewinnt die Analyse (625 zu 545), die Abweichung ist am 25.09.2026 begründet und zwei Annahmen extern geprüft |
-| 0002 | Container-Plattform (docker / podman / kubernetes) | offen |
+| [0001](0001-linux-distribution.md) | Linux-Distribution für die Strato-VM | **Debian 13** entschieden. Nutzwertanalyse nach Markdown überführt, **gewinnt aber Ubuntu 26.04 LTS** (630 zu 540), die Abweichung ist noch nicht begründet |
+| 0002 | Container-Plattform (docker / podman / kubernetes) | **Docker und Docker-Compose**. Nutzwertanalyse in Markdown ausgeführt und mit den Dokumentationen der anderen Tools abgeglichen |
 | 0003 | Reverse Proxy (apache2 / nginx / Traefik) | offen |
 | [0004](0004-client-technologie.md) | Client-Technologie | **React mit Next.js**: React vs. Angular vs. Flutter, Nutzwert 4,55 / 3,80 / 2,40 |
 | [0005](0005-mailserver.md) | Mailserver (mailcow / docker-mailserver / stalwart) | in Arbeit. Gewichtungen begründet, Bewertung und Entscheidung fehlen. Ticket #12 |
