@@ -17,7 +17,7 @@ Die Wahl ist damit offen und muss begründet werden.
 | Ausschlusskriterium | React/Next.js | Angular | Flutter |
 | --- | --- | --- | --- |
 | Client-Server-Architektur möglich | ja | ja, mit eigenem Backend | ja, mit eigenem Backend |
-| Client-Server-Architektur möglich | ja | ja | ja |
+| Objektorientierter Ansatz möglich | ja | ja | ja |
 | Barrierefreiheit nach ISO 9241 erreichbar | ja, über DOM und ARIA | ja, über DOM und ARIA | eingeschränkt |
 
 ## Nutzwertanalyse
@@ -61,12 +61,15 @@ Gewichte summieren auf 1,00. Bewertung 1 bis 5. Nutzwert = Summe aus Gewicht × 
 
 ## Anmerkungen zur Vorlage
 
-Gefunden beim Überführen, nicht verändert:
+Gefunden beim Überführen. Was das Team entschieden hat, ist eingearbeitet und hier
+festgehalten; die übrigen Punkte stehen unverändert.
 
-- **Die Ausschlusstabelle nennt „Client-Server-Architektur möglich" zweimal** (Zeile 3 und 4).
-  Zeile 4 ist mit „ja / ja / ja" gefüllt und dürfte ein anderes Kriterium meinen, 
-  vermutlich „Objektorientierter Ansatz möglich". Bitte korrigieren, doppelte Kriterien
-  fallen im Review auf.
+- **Korrigiert am 25.09.2026:** Die Ausschlusstabelle nannte „Client-Server-Architektur
+  möglich" zweimal (Zeile 3 und 4). Zeile 4 war mit „ja / ja / ja" gefüllt. Das Team hat
+  bestätigt, dass dort **„Objektorientierter Ansatz möglich"** gemeint war, und die Zeile
+  entsprechend umbenannt. Die Bewertungen bleiben unverändert, alle drei Kandidaten
+  erfüllen das Kriterium. Am Ergebnis ändert sich nichts, die Ausschlusstabelle wird nicht
+  in den Nutzwert eingerechnet.
 - Zwei Schreibfehler in der Tabelle: **„Keine Erfahrenen Entwickler"** (klein: erfahrenen)
   und **„Infracstructure as Code"** (Infrastructure).
 - Die Gewichte summieren korrekt auf 1,00.
