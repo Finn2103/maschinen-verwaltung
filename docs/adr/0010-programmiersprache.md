@@ -1,6 +1,6 @@
 # ADR 0010: Programmiersprache und Typisierung
 
-- **Status:** Entwurf
+- **Status:** **Entschieden.** Zahlen am 25.09.2026 korrigiert, Interpretation und Konsequenzen am 01.10.2026 vom Team ergänzt
 - **Datum:** 2026-09-18
 - **Entschieden von:** Team (Gruppe 11), im Sprint-1-Planning
 - **Betrifft:** [#6](https://github.com/Finn2103/maschinen-verwaltung/issues/6) und alle Stories der Anwendungsentwicklung
@@ -47,24 +47,72 @@ Bewertung 1 bis 5. Nutzwert = Summe aus Gewicht × Bewertung. Gewichte summieren
 
 **TypeScript.**
 
-> **TODO, Interpretation ergänzen.** Aus der Tabelle:
->
-> - **C# und C++ gewinnen die zwei prüfungsrelevanten Kriterien**: Typsicherheit und
->   Objektorientierung, je 1,00 gegen 0,80. Beide verlieren an „passt zur
->   Client-Technologie" und „Eignung für Weboberflächen", also an der Folge von ADR 0004.
-> - **C++ bekommt beim Lernzuwachs nur 1 Punkt**, weil es im Unterricht behandelt wurde.
->   Vorkenntnisse sind bei diesem Kriterium ein Nachteil, das ist der Satz, den man parat
->   haben sollte, wenn gefragt wird „warum nicht C++, das könnt ihr doch".
-> - Diese Entscheidung ist eine **Folge von ADR 0004**, keine eigenständige. Wer die
->   Client-Wahl kippt, kippt diese mit.
+## Interpretation
+
+TypeScript gewinnt mit 4,45 vor C# mit 3,70, JavaScript mit 3,25 und C++ mit 2,80.
+Woher die 0,75 Abstand zu C# kommen:
+
+| Kriterium | Gewicht | TS | C# | bringt TS |
+| --- | --- | --- | --- | --- |
+| Eignung für Weboberflächen | 0,15 | 5 | 1 | **+0,60** |
+| Passt zur Client-Technologie | 0,10 | 5 | 1 | **+0,40** |
+| Werkzeuge in VS Code | 0,10 | 5 | 3 | +0,20 |
+| Typen aus dem Datenbankschema ableitbar | 0,10 | 5 | 4 | +0,10 |
+| Typsicherheit vor der Laufzeit | 0,20 | 4 | 5 | **−0,20** |
+| Objektorientierung sauber ausdrückbar | 0,20 | 4 | 5 | **−0,20** |
+| Lernzuwachs im Team | 0,15 | 4 | 5 | −0,15 |
+| | | | | **= +0,75** |
+
+**TypeScript gewinnt nicht, weil es typsicherer oder objektorientierter wäre.** Bei beiden
+Kriterien liegt es hinter C# und C++, und beide zusammen sind mit 0,40 die höchstgewichteten
+der Tabelle. Das ist der Satz, der hier stehen muss, denn genau diese zwei Kriterien sind
+die prüfungsrelevanten.
+
+**Es gewinnt an der Aufgabe.** Das Produkt ist eine Webanwendung. C# und C++ bekommen bei
+„Eignung für Weboberflächen" und „Passt zur Client-Technologie" je 1 Punkt, zusammen
+1,00 Abstand. Eine Sprache, die die Hauptaufgabe des Projekts nicht erfüllt, kann nicht
+gewinnen, auch wenn sie in zwei Einzelkriterien stärker ist. Für eine Weboberfläche nimmt
+man keine Sprache, die dafür nicht gebaut ist.
+
+**Diese Entscheidung ist eine Folge von [ADR 0004](0004-client-technologie.md),
+keine eigenständige.** Mit React als Client bleiben TypeScript und JavaScript übrig, und
+zwischen diesen beiden ist TypeScript auf **jedem einzelnen Kriterium** mindestens so gut.
+Keine Gewichtung kann die beiden vertauschen. Wer die Client-Wahl kippt, kippt diese mit.
+
+**C++ bekommt beim Lernzuwachs nur 1 Punkt, weil es im Unterricht behandelt wurde.**
+Vorkenntnisse sind bei diesem Kriterium ein Nachteil, denn die Aufgabenstellung verlangt
+Technologien, die wir noch nicht gut können. Das ist die Antwort auf „warum nicht C++, das
+könnt ihr doch".
+
+**JavaScript fällt nach der Korrektur vom 25.09.2026 auf Platz 3.** Es kann das Kriterium
+„Typen aus dem Datenbankschema ableitbar" grundsätzlich nicht erfüllen und stand dort
+trotzdem auf der Höchstpunktzahl. Siehe „Korrekturen" weiter unten.
 
 ## Konsequenzen
 
-> **TODO:** ergänzen. Zum Beispiel: TypeScript-Typen sind nach dem Übersetzen weg, also muss
-> an jeder Systemgrenze explizit validiert werden, besonders bei #8, wo die Rechteprüfung
-> serverseitig auch bei direktem Aufruf der Datenbank-API greifen muss.
+**Die Typen sind nach dem Übersetzen weg.** TypeScript prüft vor der Laufzeit, erzeugt aber
+gewöhnliches JavaScript. Zur Laufzeit existiert keine Typprüfung mehr. Daraus folgt:
 
----
+- An **jeder Systemgrenze** muss explizit validiert werden: alles, was aus dem Browser, aus
+  einem Formular oder von der Datenbank-API kommt. Ein deklarierter Typ ist eine Zusage des
+  Entwicklers an sich selbst, keine Prüfung zur Laufzeit.
+- Besonders in **#8**: eine Rolle, die als Typ deklariert ist, ist zur Laufzeit nur eine
+  Zeichenkette aus dem Netz. Die Rechteprüfung muss serverseitig greifen, auch bei direktem
+  Aufruf der Datenbank-API.
+
+**Die Typen kommen aus dem SQL-DDL, nicht umgekehrt.** Das Schema wird von Hand geschrieben
+und ist die Quelle (#45). Typen werden daraus abgeleitet. Ein Werkzeug, das aus
+TypeScript-Typen ein Schema erzeugt, wäre ein implizit erzeugtes Schema und damit laut
+Aufgabenstellung unzulässig.
+
+**Nur eine Person im Team kann TypeScript.** Wie bei der Client-Wahl bedeutet das
+Einarbeitungszeit. Der Vorteil gegenüber C++ oder C#: wer JavaScript kennt, findet sich
+schneller zurecht, und die Typen helfen beim Lernen, weil der Editor Fehler zeigt, bevor der
+Code läuft.
+
+**Die Anforderung, Unbekanntes zu nutzen, ist nur teilweise erfüllt.** TypeScript ist für
+vier von fünf neu, für eine Person nicht. Das ist der schwächste Punkt dieser Wahl und steht
+hier bewusst.
 
 ## Korrekturen
 

@@ -1,6 +1,6 @@
 # Oberflächen-Konventionen
 
-**Status:** Entwurf, die offenen Punkte in Abschnitt 2 entscheidet das Team, dann gilt das Dokument
+**Status:** Abschnitt 2 am 01.10.2026 entschieden. Offen bleiben die Sprache der Fachbegriffe (3.4) und die Rückgabetag-Frage (4)
 
 Zweck: Im Review stellt das Lehrerteam **vertiefende Fragen ähnlich einem Fachgespräch in
 der Abschlussprüfung**. Wer Muster beim Programmieren nebenbei wählt, kann hinterher nicht
@@ -45,14 +45,44 @@ Wenn Tempo wichtiger ist als Erklärbarkeit und du Tailwind schon kannst, ist Ta
 vertretbar, dann aber bewusst, mit dem Satz „utility-first, damit Stile nicht auseinander
 laufen" im Kopf.
 
-> **Entscheidung:** ☐ CSS Modules ☐ Tailwind ☐ anderes: ______
+> **Entschieden am 01.10.2026: Tailwind CSS.**
+>
+> Begründung des Teams: CSS beherrsche ich bereits, CSS Modules wären für mich kaum etwas
+> Neues. Die Aufgabenstellung verlangt Technologien, die wir noch nicht gut können, also
+> nehmen wir Tailwind. **Falls sich am Ende herausstellt, dass Tailwind hier die falsche
+> Wahl war, ist genau das ein Ergebnis**, das sich im Review vertreten lässt. Eine
+> begründete Entscheidung, die sich als suboptimal erweist, ist mehr wert als eine
+> Entscheidung, bei der nichts gelernt wurde.
+>
+> **Damit eingekauft, bewusst:** zusätzliche Abhängigkeit und ein Bauschritt. Und die
+> Rückfrage im Fachgespräch, warum zwanzig Klassennamen im Markup stehen. Die Antwort
+> darauf: utility-first, damit Stile nicht auseinanderlaufen und jede Änderung dort
+> passiert, wo das Element steht.
+>
+> **Wiederverwendung läuft über Komponenten, nicht über `@apply`.** `@apply` kann man
+> benutzen, es dreht Tailwind aber gegen seine eigene Idee: man hätte dann CSS-Klassen, die
+> innen aus Utilities bestehen. Wird `@apply` doch irgendwo nötig, kommt eine Notiz hierher,
+> warum.
 
 ### 2.2 Wo liegen die Design-Tokens?
 
 Farben, Abstände, Schriftgrößen an **einer** Stelle als CSS-Variablen, nicht verstreut.
 Zwei Fragen, die dazugehören: Gibt es eine dunkle Darstellung? Woher kommen die Kontrastwerte?
 
-> **Entscheidung:** Datei: ______ · dunkle Darstellung ☐ ja ☐ nein
+> **Entschieden am 01.10.2026:** Tokens in **`app/globals.css`**, dunkle Darstellung **ja**.
+>
+> Alle Farben einmal als CSS-Variablen auf `:root`, für die dunkle Darstellung an einer
+> Stelle überschrieben. Komponenten greifen nur über die Variablen zu und kennen keine
+> festen Farbwerte, sonst steht in jeder Datei dieselbe Farbe zweimal.
+>
+> **Zur Ordnerstruktur:** gewünscht war ein `styles`-Ordner mit mehreren nach Logik
+> getrennten Dateien, etwa `main.css` und `button.css`. Mit Tailwind bleiben diese Dateien
+> weitgehend leer, weil die Stile im Markup stehen. Deshalb: das Globale, also Tokens, Reset
+> und dunkle Darstellung, liegt in `app/globals.css`. Wird darüber hinaus eigenes CSS nötig,
+> kommt es nach Logik getrennt in `styles/` und bekommt hier eine Zeile, wofür.
+>
+> **Kontrastwerte werden gemessen, nicht geschätzt.** Woher die Mindestwerte kommen, legt
+> die Barrierefreiheits-Checkliste aus #44 fest.
 
 ### 2.3 Zustandsverwaltung
 
@@ -60,7 +90,40 @@ Solange es geht: **kein globaler Speicher.** Zustand so lokal wie möglich, Date
 nach unten, Ereignisse nach oben. Ein Store wird erst eingeführt, wenn ein konkretes Problem
 ihn erzwingt, und dann mit einer Notiz hier, warum.
 
-> **Entscheidung:** ☐ nur lokaler Zustand ☐ Store ab: ______
+> **Entschieden am 01.10.2026: nur lokaler Zustand.** Ein Store wird eingeführt, wenn ein
+> konkretes Problem ihn erzwingt, und dann mit einer Notiz hier, welches.
+
+### Was damit gemeint ist
+
+Zustand ist jeder Wert, der sich ändert und nach dem die Oberfläche anders aussehen muss.
+In #1 sind das: der eingegebene Zeitraum, die Kategorie, die Trefferliste, ob gerade gesucht
+wird, welche Fehlermeldung steht.
+
+Dafür gibt es drei Stufen:
+
+| Stufe | Wo der Wert liegt | Wann |
+| --- | --- | --- |
+| **Lokal** | in der Komponente, die ihn braucht | ein aufgeklapptes Menü, ein einzelnes Feld |
+| **Hochgezogen** | in der gemeinsamen Elternkomponente, nach unten durchgereicht | zwei Komponenten brauchen denselben Wert |
+| **Globaler Speicher** | außerhalb des Komponentenbaums, für alle erreichbar | viele weit auseinanderliegende Stellen |
+
+„Daten über Props nach unten, Ereignisse nach oben" ist die mittlere Stufe. Beispiel aus
+#1: Suchformular und Ergebnisliste brauchen beide die Filter, also liegen die Filter auf
+der Seite darüber. Das Formular meldet Änderungen nach oben, die Liste bekommt das Ergebnis
+nach unten.
+
+**Warum kein Store.** Nicht aus Prinzip, sondern weil er ein Problem löst, das wir nicht
+haben: Werte, die an vielen weit entfernten Stellen gebraucht werden. Bei uns liegen
+Formular und Liste direkt nebeneinander.
+
+Dazu kommt ein Argument, das im Fachgespräch trägt: **ein Store ist Zustand im Browser.**
+Jeder Wert dort muss mit dem Server abgeglichen werden und kann mit ihm auseinanderlaufen.
+Weniger Zustand im Browser heißt weniger Gelegenheit für genau diesen Fehler. Das passt zur
+Entscheidung aus [ADR 0004](adr/0004-client-technologie.md), Server-Komponenten als
+Voreinstellung zu nehmen.
+
+**Wenn es doch eng wird:** erst prüfen, ob Hochziehen reicht. In den meisten Fällen reicht
+es.
 
 ---
 
