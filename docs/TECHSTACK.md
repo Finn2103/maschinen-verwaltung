@@ -9,6 +9,7 @@ jede mit einer Nutzwertanalyse dahinter.
 | Ebene | Entscheidung | Begründung | Nutzwert |
 | --- | --- | --- | --- |
 | **Betriebssystem** | **Debian 13** | [ADR 0001](adr/0001-linux-distribution.md) | 540, *siehe Hinweis unten* |
+| **Container-Plattform** | **Docker & Docker-Compose** | [ADR 0002](adr/0002-container-plattform.md) | 4,60 |
 | **Client** | **React mit Next.js** | [ADR 0004](adr/0004-client-technologie.md) | 4,55 · Angular 3,80 · Flutter 2,40 |
 | **Sprache** | **TypeScript** | [ADR 0010](adr/0010-programmiersprache.md) | 4,95 · JavaScript 4,15 · C# 3,80 · C++ 2,90 |
 | **Datenhaltung und Datenbank-API** | **Supabase, selbst gehostet**: PostgreSQL mit PostgREST | [ADR 0006](adr/0006-datenhaltung.md) | 4,40 · Oracle 3,60 · PocketBase 3,35 |
@@ -25,7 +26,6 @@ Supabase läuft **auf der eigenen Strato-VM**, nicht als Cloud-Dienst.
 | Ebene | Kandidaten | Wo |
 | --- | --- | --- |
 | **Reverse Proxy** | apache2 · nginx · Traefik | ADR 0003, keine Nutzwertanalyse |
-| **Container-Plattform** | docker · podman · kubernetes | ADR 0002, keine Nutzwertanalyse |
 | **Mailserver** | mailcow · docker-mailserver · stalwart | ADR 0005, Ticket [#12](https://github.com/Finn2103/maschinen-verwaltung/issues/12) |
 | **Anmeldeverfahren** | Supabase-Anmeldung oder Authelia | ADR 0008 |
 | **Barrierefreiheit** | Was „ISO 9241" konkret heißt, Checkliste | ADR 0009 |
