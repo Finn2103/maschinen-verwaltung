@@ -1,0 +1,8 @@
+# Platzhalterdienst für den HTTP-Test aus #36.
+# Antwortet mit 200 und "Hello world". Domain vor dem Einsatz ersetzen.
+
+example.com {
+	respond 200 {
+		body "Hello world"
+	}
+}
