@@ -122,7 +122,7 @@ Starten und testen:
 ```bash
 docker compose up -d
 curl -i https://<domain>      # muss 200 und "Hello world" zurückgeben
-docker version                # Version, kommt in docs/TECHSTACK.md
+docker version                # installierte Version anzeigen
 ```
 
 Dann die VM neu starten und nochmal testen.
