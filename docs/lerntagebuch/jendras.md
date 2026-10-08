@@ -10,6 +10,49 @@ die Abgabe zusätzlich eine Word-Fassung im Loop-Arbeitsbereich verlangt ist.
 
 ---
 
+## 2026-10-01 · Donnerstag
+
+**Tätigkeit**
+
+- Board gegen den Sprintplan geprüft: Sprint 1 war seit dem 30.09. abgelaufen
+- Die offenen Begründungen zu #40 (Client-Technologie) und #41 (Programmiersprache) im Team erarbeitet und in die ADRs eingetragen
+- Styling-Entscheidung getroffen: **Tailwind CSS**, dazu Design-Tokens in `app/globals.css` und „nur lokaler Zustand" festgelegt
+- Issue #55 für die Debian-Begründung angelegt und Laurin zugewiesen, weil er die Analyse gemacht hat und den Server einrichtet
+- Commit-Typ `chore` in `CONTRIBUTING.md` aufgenommen
+- Next.js-Projekt mit TypeScript, Tailwind und App Router angelegt
+- Vier Pull Requests nach `staging` gemergt und dabei zwei Konflikte aufgelöst
+- Nico Rückmeldung zur Doku-Ablage gegeben
+
+**Problem**
+
+- Als Begründung für React hatte ich „geringere Lernkurve" genannt. Das Kriterium in unserer Tabelle heißt **Lernzuwachs**, und dort gewinnt Angular mit 5 gegen 4
+- Für TypeScript hatte ich Typsicherheit und Objektorientierung angeführt. Bei **beiden verliert TypeScript gegen C#** (4 gegen 5), und beide sind die höchstgewichteten Kriterien der Tabelle
+- Beim Auflösen von zwei Merge-Konflikten sind zwei Stellen auf den Stand vor dem 25.09. zurückgefallen: in `TECHSTACK.md` stand beim Betriebssystem wieder 540, im ADR-Index wieder „die Abweichung ist noch nicht begründet"
+- Nico hatte die Referenzarchitektur in der `README.md` verändert (caddy ergänzt, Container-Liste verkürzt) und in ADR 0002 eine Entscheidung behauptet, die noch nicht gefallen ist („#12 ist entschieden")
+- Für das Projektgerüst passte keiner unserer vier Commit-Typen
+
+**Lösung**
+
+- Beide Argumentationen durch die tragfähigen ersetzt: bei React die **eigene Serverschicht** (trägt 0,60 der 0,75 Abstand) und die **Anlaufzeit** (0,30), bei TypeScript die **Web-Eignung**, weil C# und C++ dort je einen Punkt bekommen
+- In ADR 0004 eine Warnung eingebaut, die Lernzuwachs und Lernkurve auseinanderhält, damit der Fehler nicht zurückkommt
+- In beiden ADRs den Abstand Kriterium für Kriterium aufgeschlüsselt und festgehalten, wo die eigene Wahl verliert
+- Die Rückschritte in `TECHSTACK.md` und im ADR-Index repariert
+- Nico die Ablageregeln weitergegeben, er bessert selbst nach. Wir prüfen in den Tagen danach
+- `chore` als fünften Commit-Typ aufgenommen, mit Tabelle und einem Absatz dazu, wann eine `Co-Authored-By`-Zeile gesetzt wird und wann nicht
+
+**Lessons Learned**
+
+- **Ein Argument muss zur eigenen Tabelle passen.** Zweimal am selben Tag hatte ich Kriterien als Begründung genannt, bei denen unsere Wahl verliert. Das wäre im Fachgespräch die erste Rückfrage gewesen
+- Der Abstand zwischen zwei Optionen lässt sich als Gewicht mal Bewertungsdifferenz **Kriterium für Kriterium aufschlüsseln**. Erst danach weiß man, worauf die Entscheidung wirklich steht. Bei React sind es zwei von sieben Kriterien
+- **Lernzuwachs ist nicht Lernkurve.** Ein hoher Lernzuwachs ist nach der Aufgabenstellung erwünscht, weil wir Technologien nutzen sollen, die wir noch nicht gut können
+- Eine Nutzwertanalyse kann rechnerisch stimmen und trotzdem falsch begründet werden. Die Zahlen prüfen reicht nicht, die Begründung muss zu ihnen passen
+- Beim Auflösen eines Merge-Konflikts muss man prüfen, **welche Seite neuer ist**. Beide Rückschritte standen drei Zeilen neben ihrem eigenen Widerspruch
+- Ablage: die `README.md` beschreibt das Projekt und die Vorgabe, `docs/TECHSTACK.md` unsere Entscheidungen, die ADRs begründen sie. Wer über die eigene Wahl schreibt und in der README landet, ist in der falschen Datei
+- **Zitate aus der Aufgabenstellung darf man nicht verbessern.** Ein Abschnitt, der die Vorlage der Lehrkräfte wiedergibt, muss sie wiedergeben, auch wenn uns eine Option fehlt. Zusätzliche Kandidaten gehören in den eigenen ADR
+- Tailwind bewusst gewählt, obwohl CSS für mich der einfachere Weg wäre. Die Aufgabenstellung verlangt Unbekanntes, und wenn sich Tailwind hier als falsche Wahl erweist, ist genau das ein vorzeigbares Ergebnis
+
+---
+
 ## 2026-09-25 · Freitag
 
 **Tätigkeit**
