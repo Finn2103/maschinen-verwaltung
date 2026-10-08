@@ -149,6 +149,46 @@ Der Reservierungskonflikt aus #1 ist ein **gültiges Ergebnis**: „dieser Zeitr
 belegt vom … bis …". Kein `throw`, sondern ein Rückgabewert, den der Typ beschreibt. Die
 Oberfläche zeigt ihn am betroffenen Feld.
 
+### Zustand in der URL, nicht im Browser
+
+Suchfilter stehen als Query-Parameter in der Adresse, nicht in `useState`. Daraus folgt
+dreierlei: der Server filtert, die Suche ist teilbar und als Lesezeichen speicherbar, und
+die Zurück-Taste funktioniert. Zurücksetzen ist damit **eine Navigation, keine Aktion**,
+also ein `<Link>` auf die Seite ohne die entsprechenden Parameter.
+
+**Nicht** `<button type="reset">` benutzen. Das setzt die Felder auf ihren `defaultValue`
+zurück, und der kommt bei uns aus der URL. Ein Reset würde die aktuellen Suchwerte
+wiederherstellen statt sie zu leeren.
+
+### Unkontrollierte Felder brauchen einen Schlüssel
+
+**Gefunden am 08.10.2026 bei der Umsetzung von #1.** Nach dem Zurücksetzen blieben
+Kategorie und Standort in den Auswahllisten stehen, obwohl die URL die Parameter nicht
+mehr enthielt.
+
+Ursache: `defaultValue` wirkt **nur beim ersten Einhängen**. Bei einer
+Client-Navigation über `next/link` rendert der Server neu, React benutzt aber das
+vorhandene DOM-Element weiter, und ein eingehängtes unkontrolliertes Feld behält seinen
+Wert. Die neue Vorgabe kommt nie an.
+
+Dass die Datumsfelder sich leerten und die Auswahllisten nicht, liegt an den
+unterschiedlichen Mechanismen: beim `<input>` setzt React das `value`-Attribut, beim
+`<select>` das `selected` an den Optionen.
+
+**Lösung:** dem Formular einen `key` geben, der sich mit der Suche ändert. Ändert sich
+der Schlüssel, baut React das Element samt Inhalt neu auf, und die Vorgaben greifen
+wieder.
+
+```tsx
+const schluessel = [werte.von, werte.bis, werte.kategorie, werte.standort].join("|");
+// ...
+<form method="get" key={schluessel}>
+```
+
+Kontrollierte Felder wären die andere Lösung, bräuchten aber Zustand im Browser und
+damit `"use client"`. Das widerspricht der Voreinstellung Server-Komponente und wäre in
+Phase 5 wieder umzubauen. Der Schlüssel kostet zwei Zeilen.
+
 ### Komponenten
 
 Eine Komponente hat eine Aufgabe. Geteilt wird, wenn ein Teil eigenständig wiederverwendet
@@ -188,6 +228,8 @@ noch etwas.
 | Warum validiert ihr zweimal? | Abschnitt 3, Server entscheidet, Client ist Komfort |
 | Wo prüfst du, ob zwei Reservierungen sich überlappen, und warum dort? | Domänenschicht, Abschnitt 1 |
 | Überlappen 24. bis 28.09. und 28.09. bis 02.10.? | **Ja.** Der Rückgabetag bleibt belegt, Abschnitt 4 unten |
+| Warum setzt sich ein Formularfeld nicht zurück, obwohl sich die Daten geändert haben? | Abschnitt 3, `defaultValue` wirkt nur beim Einhängen, deshalb der `key` |
+| Warum steht der Suchzustand in der URL und nicht in `useState`? | Abschnitt 3, der Server filtert, die Suche ist teilbar |
 
 ### Die Fachfrage zum Zeitraum
 
