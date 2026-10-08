@@ -89,3 +89,6 @@ export const maschinen: Maschine[] = [
         ],
     },
 ];
+
+export const kategorien = [...new Set(maschinen.map((m) => m.kategorie))].sort();
+export const standorte = [...new Set(maschinen.map((m) => m.standort))].sort();
