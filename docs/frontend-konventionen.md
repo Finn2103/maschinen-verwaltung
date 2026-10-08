@@ -1,6 +1,6 @@
 # Oberflächen-Konventionen
 
-**Status:** Abschnitt 2 am 01.10.2026 entschieden. Offen bleiben die Sprache der Fachbegriffe (3.4) und die Rückgabetag-Frage (4)
+**Status:** Alle Entscheidungen getroffen. Abschnitt 2 am 01.10.2026, Benennung und Rückgabetag am 08.10.2026
 
 Zweck: Im Review stellt das Lehrerteam **vertiefende Fragen ähnlich einem Fachgespräch in
 der Abschlussprüfung**. Wer Muster beim Programmieren nebenbei wählt, kann hinterher nicht
@@ -161,7 +161,13 @@ Klassendiagramm und Akzeptanzkriterien dieselben Wörter benutzen. Technische Be
 bleiben englisch. Einmal festlegen und durchhalten, Mischformen wie `MachineReservierung`
 fallen im Review auf.
 
-> **Entscheidung:** ☐ Fachbegriffe deutsch ☐ alles englisch
+> **Entschieden am 08.10.2026: Fachbegriffe deutsch.** `Maschine`, `Reservierung`,
+> `Belegung`, `Zeitraum`, `Standort`, `Kategorie`, `Inventarnummer`. Technische Begriffe
+> bleiben englisch: `Component`, `Route Handler`, `Props`, `State`.
+>
+> Grund: Code, ERD, Klassendiagramm und Akzeptanzkriterien benutzen dann dieselben Wörter.
+> Wer im Fachgespräch eine Akzeptanzkriterium vorliest und danach den Code zeigt, soll
+> nicht zwischen `machine` und `Maschine` übersetzen müssen.
 
 ---
 
@@ -181,16 +187,41 @@ noch etwas.
 | Was heißt DOM, was heißt ARIA? | `docs/wissen/` *(noch anzulegen)* |
 | Warum validiert ihr zweimal? | Abschnitt 3, Server entscheidet, Client ist Komfort |
 | Wo prüfst du, ob zwei Reservierungen sich überlappen, und warum dort? | Domänenschicht, Abschnitt 1 |
-| Überlappen 24. bis 28.09. und 28.09. bis 02.10.? | **fachliche Entscheidung, noch offen**: siehe unten |
+| Überlappen 24. bis 28.09. und 28.09. bis 02.10.? | **Ja.** Der Rückgabetag bleibt belegt, Abschnitt 4 unten |
 
-### Die offene Fachfrage
+### Die Fachfrage zum Zeitraum
 
-Wenn eine Maschine am 28. zurückkommt und am 28. wieder rausgeht: Konflikt oder nicht? Das
-ist keine technische, sondern eine fachliche Entscheidung, und sie bestimmt, ob die Prüfung
-`<` oder `<=` verwendet. Sie gehört entschieden und hier festgehalten, **bevor** die
-Domänenklasse geschrieben wird.
+Wenn eine Maschine am 28. zurückkommt und am 28. wieder rausgeht: Konflikt oder nicht?
 
-> **Entscheidung:** ☐ Rückgabetag ist wieder buchbar ☐ Rückgabetag bleibt belegt
+> **Entschieden am 08.10.2026: Der Rückgabetag bleibt belegt.**
+
+Ein Zeitraum ist damit ein **geschlossenes Intervall**: `von` und `bis` gehören beide dazu.
+Die Reservierung vom 24. bis 28.09. belegt den 28. mit, eine Reservierung vom 28.09. bis
+02.10. **überlappt** und wird abgelehnt.
+
+Begründung: am Rückgabetag ist die Maschine noch beim Kunden, sie muss zurückgebracht,
+geprüft und gegebenenfalls gereinigt werden, bevor sie wieder rausgeht. Eine
+Doppelbelegung am Wechseltag wäre im Betrieb nicht zu halten.
+
+### Was daraus im Code folgt
+
+Zwei Zeiträume `[von1, bis1]` und `[von2, bis2]` überlappen genau dann, wenn
+
+```
+von1 <= bis2  und  von2 <= bis1
+```
+
+Beide Vergleiche mit `<=`, weil die Intervalle geschlossen sind. Wäre der Rückgabetag wieder
+buchbar, stünde an beiden Stellen `<`.
+
+**Die Bedingung prüft nicht, welcher Zeitraum früher liegt.** Sie deckt alle Fälle ab:
+Teilüberlappung von links, von rechts, vollständige Umschließung in beide Richtungen und
+Gleichheit. Das ist der Grund, warum man sie so und nicht mit einer Fallunterscheidung
+schreibt.
+
+Diese Regel gehört in die **Domänenschicht** und wird in der Datenbank zusätzlich
+abgesichert (#45), weil eine Prüfung allein in der Anwendung bei gleichzeitigen Anfragen
+nicht hält.
 
 ---
 
