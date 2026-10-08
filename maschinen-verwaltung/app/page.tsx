@@ -1,6 +1,7 @@
 import { maschinen } from "@/lib/maschinen";
 import { suche, zeitraumFehler, type Suchfilter } from "@/lib/verfuegbarkeit";
 import { Suchformular } from "@/components/Suchformular";
+import Link from "next/link";
 
 type Props = { searchParams: Promise<Suchfilter> };
 
@@ -29,7 +30,7 @@ export default async function Startseite({ searchParams }: Props) {
           <p className="font-medium">Keine Maschine im gewählten Zeitraum frei.</p>
           <p className="mt-1 text-neutral-600 dark:text-neutral-400">
             Wählen Sie einen anderen Zeitraum, oder setzen Sie Kategorie und
-            Standort auf „alle".
+            Standort auf &bdquo;alle&ldquo;.
           </p>
         </div>
       ) : (
@@ -45,6 +46,17 @@ export default async function Startseite({ searchParams }: Props) {
                 <dt>Standort</dt>
                 <dd>{maschine.standort}</dd>
               </dl>
+
+              <Link
+                href={`/reservieren/${maschine.inventarnummer}${
+                  filter.von && filter.bis
+                    ? `?von=${filter.von}&bis=${filter.bis}`
+                    : ""
+                }`}
+                className="mt-2 inline-block text-sm underline underline-offset-2"
+              >
+                Reservieren
+              </Link>
             </li>
           ))}
         </ul>
