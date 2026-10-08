@@ -19,6 +19,7 @@ höchste Punktzahl allein ist keine Begründung. Nutzwertanalyse ist Prüfungsth
 | 0008 | Anmeldung über Supabase statt Authelia | offen, Begründung: zwei Benutzerverwaltungen vermeiden |
 | 0009 | Was „barrierefrei nach ISO 9241" für dieses Projekt heißt | offen. Die Checkliste gilt dann für alle Oberflächen-Items |
 | [0010](0010-programmiersprache.md) | Programmiersprache und Typisierung | **TypeScript**: Nutzwert 4,45 · C# 3,70 · JavaScript 3,25 · C++ 2,80, korrigiert am 25.09.2026 |
+| [0011](0011-speicherzugriff.md) | Speicherzugriff über eine Schnittstelle | **Schnittstelle mit zwei Umsetzungen**, Arbeitsspeicher jetzt, PostgreSQL nach #45. Von Anfang an asynchron, damit das Umstellen kein Umbau wird |
 
 **Stand 01.10.2026.** Vollständig sind **0001**, **0004** und **0010**: Entscheidung,
 Interpretation und Konsequenzen stehen jeweils. Bei 0001 trägt #55 noch die Argumente des
