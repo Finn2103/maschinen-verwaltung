@@ -14,8 +14,11 @@ export function Suchformular({ werte, fehler }: Props) {
     // alten Wert. Der Schluessel erzwingt das.
     const schluessel = [werte.von, werte.bis, werte.kategorie, werte.standort].join("|");
 
+    // autoComplete="off": Browser stellen Formularwerte bei F5 wieder her. Hier
+    // ist die URL die Wahrheit, sonst widerspricht das Feld der Trefferliste.
+    // Siehe docs/frontend-konventionen.md Abschnitt 3.
     return (
-        <form method="get" key={schluessel} className="mt-6 space-y-4">
+        <form method="get" key={schluessel} autoComplete="off" className="mt-6 space-y-4">
             <fieldset className="space-y-2">
                 <legend className="text-sm font-medium">Zeitraum</legend>
 
