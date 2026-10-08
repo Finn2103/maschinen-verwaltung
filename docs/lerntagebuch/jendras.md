@@ -10,6 +10,53 @@ die Abgabe zusätzlich eine Word-Fassung im Loop-Arbeitsbereich verlangt ist.
 
 ---
 
+## 2026-10-08 · Donnerstag
+
+**Tätigkeit**
+
+- Projektstand gegen die Review-Vorgaben vom 15.10. geprüft
+- #40 und #41 abgeschlossen, jeweils mit Abschlusskommentar und Begründung
+- Sprint 1 geschlossen, 14 unfertige Items nach Sprint 2 übertragen, Abschluss dokumentiert
+- Reservieren gebaut: Fachlogik, Speicher-Umsetzung, Server Action, Formular
+- Zwei Kriterien in #4 ergänzt, die aus Nicos Docker-Dokumentation kommen
+- ADR 0009 geschrieben: ISO 9241 in prüfbare Kriterien übersetzt (#44)
+- ADR 0011 geschrieben: Speicherzugriff über eine Schnittstelle
+- Vier Tickets für Arbeit nachgetragen, die erledigt war und kein Ticket hatte
+- #48 abgeschlossen, der Nachweis der KI-Nutzung war fast fertig
+
+**Problem**
+
+- Sprint 1 lag acht Tage über seinem Ende offen. Unser Plan sah ein Review am 01.10. vor, das nicht stattfand, und ohne Review gab es keinen Anlass abzuschließen
+- Auf dem Board sahen drei von acht Issues erledigt aus, obwohl ich 71 Commits habe und alle anderen zusammen 13. Meine größte Arbeit hatte kein Ticket: Repo aufsetzen, Backlog neu fassen, Konventionen festlegen
+- #8 kann ich nicht anfangen, weil #43 (Anmeldeverfahren) kein einziges abgehaktes Kriterium hat. Ich würde sonst eventuell doppelt bauen
+- Nach einem Neuladen mit F5 standen wieder Werte in den Suchfeldern, obwohl die URL leer war
+- Nach einer abgelehnten Reservierung waren Name, E-Mail und Telefon leer, der Kunde hätte alles neu eintippen müssen
+- Das Akzeptanzkriterium „barrierefrei nach ISO 9241" in #1 verwies auf eine Checkliste, die es nicht gab
+- Die Reservierungen liegen im Arbeitsspeicher, weil das Datenmodell aus #45 noch nicht steht
+
+**Lösung**
+
+- Sprint 1 geschlossen und die Zahlen festgehalten: 16 geplant, 2 fertig, 14 übertragen. Dazu der Befund, dass ein Sprint bei uns 14 Kalendertage hat, aber nur vier Schultage, und die letzten fünf Tage keine Projektzeit haben
+- Vier Tickets für erledigte Arbeit nachgetragen, jedes mit Beleg und Datum aus der Git-Historie und mit dem Hinweis, dass es nachgetragen wurde. Dieselbe Logik wie bei #39 bis #41, nach denen die Lehrkräfte selbst gefragt hatten
+- Den F5-Fehler mit `autoComplete="off"` behoben. Das war keine Fehlfunktion, sondern eine Hilfe des Browsers: Formularwerte werden beim Neuladen absichtlich wiederhergestellt
+- Die Server Action gibt die Eingaben im Fehlerfall zurück, das Formular zeigt sie wieder an. Das Wiederanzeigen ist Darstellung und steht deshalb in der Action, nicht in der Fachlogik
+- ADR 0009 geschrieben: drei einschlägige Teile der Norm benannt, Checkliste in sechs Abschnitten, jeder Punkt mit Tastatur, Screenreader oder Kontrastmessung nachweisbar
+- ADR 0011 geschrieben: Schnittstelle zwischen Fachlogik und Speicher, zwei Umsetzungen, eine Auswahlstelle. Von Anfang an asynchron, damit das Umstellen kein Umbau wird
+
+**Lessons Learned**
+
+- **Ein Sprintende braucht einen Termin, an dem wir es selbst feststellen**, auch wenn kein Review von außen stattfindet. Sonst läuft die Arbeit weiter und niemand zieht einen Strich
+- Unfertige Arbeit geht nach Scrum in den nächsten Sprint. Sie wird nicht gelöscht und nicht als erledigt gezählt
+- **Arbeit ohne Ticket ist auf dem Board nicht vorhanden**, egal wie viel sie war. Das trifft Scrum-Master- und Dokumentationsarbeit besonders, weil sie nie aus einer User Story kommt
+- Die Richtung der Abhängigkeit entscheidet, ob ein Wechsel ein Umbau ist. Wenn die Fachlogik sagt, **was** sie braucht, und der Speicher sich danach richtet, kostet der Wechsel eine Zeile. Das ist Dependency Inversion, und es ist die Stelle, an der der geforderte objektorientierte Ansatz einen echten Zweck hat
+- Eine Schnittstelle muss **von Anfang an asynchron** sein, auch wenn die erste Umsetzung das nicht braucht. Synchron gebaut müsste beim Wechsel jeder Aufrufer mitgeändert werden, und genau das wollte man vermeiden
+- **ISO 9241-110 heißt seit 2020 „Interaktionsprinzipien"** und hat sieben Prinzipien. Die Fassung von 2006 hieß „Grundsätze der Dialoggestaltung", und die Begriffe Lernförderlichkeit, Fehlertoleranz und Individualisierbarkeit gibt es nicht mehr. Wer sie nennt, zitiert eine zurückgezogene Ausgabe
+- Eine Norm wird prüfbar, indem man sie **einmal** in eine Liste übersetzt, nicht indem man sie je Item neu auslegt. Die WCAG-Erfolgskriterien sind dafür der Aufhänger, weil sie enger und messbar formuliert sind
+- Ein Fehler, der nach einem Neuladen auftritt, ist oft keiner: Browser helfen und stellen Formularwerte wieder her. Wer den Zustand in die URL legt, muss ihnen das abgewöhnen
+- Software prüfen heißt, auch die unangenehmen Fälle auszulösen. Den Fehler mit den verlorenen Eingaben habe ich nur gefunden, weil ich eine Ablehnung absichtlich erzeugt habe
+
+---
+
 ## 2026-10-01 · Donnerstag
 
 **Tätigkeit**
