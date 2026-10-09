@@ -17,7 +17,7 @@ höchste Punktzahl allein ist keine Begründung. Nutzwertanalyse ist Prüfungsth
 | [0006](0006-datenhaltung.md) | Datenhaltung und Datenbank-API | **Supabase, selbst gehostet**: Supabase vs. Oracle vs. PocketBase, Nutzwert 4,40 / 3,60 / 3,35 |
 | 0007 | Supabase als Cloud oder selbst gehostet | **entfällt**, in ADR 0006 mitentschieden: selbst gehostet auf der Strato-VM |
 | 0008 | Anmeldung über Supabase statt Authelia | offen, Begründung: zwei Benutzerverwaltungen vermeiden |
-| 0009 | Was „barrierefrei nach ISO 9241" für dieses Projekt heißt | offen. Die Checkliste gilt dann für alle Oberflächen-Items |
+| [0009](0009-barrierefreiheit.md) | Was „barrierefrei nach ISO 9241" für dieses Projekt heißt | **Checkliste aus ISO 9241-110:2020 und -171, an WCAG 2.1 AA aufgehängt.** Gilt für alle Oberflächen-Items |
 | [0010](0010-programmiersprache.md) | Programmiersprache und Typisierung | **TypeScript**: Nutzwert 4,45 · C# 3,70 · JavaScript 3,25 · C++ 2,80, korrigiert am 25.09.2026 |
 | [0011](0011-speicherzugriff.md) | Speicherzugriff über eine Schnittstelle | **Schnittstelle mit zwei Umsetzungen**, Arbeitsspeicher jetzt, PostgreSQL nach #45. Von Anfang an asynchron, damit das Umstellen kein Umbau wird |
 
