@@ -6,6 +6,12 @@
 - **Betrifft:** [#6](https://github.com/Finn2103/maschinen-verwaltung/issues/6) und alle Stories der Anwendungsentwicklung
 - **Quelle:** `Nutzwerkanalysen.xlsx`, Blatt `Sprache`, Zahlen und Formulierungen unverändert übernommen
 
+## In einem Satz
+
+**TypeScript**, weil es die einzige Sprache ist, die zur Client-Wahl passt. **Nicht**, weil
+es typsicherer oder objektorientierter wäre: dort liegt C# mit 5 zu 4 vorn. Die
+Entscheidung ist eine Folge von ADR 0004.
+
 ## Kontext
 
 Die Pflichtliste verlangt einen objektorientierten Ansatz, ausdrücklich im Hinblick auf die

@@ -7,6 +7,14 @@ Wo mehrere Optionen gegeneinander stehen, gehört eine **Nutzwertanalyse** in di
 ADR, gewichtete Kriterien, Punkte, Nutzwert, und eine Interpretation. Die
 höchste Punktzahl allein ist keine Begründung. Nutzwertanalyse ist Prüfungsthema.
 
+**Jede entschiedene ADR beginnt mit einem Abschnitt „In einem Satz“.** Darin steht in
+zwei bis drei Zeilen, was entschieden wurde und warum. Wer die Entscheidung im
+Fachgespräch aufruft, liest diesen Abschnitt, nicht das ganze Dokument. Die
+Begründung im Detail, die Konsequenzen und die Tabellen stehen darunter.
+
+**Wer ein Issue schließt, prüft das zugehörige ADR auf offene Stellen.** Sonst bleibt
+Arbeit in einem Dokument liegen, ohne auf dem Board zu erscheinen (#70).
+
 | Nr. | Entscheidung | Status |
 | --- | --- | --- |
 | [0001](0001-linux-distribution.md) | Linux-Distribution für die Strato-VM | **Debian 13** entschieden. Ubuntu 26.04 gewinnt die Analyse (625 zu 545), die Abweichung ist am 25.09.2026 begründet und zwei Annahmen extern geprüft. Die Argumente des Teams trägt #55 nach |

@@ -5,6 +5,12 @@
 - **Entschieden von:** Finn Jendras (Anwendungsentwicklung)
 - **Betrifft:** [#1](https://github.com/Finn2103/maschinen-verwaltung/issues/1) · [#2](https://github.com/Finn2103/maschinen-verwaltung/issues/2) · [#8](https://github.com/Finn2103/maschinen-verwaltung/issues/8) · [#9](https://github.com/Finn2103/maschinen-verwaltung/issues/9) · [#45](https://github.com/Finn2103/maschinen-verwaltung/issues/45)
 
+## In einem Satz
+
+Zwischen Fachlogik und Speicher steht eine **Schnittstelle mit zwei Umsetzungen**. Deshalb
+kostet der Wechsel vom Arbeitsspeicher auf PostgreSQL eine Zeile statt eines Umbaus. Der
+Kern ist, dass die Methoden von Anfang an asynchron sind.
+
 ## Kontext
 
 Die Oberfläche zu #1 wird gebaut, **bevor** das Datenmodell aus #45 abgenommen und das

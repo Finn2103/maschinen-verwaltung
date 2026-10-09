@@ -6,6 +6,13 @@
 - **Betrifft:** [#4](https://github.com/Finn2103/maschinen-verwaltung/issues/4) · [#5](https://github.com/Finn2103/maschinen-verwaltung/issues/5) · [#11](https://github.com/Finn2103/maschinen-verwaltung/issues/11) · [#13](https://github.com/Finn2103/maschinen-verwaltung/issues/13)
 - **Quelle:** `Nutzwerkanalyse.xlsx`, diese Datei ist die Überführung in Markdown, die Zahlen sind unverändert
 
+## In einem Satz
+
+**Debian 13**, obwohl Ubuntu 26.04 die Analyse mit 625 zu 545 gewinnt. Grund: wir kennen
+Debian besser, und der Server läuft bereits darauf. Debian gewinnt **kein einzelnes
+Kriterium**; die Abweichung ist eine Projektentscheidung gegen die Rangfolge, keine
+technische Behauptung.
+
 ## Kontext
 
 Auf der Strato-VM läuft ein Linux. Welches, wird kriteriengeleitet entschieden und nicht
