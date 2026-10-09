@@ -30,10 +30,8 @@ Sie sind in der Git-Historie nachvollziehbar, falls sie noch gebraucht werden.
 
 Beides ist Bringschuld und wird bewertet:
 
-- **`prompts.md`**: Nachweis der KI-Nutzung: welche Aufgabe, welcher Prompt, was kam
-  zurück, was davon wurde übernommen und was verworfen. Nicht jede Zeile, aber die
-  Entscheidungen: wo hat das Werkzeug getragen, wo hat es sich geirrt, wie wurde es
-  geprüft.
+- **[`prompts/`](prompts/README.md)**: Nachweis der KI-Nutzung, eine Datei je Arbeitstag.
+  Angelegt am 25.09.2026, Struktur und Vorlage stehen. Die Einträge fehlen noch.
 - **Eigener KI-Assistent für User Stories**: laut Aufgabenstellung ausdrücklich gefordert
   und noch nicht angelegt. Dazu gehört die Systemanweisung, die ihn auf die
   Story-Struktur, Lernfeld- und Bündelungsfach-Zuordnung und die T-Shirt-Schätzung

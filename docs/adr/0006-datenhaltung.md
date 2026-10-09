@@ -6,6 +6,12 @@
 - **Betrifft:** [#10](https://github.com/Finn2103/maschinen-verwaltung/issues/10) · [#11](https://github.com/Finn2103/maschinen-verwaltung/issues/11) · [#6](https://github.com/Finn2103/maschinen-verwaltung/issues/6) · [#8](https://github.com/Finn2103/maschinen-verwaltung/issues/8)
 - **Ersetzt:** ADR 0007 (Cloud oder selbst gehostet), die Frage ist hier mitentschieden
 
+## In einem Satz
+
+**Supabase, selbst gehostet** auf der Strato-VM: PostgreSQL mit PostgREST als
+Datenbank-API. Oracle käme mit einer Lizenzfrage und ohne mitgelieferte API, PocketBase
+erzeugt das Schema implizit und ist damit unzulässig.
+
 ## Kontext
 
 Die Pflichtliste verlangt eine **Datenbank-API**: der Client spricht nicht mit der Datenbank,

@@ -1,6 +1,6 @@
 # Oberflächen-Konventionen
 
-**Status:** Entwurf, die offenen Punkte in Abschnitt 2 entscheidet das Team, dann gilt das Dokument
+**Status:** Alle Entscheidungen getroffen. Abschnitt 2 am 01.10.2026, Benennung und Rückgabetag am 08.10.2026
 
 Zweck: Im Review stellt das Lehrerteam **vertiefende Fragen ähnlich einem Fachgespräch in
 der Abschlussprüfung**. Wer Muster beim Programmieren nebenbei wählt, kann hinterher nicht
@@ -45,14 +45,44 @@ Wenn Tempo wichtiger ist als Erklärbarkeit und du Tailwind schon kannst, ist Ta
 vertretbar, dann aber bewusst, mit dem Satz „utility-first, damit Stile nicht auseinander
 laufen" im Kopf.
 
-> **Entscheidung:** ☐ CSS Modules ☐ Tailwind ☐ anderes: ______
+> **Entschieden am 01.10.2026: Tailwind CSS.**
+>
+> Begründung des Teams: CSS beherrsche ich bereits, CSS Modules wären für mich kaum etwas
+> Neues. Die Aufgabenstellung verlangt Technologien, die wir noch nicht gut können, also
+> nehmen wir Tailwind. **Falls sich am Ende herausstellt, dass Tailwind hier die falsche
+> Wahl war, ist genau das ein Ergebnis**, das sich im Review vertreten lässt. Eine
+> begründete Entscheidung, die sich als suboptimal erweist, ist mehr wert als eine
+> Entscheidung, bei der nichts gelernt wurde.
+>
+> **Damit eingekauft, bewusst:** zusätzliche Abhängigkeit und ein Bauschritt. Und die
+> Rückfrage im Fachgespräch, warum zwanzig Klassennamen im Markup stehen. Die Antwort
+> darauf: utility-first, damit Stile nicht auseinanderlaufen und jede Änderung dort
+> passiert, wo das Element steht.
+>
+> **Wiederverwendung läuft über Komponenten, nicht über `@apply`.** `@apply` kann man
+> benutzen, es dreht Tailwind aber gegen seine eigene Idee: man hätte dann CSS-Klassen, die
+> innen aus Utilities bestehen. Wird `@apply` doch irgendwo nötig, kommt eine Notiz hierher,
+> warum.
 
 ### 2.2 Wo liegen die Design-Tokens?
 
 Farben, Abstände, Schriftgrößen an **einer** Stelle als CSS-Variablen, nicht verstreut.
 Zwei Fragen, die dazugehören: Gibt es eine dunkle Darstellung? Woher kommen die Kontrastwerte?
 
-> **Entscheidung:** Datei: ______ · dunkle Darstellung ☐ ja ☐ nein
+> **Entschieden am 01.10.2026:** Tokens in **`app/globals.css`**, dunkle Darstellung **ja**.
+>
+> Alle Farben einmal als CSS-Variablen auf `:root`, für die dunkle Darstellung an einer
+> Stelle überschrieben. Komponenten greifen nur über die Variablen zu und kennen keine
+> festen Farbwerte, sonst steht in jeder Datei dieselbe Farbe zweimal.
+>
+> **Zur Ordnerstruktur:** gewünscht war ein `styles`-Ordner mit mehreren nach Logik
+> getrennten Dateien, etwa `main.css` und `button.css`. Mit Tailwind bleiben diese Dateien
+> weitgehend leer, weil die Stile im Markup stehen. Deshalb: das Globale, also Tokens, Reset
+> und dunkle Darstellung, liegt in `app/globals.css`. Wird darüber hinaus eigenes CSS nötig,
+> kommt es nach Logik getrennt in `styles/` und bekommt hier eine Zeile, wofür.
+>
+> **Kontrastwerte werden gemessen, nicht geschätzt.** Woher die Mindestwerte kommen, legt
+> die Barrierefreiheits-Checkliste aus #44 fest.
 
 ### 2.3 Zustandsverwaltung
 
@@ -60,7 +90,40 @@ Solange es geht: **kein globaler Speicher.** Zustand so lokal wie möglich, Date
 nach unten, Ereignisse nach oben. Ein Store wird erst eingeführt, wenn ein konkretes Problem
 ihn erzwingt, und dann mit einer Notiz hier, warum.
 
-> **Entscheidung:** ☐ nur lokaler Zustand ☐ Store ab: ______
+> **Entschieden am 01.10.2026: nur lokaler Zustand.** Ein Store wird eingeführt, wenn ein
+> konkretes Problem ihn erzwingt, und dann mit einer Notiz hier, welches.
+
+### Was damit gemeint ist
+
+Zustand ist jeder Wert, der sich ändert und nach dem die Oberfläche anders aussehen muss.
+In #1 sind das: der eingegebene Zeitraum, die Kategorie, die Trefferliste, ob gerade gesucht
+wird, welche Fehlermeldung steht.
+
+Dafür gibt es drei Stufen:
+
+| Stufe | Wo der Wert liegt | Wann |
+| --- | --- | --- |
+| **Lokal** | in der Komponente, die ihn braucht | ein aufgeklapptes Menü, ein einzelnes Feld |
+| **Hochgezogen** | in der gemeinsamen Elternkomponente, nach unten durchgereicht | zwei Komponenten brauchen denselben Wert |
+| **Globaler Speicher** | außerhalb des Komponentenbaums, für alle erreichbar | viele weit auseinanderliegende Stellen |
+
+„Daten über Props nach unten, Ereignisse nach oben" ist die mittlere Stufe. Beispiel aus
+#1: Suchformular und Ergebnisliste brauchen beide die Filter, also liegen die Filter auf
+der Seite darüber. Das Formular meldet Änderungen nach oben, die Liste bekommt das Ergebnis
+nach unten.
+
+**Warum kein Store.** Nicht aus Prinzip, sondern weil er ein Problem löst, das wir nicht
+haben: Werte, die an vielen weit entfernten Stellen gebraucht werden. Bei uns liegen
+Formular und Liste direkt nebeneinander.
+
+Dazu kommt ein Argument, das im Fachgespräch trägt: **ein Store ist Zustand im Browser.**
+Jeder Wert dort muss mit dem Server abgeglichen werden und kann mit ihm auseinanderlaufen.
+Weniger Zustand im Browser heißt weniger Gelegenheit für genau diesen Fehler. Das passt zur
+Entscheidung aus [ADR 0004](adr/0004-client-technologie.md), Server-Komponenten als
+Voreinstellung zu nehmen.
+
+**Wenn es doch eng wird:** erst prüfen, ob Hochziehen reicht. In den meisten Fällen reicht
+es.
 
 ---
 
@@ -86,6 +149,46 @@ Der Reservierungskonflikt aus #1 ist ein **gültiges Ergebnis**: „dieser Zeitr
 belegt vom … bis …". Kein `throw`, sondern ein Rückgabewert, den der Typ beschreibt. Die
 Oberfläche zeigt ihn am betroffenen Feld.
 
+### Zustand in der URL, nicht im Browser
+
+Suchfilter stehen als Query-Parameter in der Adresse, nicht in `useState`. Daraus folgt
+dreierlei: der Server filtert, die Suche ist teilbar und als Lesezeichen speicherbar, und
+die Zurück-Taste funktioniert. Zurücksetzen ist damit **eine Navigation, keine Aktion**,
+also ein `<Link>` auf die Seite ohne die entsprechenden Parameter.
+
+**Nicht** `<button type="reset">` benutzen. Das setzt die Felder auf ihren `defaultValue`
+zurück, und der kommt bei uns aus der URL. Ein Reset würde die aktuellen Suchwerte
+wiederherstellen statt sie zu leeren.
+
+### Unkontrollierte Felder brauchen einen Schlüssel
+
+**Gefunden am 08.10.2026 bei der Umsetzung von #1.** Nach dem Zurücksetzen blieben
+Kategorie und Standort in den Auswahllisten stehen, obwohl die URL die Parameter nicht
+mehr enthielt.
+
+Ursache: `defaultValue` wirkt **nur beim ersten Einhängen**. Bei einer
+Client-Navigation über `next/link` rendert der Server neu, React benutzt aber das
+vorhandene DOM-Element weiter, und ein eingehängtes unkontrolliertes Feld behält seinen
+Wert. Die neue Vorgabe kommt nie an.
+
+Dass die Datumsfelder sich leerten und die Auswahllisten nicht, liegt an den
+unterschiedlichen Mechanismen: beim `<input>` setzt React das `value`-Attribut, beim
+`<select>` das `selected` an den Optionen.
+
+**Lösung:** dem Formular einen `key` geben, der sich mit der Suche ändert. Ändert sich
+der Schlüssel, baut React das Element samt Inhalt neu auf, und die Vorgaben greifen
+wieder.
+
+```tsx
+const schluessel = [werte.von, werte.bis, werte.kategorie, werte.standort].join("|");
+// ...
+<form method="get" key={schluessel}>
+```
+
+Kontrollierte Felder wären die andere Lösung, bräuchten aber Zustand im Browser und
+damit `"use client"`. Das widerspricht der Voreinstellung Server-Komponente und wäre in
+Phase 5 wieder umzubauen. Der Schlüssel kostet zwei Zeilen.
+
 ### Komponenten
 
 Eine Komponente hat eine Aufgabe. Geteilt wird, wenn ein Teil eigenständig wiederverwendet
@@ -98,7 +201,13 @@ Klassendiagramm und Akzeptanzkriterien dieselben Wörter benutzen. Technische Be
 bleiben englisch. Einmal festlegen und durchhalten, Mischformen wie `MachineReservierung`
 fallen im Review auf.
 
-> **Entscheidung:** ☐ Fachbegriffe deutsch ☐ alles englisch
+> **Entschieden am 08.10.2026: Fachbegriffe deutsch.** `Maschine`, `Reservierung`,
+> `Belegung`, `Zeitraum`, `Standort`, `Kategorie`, `Inventarnummer`. Technische Begriffe
+> bleiben englisch: `Component`, `Route Handler`, `Props`, `State`.
+>
+> Grund: Code, ERD, Klassendiagramm und Akzeptanzkriterien benutzen dann dieselben Wörter.
+> Wer im Fachgespräch eine Akzeptanzkriterium vorliest und danach den Code zeigt, soll
+> nicht zwischen `machine` und `Maschine` übersetzen müssen.
 
 ---
 
@@ -118,16 +227,43 @@ noch etwas.
 | Was heißt DOM, was heißt ARIA? | `docs/wissen/` *(noch anzulegen)* |
 | Warum validiert ihr zweimal? | Abschnitt 3, Server entscheidet, Client ist Komfort |
 | Wo prüfst du, ob zwei Reservierungen sich überlappen, und warum dort? | Domänenschicht, Abschnitt 1 |
-| Überlappen 24. bis 28.09. und 28.09. bis 02.10.? | **fachliche Entscheidung, noch offen**: siehe unten |
+| Überlappen 24. bis 28.09. und 28.09. bis 02.10.? | **Ja.** Der Rückgabetag bleibt belegt, Abschnitt 4 unten |
+| Warum setzt sich ein Formularfeld nicht zurück, obwohl sich die Daten geändert haben? | Abschnitt 3, `defaultValue` wirkt nur beim Einhängen, deshalb der `key` |
+| Warum steht der Suchzustand in der URL und nicht in `useState`? | Abschnitt 3, der Server filtert, die Suche ist teilbar |
 
-### Die offene Fachfrage
+### Die Fachfrage zum Zeitraum
 
-Wenn eine Maschine am 28. zurückkommt und am 28. wieder rausgeht: Konflikt oder nicht? Das
-ist keine technische, sondern eine fachliche Entscheidung, und sie bestimmt, ob die Prüfung
-`<` oder `<=` verwendet. Sie gehört entschieden und hier festgehalten, **bevor** die
-Domänenklasse geschrieben wird.
+Wenn eine Maschine am 28. zurückkommt und am 28. wieder rausgeht: Konflikt oder nicht?
 
-> **Entscheidung:** ☐ Rückgabetag ist wieder buchbar ☐ Rückgabetag bleibt belegt
+> **Entschieden am 08.10.2026: Der Rückgabetag bleibt belegt.**
+
+Ein Zeitraum ist damit ein **geschlossenes Intervall**: `von` und `bis` gehören beide dazu.
+Die Reservierung vom 24. bis 28.09. belegt den 28. mit, eine Reservierung vom 28.09. bis
+02.10. **überlappt** und wird abgelehnt.
+
+Begründung: am Rückgabetag ist die Maschine noch beim Kunden, sie muss zurückgebracht,
+geprüft und gegebenenfalls gereinigt werden, bevor sie wieder rausgeht. Eine
+Doppelbelegung am Wechseltag wäre im Betrieb nicht zu halten.
+
+### Was daraus im Code folgt
+
+Zwei Zeiträume `[von1, bis1]` und `[von2, bis2]` überlappen genau dann, wenn
+
+```
+von1 <= bis2  und  von2 <= bis1
+```
+
+Beide Vergleiche mit `<=`, weil die Intervalle geschlossen sind. Wäre der Rückgabetag wieder
+buchbar, stünde an beiden Stellen `<`.
+
+**Die Bedingung prüft nicht, welcher Zeitraum früher liegt.** Sie deckt alle Fälle ab:
+Teilüberlappung von links, von rechts, vollständige Umschließung in beide Richtungen und
+Gleichheit. Das ist der Grund, warum man sie so und nicht mit einer Fallunterscheidung
+schreibt.
+
+Diese Regel gehört in die **Domänenschicht** und wird in der Datenbank zusätzlich
+abgesichert (#45), weil eine Prüfung allein in der Anwendung bei gleichzeitigen Anfragen
+nicht hält.
 
 ---
 

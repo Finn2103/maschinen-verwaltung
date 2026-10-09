@@ -156,6 +156,7 @@ die ursprünglichen Issues, damit die Zuordnung nachvollziehbar bleibt.
 - [ ] Die Oberfläche ist barrierefrei bedienbar **nach ISO 9241**: geprüft gegen die Barrierefreiheits-Checkliste des Projekts (`docs/adr`)
 - [ ] Suche und Reservierung sind vollständig per Tastatur bedienbar
 - [ ] Jedes Formularfeld hat ein zugeordnetes Label, jede Fehlermeldung ist mit ihrem Feld verknüpft
+- [ ] Zeitraum und Filter lassen sich einzeln und gemeinsam zurücksetzen
 
 > **Geändert:** Neu aufgenommen ist die Ablehnung überlappender Reservierungen, 
 > fachlich der schwierigste Teil und in der Vorlage nicht gefordert. Ergänzt um zwei
@@ -171,6 +172,15 @@ die ursprünglichen Issues, damit die Zuordnung nachvollziehbar bleibt.
 > **Offen fürs Team:** Was heißt „barrierefrei nach ISO 9241" für dieses Projekt
 > konkret? Einmal als Checkliste festlegen und als ADR ablegen, dann gilt sie für alle
 > Oberflächen-Items, nicht nur für #1.
+>
+> **Ergänzt am 08.10.2026 während der Umsetzung:** „Zeitraum und Filter lassen sich
+> einzeln und gemeinsam zurücksetzen". Grund: Datumsfelder lassen sich über die
+> Tastatur kaum leeren, und wer einen Filter gesetzt hat, kommt ohne Rücksetzen nicht
+> zur vollen Liste zurück. Die Suche war damit nicht vollständig bedienbar.
+>
+> Bewusst **kein eigenes Issue**: ein Rücksetzen liefert keinen eigenen Nutzen, es macht
+> die bestehende Suche bedienbar. Ein Ticket dafür wäre unter der sinnvollen
+> Schnittgröße. Die Scope-Erweiterung steht dafür hier und als Kriterium im Issue.
 
 ---
 

@@ -1,10 +1,17 @@
 # ADR 0004: Client-Technologie
 
-- **Status:** Entwurf
+- **Status:** **Entschieden.** Interpretation und Konsequenzen am 01.10.2026 vom Team ergänzt
 - **Datum:** 2026-09-18
 - **Entschieden von:** Team (Gruppe 11), im Sprint-1-Planning
 - **Betrifft:** [#1](https://github.com/Finn2103/maschinen-verwaltung/issues/1) · [#2](https://github.com/Finn2103/maschinen-verwaltung/issues/2) · [#6](https://github.com/Finn2103/maschinen-verwaltung/issues/6) · [#8](https://github.com/Finn2103/maschinen-verwaltung/issues/8)
 - **Quelle:** `Nutzwerkanalysen.xlsx`, Blätter `Framework-Ausschluss` und `Framework`, Zahlen und Formulierungen unverändert übernommen
+
+## In einem Satz
+
+**React mit Next.js**, weil es als einzige Option eine **eigene Serverschicht** mitbringt.
+Angular und Flutter sind reine Client-Technologien und bräuchten für die
+Client-Server-Pflicht ein zweites Projekt. Dieses eine Kriterium trägt 0,60 der 0,75
+Punkte Abstand.
 
 ## Kontext
 
@@ -17,7 +24,7 @@ Die Wahl ist damit offen und muss begründet werden.
 | Ausschlusskriterium | React/Next.js | Angular | Flutter |
 | --- | --- | --- | --- |
 | Client-Server-Architektur möglich | ja | ja, mit eigenem Backend | ja, mit eigenem Backend |
-| Client-Server-Architektur möglich | ja | ja | ja |
+| Objektorientierter Ansatz möglich | ja | ja | ja |
 | Barrierefreiheit nach ISO 9241 erreichbar | ja, über DOM und ARIA | ja, über DOM und ARIA | eingeschränkt |
 
 ## Nutzwertanalyse
@@ -40,33 +47,92 @@ Gewichte summieren auf 1,00. Bewertung 1 bis 5. Nutzwert = Summe aus Gewicht × 
 
 **React mit Next.js.**
 
-> **TODO, Interpretation ergänzen.** Die Aufgabenstellung verlangt sie ausdrücklich: die
-> höchste Punktzahl allein ist keine Begründung. Was aus der Tabelle heraussticht:
->
-> - Der Abstand entsteht fast vollständig an **einem** Kriterium, der eigenen Serverschicht
->   (React 1,00 gegen Angular 0,40 gegen Flutter 0,20).
-> - **Angular gewinnt zwei Kriterien** gegen React: datenlastige Oberflächen und
->   Lernzuwachs. Das gehört erwähnt, sonst sieht die Analyse geschönt aus.
-> - **Flutter verliert vor allem an der Barrierefreiheit** (0,40 gegen 1,00): also an einer
->   Pflichtvorgabe, nicht an Bequemlichkeit.
+Die Nutzwertanalyse gewinnt React mit 4,55 vor Angular mit 3,80 und Flutter mit 2,40.
+Die höchste Punktzahl allein ist keine Begründung, deshalb die Aufschlüsselung: woher
+kommen die 0,75 Abstand zwischen React und Angular?
+
+| Kriterium | Gewicht | React | Angular | bringt React |
+| --- | --- | --- | --- | --- |
+| Eigene Serverschicht im selben Projekt | 0,20 | 5 | 2 | **+0,60** |
+| Anlaufzeit | 0,15 | 4 | 2 | **+0,30** |
+| Dokumentation | 0,10 | 5 | 4 | +0,10 |
+| Betrieb ohne Fremddienst | 0,05 | 5 | 4 | +0,05 |
+| Barrierefreiheit nach ISO 9241 | 0,20 | 5 | 5 | 0 |
+| Eignung für datenlastige Oberflächen | 0,15 | 4 | 5 | **−0,15** |
+| Lernzuwachs im Team | 0,15 | 4 | 5 | **−0,15** |
+| | | | | **= +0,75** |
+
+**Die eigene Serverschicht trägt 0,60 der 0,75.** Sie ist der eigentliche Grund. Angular
+und Flutter sind reine Client-Technologien. Die Aufgabenstellung macht eine
+Client-Server-Architektur und eine Datenbank-API zur Pflicht; mit Angular oder Flutter
+bräuchten wir dafür ein zweites Projekt mit eigenem Server, eigenem Aufbau und eigener
+Wartung. Next.js bringt diese Schicht mit.
+
+**Anlaufzeit mit +0,30 ist der zweite Grund.** Der Abgabetermin am 11.12.2026 steht fest
+und wird nicht verschoben. Wie schnell ein Team produktiv wird, ist deshalb kein Komfort,
+sondern ein Projektrisiko.
+
+**Angular gewinnt zwei Kriterien gegen React** und verliert trotzdem: datenlastige
+Oberflächen (5 gegen 4) und Lernzuwachs im Team (5 gegen 4). Zusammen kosten sie React
+0,30. Das gehört hier hin, sonst sieht die Analyse geschönt aus. Angular ist für Formulare
+und Tabellen tatsächlich besser ausgestattet, und es wäre für uns das unbekanntere und
+damit lehrreichere Werkzeug gewesen.
+
+> **Nicht verwechseln:** *Lernzuwachs* ist der Zugewinn an Wissen, nicht die Steilheit der
+> Lernkurve. Ein hoher Lernzuwachs ist nach der Aufgabenstellung **erwünscht**. Dass React
+> hier schlechter abschneidet, ist also ein Nachteil und darf nicht als Vorteil gelesen
+> werden. Wie schnell man loslegen kann, steckt getrennt davon in *Anlaufzeit*.
+
+**Flutter verliert an einer Pflichtvorgabe**, nicht an Bequemlichkeit: Barrierefreiheit 2
+gegen 5. Flutter zeichnet seine Oberfläche selbst, statt sie aus Dokumentelementen
+aufzubauen. Hilfstechnik liest aber den Dokumentenbaum. ISO 9241 steht in der Pflichtliste.
+
+### Abweichung von der Referenzarchitektur
+
+Die Aufgabenstellung nennt Angular, C#/C++ oder Flutter als Orientierung. Wir weichen ab
+und begründen das mit der Client-Server-Pflicht: alle drei genannten Optionen erfüllen sie
+nur mit einem zusätzlichen Server. Die Referenzarchitektur ist ausdrücklich als
+„Überlegungen" mit „Wahlmöglichkeiten, die kriteriengeleitet ausgewählt werden müssen"
+bezeichnet. Genau das ist hier geschehen.
 
 ## Konsequenzen
 
-> **TODO:** ergänzen. Was folgt daraus? Zum Beispiel: die Sprachwahl ist damit eingeschränkt
-> (siehe [ADR 0010](0010-programmiersprache.md)), die Formularvalidierung baut das Team
-> selbst, und der objektorientierte Anteil liegt in der Domänenschicht auf dem Server, nicht
-> in den Komponenten.
+**Wo die Objektorientierung liegt.** Die Pflichtliste verlangt einen objektorientierten
+Ansatz. React-Komponenten sind Darstellung, kein Fachmodell. Die Domänenschicht liegt
+deshalb **im Next.js-Server als Klassen mit Verhalten**: Maschine, Reservierung, Buchung,
+Rechnung tragen ihre Regeln selbst. Die Überlappungsprüfung aus #1 gehört dorthin, nicht in
+eine Komponente und nicht in einen Route Handler.
+
+**Kein Datenzugriff aus dem Browser.** Client-Komponenten sprechen ausschließlich mit
+unseren Route Handlers, diese über die Datenbank-API mit PostgreSQL. Zugangsdaten stehen
+nur serverseitig. Alles, was im Browser läuft, ist einsehbar und veränderbar; eine Prüfung
+dort ist Komfort, keine Absicherung.
+
+**Vier von fünf im Team können React nicht.** Das ist mit der Wahl eingekauft. Es bedeutet
+Einarbeitungszeit und dass Oberflächenarbeit nicht beliebig verteilt werden kann. Die
+Oberflächen-Konventionen (`docs/frontend-konventionen.md`) sind die Gegenmaßnahme: Muster
+einmal festlegen, statt sie in jeder Komponente neu zu erfinden.
+
+**Die Sprachwahl ist damit eingeschränkt**, siehe [ADR 0010](0010-programmiersprache.md).
+Wer diese Entscheidung kippt, kippt jene mit.
+
+**Server ist die Voreinstellung.** `"use client"` nur dort, wo Interaktion nötig ist, und so
+weit unten im Komponentenbaum wie möglich. Das hält die Menge an JavaScript im Browser klein
+und die Datenzugriffe auf dem Server.
 
 ---
 
 ## Anmerkungen zur Vorlage
 
-Gefunden beim Überführen, nicht verändert:
+Gefunden beim Überführen. Was das Team entschieden hat, ist eingearbeitet und hier
+festgehalten; die übrigen Punkte stehen unverändert.
 
-- **Die Ausschlusstabelle nennt „Client-Server-Architektur möglich" zweimal** (Zeile 3 und 4).
-  Zeile 4 ist mit „ja / ja / ja" gefüllt und dürfte ein anderes Kriterium meinen, 
-  vermutlich „Objektorientierter Ansatz möglich". Bitte korrigieren, doppelte Kriterien
-  fallen im Review auf.
+- **Korrigiert am 25.09.2026:** Die Ausschlusstabelle nannte „Client-Server-Architektur
+  möglich" zweimal (Zeile 3 und 4). Zeile 4 war mit „ja / ja / ja" gefüllt. Das Team hat
+  bestätigt, dass dort **„Objektorientierter Ansatz möglich"** gemeint war, und die Zeile
+  entsprechend umbenannt. Die Bewertungen bleiben unverändert, alle drei Kandidaten
+  erfüllen das Kriterium. Am Ergebnis ändert sich nichts, die Ausschlusstabelle wird nicht
+  in den Nutzwert eingerechnet.
 - Zwei Schreibfehler in der Tabelle: **„Keine Erfahrenen Entwickler"** (klein: erfahrenen)
   und **„Infracstructure as Code"** (Infrastructure).
 - Die Gewichte summieren korrekt auf 1,00.
