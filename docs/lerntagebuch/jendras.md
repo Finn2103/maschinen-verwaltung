@@ -10,6 +10,53 @@ die Abgabe zusätzlich eine Word-Fassung im Loop-Arbeitsbereich verlangt ist.
 
 ---
 
+## 2026-10-09 · Freitag
+
+**Tätigkeit**
+
+- Eigenes Review des Boards und meiner User Stories, ohne KI, danach die Befunde abarbeiten lassen
+- `staging` nach `main` zusammengeführt, 57 Commits
+- #39 und #1 geprüft und die erfüllten Akzeptanzkriterien abgehakt
+- Jede entschiedene ADR um einen Abschnitt „In einem Satz" ergänzt
+- #70 und #71 angelegt für Arbeit, die in Dokumenten lag und kein Ticket hatte
+- ERD-Abnahme vorbereitet: Übersichtsseite mit acht Fragen und #73 zum Antworten
+- Aufgabenliste je Teammitglied für die Zeit bis zum Review geschrieben
+- Kommentare an #55 und #35, damit die Hinweise dort stehen, wo gearbeitet wird
+
+**Problem**
+
+- In ADR 0001, 0004 und 0010 stand oben noch „Entwurf" und „die Begründung fehlt noch", obwohl die Issues geschlossen waren. Ich dachte, beim Schließen sei etwas schiefgelaufen
+- Die KI hatte für #1 „sieben von zehn Kriterien erfüllt" behauptet. Es sind **neun** Kriterien, und erfüllt waren **fünf**. Keines war abgehakt
+- Bei #45 war die Annahme, aus `staging` sei etwas erfüllt. Es gibt nur das ERD, kein relationales Modell und kein SQL
+- Im ERD fehlen Bauteil, Verbrauchsmaterial und Bestellung, obwohl sie in unserem eigenen `docs/datenmodell/README.md` als fachliche Anker stehen. Bei sieben von neun Entitäten fehlen die Attribute
+- Die Begründungen stehen verteilt in Issue-Kommentaren und ADRs und sind zu lang, um im Fachgespräch benutzbar zu sein
+- #44 ist geschlossen, die Abnahme gegen die Checkliste war darin aber nicht enthalten. #2, #7 und #8 haben gar keine Barrierefreiheits-Kriterien
+- Die Checkliste in ADR 0009 zeigte 30 leere Kästchen und sah aus wie Arbeitsrückstand, obwohl sie eine Vorlage ist
+- Das Team konnte heute nicht gemeinsam am ERD arbeiten, und mehrere haben gesagt, dass sie nicht fertig werden
+- Meine erste Aufgabenliste für die Gruppe war zu lang für den Weg, auf dem ich sie schicken wollte
+
+**Lösung**
+
+- Ursache der ADR-Beobachtung gefunden: **`main` lag 55 Commits hinter `staging`.** `main` ist der Standard-Branch, also sieht man dort den Stand vom 24.09. Fünf ADRs existierten auf `main` gar nicht, und alle Links in Issue-Kommentaren zeigten auf `blob/main/` und damit auf veraltete Dateien. Zusammengeführt und die Links auf `staging` umgestellt
+- Kriterien in #39 und #1 nachgezählt und abgehakt, die veralteten Zahlen in #39 korrigiert
+- Jede entschiedene ADR beginnt jetzt mit „In einem Satz", zwei bis drei Zeilen ganz oben. Als Konvention im ADR-Index festgehalten, zusammen mit der Regel: wer ein Issue schließt, prüft das zugehörige ADR auf offene Stellen
+- #70 sammelt die offenen Stellen aus fünf ADRs, #71 die Anwendung der Barrierefreiheits-Checkliste auf #2, #7 und #8
+- Hinweis über die Checkliste in ADR 0009, dass sie eine Vorlage ist
+- ERD-Abnahme so gebaut, dass sie ohne Git funktioniert: Übersichtsseite zum Lesen, und in #73 eine Vorlage, bei der je Frage **ein Wort** genügt
+- Aufgabenliste gekürzt, bis sie in eine Kurznachricht passt. Details bleiben in den Issues und werden nur verlinkt
+
+**Lessons Learned**
+
+- **Der Standard-Branch ist das, was andere sehen.** Wir arbeiten auf `staging`, aber jeder Link und jeder Repository-Aufruf landet auf `main`. Solange der nicht nachgezogen wird, ist die halbe Arbeit für Außenstehende nicht vorhanden. Wir hatten die Regel „wann geht `staging` nach `main`" als offen markiert und dann vergessen
+- **Zahlen, die eine KI nennt, sind Behauptungen, bis sie gezählt sind.** Zweimal an einem Tag stimmten die Angaben nicht. Das eigene Review war die bessere Prüfung
+- **Ein Dokument zu erzeugen ist nicht dasselbe wie es anzuwenden.** #44 hat die Checkliste erstellt und war damit erledigt. Dass drei von vier Oberflächen-Items sie nicht als Kriterium tragen, hatte niemandem gehört
+- Arbeit, die als „offen" in einem Dokument steht, hat keinen Bearbeiter und erscheint auf keinem Board. Beim Schließen eines Issues muss man ins zugehörige Dokument schauen
+- **Eine Begründung, die niemand liest, wirkt wie keine.** Drei Absätze im ADR sind richtig und nützen nichts, wenn die Frage im Fachgespräch in zehn Sekunden beantwortet werden muss. Deshalb die Kurzfassung oben und das Ausführliche darunter
+- Kommunikation muss zum Medium passen. Eine Liste, die als Seite funktioniert, ist für eine Kurznachricht zu lang. Dann gehören die Details in das Issue und die Nachricht enthält nur, was ansteht und wo es steht
+- Wer mit Git nicht zurechtkommt, braucht einen Weg ohne Git. Ein Kommentar in einem Issue ist ein Textfeld wie in einem Chat, und das muss man dazusagen, sonst ist die Hürde das Werkzeug und nicht die Aufgabe
+
+---
+
 ## 2026-10-08 · Donnerstag
 
 **Tätigkeit**
