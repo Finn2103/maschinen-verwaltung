@@ -6,6 +6,13 @@
 - **Betrifft:** [#1](https://github.com/Finn2103/maschinen-verwaltung/issues/1) · [#2](https://github.com/Finn2103/maschinen-verwaltung/issues/2) · [#6](https://github.com/Finn2103/maschinen-verwaltung/issues/6) · [#8](https://github.com/Finn2103/maschinen-verwaltung/issues/8)
 - **Quelle:** `Nutzwerkanalysen.xlsx`, Blätter `Framework-Ausschluss` und `Framework`, Zahlen und Formulierungen unverändert übernommen
 
+## In einem Satz
+
+**React mit Next.js**, weil es als einzige Option eine **eigene Serverschicht** mitbringt.
+Angular und Flutter sind reine Client-Technologien und bräuchten für die
+Client-Server-Pflicht ein zweites Projekt. Dieses eine Kriterium trägt 0,60 der 0,75
+Punkte Abstand.
+
 ## Kontext
 
 Für Webportal und Backoffice wird eine Client-Technologie gebraucht. Die Aufgabenstellung

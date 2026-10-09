@@ -5,6 +5,12 @@
 - **Entschieden von:** Finn Jendras (Anwendungsentwicklung)
 - **Betrifft:** [#1](https://github.com/Finn2103/maschinen-verwaltung/issues/1) · [#2](https://github.com/Finn2103/maschinen-verwaltung/issues/2) · [#7](https://github.com/Finn2103/maschinen-verwaltung/issues/7) · [#8](https://github.com/Finn2103/maschinen-verwaltung/issues/8) · [#44](https://github.com/Finn2103/maschinen-verwaltung/issues/44)
 
+## In einem Satz
+
+ISO 9241 wird **einmal** in eine Liste prüfbarer Kriterien übersetzt. Jedes
+Oberflächen-Item wird gegen diese Liste abgenommen, nicht gegen die Norm. Einschlägig
+sind ISO 9241-110:2020 und -171:2008.
+
 ## Kontext
 
 Die Aufgabenstellung verlangt eine Oberfläche, die **barrierefrei nach ISO 9241** ist. Das
@@ -71,6 +77,10 @@ hinausgeht: Aufgabenangemessenheit, Erwartungskonformität, Erlernbarkeit. Dafü
 unten eigene Punkte.
 
 ## Die Checkliste
+
+> **Das ist eine Vorlage, keine offene Arbeit.** Die leeren Kästchen unten gehören
+> hierher und bleiben leer. Abgehakt wird in dem Issue, in das die Liste kopiert wird.
+> Wer hier 30 offene Punkte sieht, sieht die Vorlage, nicht einen Arbeitsrückstand.
 
 Zum Kopieren in das jeweilige Issue. Ein Item ist barrierefrei abgenommen, wenn alle
 zutreffenden Punkte erfüllt sind.
