@@ -2,68 +2,64 @@
 //
 // Fehlerfaelle sind Rueckgabewerte, keine Ausnahmen. So steht es in
 // docs/frontend-konventionen.md, Abschnitt 3: ein Reservierungskonflikt ist ein
-// gueltiges Ergebnis, kein Absturz.
+// gueltiges fachliches Ergebnis, kein Absturz. Der Typ unten ist eine
+// diskriminierte Vereinigung, "ok" ist das Unterscheidungsmerkmal. TypeScript
+// erzwingt damit, dass der Aufrufer beide Faelle behandelt.
+//
+// Diese Funktion prueft nicht mehr selbst, was die Fachobjekte selbst wissen:
+// der Zeitraum prueft seine Gueltigkeit, der Kunde seine Vollstaendigkeit, und
+// die Maschine kennt ihre Belegungen. Hier bleibt nur die Reihenfolge und das
+// Zusammensetzen (ADR 0004).
 
-import type { Kunde, Reservierung, ReservierungSpeicher } from "./reservierungen";
-import { ueberlappt, zeitraumFehler } from "./verfuegbarkeit";
-
-export type Feld = "von" | "bis" | "name" | "email" | "telefon";
+import { Zeitraum } from "./zeitraum";
+import type { Feld, Kunde, Reservierung, ReservierungSpeicher } from "./reservierung";
 
 export type ReservierungErgebnis =
     | { ok: true; reservierung: Reservierung }
     | { ok: false; fehler: string; feld: Feld };
 
-export type Reservierungswunsch = {
-    inventarnummer: string;
-    von: string;
-    bis: string;
-    kunde: Kunde;
-};
-
 export async function reservieren(
     speicher: ReservierungSpeicher,
-    wunsch: Reservierungswunsch,
+    inventarnummer: string,
+    von: string,
+    bis: string,
+    kunde: Kunde,
 ): Promise<ReservierungErgebnis> {
-    // 1. Zeitraum
-    if (!wunsch.von || !wunsch.bis) {
+    // 1. Zeitraum. Der Zeitraum prueft sich selbst.
+    if (!von || !bis) {
         return { ok: false, fehler: "Bitte Von- und Bis-Datum angeben.", feld: "von" };
     }
 
-    const zeitfehler = zeitraumFehler(wunsch.von, wunsch.bis);
+    const zeitfehler = Zeitraum.fehler(von, bis);
     if (zeitfehler) {
         return { ok: false, fehler: zeitfehler, feld: "bis" };
     }
 
-    // 2. Kundendaten
-    if (!wunsch.kunde.name.trim()) {
-        return { ok: false, fehler: "Bitte einen Namen angeben.", feld: "name" };
-    }
-    if (!wunsch.kunde.email.includes("@")) {
-        return { ok: false, fehler: "Bitte eine E-Mail-Adresse angeben.", feld: "email" };
-    }
-    if (!wunsch.kunde.telefon.trim()) {
-        return {
-            ok: false,
-            fehler: "Bitte eine Telefonnummer für Rückfragen angeben.",
-            feld: "telefon",
-        };
+    const zeitraum = new Zeitraum(von, bis);
+
+    // 2. Kundendaten. Der Kunde prueft sich selbst.
+    const fehlend = kunde.fehlendesFeld();
+    if (fehlend) {
+        return { ok: false, fehler: fehlend.fehler, feld: fehlend.feld };
     }
 
-    // 3. Konflikt. Der belegte Zeitraum wird benannt, so verlangt es das
-    //    Akzeptanzkriterium in #1: "wird abgelehnt und der Konflikt benannt".
-    const belegungen = await speicher.belegungenFuer(wunsch.inventarnummer);
-    const konflikt = belegungen.find((belegung) =>
-        ueberlappt(belegung, { von: wunsch.von, bis: wunsch.bis }),
-    );
+    // 3. Konflikt. Der Belegungsplan benennt den blockierenden Zeitraum, so
+    //    verlangt es das Akzeptanzkriterium in #1: "wird abgelehnt und der
+    //    Konflikt benannt".
+    //
+    //    Der Plan kommt ueber den Speicher und nicht aus den Beispieldaten,
+    //    damit bereits angelegte Reservierungen mitzaehlen (ADR 0011).
+    const plan = await speicher.belegungsplanFuer(inventarnummer);
+    const konflikt = plan.konfliktMit(zeitraum);
 
     if (konflikt) {
         return {
             ok: false,
-            fehler: `Die Maschine ist vom ${konflikt.von} bis ${konflikt.bis} belegt.`,
+            fehler: `Die Maschine ist vom ${konflikt.alsText()} belegt.`,
             feld: "von",
         };
     }
 
-    const reservierung = await speicher.anlegen(wunsch);
+    const reservierung = await speicher.anlegen(inventarnummer, zeitraum, kunde);
     return { ok: true, reservierung };
 }

@@ -10,17 +10,22 @@
 // Der Datenzugriff bleibt trotzdem auf dem Server: abgesendet wird an eine
 // Server Action, die Fachlogik und Speicher laufen dort. Diese Komponente
 // kennt den Speicher nicht.
+//
+// Und sie kennt das Fachobjekt nicht: sie bekommt MaschineAnzeige, ein
+// einfaches Objekt ohne Methoden. Eine Klasseninstanz kann die Grenze zum
+// Browser nicht ueberqueren, React verlangt hier serialisierbare Props. Das
+// Fachmodell bleibt serverseitig, hier kommen nur Anzeigedaten an.
 
 import { useActionState, useEffect } from "react";
 import Link from "next/link";
 import { reservierungAbsenden, type FormularZustand } from "@/app/reservieren/aktionen";
-import type { Maschine } from "@/lib/maschinen";
-import type { Feld } from "@/lib/reservieren";
+import type { MaschineAnzeige } from "@/lib/maschine";
+import type { Feld } from "@/lib/reservierung";
 
 const FEHLER_ID = "reservierung-fehler";
 
 type Props = {
-  maschine: Maschine;
+  maschine: MaschineAnzeige;
   von?: string;
   bis?: string;
 };

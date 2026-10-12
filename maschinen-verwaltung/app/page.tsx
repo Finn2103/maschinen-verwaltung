@@ -1,5 +1,6 @@
 import { maschinen } from "@/lib/maschinen";
-import { suche, zeitraumFehler, type Suchfilter } from "@/lib/verfuegbarkeit";
+import { suche, type Suchfilter } from "@/lib/suche";
+import { Zeitraum } from "@/lib/zeitraum";
 import { Suchformular } from "@/components/Suchformular";
 import Link from "next/link";
 
@@ -7,7 +8,7 @@ type Props = { searchParams: Promise<Suchfilter> };
 
 export default async function Startseite({ searchParams }: Props) {
   const filter = await searchParams;
-  const fehler = zeitraumFehler(filter.von, filter.bis);
+  const fehler = Zeitraum.fehler(filter.von, filter.bis);
   const treffer = fehler ? [] : suche(maschinen, filter);
 
   return (

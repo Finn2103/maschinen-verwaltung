@@ -21,7 +21,8 @@ export default async function Reservieren({ params, searchParams }: Props) {
 
   // Ueber den Speicher, nicht ueber maschine.belegungen: so sind bereits
   // angelegte Reservierungen mit dabei (ADR 0011).
-  const belegungen = await speicher.belegungenFuer(inventarnummer);
+  const plan = await speicher.belegungsplanFuer(inventarnummer);
+  const belegungen = plan.alle();
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
@@ -44,16 +45,14 @@ export default async function Reservieren({ params, searchParams }: Props) {
 
       <section className="mt-6">
         <h2 className="text-sm font-medium">Schon belegt</h2>
-        {belegungen.length === 0 ? (
+        {plan.leer ? (
           <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
             Keine Belegung erfasst, die Maschine ist durchgehend frei.
           </p>
         ) : (
           <ul className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
             {belegungen.map((belegung) => (
-              <li key={`${belegung.von}-${belegung.bis}`}>
-                {belegung.von} bis {belegung.bis}
-              </li>
+              <li key={`${belegung.von}-${belegung.bis}`}>{belegung.alsText()}</li>
             ))}
           </ul>
         )}
@@ -63,7 +62,9 @@ export default async function Reservieren({ params, searchParams }: Props) {
         </p>
       </section>
 
-      <Reservierungsformular maschine={maschine} von={von} bis={bis} />
+      {/* alsAnzeige(): das Fachobjekt bleibt auf dem Server, ueber die Grenze
+          zur Client-Komponente geht ein einfaches Objekt. */}
+      <Reservierungsformular maschine={maschine.alsAnzeige()} von={von} bis={bis} />
     </main>
   );
 }

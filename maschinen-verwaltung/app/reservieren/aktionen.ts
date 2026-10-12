@@ -7,14 +7,22 @@
 // Deshalb darf hier auf den Speicher zugegriffen werden, aus einer
 // Client-Komponente heraus duerfte das nicht passieren.
 //
-// Die Funktion prueft NICHT selbst, sie uebergibt an die Fachlogik. Sie
-// uebersetzt FormData in den Typ, den reservieren() erwartet, und haengt im
-// Fehlerfall die Eingaben an, damit das Formular sie wieder anzeigen kann.
-// Dieses Wiederanzeigen ist Darstellung, deshalb steht es hier und nicht in
-// der Fachlogik.
+// Die Funktion prueft NICHT selbst, sie uebergibt an die Fachlogik. Sie hat
+// genau zwei Aufgaben an der Grenze:
+//
+//  1. FormData in Fachobjekte uebersetzen. Alles aus einem Formular ist Text,
+//     auch bei type="date".
+//  2. Das Ergebnis wieder serialisierbar machen. Der Rueckgabewert einer
+//     Server Action geht an eine Client-Komponente und muss deshalb aus
+//     einfachen Objekten bestehen. Eine Klasseninstanz verliert dabei ihren
+//     Prototyp und damit ihre Methoden, deshalb "alsAnzeige()".
+//
+// Im Fehlerfall haengt sie die Eingaben an, damit das Formular sie wieder
+// anzeigen kann. Das ist Darstellung, deshalb steht es hier und nicht in der
+// Fachlogik.
 
-import { reservieren, type Feld } from "@/lib/reservieren";
-import type { Reservierung } from "@/lib/reservierungen";
+import { reservieren } from "@/lib/reservieren";
+import { Kunde, type Feld, type ReservierungAnzeige } from "@/lib/reservierung";
 import { speicher } from "@/lib/speicher";
 
 export type Eingaben = {
@@ -26,7 +34,7 @@ export type Eingaben = {
 };
 
 export type FormularZustand =
-  | { ok: true; reservierung: Reservierung }
+  | { ok: true; reservierung: ReservierungAnzeige }
   | { ok: false; fehler: string; feld: Feld; eingaben: Eingaben }
   | null;
 
@@ -34,7 +42,6 @@ export async function reservierungAbsenden(
   _vorherigerZustand: FormularZustand,
   daten: FormData,
 ): Promise<FormularZustand> {
-  // Alles aus einem Formular ist Text, auch wenn das Feld type="date" hatte.
   const text = (feld: string) => String(daten.get(feld) ?? "").trim();
 
   const eingaben: Eingaben = {
@@ -45,17 +52,16 @@ export async function reservierungAbsenden(
     telefon: text("telefon"),
   };
 
-  const ergebnis = await reservieren(speicher, {
-    inventarnummer: text("inventarnummer"),
-    von: eingaben.von,
-    bis: eingaben.bis,
-    kunde: {
-      name: eingaben.name,
-      email: eingaben.email,
-      telefon: eingaben.telefon,
-    },
-  });
+  const ergebnis = await reservieren(
+    speicher,
+    text("inventarnummer"),
+    eingaben.von,
+    eingaben.bis,
+    new Kunde(eingaben.name, eingaben.email, eingaben.telefon),
+  );
 
-  if (ergebnis.ok) return ergebnis;
-  return { ...ergebnis, eingaben };
+  if (ergebnis.ok) {
+    return { ok: true, reservierung: ergebnis.reservierung.alsAnzeige() };
+  }
+  return { ok: false, fehler: ergebnis.fehler, feld: ergebnis.feld, eingaben };
 }

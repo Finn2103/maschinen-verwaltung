@@ -1,94 +1,47 @@
-export type Belegung = {
-    von: string; // Tag eingeschlossen
-    bis: string; // Tag eingeschlossen, siehe Konventionen Abschnitt 4
-};
+// Beispieldaten, bis das Datenmodell aus #45 steht.
+//
+// Die zehn Maschinen sind auf Randfaelle hin gebaut, nicht auf Menge:
+// M-1001 deckt den Rueckgabetag ab (belegt bis 28.09., eine Reservierung ab
+// dem 28. muss abgelehnt werden), M-1002 ist leer, M-1003 hat zwei Zeitraeume
+// mit Luecke dazwischen, M-1006 einen ganzen Monat, M-1007 einen einzigen Tag
+// (von gleich bis), M-1010 eine Belegung ueber die Monatsgrenze.
+//
+// Seit dem 12.10.2026 echte Maschine-Objekte statt Datenliterale, damit die
+// Fachregeln an den Objekten haengen (ADR 0004).
 
-export type Maschine = {
-    inventarnummer: string;
-    bezeichnung: string;
-    kategorie: string;
-    standort: string;
-    belegungen: Belegung[];
-};
+import { Maschine } from "./maschine";
+import { Zeitraum } from "./zeitraum";
 
 export const maschinen: Maschine[] = [
-    {
-        inventarnummer: "M-1001",
-        bezeichnung: "Minibagger 1,8 t",
-        kategorie: "Erdbewegung",
-        standort: "Köln",
-        belegungen: [{ von: "2026-09-24", bis: "2026-09-28" }],
-    },
-    {
-        inventarnummer: "M-1002",
-        bezeichnung: "Radlader 0,4 m³",
-        kategorie: "Erdbewegung",
-        standort: "Bonn",
-        belegungen: [],
-    },
-    {
-        inventarnummer: "M-1003",
-        bezeichnung: "Rüttelplatte 100 kg",
-        kategorie: "Verdichtung",
-        standort: "Köln",
-        belegungen: [
-            { von: "2026-10-05", bis: "2026-10-09" },
-            { von: "2026-10-19", bis: "2026-10-23" },
-        ],
-    },
-    {
-        inventarnummer: "M-1004",
-        bezeichnung: "Grabenwalze 1,4 t",
-        kategorie: "Verdichtung",
-        standort: "Düsseldorf",
-        belegungen: [{ von: "2026-10-12", bis: "2026-10-16" }],
-    },
-    {
-        inventarnummer: "M-1005",
-        bezeichnung: "Teleskoplader 7 m",
-        kategorie: "Hebetechnik",
-        standort: "Bonn",
-        belegungen: [],
-    },
-    {
-        inventarnummer: "M-1006",
-        bezeichnung: "Scherenarbeitsbühne 10 m",
-        kategorie: "Hebetechnik",
-        standort: "Leverkusen",
-        belegungen: [{ von: "2026-10-01", bis: "2026-10-31" }],
-    },
-    {
-        inventarnummer: "M-1007",
-        bezeichnung: "Betonmischer 140 l",
-        kategorie: "Betonbearbeitung",
-        standort: "Köln",
-        belegungen: [{ von: "2026-10-08", bis: "2026-10-08" }],
-    },
-    {
-        inventarnummer: "M-1008",
-        bezeichnung: "Trennschleifer 350 mm",
-        kategorie: "Betonbearbeitung",
-        standort: "Düsseldorf",
-        belegungen: [],
-    },
-    {
-        inventarnummer: "M-1009",
-        bezeichnung: "Holzhäcksler 100 mm",
-        kategorie: "Garten und Landschaftsbau",
-        standort: "Leverkusen",
-        belegungen: [{ von: "2026-10-14", bis: "2026-10-20" }],
-    },
-    {
-        inventarnummer: "M-1010",
-        bezeichnung: "Kehrmaschine 900 mm",
-        kategorie: "Reinigung",
-        standort: "Bonn",
-        belegungen: [
-            { von: "2026-09-30", bis: "2026-10-02" },
-            { von: "2026-10-26", bis: "2026-10-30" },
-        ],
-    },
+    new Maschine("M-1001", "Minibagger 1,8 t", "Erdbewegung", "Köln", [
+        new Zeitraum("2026-09-24", "2026-09-28"),
+    ]),
+    new Maschine("M-1002", "Radlader 0,4 m³", "Erdbewegung", "Bonn"),
+    new Maschine("M-1003", "Rüttelplatte 100 kg", "Verdichtung", "Köln", [
+        new Zeitraum("2026-10-05", "2026-10-09"),
+        new Zeitraum("2026-10-19", "2026-10-23"),
+    ]),
+    new Maschine("M-1004", "Grabenwalze 1,4 t", "Verdichtung", "Düsseldorf", [
+        new Zeitraum("2026-10-12", "2026-10-16"),
+    ]),
+    new Maschine("M-1005", "Teleskoplader 7 m", "Hebetechnik", "Bonn"),
+    new Maschine("M-1006", "Scherenarbeitsbühne 10 m", "Hebetechnik", "Leverkusen", [
+        new Zeitraum("2026-10-01", "2026-10-31"),
+    ]),
+    new Maschine("M-1007", "Betonmischer 140 l", "Betonbearbeitung", "Köln", [
+        new Zeitraum("2026-10-08", "2026-10-08"),
+    ]),
+    new Maschine("M-1008", "Trennschleifer 350 mm", "Betonbearbeitung", "Düsseldorf"),
+    new Maschine("M-1009", "Holzhäcksler 100 mm", "Garten und Landschaftsbau", "Leverkusen", [
+        new Zeitraum("2026-10-14", "2026-10-20"),
+    ]),
+    new Maschine("M-1010", "Kehrmaschine 900 mm", "Reinigung", "Bonn", [
+        new Zeitraum("2026-09-30", "2026-10-02"),
+        new Zeitraum("2026-10-26", "2026-10-30"),
+    ]),
 ];
 
+// Aus den Daten abgeleitet statt doppelt gepflegt: eine neue Kategorie
+// erscheint allein dadurch im Suchformular, dass eine Maschine sie hat.
 export const kategorien = [...new Set(maschinen.map((m) => m.kategorie))].sort();
 export const standorte = [...new Set(maschinen.map((m) => m.standort))].sort();
