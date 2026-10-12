@@ -137,6 +137,40 @@ Client-Komponente ist eine bewusste Entscheidung, keine Gewohnheit.
 
 Faustregel: die Suchmaske aus Mockup 1 braucht Interaktion, die Ergebnisliste nicht.
 
+### Was über die Grenze zum Browser geht, und was nicht
+
+Zwei Eigenschaften, die leicht verwechselt werden. Sie haben nichts miteinander zu tun.
+
+**1. Klasseninstanzen können die Grenze nicht überqueren.** React verlangt für Props einer
+Client-Komponente serialisierbare Werte. Beim Verschicken bleibt nur übrig, was Daten
+sind, die Methoden fallen weg. Deshalb haben `Maschine` und `Reservierung` je eine Methode
+`alsAnzeige()`, die ein einfaches Objekt liefert, und die Client-Komponente nimmt
+`MaschineAnzeige` statt `Maschine`.
+
+Dasselbe gilt für den **Rückgabewert einer Server Action**: er geht an die
+Client-Komponente und muss ebenfalls serialisierbar sein.
+
+> Das bricht erst beim Benutzen, nicht beim Kompilieren. `tsc` sagt dazu nichts. Wer an
+> dieser Grenze etwas ändert, muss es **laufen lassen**, nicht nur übersetzen.
+
+**2. Fachlogik landet nicht im Browser-Bündel.** Code, den nur Server-Komponenten
+importieren, wird nicht in den Browser ausgeliefert. Das ist nachprüfbar und nicht nur
+behauptet. Nach `npm run build`:
+
+```bash
+grep -rl "ueberlappt" maschinen-verwaltung/.next/static/chunks
+```
+
+Stand 12.10.2026 kommen `ueberlappt`, `konfliktMit`, `istVerfuegbarIn`, `Belegungsplan`,
+`belegungsplanFuer` und auch die Maschinendaten in **keiner** Datei unter
+`.next/static/chunks` vor. Der Text der Client-Komponente, etwa `Verbindlich reservieren`,
+dagegen schon.
+
+Das ist der Beleg für den Client-Server-Schnitt aus der Pflichtliste. **Wer eine
+Fachlogik-Datei aus einer Client-Komponente importiert, hebt ihn auf**, auch wenn nichts
+sichtbar kaputtgeht. Ein reiner Typ-Import (`import type`) ist unkritisch, weil Typen beim
+Übersetzen verschwinden.
+
 ### Formulare
 
 Server-Validierung ist die Wahrheit, Client-Validierung ist Komfort. Beide dürfen

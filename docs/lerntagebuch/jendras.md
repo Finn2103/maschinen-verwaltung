@@ -10,6 +10,84 @@ die Abgabe zusätzlich eine Word-Fassung im Loop-Arbeitsbereich verlangt ist.
 
 ---
 
+## 2026-10-12 · Montag
+
+Kein Schultag. Vorbereitung auf das Review am 15.10. und eine eigene Code-Review am
+privaten Rechner.
+
+**Tätigkeit**
+
+- Eigene Code-Review der Oberflächenschicht aus #1, Datei für Datei
+- Domänenschicht auf Klassen mit Verhalten umgestellt
+- Präsentation für das Review vorbereitet, dazu ein Vorbereitungsdokument für das
+  Fachgespräch
+- Zuständigkeit für #45 geprüft und das Argument zu Debian in #55 festgehalten
+
+**Problem**
+
+- **ADR 0004 verlangt unter „Wo die Objektorientierung liegt", dass die Fachobjekte ihre
+  Regeln selbst tragen. Im Code gab es keine einzige Klasse**, nur Typen und freie
+  Funktionen. Mein eigenes Dokument und mein Code sagten verschiedene Dinge, und
+  objektorientiert ist eine der vier Pflichtvorgaben
+- `verfuegbarkeit.ts` machte drei Dinge: Verfügbarkeit, Suche und Eingabeprüfung. Der
+  Dateiname deckte nur das Erste ab, und `suchlink.ts` importierte seinen Filtertyp
+  deshalb aus einer Datei, in die er nicht gehört
+- Die Suche liest die Belegungen aus den Beispieldaten, das Reservieren über den Speicher.
+  **Zwei Quellen für dieselbe Frage.** Eine in der Anwendung angelegte Reservierung sieht
+  die Suche deshalb nicht, obwohl das zugehörige Kriterium in #1 abgehakt ist
+- Es gibt keine einzige Testdatei im Projekt
+- `lib/` ist mit vier Leerzeichen eingerückt, `app/` und `components/` mit zwei. Kein
+  Prettier, keine `.editorconfig`
+- Beim Umbau wollte ich in `reservieren.ts` eine Maschine mit leeren Feldern anlegen, nur
+  um an deren Konfliktmethode zu kommen
+
+**Lösung**
+
+- Fünf Klassen mit Verhalten: `Zeitraum` prüft Überlappung und Eingabe, `Belegungsplan`
+  findet Konflikte, `Maschine` beantwortet Verfügbarkeit und Suchtreffer, `Kunde` prüft
+  seine Vollständigkeit, `Reservierung` hält das Ergebnis. Aus `ueberlappt(a, b)` wurde
+  `a.ueberlappt(b)`, die Rechnung selbst ist unverändert
+- `Belegungsplan` als eigenes Fachobjekt eingeführt, statt die Scheinmaschine zu bauen
+- `verfuegbarkeit.ts` in `zeitraum.ts`, `maschine.ts` und `suche.ts` aufgeteilt
+- Für die Grenze zum Browser `alsAnzeige()` auf `Maschine` und `Reservierung`: das
+  Fachobjekt bleibt auf dem Server, hinüber geht ein einfaches Objekt
+- Geprüft mit `tsc`, `eslint` und `next build`, dazu von Hand gegen `next start`: der
+  abgelehnte Rückgabetag, eine erfolgreiche Reservierung und eine Doppelbuchung
+- Den Suchdefekt bewusst **nicht** mit behoben, damit Umbau und Fehlerbehebung getrennt
+  bleiben. Er ist als offener Befund notiert
+
+**Lessons Learned**
+
+- **Objektorientiert gedacht ist nicht objektorientiert ausgedrückt.** Trennung von
+  Darstellung und Fachlichkeit, Abhängigkeiten nach innen, eine Schnittstelle mit zwei
+  Umsetzungen: das war alles da. Was fehlte, war, dass das Verhalten an den Daten hängt.
+  Eine Funktion, die ihr Objekt als erstes Argument nimmt, ist eine Methode, die noch
+  nicht umgezogen ist
+- **Wenn man ein Objekt erfinden muss, das es fachlich nicht gibt, fehlt eine Klasse.** Die
+  Maschine mit leeren Feldern war das Symptom, der fehlende `Belegungsplan` die Ursache
+- **Klasseninstanzen können die Grenze zum Browser nicht überqueren.** React verlangt für
+  Props einer Client-Komponente serialisierbare Werte, und beim Verschicken bleibt nur das
+  übrig, was Daten sind. Die Methoden fallen weg. Das bricht erst beim Benutzen und nicht
+  beim Kompilieren, deshalb habe ich es laufen lassen und nicht nur übersetzt
+- **Die Fachlogik ist nachweislich nicht im Browser.** Im gebauten Bundle unter
+  `.next/static/chunks` kommen `ueberlappt`, `konfliktMit`, `istVerfuegbarIn`,
+  `Belegungsplan` und auch die Maschinendaten in keiner einzigen Datei vor, der Text der
+  Client-Komponente dagegen schon. Das ist der Beleg für den Client-Server-Schnitt, und er
+  ist mit einem `grep` nachprüfbar statt behauptet
+- „Hinter einer Schnittstelle" und „nicht im Browser sichtbar" sind **zwei verschiedene
+  Eigenschaften.** Die Schnittstelle macht den Speicher austauschbar, das Bündeln
+  entscheidet, was im Browser landet. Ich hatte beides in einem Satz vermischt
+- Ein Umbau, der kein Verhalten ändert, gehört **in einen eigenen Commit** und nicht
+  zusammen mit einer Fehlerbehebung. Sonst kann niemand später trennen, was die Ursache
+  einer Änderung war
+- **Eine KI schreibt ohne Vorgabe idiomatisch, nicht nach unserem ADR.** Modernes
+  TypeScript mit React benutzt Typen und Funktionen, und genau das kam heraus. An allen
+  Stellen, an denen ich etwas vorgegeben hatte, steht es im Code: deutsche Fachbegriffe,
+  Fehler als Rückgabewert, Schnittstelle vor Umsetzung. An der einen Stelle, an der ich
+  nichts vorgegeben hatte, hat die Voreinstellung gewonnen, und es widersprach dem ADR
+
+---
+
 ## 2026-10-09 · Freitag
 
 **Tätigkeit**
@@ -80,6 +158,7 @@ die Abgabe zusätzlich eine Word-Fassung im Loop-Arbeitsbereich verlangt ist.
 - Nach einer abgelehnten Reservierung waren Name, E-Mail und Telefon leer, der Kunde hätte alles neu eintippen müssen
 - Das Akzeptanzkriterium „barrierefrei nach ISO 9241" in #1 verwies auf eine Checkliste, die es nicht gab
 - Die Reservierungen liegen im Arbeitsspeicher, weil das Datenmodell aus #45 noch nicht steht
+- Das angelegte Projekt ist **Next.js 16**, und mehrere Dinge funktionieren dort anders als in der Version 15, auf die sich die meisten Anleitungen beziehen. Drei Stellen haben mich aufgehalten: der Zugriff auf `searchParams` und `params`, der Zustand des Formulars nach dem Absenden, und dass die Server Action die Suchparameter der Seite nicht kennt
 
 **Lösung**
 
@@ -89,6 +168,7 @@ die Abgabe zusätzlich eine Word-Fassung im Loop-Arbeitsbereich verlangt ist.
 - Die Server Action gibt die Eingaben im Fehlerfall zurück, das Formular zeigt sie wieder an. Das Wiederanzeigen ist Darstellung und steht deshalb in der Action, nicht in der Fachlogik
 - ADR 0009 geschrieben: drei einschlägige Teile der Norm benannt, Checkliste in sechs Abschnitten, jeder Punkt mit Tastatur, Screenreader oder Kontrastmessung nachweisbar
 - ADR 0011 geschrieben: Schnittstelle zwischen Fachlogik und Speicher, zwei Umsetzungen, eine Auswahlstelle. Von Anfang an asynchron, damit das Umstellen kein Umbau wird
+- Zu den drei Next.js-16-Stellen jeweils in der mitgelieferten Dokumentation unter `node_modules/next/dist/docs/` nachgesehen statt in Anleitungen im Netz, weil die sich auf Version 15 beziehen. `searchParams` und `params` werden `await`-et, der Formularzustand kommt über `useActionState` aus `react`, und die Inventarnummer geht als verstecktes Feld ins Formular. Die Begründung steht jeweils als Kommentar an der Stelle im Code
 
 **Lessons Learned**
 
@@ -101,6 +181,8 @@ die Abgabe zusätzlich eine Word-Fassung im Loop-Arbeitsbereich verlangt ist.
 - Eine Norm wird prüfbar, indem man sie **einmal** in eine Liste übersetzt, nicht indem man sie je Item neu auslegt. Die WCAG-Erfolgskriterien sind dafür der Aufhänger, weil sie enger und messbar formuliert sind
 - Ein Fehler, der nach einem Neuladen auftritt, ist oft keiner: Browser helfen und stellen Formularwerte wieder her. Wer den Zustand in die URL legt, muss ihnen das abgewöhnen
 - Software prüfen heißt, auch die unangenehmen Fälle auszulösen. Den Fehler mit den verlorenen Eingaben habe ich nur gefunden, weil ich eine Ablehnung absichtlich erzeugt habe
+- **Bei einer frischen Hauptversion ist die mitgelieferte Dokumentation die verlässlichere Quelle als Anleitungen im Netz.** Die Umstellung von Next.js 15 auf 16 betrifft genau die Stellen, die in jedem Beispiel vorkommen, also Seitenparameter und Formularzustand. Ich habe die Zeit nicht beim Tippen verloren, sondern beim Suchen in Material, das sich auf die Vorversion bezog
+- Eine Änderung, die vorher nur eine Warnung war, wird in der nächsten Hauptversion zum Fehler. Das gilt hier für den synchronen Zugriff auf `searchParams`
 
 ---
 
