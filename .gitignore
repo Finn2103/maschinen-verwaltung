@@ -48,3 +48,7 @@ Thumbs.db
 # drawio Auto-Backups, Office-Sperrdateien
 .$*.bkp
 ~$*
+
+# Claude Code: launch.json wird bewusst mitversioniert, weil sie beschreibt, wie
+# die Anwendung startet. Geraetespezifische Freigaben gehoeren nicht ins Repo.
+.claude/settings.local.json
