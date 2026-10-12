@@ -19,62 +19,94 @@ Umgekehrt gilt mehr: in #43 steht als Ausschlusskriterium **„das Rollenmodell 
 abbildbar"**. Ohne diese Matrix kann #43 dieses Kriterium nicht prüfen. Die Matrix entblockt
 also #43.
 
-## Die vier Rollen
+## Die fünf Rollen
+
+Vier fachliche Rollen und eine technische. Der Admin steht **nicht über** den anderen,
+sondern quer dazu: er verwaltet Benutzer und Technik, nicht das Geschäft.
 
 | Rolle | Wer das ist |
 | --- | --- |
-| **Kunde** | Mietet Maschinen. Sieht ausschließlich eigene Vorgänge |
-| **Mitarbeiter** | Pflegt Stamm- und Bewegungsdaten im Tagesgeschäft |
+| **Owner** | Chef der Firma. Oberste fachliche Instanz |
 | **Manager** | Fachliche Leitung. Stellt Regeln ein und sieht Auswertungen |
-| **Admin** | Technische Administration. Benutzer und Rollen |
+| **Mitarbeiter** | Pflegt Stamm- und Bewegungsdaten im Tagesgeschäft |
+| **Kunde** | Mietet Maschinen. Sieht ausschließlich eigene Vorgänge |
+| **Admin** | Technische Administration. Benutzer, Rollen, Betrieb |
+
+> **Die Rolle heißt „Kunde", nicht „User".** Der Fachbegriff im ganzen Projekt ist Kunde:
+> #7 heißt „Kundenstammdaten", das ERD kennt die Entität Kunde, und die
+> Oberflächen-Konventionen legen deutsche Fachbegriffe fest.
 
 > **Änderung an #8 nötig.** Das Akzeptanzkriterium dort lautet „Die Rollen Kunde,
 > Mitarbeiter und Admin existieren mit je festgelegten Rechten", also drei. Entschieden
-> wurden **vier**. Der Grund ist die Trennung von fachlicher Leitung und technischer
-> Administration: wer Benutzer und Rollen verwaltet, soll nicht zugleich fachliche
-> Auswertungen über Personen sehen. Das Kriterium in #8 muss entsprechend angepasst werden.
+> wurden **fünf**.
+>
+> Das ist **keine Abweichung von der Vorgabe der Lehrkräfte.** Deren Originaltext, gesichert
+> als Kommentar unter #8, sagt „Benutzerkonten mit unterschiedlichen Rollen (**z. B.** Kunde,
+> Mitarbeiter, Admin)". Das ist ein Beispiel, keine Festlegung. Die Verengung auf genau drei
+> ist erst bei der Neufassung im Refinement entstanden und wird hiermit korrigiert.
+
+## Eine Firma, keine Mandantenfähigkeit
+
+Entschieden am 12.10.2026. Das System verwaltet **eine** Verleihfirma. Der Owner ist deren
+Chef, nicht der Inhaber eines von mehreren Mandanten.
+
+> **Warum das überhaupt dasteht.** Beim Festlegen der Rollen kam die Frage auf, ob die
+> Organisation eine eigene Instanz im Modell sein soll, also mehrere Verleihfirmen in einem
+> System. Das wäre der Weg, wenn man die Anwendung verkaufen wollte. Für dieses Projekt wird
+> es bewusst als **eine** Organisation simuliert.
+>
+> Die Folge, die man kennen muss: Mandantenfähigkeit nachträglich einzubauen heißt, **jede**
+> Tabelle um einen Bezug zur Organisation zu erweitern und **jede** Abfrage darauf
+> einzuschränken. Das ist kein Nachrüsten, sondern ein Umbau des Datenmodells. Deshalb steht
+> die Entscheidung hier und nicht implizit im SQL.
 
 ## Die Matrix
 
 Legende: `ja` darf · `nein` darf nicht · `eigene` nur eigene Datensätze · `offen` noch nicht
 entschieden
 
+> **Owner hat überall dieselben Rechte wie Manager.** Das ist Absicht und keine Lücke: der
+> Owner ist die oberste fachliche Instanz, also darf er alles, was die fachliche Leitung
+> darf. Ihm zusätzliche Operationen zu geben, die der Manager nicht hat, wäre erst nötig,
+> wenn es etwas gibt, das **nur** der Chef entscheiden darf. Was das sein könnte, steht
+> unter „Offene Punkte".
+
 ### Maschine (#2, #3)
 
-| Operation | Kunde | Mitarbeiter | Manager | Admin |
-| --- | --- | --- | --- | --- |
-| Suchen und Details sehen | ja | ja | ja | ja |
-| Anlegen | nein | **ja** | ja | ja |
-| Bearbeiten | nein | **ja** | ja | ja |
-| Außer Dienst stellen | nein | offen | offen | ja |
-| Wartungsübersicht sehen | nein | offen | offen | offen |
+| Operation | Kunde | Mitarbeiter | Manager | Owner | Admin |
+| --- | --- | --- | --- | --- | --- |
+| Suchen und Details sehen | ja | ja | ja | ja | ja |
+| Anlegen | nein | **ja** | ja | ja | ja |
+| Bearbeiten | nein | **ja** | ja | ja | ja |
+| Außer Dienst stellen | nein | offen | offen | offen | ja |
+| Wartungsübersicht sehen | nein | offen | offen | offen | offen |
 
 ### Reservierung (#1)
 
-| Operation | Kunde | Mitarbeiter | Manager | Admin |
-| --- | --- | --- | --- | --- |
-| Verfügbarkeit suchen | ja | ja | ja | ja |
-| Verbindlich reservieren | **ja** | ja | ja | ja |
-| Sehen | **eigene** | ja | ja | ja |
-| Stornieren bis `X` Tage vor Mietbeginn | **eigene** | ja | ja | ja |
-| Stornieren nach Ablauf der Frist | **nein** | **ja, mit Grund** | ja, mit Grund | ja, mit Grund |
+| Operation | Kunde | Mitarbeiter | Manager | Owner | Admin |
+| --- | --- | --- | --- | --- | --- |
+| Verfügbarkeit suchen | ja | ja | ja | ja | ja |
+| Verbindlich reservieren | **ja** | ja | ja | ja | ja |
+| Sehen | **eigene** | ja | ja | ja | ja |
+| Stornieren bis `X` Tage vor Mietbeginn | **eigene** | ja | ja | ja | ja |
+| Stornieren nach Ablauf der Frist | **nein** | **ja, mit Grund** | ja, mit Grund | ja, mit Grund | ja, mit Grund |
 
 ### Auftrag (#9)
 
-| Operation | Kunde | Mitarbeiter | Manager | Admin |
-| --- | --- | --- | --- | --- |
-| Status sehen | **eigene** | ja | ja | ja |
-| Ändern, erzeugt einen neuen Eintrag | nein | offen | offen | ja |
-| Stornieren, erzeugt einen Storno-Eintrag | nein | ja, mit Grund | ja, mit Grund | ja, mit Grund |
+| Operation | Kunde | Mitarbeiter | Manager | Owner | Admin |
+| --- | --- | --- | --- | --- | --- |
+| Status sehen | **eigene** | ja | ja | ja | ja |
+| Ändern, erzeugt einen neuen Eintrag | nein | offen | offen | offen | ja |
+| Stornieren, erzeugt einen Storno-Eintrag | nein | ja, mit Grund | ja, mit Grund | ja, mit Grund | ja, mit Grund |
 
 ### Kunde (#7, #20)
 
-| Operation | Kunde | Mitarbeiter | Manager | Admin |
-| --- | --- | --- | --- | --- |
-| Anlegen | nein | ja | ja | ja |
-| Bearbeiten | offen | ja | ja | ja |
-| Suchen | nein | ja | ja | ja |
-| Eigene Daten sehen | **ja** | ja | ja | ja |
+| Operation | Kunde | Mitarbeiter | Manager | Owner | Admin |
+| --- | --- | --- | --- | --- | --- |
+| Anlegen | nein | ja | ja | ja | ja |
+| Bearbeiten | offen | ja | ja | ja | ja |
+| Suchen | nein | ja | ja | ja | ja |
+| Eigene Daten sehen | **ja** | ja | ja | ja | ja |
 
 ### Rechnung und Zahlung
 
@@ -83,25 +115,25 @@ entschieden
 > verlangt Rechnung und Zahlung im Datenmodell, und #8 nennt Rechnungen in den Rechten des
 > Kunden. Ein Ticket existiert nicht. Die Zeilen bleiben deshalb überwiegend offen.
 
-| Operation | Kunde | Mitarbeiter | Manager | Admin |
-| --- | --- | --- | --- | --- |
-| Eigene Rechnungen sehen | **ja** | ja | ja | ja |
-| Rechnung erstellen | nein | offen | offen | offen |
-| Rechnung stornieren | nein | offen | offen | offen |
+| Operation | Kunde | Mitarbeiter | Manager | Owner | Admin |
+| --- | --- | --- | --- | --- | --- |
+| Eigene Rechnungen sehen | **ja** | ja | ja | ja | ja |
+| Rechnung erstellen | nein | offen | offen | offen | offen |
+| Rechnung stornieren | nein | offen | offen | offen | offen |
 
 ### Protokoll (#2, #7, #9 erzeugen es, #19 bewahrt es auf)
 
-| Operation | Kunde | Mitarbeiter | Manager | Admin |
-| --- | --- | --- | --- | --- |
-| Historie **eines** Belegs oder **einer** Maschine | nein | **ja** | ja | ja |
-| Auswertung **über Personen** | nein | **nein** | **ja** | ja |
+| Operation | Kunde | Mitarbeiter | Manager | Owner | Admin |
+| --- | --- | --- | --- | --- | --- |
+| Historie **eines** Belegs oder **einer** Maschine | nein | **ja** | ja | ja | ja |
+| Auswertung **über Personen** | nein | **nein** | **ja** | **ja** | ja |
 
 ### Benutzer und Einstellungen (#8)
 
-| Operation | Kunde | Mitarbeiter | Manager | Admin |
-| --- | --- | --- | --- | --- |
-| Rolle zuweisen | nein | nein | offen | **ja** |
-| Stornofrist `X` einstellen | nein | nein | **ja** | ja |
+| Operation | Kunde | Mitarbeiter | Manager | Owner | Admin |
+| --- | --- | --- | --- | --- | --- |
+| Rolle zuweisen | nein | nein | offen | offen | **ja** |
+| Stornofrist `X` einstellen | nein | nein | **ja** | **ja** | ja |
 
 ## Die Entscheidungen im Wortlaut
 
@@ -127,8 +159,17 @@ Angabe eines Grundes**.
 Historie eines einzelnen Datensatzes, weil sie im Alltag wissen müssen, warum er so
 aussieht. Auswertungen über Personen sieht nur die Leitung.
 
-**5. Vier Rollen statt drei**, um fachliche Leitung und technische Administration zu
-trennen.
+**5. Fünf Rollen statt drei**, und der Admin steht quer statt oben.
+
+> „Owner ist der Chef der Firma und ihm gehört die Orga, in der gearbeitet wird."
+
+Vier fachliche Rollen (Owner, Manager, Mitarbeiter, Kunde) und eine technische (Admin). Der
+Grund für die Trennung: wer Benutzer und Rollen verwaltet, soll nicht zugleich fachliche
+Auswertungen über Personen sehen.
+
+**6. Eine Firma, keine Mandantenfähigkeit.** Die Organisation wird als eine Instanz
+simuliert. Mehrere Firmen in einem System wären der Weg, wenn man die Anwendung verkaufen
+wollte, und sind für dieses Projekt ausdrücklich nicht vorgesehen.
 
 ## Was daraus für andere Tickets folgt
 
@@ -185,7 +226,12 @@ Oberfläche alles sehen muss.
 
 ## Offene Punkte
 
-- [ ] **#8 anpassen:** das Kriterium nennt drei Rollen, entschieden sind vier
+- [ ] **#8 anpassen:** das Kriterium nennt drei Rollen, entschieden sind fünf. Der
+      Originaltext sagt „z. B.", die Verengung stammt aus der Neufassung
+- [ ] **Was darf nur der Owner, das der Manager nicht darf?** Solange die Antwort „nichts"
+      ist, sind die beiden Rollen im Rechtemodell nicht unterscheidbar. Mögliche Kandidaten:
+      einen Manager einsetzen oder absetzen, Firmenstammdaten ändern, eine Rechnung über
+      einem bestimmten Betrag stornieren
 - [ ] Darf ein Kunde seine **eigenen Stammdaten** ändern? Betrifft die Rechnungsadresse und
       damit die Abrechnung
 - [ ] Wer darf eine Maschine **außer Dienst stellen**? In #2 steht dazu kein Kriterium
