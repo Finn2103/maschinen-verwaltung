@@ -11,6 +11,7 @@ jede mit einer Nutzwertanalyse dahinter.
 | **Betriebssystem** | **Debian 13** | [ADR 0001](adr/0001-linux-distribution.md) | 545 · Ubuntu 26.04 625, *bewusste Abweichung* |
 | **Container-Plattform** | **Docker & Docker-Compose**, immer die aktuelle stabile Version (latest) aus dem Docker-Apt-Repository, Installation: [`infra/docker`](../infra/docker/README.md) | [ADR 0002](adr/0002-container-plattform.md) | 4,60 · Podman 3,75 · Kubernetes 2,90 |
 | **Reverse Proxy** | **Caddy** | [ADR 0003](adr/0003-reverse-proxy.md) | 4,70 · Traefik 4,10 · nginx 4,00 · apache2 3,30 |
+| **Monitoring** | **Eigenes Skript**, läuft direkt auf dem Server, ohne Docker | [ADR 0012](adr/0012-monitoring.md) | 4,40 · Prometheus 3,80 · Netdata 3,80 · Uptime Kuma 2,80 |
 | **Client** | **React mit Next.js** | [ADR 0004](adr/0004-client-technologie.md) | 4,55 · Angular 3,80 · Flutter 2,40 |
 | **Sprache** | **TypeScript** | [ADR 0010](adr/0010-programmiersprache.md) | 4,45 · C# 3,70 · JavaScript 3,25 · C++ 2,80 |
 | **Datenhaltung und Datenbank-API** | **Supabase, selbst gehostet**: PostgreSQL mit PostgREST | [ADR 0006](adr/0006-datenhaltung.md) | 4,40 · Oracle 3,60 · PocketBase 3,35 |
