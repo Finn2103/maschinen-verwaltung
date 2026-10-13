@@ -28,14 +28,14 @@ Arbeit in einem Dokument liegen, ohne auf dem Board zu erscheinen (#70).
 | [0009](0009-barrierefreiheit.md) | Was „barrierefrei nach ISO 9241" für dieses Projekt heißt | **Checkliste aus ISO 9241-110:2020 und -171, an WCAG 2.1 AA aufgehängt.** Gilt für alle Oberflächen-Items |
 | [0010](0010-programmiersprache.md) | Programmiersprache und Typisierung | **TypeScript**: Nutzwert 4,45 · C# 3,70 · JavaScript 3,25 · C++ 2,80, korrigiert am 25.09.2026 |
 | [0011](0011-speicherzugriff.md) | Speicherzugriff über eine Schnittstelle | **Schnittstelle mit zwei Umsetzungen**, Arbeitsspeicher jetzt, PostgreSQL nach #45. Von Anfang an asynchron, damit das Umstellen kein Umbau wird |
-| [0012](0012-monitoring.md) | Monitoring (Prometheus / Netdata / Uptime Kuma / eigenes Skript) | Entwurf, Entscheidung offen. Eigenes Skript vorn (4,40) vor Prometheus und Netdata (je 3,80). Auch ohne die Kriterien „Robust bei voller Platte“ und „Robust bei Docker-Ausfall“ bleibt es vorn (3,50 zu 3,20). Ticket #14 |
+| [0012](0012-monitoring.md) | Monitoring (Prometheus / Netdata / Uptime Kuma / eigenes Skript) | **Eigenes Skript**: Nutzwert 4,40 · Prometheus und Netdata je 3,80 · Uptime Kuma 2,80. Auch ohne die Kriterien „Robust bei voller Platte“ und „Robust bei Docker-Ausfall“ bleibt es vorn (3,50 zu 3,20). Ticket #14 |
 
 **Stand 01.10.2026.** Vollständig sind **0001**, **0004** und **0010**: Entscheidung,
 Interpretation und Konsequenzen stehen jeweils. Bei 0001 trägt #55 noch die Argumente des
 Teams nach, die dort stehende Begründung ist ein Entwurf.
 
 **0002** ist entschieden. Die Zeile zum Mailserver darin ist voraussichtlich, weil #12
-offen ist. **0003** ist entschieden: Caddy. **0005** hat Gewichtungen und Punkte, aber
+offen ist. **0003** ist entschieden: Caddy. **0012** ist entschieden: eigenes Skript. **0005** hat Gewichtungen und Punkte, aber
 noch keine Entscheidung. **0006** liegt als Entwurf vor, Methode und Zahlen stehen, die
 Formulierung schreibt das Team um.
 
@@ -53,6 +53,8 @@ In den meisten Fällen gewinnt die gewählte Option **nicht** in allen Kriterien
   SQL-DDL).
 - **Podman** gewinnt bei der Container-Plattform das Kriterium Isolation (5 gegen 3), weil
   es nativ rootless läuft. Docker muss dafür umgestellt werden.
+- **Prometheus** gewinnt beim Monitoring den Prüfumfang (5 gegen 4). Entschieden ist das
+  eigene Skript, weil es bei voller Platte und bei Docker-Ausfall weiter meldet.
 - **Traefik** gewinnt beim Reverse Proxy das Zusammenspiel mit Docker Compose (5 gegen 4),
   **nginx** die Angriffsfläche (5 gegen 4). Entschieden ist trotzdem Caddy.
 - **Ubuntu 26.04 LTS** gewinnt die Analyse zur Linux-Distribution insgesamt (625 zu 545),

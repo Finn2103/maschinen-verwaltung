@@ -1,11 +1,11 @@
 # ADR 0012: Monitoring für Datenbank- und Mailserver
 
-- **Status:** Entwurf
+- **Status:** **Entschieden** am 13.10.2026
 - **Datum:** 2026-10-09
-- **Entschieden von:** offen
+- **Entschieden von:** Nico Laeser
 - **Betrifft:** [#14](https://github.com/Finn2103/maschinen-verwaltung/issues/14) · [#11](https://github.com/Finn2103/maschinen-verwaltung/issues/11) · [#12](https://github.com/Finn2103/maschinen-verwaltung/issues/12) · [#13](https://github.com/Finn2103/maschinen-verwaltung/issues/13)
-- **Quelle:** Recherche, Stand 09.10.2026. KI-gestützter Entwurf, Gewichte und Punkte sind
-  Vorschläge und werden vor der Entscheidung geprüft.
+- **Quelle:** Recherche, Stand 09.10.2026. Entwurf mit KI-Unterstützung, Entscheidung am
+  13.10.2026.
 
 ## Kontext
 
@@ -94,6 +94,22 @@ hängt also nicht an diesen beiden Kriterien.
 
 Zwischen Skript und den fertigen Werkzeugen liegen 0,60. Die Tabelle allein entscheidet das nicht.
 
+## Entscheidung
+
+**Eigenes Skript.**
+
+Die Punktzahl allein ist keine Begründung. Das Skript läuft direkt auf dem Server, ohne
+Docker und ohne Webseite. Es schreibt nichts auf die Platte und meldet deshalb auch bei
+voller Platte. Fällt Docker aus, meldet es das ebenfalls. Es braucht keinen offenen Port
+und kaum Arbeitsspeicher. Genau diese Fälle muss das Monitoring auf einer einzelnen VM
+abdecken.
+
+Prometheus ist beim Prüfumfang besser (5 gegen 4), Prometheus und Netdata bei der
+Benachrichtigung (5 gegen 4) und Uptime Kuma bei der Erklärbarkeit (5 gegen 4). Dafür
+bräuchten sie mehrere Dienste oder eine Weboberfläche und sind bei voller Platte weniger
+robust. Der Preis beim Skript ist der eigene Wartungsaufwand. Die Punkte des Skripts sind
+Ziele, belegt werden sie durch den Test aus [#14](https://github.com/Finn2103/maschinen-verwaltung/issues/14).
+
 ## Wie das Skript aussehen würde
 
 - Am liebsten Bash, läuft direkt auf dem Server. Ein systemd-Timer startet es jede Minute.
@@ -120,7 +136,7 @@ Zwischen Skript und den fertigen Werkzeugen liegen 0,60. Die Tabelle allein ents
   dokumentiert.
 - Webhook-Adresse und Datenbank-Zugang liegen nicht im Repository, sondern nur auf dem
   Server ([Definition of Done](../scrum/definition-of-done.md), Punkt 6).
-- Wird es das Skript, kommen Prompt und Bewertung nach [`docs/ki/prompts`](../ki/prompts/README.md).
+- Prompt und Bewertung zum Skript kommen nach [`docs/ki/prompts`](../ki/prompts/README.md).
 
 ## Fragen und Antworten
 
