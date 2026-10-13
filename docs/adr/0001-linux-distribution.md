@@ -1,17 +1,18 @@
 # ADR 0001: Linux-Distribution für die Strato-VM
 
-- **Status:** **Entschieden** am 25.09.2026. Bewertung „Vorkenntnisse" korrigiert, Abweichung begründet
+- **Status:** **Entschieden** am 11.09.2026, dokumentiert am 25.09.2026. Begründung am 12.10.2026 aus der Entscheidungsrunde nachgetragen
 - **Datum:** Nutzwertanalyse vom 04.09.2026, überführt nach Markdown am 18.09.2026
-- **Entschieden von:** Team (Gruppe 11)
+- **Entschieden von:** Team (Gruppe 11), Runde vom 11.09.2026: Nico, Alexa, Justin, Laurin
 - **Betrifft:** [#4](https://github.com/Finn2103/maschinen-verwaltung/issues/4) · [#5](https://github.com/Finn2103/maschinen-verwaltung/issues/5) · [#11](https://github.com/Finn2103/maschinen-verwaltung/issues/11) · [#13](https://github.com/Finn2103/maschinen-verwaltung/issues/13)
 - **Quelle:** `Nutzwerkanalyse.xlsx`, diese Datei ist die Überführung in Markdown, die Zahlen sind unverändert
 
 ## In einem Satz
 
-**Debian 13**, obwohl Ubuntu 26.04 die Analyse mit 625 zu 545 gewinnt. Grund: wir kennen
-Debian besser, und der Server läuft bereits darauf. Debian gewinnt **kein einzelnes
-Kriterium**; die Abweichung ist eine Projektentscheidung gegen die Rangfolge, keine
-technische Behauptung.
+**Debian 13**, weil mit Nico **eine Person im Team Erfahrung mit Debian-Servern hat** und
+damit bei dringenden Problemen ansprechbar ist. Drei der fünf hatten keine
+Linux-Server-Erfahrung. Die Nutzwertanalyse sieht Ubuntu 26.04 mit 625 zu 545 vorn, und
+Debian gewinnt **kein einzelnes Kriterium**: die Entscheidung ist eine
+Projektentscheidung, keine technische Behauptung.
 
 ## Kontext
 
@@ -72,15 +73,38 @@ interpretieren, die höchste Punktzahl allein ist keine Begründung."*
 
 ### Begründung
 
-> **Vom Team am 25.09.2026 festgelegt. Bitte gegenlesen, ob das eure Begründung so trifft.**
+> **Argumente aus der Entscheidungsrunde vom 11.09.2026**, nachgetragen am 12.10.2026 von
+> Laurin. Anwesend waren Nico, Alexa, Justin und Laurin. Gegenstimmen gab es keine.
 
-1. **Das Team kennt Debian besser als Ubuntu.** Die ursprüngliche Bewertung sagte das
+1. **Eine Person im Team hat Erfahrung mit Debian-Servern und ist damit bei dringenden
+   Problemen ansprechbar.** Nico bringt diese Erfahrung mit, Laurin, Alexa und Justin
+   hatten keine Linux-Server-Erfahrung. **Das war das ausschlaggebende Argument.** Laurins
+   eigene Recherche hatte zunächst zu Ubuntu geführt.
+2. **Das Team kennt Debian besser als Ubuntu.** Die ursprüngliche Bewertung sagte das
    Gegenteil und war falsch. Sie ist korrigiert, siehe „Korrekturen". Das Kriterium wiegt
    allerdings nur 5 von 165 Punkten und trägt die Entscheidung nicht allein.
-2. **Der Server läuft bereits unter Debian 13.** Die Einrichtung ist gemacht, die Arbeit an
-   #5 und #11 baut darauf auf. Ein Wechsel würde Sprintzeit kosten, die gegen einen harten
-   Abgabetermin am 11.12.2026 nicht vorhanden ist. Der Nutzen aus 80 Punkten Vorsprung
-   würde diesen Aufwand nicht aufwiegen.
+3. **Geringerer Standardumfang als Ubuntu Server.** Weniger vorinstallierte Dienste heißt
+   weniger Angriffsfläche, was zur Pflichtvorgabe IT-Grundschutz passt. **Noch nicht
+   belegt**, siehe #55: dafür fehlt eine Zahl je Kandidat statt eines Adjektivs.
+
+Weitere Gründe gab es am 11.09. nicht.
+
+### Was ein Wechsel heute kosten würde
+
+Kein Entscheidungsgrund vom 11.09., sondern der Stand danach. Festgehalten, damit beides
+nicht vermischt wird:
+
+- Der Server läuft **seit 18.09.2026** unter Debian 13, rund **8 Stunden** Arbeit für
+  Einrichtung und Absicherung.
+- Dazu rund **5 Stunden** Einarbeitung in die Debian-Administration bei Laurin. Bei einem
+  Wechsel auf Ubuntu fängt dieser Teil von vorn an, soweit sich die Distributionen
+  unterscheiden.
+- Unklar ist, ob Software-Entscheidungen nachgezogen werden müssten, die inzwischen auf
+  Debian 13 aufbauen (#5, #11).
+
+Gegen einen harten Abgabetermin am 11.12.2026 wiegt der Vorsprung von 80 Punkten diesen
+Aufwand nicht auf. **Das ist ein Argument gegen das Wechseln, nicht eines für die
+ursprüngliche Wahl.**
 
 ### Was diese Begründung nicht behauptet
 
