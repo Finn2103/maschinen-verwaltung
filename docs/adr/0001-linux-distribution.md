@@ -1,6 +1,6 @@
 # ADR 0001: Linux-Distribution für die Strato-VM
 
-- **Status:** **Entschieden** am 11.09.2026, dokumentiert am 25.09.2026. Begründung am 12.10.2026 aus der Entscheidungsrunde nachgetragen
+- **Status:** **Entschieden** am 11.09.2026, dokumentiert am 25.09.2026. Begründung am 13.10.2026 aus der Entscheidungsrunde nachgetragen
 - **Datum:** Nutzwertanalyse vom 04.09.2026, überführt nach Markdown am 18.09.2026
 - **Entschieden von:** Team (Gruppe 11), Runde vom 11.09.2026: Nico, Alexa, Justin, Laurin
 - **Betrifft:** [#4](https://github.com/Finn2103/maschinen-verwaltung/issues/4) · [#5](https://github.com/Finn2103/maschinen-verwaltung/issues/5) · [#11](https://github.com/Finn2103/maschinen-verwaltung/issues/11) · [#13](https://github.com/Finn2103/maschinen-verwaltung/issues/13)
@@ -73,7 +73,7 @@ interpretieren, die höchste Punktzahl allein ist keine Begründung."*
 
 ### Begründung
 
-> **Argumente aus der Entscheidungsrunde vom 11.09.2026**, nachgetragen am 12.10.2026 von
+> **Argumente aus der Entscheidungsrunde vom 11.09.2026**, nachgetragen am 13.10.2026 von
 > Laurin. Anwesend waren Nico, Alexa, Justin und Laurin. Gegenstimmen gab es keine.
 
 1. **Eine Person im Team hat Erfahrung mit Debian-Servern und ist damit bei dringenden
