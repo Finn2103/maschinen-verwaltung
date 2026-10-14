@@ -10,6 +10,79 @@ die Abgabe zusätzlich eine Word-Fassung im Loop-Arbeitsbereich verlangt ist.
 
 ---
 
+## 2026-10-13 · Dienstag
+
+Kein Schultag. Vorbereitung auf das Review am 15.10. und die Barrierefreiheits-Abnahme
+für #1.
+
+**Tätigkeit**
+
+- Rollenmodell für #8 von vier auf fünf Rollen erweitert und festgehalten, dass das System
+  genau eine Firma verwaltet
+- Begründung für Debian 13 aus der Entscheidungsrunde vom 11.09. in ADR 0001 nachgetragen,
+  Quelle als Kommentar unter #55
+- Deutsches Datumsformat in der Oberfläche
+- Barrierefreiheits-Abnahme für #1 gegen die Checkliste aus ADR 0009
+- Branches aufgeräumt, zwei Pull Requests von Nico geprüft
+
+**Problem**
+
+- Die Begründung für Debian in ADR 0001 war ein KI-Entwurf und stützte sich auf „wir
+  kennen Debian besser" und „der Server läuft schon". Das zweite kann kein Grund gewesen
+  sein: entschieden wurde am 11.09., der Server lief erst ab dem 18.09.
+- In der Oberfläche standen Datumsangaben im Format `2026-09-24`. Im Code ist das richtig,
+  für eine deutschsprachige Anwendung in der Anzeige nicht.
+- Beim Prüfen der Kontraste kamen zunächst unsinnige Werte heraus: 19,6 statt 7,8.
+- **Zwei Verstöße gegen die eigene Checkliste**, beide noch Vorgabewerte von
+  `create-next-app`: `lang="en"` auf einer deutschen Anwendung, und der Seitentitel
+  „Create Next App" auf jeder Seite.
+- Im Prompt-Log von Nico (#77) fehlten Ergebnis und Bewertung je Prompt, also genau der
+  Teil, der laut Projektregeln bewertet wird.
+
+**Lösung**
+
+- Laurin hat die Argumente der Runde vom 11.09. geschickt. Ausschlaggebend war, dass eine
+  Person im Team Erfahrung mit Debian-Servern hat und bei dringenden Problemen
+  ansprechbar ist; drei der fünf hatten keine. Das steht jetzt an erster Stelle. Der
+  laufende Server und die Einarbeitungszeit stehen getrennt davon als Wechselkosten.
+- Neue Datei `lib/datum.ts`, bewusst **ohne `Date` und ohne `Intl`**: beide brauchen eine
+  Zeitzone. Es wird nur eine Zeichenkette umgestellt. `Zeitraum.alsText()` ist dafür
+  entfallen, damit die Darstellung aus dem Fachobjekt heraus ist.
+- Kontrast gemessen in heller und dunkler Darstellung, auch im Fehlerzustand. Niedrigster
+  Wert **7,63 zu 1** bei gefordertem 4,5. Fehlermeldung 13,22, Rahmen des fehlerhaften
+  Felds 6,90 bei gefordertem 3.
+- `lang="de"` gesetzt und Seitentitel vergeben. Die Reservierungsseite nennt die Maschine,
+  damit zwei offene Browser-Tabs unterscheidbar sind.
+- Tastaturdurchgang und 200 Prozent Zoom selbst geprüft, beides ohne Befund. Damit sind
+  die zwei Kriterien in #1 erfüllt, die bei mir lagen.
+- #77 nicht gemerged, sondern mit Kommentar zurückgegeben.
+
+**Lessons Learned**
+
+- **Eine Begründung muss trennen zwischen dem, was damals entschieden hat, und dem, was
+  heute gegen eine Änderung spricht.** „Der Server läuft schon" ist ein Argument gegen das
+  Wechseln, keines für die ursprüngliche Wahl. Laurin hat diese Trennung von sich aus
+  gemacht, und sie ist der Grund, warum die Begründung jetzt trägt.
+- **Durchklicken ist keine Barrierefreiheitsprüfung.** Ich hatte die Anwendung mit der Maus
+  bedient und für getestet gehalten. Die Checkliste verlangt ausdrücklich „Maus weglegen",
+  Kontraste messen statt schätzen, und beides auch in dunkler Darstellung. Beim Messen kamen
+  dann zwei Fehler heraus, die mit der Maus unsichtbar sind.
+- **Die gefährlichsten Fehler sind die Vorgabewerte des Gerüsts.** `lang="en"` und „Create
+  Next App" standen seit dem ersten Tag da und sind niemandem aufgefallen, weil sie nichts
+  kaputt machen, was man sieht.
+- **Ein Messwerkzeug muss man selbst prüfen.** Die ersten Kontrastwerte waren falsch, weil
+  Tailwind 4 Farben als `lab()` ausgibt und meine Rechnung sie als `rgb()` gelesen hat. Ein
+  Wert von 19,6 für grauen Text auf Weiß war zu gut, um zu stimmen, und genau das war der
+  Hinweis.
+- Im Code ISO-8601, in der Anzeige das Format des Landes. **Beides ist richtig, nur an
+  verschiedenen Stellen.** Ein Format, das sortiert, und eines, das gelesen wird, sind zwei
+  verschiedene Anforderungen.
+- **Ein Nachweis ohne Bewertung erfüllt die Vorgabe nicht.** Bei #77 waren die Prompts
+  sauber dokumentiert, aber ohne Ergebnis und Bewertung. Genau der zweite Teil wird benotet,
+  und das steht so in unserem eigenen README.
+
+---
+
 ## 2026-10-12 · Montag
 
 Kein Schultag. Vorbereitung auf das Review am 15.10. und eine eigene Code-Review am

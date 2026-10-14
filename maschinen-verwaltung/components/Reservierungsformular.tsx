@@ -21,6 +21,7 @@ import Link from "next/link";
 import { reservierungAbsenden, type FormularZustand } from "@/app/reservieren/aktionen";
 import type { MaschineAnzeige } from "@/lib/maschine";
 import type { Feld } from "@/lib/reservierung";
+import { zeitraumDeutsch } from "@/lib/datum";
 
 const FEHLER_ID = "reservierung-fehler";
 
@@ -67,7 +68,7 @@ export function Reservierungsformular({ maschine, von, bis }: Props) {
           <dd>{maschine.bezeichnung}</dd>
           <dt>Zeitraum</dt>
           <dd>
-            {ergebnis.reservierung.von} bis {ergebnis.reservierung.bis}
+            {zeitraumDeutsch(ergebnis.reservierung.von, ergebnis.reservierung.bis)}
           </dd>
         </dl>
         <p className="mt-3 text-sm text-neutral-600 dark:text-neutral-400">

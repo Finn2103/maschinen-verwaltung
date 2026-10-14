@@ -12,6 +12,7 @@
 // Zusammensetzen (ADR 0004).
 
 import { Zeitraum } from "./zeitraum";
+import { zeitraumDeutsch } from "./datum";
 import type { Feld, Kunde, Reservierung, ReservierungSpeicher } from "./reservierung";
 
 export type ReservierungErgebnis =
@@ -55,7 +56,7 @@ export async function reservieren(
     if (konflikt) {
         return {
             ok: false,
-            fehler: `Die Maschine ist vom ${konflikt.alsText()} belegt.`,
+            fehler: `Die Maschine ist vom ${zeitraumDeutsch(konflikt.von, konflikt.bis)} belegt.`,
             feld: "von",
         };
     }

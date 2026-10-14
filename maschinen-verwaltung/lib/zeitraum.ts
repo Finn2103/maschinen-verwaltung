@@ -33,11 +33,6 @@ export class Zeitraum {
         return this.von <= anderer.bis && anderer.von <= this.bis;
     }
 
-    /** Fuer die Anzeige, damit das Format an einer Stelle steht. */
-    alsText(): string {
-        return `${this.von} bis ${this.bis}`;
-    }
-
     /**
      * Prueft eine Eingabe, bevor daraus ein Zeitraum wird, und gibt die
      * Fehlermeldung zurueck oder null.
