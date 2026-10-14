@@ -1,7 +1,9 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { maschinen } from "@/lib/maschinen";
 import { speicher } from "@/lib/speicher";
+import { zeitraumDeutsch } from "@/lib/datum";
 import { Reservierungsformular } from "@/components/Reservierungsformular";
 
 // In Next.js 16 sind params und searchParams Promises und muessen awaited
@@ -12,6 +14,19 @@ type Props = {
   searchParams: Promise<{ von?: string; bis?: string }>;
 };
 
+// Der Titel nennt die Maschine, damit zwei offene Reservierungsseiten im
+// Browser unterscheidbar sind (WCAG 2.4.2). Dynamisch, deshalb
+// generateMetadata statt eines festen metadata-Objekts. params ist auch hier
+// ein Promise und muss awaited werden.
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { inventarnummer } = await params;
+  const maschine = maschinen.find((m) => m.inventarnummer === inventarnummer);
+
+  return {
+    title: maschine ? `${maschine.bezeichnung} reservieren` : "Maschine nicht gefunden",
+  };
+}
+
 export default async function Reservieren({ params, searchParams }: Props) {
   const { inventarnummer } = await params;
   const { von, bis } = await searchParams;
@@ -21,7 +36,8 @@ export default async function Reservieren({ params, searchParams }: Props) {
 
   // Ueber den Speicher, nicht ueber maschine.belegungen: so sind bereits
   // angelegte Reservierungen mit dabei (ADR 0011).
-  const belegungen = await speicher.belegungenFuer(inventarnummer);
+  const plan = await speicher.belegungsplanFuer(inventarnummer);
+  const belegungen = plan.alle();
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
@@ -44,7 +60,7 @@ export default async function Reservieren({ params, searchParams }: Props) {
 
       <section className="mt-6">
         <h2 className="text-sm font-medium">Schon belegt</h2>
-        {belegungen.length === 0 ? (
+        {plan.leer ? (
           <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
             Keine Belegung erfasst, die Maschine ist durchgehend frei.
           </p>
@@ -52,7 +68,7 @@ export default async function Reservieren({ params, searchParams }: Props) {
           <ul className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
             {belegungen.map((belegung) => (
               <li key={`${belegung.von}-${belegung.bis}`}>
-                {belegung.von} bis {belegung.bis}
+                {zeitraumDeutsch(belegung.von, belegung.bis)}
               </li>
             ))}
           </ul>
@@ -63,7 +79,9 @@ export default async function Reservieren({ params, searchParams }: Props) {
         </p>
       </section>
 
-      <Reservierungsformular maschine={maschine} von={von} bis={bis} />
+      {/* alsAnzeige(): das Fachobjekt bleibt auf dem Server, ueber die Grenze
+          zur Client-Komponente geht ein einfaches Objekt. */}
+      <Reservierungsformular maschine={maschine.alsAnzeige()} von={von} bis={bis} />
     </main>
   );
 }

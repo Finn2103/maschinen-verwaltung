@@ -10,6 +10,270 @@ die Abgabe zusätzlich eine Word-Fassung im Loop-Arbeitsbereich verlangt ist.
 
 ---
 
+## 2026-10-14 · Mittwoch
+
+Kein Schultag. Vorbereitung auf das Review am 15.10.
+
+**Tätigkeit**
+
+- Präsentation neu strukturiert: Organisation, Entwurf, Umsetzung statt „geplant" und
+  „ungeplant"
+- Den Aufbau der Anwendung durchgegangen, bis ich ihn selbst erklären konnte
+- Oberflächen-Konventionen um den Abschnitt erweitert, wo die Entscheidung fällt
+
+**Problem**
+
+- Die Präsentation legte den Schwerpunkt auf die kleinsten Themen. „Repo und Board
+  aufsetzen" stand prominent, die **dreizehn Bildschirme als Mockups** kamen gar nicht vor,
+  obwohl sie mit 1046 Zeilen das größte Einzelstück im Projekt sind.
+- Die Folie „Aufbau der Anwendung" zeigte nur `lib/` und ließ `components/` weg, also den
+  zweitgrößten Teil mit 336 von 736 Zeilen.
+- **Der Nachweis, dass die Fachlogik nicht im Browser landet, war falsch geführt.** Gesucht
+  wurde nach Funktionsnamen wie `ueberlappt`.
+- Ich konnte den Satz „die Fachlogik landet nicht im Browser" nicht in eigenen Worten
+  erklären, obwohl er auf einer Folie stand.
+- Im Projekt gibt es **zwei** Dateien mit `"use client"`, nicht eine. In allen Unterlagen
+  stand „genau eine Ausnahme".
+
+**Lösung**
+
+- Neue Gliederung: Organisation, Entwurf, Umsetzung, dann Entscheidungen, KI, Offenes. Die
+  Mockups haben eine eigene Folie bekommen.
+- Folie „Aufbau" zeigt jetzt alle drei Ordner mit ihrer Rolle, nur `lib/` ist in Dateien
+  aufgeklappt.
+- Nachweis auf **Zeichenketten** umgestellt und in den Konventionen dokumentiert, mit dem
+  Hinweis, warum die Suche nach Bezeichnern nicht trägt.
+- Die beiden Wege durch die Anwendung in `docs/frontend-konventionen.md` aufgeschrieben,
+  Suche und Reservieren, Schritt für Schritt.
+- `app/error.tsx` als zweite Client-Datei benannt, mit dem Vermerk, dass sie eine Vorgabe
+  des Frameworks ist.
+
+**Lessons Learned**
+
+- **Der Schwerpunkt einer Präsentation gehört dorthin, wo die Arbeit war.** Nach Commits
+  und Dateigrößen nachgesehen: der erste Projekttag hatte elf Commits und brachte das neu
+  gefasste Backlog, der 08.10. hatte fünfzehn und brachte den Code. Dazwischen lagen die
+  Mockups. Das Bauen war nicht der Zeitfresser, das Entscheiden und Entwerfen davor war es.
+- **Ein Nachweis muss zu dem passen, was das Werkzeug tut.** Der Produktionsbau kürzt
+  Funktionsnamen ab, deshalb findet eine Suche nach `ueberlappt` auch dann nichts, wenn der
+  Code vorhanden wäre. Nur Zeichenketten überstehen die Minimierung. Ein Beleg, der immer
+  bestätigt, belegt nichts.
+- **„Die Fachlogik läuft auf dem Server" und „ihr Code ist nicht im Browser" sind zwei
+  Aussagen.** Die erste sagt, wo die Entscheidung fällt, die zweite, was ausgeliefert wird.
+  Beide treffen hier zu, aber aus verschiedenen Gründen.
+- **Der eigentliche Grund für den Schnitt ist nicht Ordnung, sondern Manipulierbarkeit.**
+  Alles im Browser kann der Nutzer über die Entwicklerwerkzeuge ändern. Läge die
+  Überlappungsprüfung dort, könnte man sie durch `return false` ersetzen und jede Maschine
+  doppelt buchen. Deshalb heißt es in unseren Konventionen: Server-Validierung ist die
+  Wahrheit, Client-Validierung ist Komfort.
+- **Die Grenze entsteht durch die Importkette, nicht durch eine Einstellung.** Der Bündler
+  startet bei jeder `"use client"`-Datei und folgt ihren Importen. Deshalb gilt die Aussage
+  nicht pauschal für `lib/`: `lib/datum.ts` ist im Browser, weil das Formular es für die
+  Datumsanzeige braucht.
+- **Was auf einer Folie steht, muss man in eigenen Worten erklären können.** Ich hatte
+  Sätze übernommen, die ich nicht hätte verteidigen können. Das Durchgehen hat drei Fehler
+  darin gefunden.
+
+---
+
+## 2026-10-13 · Dienstag
+
+Kein Schultag. Vorbereitung auf das Review am 15.10. und die Barrierefreiheits-Abnahme
+für #1.
+
+**Tätigkeit**
+
+- Rollenmodell für #8 von vier auf fünf Rollen erweitert und festgehalten, dass das System
+  genau eine Firma verwaltet
+- Begründung für Debian 13 aus der Entscheidungsrunde vom 11.09. in ADR 0001 nachgetragen,
+  Quelle als Kommentar unter #55
+- Deutsches Datumsformat in der Oberfläche
+- Barrierefreiheits-Abnahme für #1 gegen die Checkliste aus ADR 0009
+- Branches aufgeräumt, zwei Pull Requests von Nico geprüft
+
+**Problem**
+
+- Die Begründung für Debian in ADR 0001 war ein KI-Entwurf und stützte sich auf „wir
+  kennen Debian besser" und „der Server läuft schon". Das zweite kann kein Grund gewesen
+  sein: entschieden wurde am 11.09., der Server lief erst ab dem 18.09.
+- In der Oberfläche standen Datumsangaben im Format `2026-09-24`. Im Code ist das richtig,
+  für eine deutschsprachige Anwendung in der Anzeige nicht.
+- Beim Prüfen der Kontraste kamen zunächst unsinnige Werte heraus: 19,6 statt 7,8.
+- **Zwei Verstöße gegen die eigene Checkliste**, beide noch Vorgabewerte von
+  `create-next-app`: `lang="en"` auf einer deutschen Anwendung, und der Seitentitel
+  „Create Next App" auf jeder Seite.
+- Im Prompt-Log von Nico (#77) fehlten Ergebnis und Bewertung je Prompt, also genau der
+  Teil, der laut Projektregeln bewertet wird.
+
+**Lösung**
+
+- Laurin hat die Argumente der Runde vom 11.09. geschickt. Ausschlaggebend war, dass eine
+  Person im Team Erfahrung mit Debian-Servern hat und bei dringenden Problemen
+  ansprechbar ist; drei der fünf hatten keine. Das steht jetzt an erster Stelle. Der
+  laufende Server und die Einarbeitungszeit stehen getrennt davon als Wechselkosten.
+- Neue Datei `lib/datum.ts`, bewusst **ohne `Date` und ohne `Intl`**: beide brauchen eine
+  Zeitzone. Es wird nur eine Zeichenkette umgestellt. `Zeitraum.alsText()` ist dafür
+  entfallen, damit die Darstellung aus dem Fachobjekt heraus ist.
+- Kontrast gemessen in heller und dunkler Darstellung, auch im Fehlerzustand. Niedrigster
+  Wert **7,63 zu 1** bei gefordertem 4,5. Fehlermeldung 13,22, Rahmen des fehlerhaften
+  Felds 6,90 bei gefordertem 3.
+- `lang="de"` gesetzt und Seitentitel vergeben. Die Reservierungsseite nennt die Maschine,
+  damit zwei offene Browser-Tabs unterscheidbar sind.
+- Tastaturdurchgang und 200 Prozent Zoom selbst geprüft, beides ohne Befund. Damit sind
+  die zwei Kriterien in #1 erfüllt, die bei mir lagen.
+- #77 nicht gemerged, sondern mit Kommentar zurückgegeben.
+
+**Lessons Learned**
+
+- **Eine Begründung muss trennen zwischen dem, was damals entschieden hat, und dem, was
+  heute gegen eine Änderung spricht.** „Der Server läuft schon" ist ein Argument gegen das
+  Wechseln, keines für die ursprüngliche Wahl. Laurin hat diese Trennung von sich aus
+  gemacht, und sie ist der Grund, warum die Begründung jetzt trägt.
+- **Durchklicken ist keine Barrierefreiheitsprüfung.** Ich hatte die Anwendung mit der Maus
+  bedient und für getestet gehalten. Die Checkliste verlangt ausdrücklich „Maus weglegen",
+  Kontraste messen statt schätzen, und beides auch in dunkler Darstellung. Beim Messen kamen
+  dann zwei Fehler heraus, die mit der Maus unsichtbar sind.
+- **Die gefährlichsten Fehler sind die Vorgabewerte des Gerüsts.** `lang="en"` und „Create
+  Next App" standen seit dem ersten Tag da und sind niemandem aufgefallen, weil sie nichts
+  kaputt machen, was man sieht.
+- **Ein Messwerkzeug muss man selbst prüfen.** Die ersten Kontrastwerte waren falsch, weil
+  Tailwind 4 Farben als `lab()` ausgibt und meine Rechnung sie als `rgb()` gelesen hat. Ein
+  Wert von 19,6 für grauen Text auf Weiß war zu gut, um zu stimmen, und genau das war der
+  Hinweis.
+- Im Code ISO-8601, in der Anzeige das Format des Landes. **Beides ist richtig, nur an
+  verschiedenen Stellen.** Ein Format, das sortiert, und eines, das gelesen wird, sind zwei
+  verschiedene Anforderungen.
+- **Ein Nachweis ohne Bewertung erfüllt die Vorgabe nicht.** Bei #77 waren die Prompts
+  sauber dokumentiert, aber ohne Ergebnis und Bewertung. Genau der zweite Teil wird benotet,
+  und das steht so in unserem eigenen README.
+
+---
+
+## 2026-10-12 · Montag
+
+Kein Schultag. Vorbereitung auf das Review am 15.10. und eine eigene Code-Review am
+privaten Rechner.
+
+**Tätigkeit**
+
+- Eigene Code-Review der Oberflächenschicht aus #1, Datei für Datei
+- Domänenschicht auf Klassen mit Verhalten umgestellt
+- Präsentation für das Review vorbereitet, dazu ein Vorbereitungsdokument für das
+  Fachgespräch
+- Zuständigkeit für #45 geprüft und das Argument zu Debian in #55 festgehalten
+
+**Problem**
+
+- **ADR 0004 verlangt unter „Wo die Objektorientierung liegt", dass die Fachobjekte ihre
+  Regeln selbst tragen. Im Code gab es keine einzige Klasse**, nur Typen und freie
+  Funktionen. Mein eigenes Dokument und mein Code sagten verschiedene Dinge, und
+  objektorientiert ist eine der vier Pflichtvorgaben
+- `verfuegbarkeit.ts` machte drei Dinge: Verfügbarkeit, Suche und Eingabeprüfung. Der
+  Dateiname deckte nur das Erste ab, und `suchlink.ts` importierte seinen Filtertyp
+  deshalb aus einer Datei, in die er nicht gehört
+- Die Suche liest die Belegungen aus den Beispieldaten, das Reservieren über den Speicher.
+  **Zwei Quellen für dieselbe Frage.** Eine in der Anwendung angelegte Reservierung sieht
+  die Suche deshalb nicht, obwohl das zugehörige Kriterium in #1 abgehakt ist
+- Es gibt keine einzige Testdatei im Projekt
+- `lib/` ist mit vier Leerzeichen eingerückt, `app/` und `components/` mit zwei. Kein
+  Prettier, keine `.editorconfig`
+- Beim Umbau wollte ich in `reservieren.ts` eine Maschine mit leeren Feldern anlegen, nur
+  um an deren Konfliktmethode zu kommen
+
+**Lösung**
+
+- Fünf Klassen mit Verhalten: `Zeitraum` prüft Überlappung und Eingabe, `Belegungsplan`
+  findet Konflikte, `Maschine` beantwortet Verfügbarkeit und Suchtreffer, `Kunde` prüft
+  seine Vollständigkeit, `Reservierung` hält das Ergebnis. Aus `ueberlappt(a, b)` wurde
+  `a.ueberlappt(b)`, die Rechnung selbst ist unverändert
+- `Belegungsplan` als eigenes Fachobjekt eingeführt, statt die Scheinmaschine zu bauen
+- `verfuegbarkeit.ts` in `zeitraum.ts`, `maschine.ts` und `suche.ts` aufgeteilt
+- Für die Grenze zum Browser `alsAnzeige()` auf `Maschine` und `Reservierung`: das
+  Fachobjekt bleibt auf dem Server, hinüber geht ein einfaches Objekt
+- Geprüft mit `tsc`, `eslint` und `next build`, dazu von Hand gegen `next start`: der
+  abgelehnte Rückgabetag, eine erfolgreiche Reservierung und eine Doppelbuchung
+- Den Suchdefekt bewusst **nicht** mit behoben, damit Umbau und Fehlerbehebung getrennt
+  bleiben. Er ist als offener Befund notiert
+
+**Lessons Learned**
+
+- **Objektorientiert gedacht ist nicht objektorientiert ausgedrückt.** Trennung von
+  Darstellung und Fachlichkeit, Abhängigkeiten nach innen, eine Schnittstelle mit zwei
+  Umsetzungen: das war alles da. Was fehlte, war, dass das Verhalten an den Daten hängt.
+  Eine Funktion, die ihr Objekt als erstes Argument nimmt, ist eine Methode, die noch
+  nicht umgezogen ist
+- **Wenn man ein Objekt erfinden muss, das es fachlich nicht gibt, fehlt eine Klasse.** Die
+  Maschine mit leeren Feldern war das Symptom, der fehlende `Belegungsplan` die Ursache
+- **Klasseninstanzen können die Grenze zum Browser nicht überqueren.** React verlangt für
+  Props einer Client-Komponente serialisierbare Werte, und beim Verschicken bleibt nur das
+  übrig, was Daten sind. Die Methoden fallen weg. Das bricht erst beim Benutzen und nicht
+  beim Kompilieren, deshalb habe ich es laufen lassen und nicht nur übersetzt
+- **Die Fachlogik ist nachweislich nicht im Browser.** Im gebauten Bundle unter
+  `.next/static/chunks` kommen `ueberlappt`, `konfliktMit`, `istVerfuegbarIn`,
+  `Belegungsplan` und auch die Maschinendaten in keiner einzigen Datei vor, der Text der
+  Client-Komponente dagegen schon. Das ist der Beleg für den Client-Server-Schnitt, und er
+  ist mit einem `grep` nachprüfbar statt behauptet
+- „Hinter einer Schnittstelle" und „nicht im Browser sichtbar" sind **zwei verschiedene
+  Eigenschaften.** Die Schnittstelle macht den Speicher austauschbar, das Bündeln
+  entscheidet, was im Browser landet. Ich hatte beides in einem Satz vermischt
+- Ein Umbau, der kein Verhalten ändert, gehört **in einen eigenen Commit** und nicht
+  zusammen mit einer Fehlerbehebung. Sonst kann niemand später trennen, was die Ursache
+  einer Änderung war
+- **Eine KI schreibt ohne Vorgabe idiomatisch, nicht nach unserem ADR.** Modernes
+  TypeScript mit React benutzt Typen und Funktionen, und genau das kam heraus. An allen
+  Stellen, an denen ich etwas vorgegeben hatte, steht es im Code: deutsche Fachbegriffe,
+  Fehler als Rückgabewert, Schnittstelle vor Umsetzung. An der einen Stelle, an der ich
+  nichts vorgegeben hatte, hat die Voreinstellung gewonnen, und es widersprach dem ADR
+
+---
+
+## 2026-10-09 · Freitag
+
+**Tätigkeit**
+
+- Eigenes Review des Boards und meiner User Stories, ohne KI, danach die Befunde abarbeiten lassen
+- `staging` nach `main` zusammengeführt, 57 Commits
+- #39 und #1 geprüft und die erfüllten Akzeptanzkriterien abgehakt
+- Jede entschiedene ADR um einen Abschnitt „In einem Satz" ergänzt
+- #70 und #71 angelegt für Arbeit, die in Dokumenten lag und kein Ticket hatte
+- ERD-Abnahme vorbereitet: Übersichtsseite mit acht Fragen und #73 zum Antworten
+- Aufgabenliste je Teammitglied für die Zeit bis zum Review geschrieben
+- Kommentare an #55 und #35, damit die Hinweise dort stehen, wo gearbeitet wird
+
+**Problem**
+
+- In ADR 0001, 0004 und 0010 stand oben noch „Entwurf" und „die Begründung fehlt noch", obwohl die Issues geschlossen waren. Ich dachte, beim Schließen sei etwas schiefgelaufen
+- Die KI hatte für #1 „sieben von zehn Kriterien erfüllt" behauptet. Es sind **neun** Kriterien, und erfüllt waren **fünf**. Keines war abgehakt
+- Bei #45 war die Annahme, aus `staging` sei etwas erfüllt. Es gibt nur das ERD, kein relationales Modell und kein SQL
+- Im ERD fehlen Bauteil, Verbrauchsmaterial und Bestellung, obwohl sie in unserem eigenen `docs/datenmodell/README.md` als fachliche Anker stehen. Bei sieben von neun Entitäten fehlen die Attribute
+- Die Begründungen stehen verteilt in Issue-Kommentaren und ADRs und sind zu lang, um im Fachgespräch benutzbar zu sein
+- #44 ist geschlossen, die Abnahme gegen die Checkliste war darin aber nicht enthalten. #2, #7 und #8 haben gar keine Barrierefreiheits-Kriterien
+- Die Checkliste in ADR 0009 zeigte 30 leere Kästchen und sah aus wie Arbeitsrückstand, obwohl sie eine Vorlage ist
+- Das Team konnte heute nicht gemeinsam am ERD arbeiten, und mehrere haben gesagt, dass sie nicht fertig werden
+- Meine erste Aufgabenliste für die Gruppe war zu lang für den Weg, auf dem ich sie schicken wollte
+
+**Lösung**
+
+- Ursache der ADR-Beobachtung gefunden: **`main` lag 55 Commits hinter `staging`.** `main` ist der Standard-Branch, also sieht man dort den Stand vom 24.09. Fünf ADRs existierten auf `main` gar nicht, und alle Links in Issue-Kommentaren zeigten auf `blob/main/` und damit auf veraltete Dateien. Zusammengeführt und die Links auf `staging` umgestellt
+- Kriterien in #39 und #1 nachgezählt und abgehakt, die veralteten Zahlen in #39 korrigiert
+- Jede entschiedene ADR beginnt jetzt mit „In einem Satz", zwei bis drei Zeilen ganz oben. Als Konvention im ADR-Index festgehalten, zusammen mit der Regel: wer ein Issue schließt, prüft das zugehörige ADR auf offene Stellen
+- #70 sammelt die offenen Stellen aus fünf ADRs, #71 die Anwendung der Barrierefreiheits-Checkliste auf #2, #7 und #8
+- Hinweis über die Checkliste in ADR 0009, dass sie eine Vorlage ist
+- ERD-Abnahme so gebaut, dass sie ohne Git funktioniert: Übersichtsseite zum Lesen, und in #73 eine Vorlage, bei der je Frage **ein Wort** genügt
+- Aufgabenliste gekürzt, bis sie in eine Kurznachricht passt. Details bleiben in den Issues und werden nur verlinkt
+
+**Lessons Learned**
+
+- **Der Standard-Branch ist das, was andere sehen.** Wir arbeiten auf `staging`, aber jeder Link und jeder Repository-Aufruf landet auf `main`. Solange der nicht nachgezogen wird, ist die halbe Arbeit für Außenstehende nicht vorhanden. Wir hatten die Regel „wann geht `staging` nach `main`" als offen markiert und dann vergessen
+- **Zahlen, die eine KI nennt, sind Behauptungen, bis sie gezählt sind.** Zweimal an einem Tag stimmten die Angaben nicht. Das eigene Review war die bessere Prüfung
+- **Ein Dokument zu erzeugen ist nicht dasselbe wie es anzuwenden.** #44 hat die Checkliste erstellt und war damit erledigt. Dass drei von vier Oberflächen-Items sie nicht als Kriterium tragen, hatte niemandem gehört
+- Arbeit, die als „offen" in einem Dokument steht, hat keinen Bearbeiter und erscheint auf keinem Board. Beim Schließen eines Issues muss man ins zugehörige Dokument schauen
+- **Eine Begründung, die niemand liest, wirkt wie keine.** Drei Absätze im ADR sind richtig und nützen nichts, wenn die Frage im Fachgespräch in zehn Sekunden beantwortet werden muss. Deshalb die Kurzfassung oben und das Ausführliche darunter
+- Kommunikation muss zum Medium passen. Eine Liste, die als Seite funktioniert, ist für eine Kurznachricht zu lang. Dann gehören die Details in das Issue und die Nachricht enthält nur, was ansteht und wo es steht
+- Wer mit Git nicht zurechtkommt, braucht einen Weg ohne Git. Ein Kommentar in einem Issue ist ein Textfeld wie in einem Chat, und das muss man dazusagen, sonst ist die Hürde das Werkzeug und nicht die Aufgabe
+
+---
+
 ## 2026-10-08 · Donnerstag
 
 **Tätigkeit**
@@ -33,6 +297,7 @@ die Abgabe zusätzlich eine Word-Fassung im Loop-Arbeitsbereich verlangt ist.
 - Nach einer abgelehnten Reservierung waren Name, E-Mail und Telefon leer, der Kunde hätte alles neu eintippen müssen
 - Das Akzeptanzkriterium „barrierefrei nach ISO 9241" in #1 verwies auf eine Checkliste, die es nicht gab
 - Die Reservierungen liegen im Arbeitsspeicher, weil das Datenmodell aus #45 noch nicht steht
+- Das angelegte Projekt ist **Next.js 16**, und mehrere Dinge funktionieren dort anders als in der Version 15, auf die sich die meisten Anleitungen beziehen. Drei Stellen haben mich aufgehalten: der Zugriff auf `searchParams` und `params`, der Zustand des Formulars nach dem Absenden, und dass die Server Action die Suchparameter der Seite nicht kennt
 
 **Lösung**
 
@@ -42,6 +307,7 @@ die Abgabe zusätzlich eine Word-Fassung im Loop-Arbeitsbereich verlangt ist.
 - Die Server Action gibt die Eingaben im Fehlerfall zurück, das Formular zeigt sie wieder an. Das Wiederanzeigen ist Darstellung und steht deshalb in der Action, nicht in der Fachlogik
 - ADR 0009 geschrieben: drei einschlägige Teile der Norm benannt, Checkliste in sechs Abschnitten, jeder Punkt mit Tastatur, Screenreader oder Kontrastmessung nachweisbar
 - ADR 0011 geschrieben: Schnittstelle zwischen Fachlogik und Speicher, zwei Umsetzungen, eine Auswahlstelle. Von Anfang an asynchron, damit das Umstellen kein Umbau wird
+- Zu den drei Next.js-16-Stellen jeweils in der mitgelieferten Dokumentation unter `node_modules/next/dist/docs/` nachgesehen statt in Anleitungen im Netz, weil die sich auf Version 15 beziehen. `searchParams` und `params` werden `await`-et, der Formularzustand kommt über `useActionState` aus `react`, und die Inventarnummer geht als verstecktes Feld ins Formular. Die Begründung steht jeweils als Kommentar an der Stelle im Code
 
 **Lessons Learned**
 
@@ -54,6 +320,8 @@ die Abgabe zusätzlich eine Word-Fassung im Loop-Arbeitsbereich verlangt ist.
 - Eine Norm wird prüfbar, indem man sie **einmal** in eine Liste übersetzt, nicht indem man sie je Item neu auslegt. Die WCAG-Erfolgskriterien sind dafür der Aufhänger, weil sie enger und messbar formuliert sind
 - Ein Fehler, der nach einem Neuladen auftritt, ist oft keiner: Browser helfen und stellen Formularwerte wieder her. Wer den Zustand in die URL legt, muss ihnen das abgewöhnen
 - Software prüfen heißt, auch die unangenehmen Fälle auszulösen. Den Fehler mit den verlorenen Eingaben habe ich nur gefunden, weil ich eine Ablehnung absichtlich erzeugt habe
+- **Bei einer frischen Hauptversion ist die mitgelieferte Dokumentation die verlässlichere Quelle als Anleitungen im Netz.** Die Umstellung von Next.js 15 auf 16 betrifft genau die Stellen, die in jedem Beispiel vorkommen, also Seitenparameter und Formularzustand. Ich habe die Zeit nicht beim Tippen verloren, sondern beim Suchen in Material, das sich auf die Vorversion bezog
+- Eine Änderung, die vorher nur eine Warnung war, wird in der nächsten Hauptversion zum Fehler. Das gilt hier für den synchronen Zugriff auf `searchParams`
 
 ---
 

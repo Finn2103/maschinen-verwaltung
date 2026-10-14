@@ -1,5 +1,5 @@
 import { kategorien, standorte } from "@/lib/maschinen";
-import type { Suchfilter } from "@/lib/verfuegbarkeit";
+import type { Suchfilter } from "@/lib/suche";
 import Link from "next/link";
 import { suchlinkOhne } from "@/lib/suchlink";
 

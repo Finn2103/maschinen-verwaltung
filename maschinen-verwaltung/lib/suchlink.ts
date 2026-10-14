@@ -1,4 +1,4 @@
-import type { Suchfilter } from "./verfuegbarkeit";
+import type { Suchfilter } from "./suche";
 
 /**
  * Baut einen Link auf die Suche, bei dem die genannten Felder fehlen.

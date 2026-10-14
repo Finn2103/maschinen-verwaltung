@@ -1,13 +1,26 @@
 import { maschinen } from "@/lib/maschinen";
-import { suche, zeitraumFehler, type Suchfilter } from "@/lib/verfuegbarkeit";
+import { suche, type Suchfilter } from "@/lib/suche";
+import { Zeitraum } from "@/lib/zeitraum";
 import { Suchformular } from "@/components/Suchformular";
 import Link from "next/link";
+
+// Benennt die Seite, nicht die Anwendung (WCAG 2.4.2).
+//
+// "absolute" statt eines einfachen Titels, weil die Vorlage aus dem Layout hier
+// NICHT greift: sie gilt nur fuer untergeordnete Routenabschnitte, und
+// app/page.tsx liegt im selben Abschnitt wie app/layout.tsx. Ohne "absolute"
+// hiesse die Startseite nur "Maschinen suchen", jede Unterseite dagegen
+// "... · Maschinenverleih". Steht so in der Next.js-Dokumentation unter
+// generateMetadata, Abschnitt title.template.
+export const metadata = {
+  title: { absolute: "Maschinen suchen · Maschinenverleih" },
+};
 
 type Props = { searchParams: Promise<Suchfilter> };
 
 export default async function Startseite({ searchParams }: Props) {
   const filter = await searchParams;
-  const fehler = zeitraumFehler(filter.von, filter.bis);
+  const fehler = Zeitraum.fehler(filter.von, filter.bis);
   const treffer = fehler ? [] : suche(maschinen, filter);
 
   return (

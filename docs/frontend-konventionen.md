@@ -137,6 +137,122 @@ Client-Komponente ist eine bewusste Entscheidung, keine Gewohnheit.
 
 Faustregel: die Suchmaske aus Mockup 1 braucht Interaktion, die Ergebnisliste nicht.
 
+### Was über die Grenze zum Browser geht, und was nicht
+
+Zwei Eigenschaften, die leicht verwechselt werden. Sie haben nichts miteinander zu tun.
+
+**1. Klasseninstanzen können die Grenze nicht überqueren.** React verlangt für Props einer
+Client-Komponente serialisierbare Werte. Beim Verschicken bleibt nur übrig, was Daten
+sind, die Methoden fallen weg. Deshalb haben `Maschine` und `Reservierung` je eine Methode
+`alsAnzeige()`, die ein einfaches Objekt liefert, und die Client-Komponente nimmt
+`MaschineAnzeige` statt `Maschine`.
+
+Dasselbe gilt für den **Rückgabewert einer Server Action**: er geht an die
+Client-Komponente und muss ebenfalls serialisierbar sein.
+
+> Das bricht erst beim Benutzen, nicht beim Kompilieren. `tsc` sagt dazu nichts. Wer an
+> dieser Grenze etwas ändert, muss es **laufen lassen**, nicht nur übersetzen.
+
+**2. Fachlogik landet nicht im Browser-Bündel.** Code, den nur Server-Komponenten
+importieren, wird nicht in den Browser ausgeliefert.
+
+**Es gibt dabei keine Mauer.** Next.js baut aus demselben Quellbaum zwei Dinge: ein Bündel
+für den Server und Bündel für den Browser. Für die Browser-Bündel startet der Bündler **bei
+jeder Datei mit `"use client"`** und folgt ihren Importen. Was er erreicht, landet im
+Browser, was nicht, nicht. Es ist eine Folge der Importkette, keine Einstellung.
+
+Deshalb gilt die Aussage **nicht pauschal für `lib/`**: `lib/datum.ts` ist im Browser, weil
+das Reservierungsformular es für die Datumsanzeige importiert. Der Rest von `lib/` ist es
+nicht, weil keine Client-Datei ihn importiert.
+
+**Wer eine Fachlogik-Datei aus einer Client-Komponente importiert, hebt den Schnitt auf**,
+auch wenn nichts sichtbar kaputtgeht. Ein reiner Typ-Import (`import type`) ist unkritisch,
+weil Typen beim Übersetzen verschwinden.
+
+#### So prüft man es, und so nicht
+
+> **Nach Bezeichnern zu suchen beweist nichts.** Der Produktionsbau kürzt Funktionsnamen ab,
+> `ueberlappt` heißt dort vielleicht `a`. Ein `grep` danach liefert auch dann null Treffer,
+> wenn der Code vorhanden ist. Dieser Fehler stand bis zum 14.10.2026 an dieser Stelle.
+
+Gültig ist nur die Suche nach **Zeichenketten**, die überstehen die Minimierung. Nach
+`npm run build`:
+
+```bash
+grep -rl "Die Maschine ist vom" maschinen-verwaltung/.next/static/chunks
+```
+
+Stand 14.10.2026:
+
+| Gesucht | Herkunft | Treffer |
+| --- | --- | --- |
+| „Bitte beide Datumsfelder" | `lib/zeitraum.ts` | **0** |
+| „Die Maschine ist vom" | `lib/reservieren.ts` | **0** |
+| „Bitte eine Telefonnummer" | `lib/reservierung.ts` | **0** |
+| „Minibagger" | `lib/maschinen.ts` | **0** |
+| „Verbindlich reservieren" | `components/Reservierungsformular.tsx` | 1 |
+| „Erneut versuchen" | `app/error.tsx` | 1 |
+
+### Wo die Entscheidung fällt, an zwei Beispielen
+
+Die beiden Wege durch die Anwendung, weil der Unterschied sonst abstrakt bleibt.
+
+**Die Suche, ganz ohne eigenes JavaScript:**
+
+1. Das Formular ist ein `<form method="get">`, also ein normales HTML-Formular.
+2. Klick auf „Suchen": der **Browser selbst** baut die Adresse
+   `?kategorie=...&von=...&bis=...` und navigiert dorthin. Kein Code aus diesem Projekt
+   läuft dabei.
+3. Der **Server** liest die Parameter, ruft `suche()` auf, rendert die Trefferliste und
+   schickt fertiges HTML.
+
+Es reagiert also **kein Klick im Code**, der etwas ein- oder ausblendet. Die Seite kommt neu
+vom Server, mit einer anderen Liste darin.
+
+**Das Reservieren, mit JavaScript:**
+
+1. Klick auf „Verbindlich reservieren": jetzt greift Code im Browser ein und schickt die
+   Formulardaten an die Server Action.
+2. Die **Server Action läuft auf dem Server** und ruft `reservieren()` auf. **Dort fällt die
+   Entscheidung.**
+3. Das Ergebnis kommt zurück, und **der Browser** zeigt die Meldung an und setzt den Fokus
+   auf das betroffene Feld.
+
+> **Die Regel läuft in beiden Fällen auf dem Server.** Unterschiedlich ist nur, wer die
+> Antwort anzeigt.
+
+**Warum das der eigentliche Punkt ist.** Alles, was im Browser läuft, kann der Nutzer
+ändern: Entwicklerwerkzeuge erlauben, JavaScript anzuhalten, Werte zu überschreiben und
+Funktionen auszutauschen. Läge `ueberlappt()` im Browser, könnte jemand sie durch
+`return false` ersetzen und jede Maschine doppelt buchen.
+
+Das ist die Antwort auf die Pflichtvorgabe Client-Server: nicht „es gibt zwei Projekte",
+sondern **die Entscheidungen fallen dort, wo der Nutzer nicht hinkommt.**
+
+### `"use client"`, was es genau bewirkt
+
+Die Voreinstellung ist die **Server-Komponente**. Sie läuft **einmal, auf dem Server,
+während der Anfrage**, darf die Datenbank lesen, erzeugt HTML und ist danach fertig. Sie
+kann kein `useState` und kein `onClick` haben, weil sie zu dem Zeitpunkt, an dem der Nutzer
+etwas sieht, längst abgelaufen ist.
+
+`"use client"` als erste Zeile bedeutet: diese Komponente läuft **zusätzlich** im Browser.
+Ihr Code wird mitgeschickt, sie bekommt Zustand und reagiert auf Eingaben.
+
+> **Es ist kein „statt".** Eine Client-Komponente wird trotzdem erst auf dem Server zu HTML
+> gerendert, damit die Seite sofort da ist. Danach wird ihr Code im Browser angeschlossen
+> und sie wird bedienbar.
+
+Im Projekt gibt es **zwei** Dateien mit `"use client"`:
+
+| Datei | Warum |
+| --- | --- |
+| `components/Reservierungsformular.tsx` | Eigene Entscheidung: Fehlermeldung dem Feld zuordnen, Fokus setzen |
+| `app/error.tsx` | **Vorgabe des Frameworks.** Eine Fehlergrenze muss eine Client-Komponente sein |
+
+Die ehrliche Formulierung ist deshalb: **eine aus eigener Entscheidung, dazu die vom
+Framework vorgeschriebene Fehlerseite.**
+
 ### Formulare
 
 Server-Validierung ist die Wahrheit, Client-Validierung ist Komfort. Beide dürfen
