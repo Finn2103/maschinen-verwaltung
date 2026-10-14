@@ -10,6 +10,72 @@ die Abgabe zusätzlich eine Word-Fassung im Loop-Arbeitsbereich verlangt ist.
 
 ---
 
+## 2026-10-14 · Mittwoch
+
+Kein Schultag. Vorbereitung auf das Review am 15.10.
+
+**Tätigkeit**
+
+- Präsentation neu strukturiert: Organisation, Entwurf, Umsetzung statt „geplant" und
+  „ungeplant"
+- Den Aufbau der Anwendung durchgegangen, bis ich ihn selbst erklären konnte
+- Oberflächen-Konventionen um den Abschnitt erweitert, wo die Entscheidung fällt
+
+**Problem**
+
+- Die Präsentation legte den Schwerpunkt auf die kleinsten Themen. „Repo und Board
+  aufsetzen" stand prominent, die **dreizehn Bildschirme als Mockups** kamen gar nicht vor,
+  obwohl sie mit 1046 Zeilen das größte Einzelstück im Projekt sind.
+- Die Folie „Aufbau der Anwendung" zeigte nur `lib/` und ließ `components/` weg, also den
+  zweitgrößten Teil mit 336 von 736 Zeilen.
+- **Der Nachweis, dass die Fachlogik nicht im Browser landet, war falsch geführt.** Gesucht
+  wurde nach Funktionsnamen wie `ueberlappt`.
+- Ich konnte den Satz „die Fachlogik landet nicht im Browser" nicht in eigenen Worten
+  erklären, obwohl er auf einer Folie stand.
+- Im Projekt gibt es **zwei** Dateien mit `"use client"`, nicht eine. In allen Unterlagen
+  stand „genau eine Ausnahme".
+
+**Lösung**
+
+- Neue Gliederung: Organisation, Entwurf, Umsetzung, dann Entscheidungen, KI, Offenes. Die
+  Mockups haben eine eigene Folie bekommen.
+- Folie „Aufbau" zeigt jetzt alle drei Ordner mit ihrer Rolle, nur `lib/` ist in Dateien
+  aufgeklappt.
+- Nachweis auf **Zeichenketten** umgestellt und in den Konventionen dokumentiert, mit dem
+  Hinweis, warum die Suche nach Bezeichnern nicht trägt.
+- Die beiden Wege durch die Anwendung in `docs/frontend-konventionen.md` aufgeschrieben,
+  Suche und Reservieren, Schritt für Schritt.
+- `app/error.tsx` als zweite Client-Datei benannt, mit dem Vermerk, dass sie eine Vorgabe
+  des Frameworks ist.
+
+**Lessons Learned**
+
+- **Der Schwerpunkt einer Präsentation gehört dorthin, wo die Arbeit war.** Nach Commits
+  und Dateigrößen nachgesehen: der erste Projekttag hatte elf Commits und brachte das neu
+  gefasste Backlog, der 08.10. hatte fünfzehn und brachte den Code. Dazwischen lagen die
+  Mockups. Das Bauen war nicht der Zeitfresser, das Entscheiden und Entwerfen davor war es.
+- **Ein Nachweis muss zu dem passen, was das Werkzeug tut.** Der Produktionsbau kürzt
+  Funktionsnamen ab, deshalb findet eine Suche nach `ueberlappt` auch dann nichts, wenn der
+  Code vorhanden wäre. Nur Zeichenketten überstehen die Minimierung. Ein Beleg, der immer
+  bestätigt, belegt nichts.
+- **„Die Fachlogik läuft auf dem Server" und „ihr Code ist nicht im Browser" sind zwei
+  Aussagen.** Die erste sagt, wo die Entscheidung fällt, die zweite, was ausgeliefert wird.
+  Beide treffen hier zu, aber aus verschiedenen Gründen.
+- **Der eigentliche Grund für den Schnitt ist nicht Ordnung, sondern Manipulierbarkeit.**
+  Alles im Browser kann der Nutzer über die Entwicklerwerkzeuge ändern. Läge die
+  Überlappungsprüfung dort, könnte man sie durch `return false` ersetzen und jede Maschine
+  doppelt buchen. Deshalb heißt es in unseren Konventionen: Server-Validierung ist die
+  Wahrheit, Client-Validierung ist Komfort.
+- **Die Grenze entsteht durch die Importkette, nicht durch eine Einstellung.** Der Bündler
+  startet bei jeder `"use client"`-Datei und folgt ihren Importen. Deshalb gilt die Aussage
+  nicht pauschal für `lib/`: `lib/datum.ts` ist im Browser, weil das Formular es für die
+  Datumsanzeige braucht.
+- **Was auf einer Folie steht, muss man in eigenen Worten erklären können.** Ich hatte
+  Sätze übernommen, die ich nicht hätte verteidigen können. Das Durchgehen hat drei Fehler
+  darin gefunden.
+
+---
+
 ## 2026-10-13 · Dienstag
 
 Kein Schultag. Vorbereitung auf das Review am 15.10. und die Barrierefreiheits-Abnahme
