@@ -34,6 +34,7 @@ Eine Datei pro Person, nach Nachnamen benannt, wie in den Projektregeln geforder
 | Datei | Person |
 | --- | --- |
 | `jendras.md` | Finn Jendras |
+| `laeser.md` | Nico Laeser |
 
 ## Warum es sich lohnt, es ernst zu nehmen
 
