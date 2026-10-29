@@ -1,0 +1,14 @@
+---
+- name: Docker installieren
+  ansible.builtin.apt:
+    name:
+      - docker.io
+      - docker-compose
+    state: present
+    update_cache: true
+
+- name: Docker Dienst aktivieren und starten
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: true

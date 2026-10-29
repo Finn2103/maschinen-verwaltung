@@ -1,0 +1,8 @@
+---
+- name: Schulprojekt Server einrichten
+  hosts: webserver
+  become: true
+
+  roles:
+    - container_runtime
+    - application

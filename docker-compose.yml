@@ -1,0 +1,27 @@
+
+services:
+  placeholder:
+    image: nginx:alpine
+    container_name: placeholder
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8080:80"
+
+  caddy:
+    image: caddy:2
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - placeholder
+
+volumes:
+  caddy_data:
+  caddy_config:
