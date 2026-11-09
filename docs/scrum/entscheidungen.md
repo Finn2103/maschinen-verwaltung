@@ -67,6 +67,31 @@ aussehen, als hätte sich das Team die Reihenfolge angeeignet. Deshalb steht es 
 
 ---
 
+## ERD-Entscheidungen (#73)
+
+Acht Fragen zum ERD aus #45, am 09.10. in #73 gestellt, zu jeder ein Vorschlag.
+
+**Stand: vorläufig angenommen.** Laurin, im Team für Datenbanken zuständig, hat am 10.10.
+allen acht Vorschlägen zugestimmt. Die Antworten der übrigen drei stehen aus. Das Datenmodell
+wird mit diesen Festlegungen weitergebaut; widerspricht noch jemand, wird die betroffene
+Entscheidung neu aufgemacht.
+
+| # | Frage | Entscheidung | Stand |
+| --- | --- | --- | --- |
+| 1 | Bauteil, Verbrauchsmaterial und Bestellung stehen in der Aufgabenstellung, fehlen im ERD | Als Entitäten aufnehmen, mit Schlüssel und Beziehungen. Attribute später | im ERD seit 09.11. |
+| 2 | Reservierung und Ausleihe sind zwei Entitäten mit fast gleichen Feldern | Eine Entität mit Status, weil die Überlappungsprüfung beide gleich behandeln muss | folgt |
+| 3 | Wie wird der Zeitraum gespeichert? | `von` und `bis` als `date`, dazu eine Zusicherung in der Datenbank gegen Doppelbuchung | folgt |
+| 4 | Der Steuersatz steht an der Rechnung | An die Rechnungsposition, sonst scheitert jede Rechnung mit gemischten Sätzen | folgt |
+| 5 | Preise aus den Stammdaten holen oder kopieren? | Einzelpreis und Steuersatz auf den Beleg kopieren. Eine Rechnung von 2026 muss 2029 denselben Betrag ergeben (GoBD) | folgt |
+| 6 | Rechnungsnummern und Storno | Fortlaufend ohne Lücke, Korrektur nur per Storno, gebuchte Belege nie ändern (UStG) | folgt |
+| 7 | Wohin mit den Messwerten für #3? | Eigene Tabelle, nicht in die Maschinen-Stammdaten | folgt |
+| 8 | Benennung | Deutsch, kleingeschrieben, Einzahl. Gilt für Tabellen und Spalten; im ERD bleiben die Entitätsnamen großgeschrieben | folgt |
+
+„Folgt" heißt: wird mit dem relationalen Modell und dem SQL-DDL aus #45 umgesetzt. Die
+Begründungen zu jeder Frage stehen in #73.
+
+---
+
 ## Zurückgezogene Befunde
 
 Bei der Prüfung des Backlogs wurden vier Widersprüche zur Aufgabenstellung gemeldet. Zwei
@@ -162,7 +187,7 @@ Abgabe: **Freitag 11.12.2026, 8. Stunde.**
 
 | Punkt | Wer entscheidet | Wann |
 | --- | --- | --- |
-| ERD abnehmen, bisher Einzelarbeit, nicht vom Team getragen | Team | Sprint Planning |
+| ERD abnehmen: vorläufig angenommen mit Laurins Zustimmung (siehe ERD-Entscheidungen), drei Antworten stehen aus | Team | in #73 |
 | Definition of Done beschließen | Team | Sprint Planning, vor dem Schätzen |
 | Sprint Goal für Sprint 1 | Team | Sprint Planning |
 | Reihenfolge des Backlogs | Team (delegiert, siehe Punkt 6) | Sprint Planning |

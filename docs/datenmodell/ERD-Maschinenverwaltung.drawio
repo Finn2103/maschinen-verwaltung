@@ -1,6 +1,6 @@
 <mxfile host="Electron">
   <diagram name="Seite-1" id="urK9CFS8pT_kvHvl9Enk">
-    <mxGraphModel dx="-2201" dy="737" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="-2201" dy="737" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#ffffff" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -276,6 +276,136 @@
         </mxCell>
         <mxCell id="4NgdJYocrXtbnPetFBts-135" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;" value="Steuersatz" vertex="1">
           <mxGeometry height="50" width="120" x="3872" y="58" as="geometry" />
+        </mxCell>
+        <mxCell id="erd45-bauteil" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Bauteil" vertex="1">
+          <mxGeometry height="60" width="120" x="3781" y="888" as="geometry" />
+        </mxCell>
+        <mxCell id="erd45-hat" parent="1" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;rounded=1;" value="hat" vertex="1">
+          <mxGeometry height="80" width="80" x="3801" y="748" as="geometry" />
+        </mxCell>
+        <mxCell id="erd45-bauteil-id" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;" value="&lt;u&gt;Bauteil_ID&lt;/u&gt;" vertex="1">
+          <mxGeometry height="50" width="120" x="3781" y="988" as="geometry" />
+        </mxCell>
+        <mxCell id="erd45-e-maschine-hat" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-67" target="erd45-hat" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd45-l-maschine-hat" connectable="0" parent="erd45-e-maschine-hat" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;1&lt;/span&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.4" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="erd45-e-hat-bauteil" edge="1" parent="1" source="erd45-hat" target="erd45-bauteil" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd45-l-hat-bauteil" connectable="0" parent="erd45-e-hat-bauteil" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;N&lt;/span&gt;" vertex="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="erd45-e-bauteil-id" edge="1" parent="1" source="erd45-bauteil-id" target="erd45-bauteil" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;endArrow=none;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd45-verbrauchsmaterial" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Verbrauchsmaterial" vertex="1">
+          <mxGeometry height="60" width="120" x="4421" y="658" as="geometry" />
+        </mxCell>
+        <mxCell id="erd45-passt-zu" parent="1" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;rounded=1;" value="passt zu" vertex="1">
+          <mxGeometry height="80" width="80" x="4281" y="648" as="geometry" />
+        </mxCell>
+        <mxCell id="erd45-verbrauchsmaterial-id" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;" value="&lt;u&gt;Verbrauchsmaterial_ID&lt;/u&gt;" vertex="1">
+          <mxGeometry height="50" width="190" x="4386" y="758" as="geometry" />
+        </mxCell>
+        <mxCell id="erd45-e-maschinentyp-passt-zu" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-77" target="erd45-passt-zu" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd45-l-maschinentyp-passt-zu" connectable="0" parent="erd45-e-maschinentyp-passt-zu" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;M&lt;/span&gt;" vertex="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="erd45-e-passt-zu-verbrauchsmaterial" edge="1" parent="1" source="erd45-passt-zu" target="erd45-verbrauchsmaterial" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd45-l-passt-zu-verbrauchsmaterial" connectable="0" parent="erd45-e-passt-zu-verbrauchsmaterial" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;N&lt;/span&gt;" vertex="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="erd45-e-verbrauchsmaterial-id" edge="1" parent="1" source="erd45-verbrauchsmaterial-id" target="erd45-verbrauchsmaterial" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;endArrow=none;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd45-bestellung" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Bestellung" vertex="1">
+          <mxGeometry height="60" width="120" x="4421" y="438" as="geometry" />
+        </mxCell>
+        <mxCell id="erd45-gibt-auf" parent="1" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;rounded=1;" value="gibt auf" vertex="1">
+          <mxGeometry height="80" width="80" x="4281" y="428" as="geometry" />
+        </mxCell>
+        <mxCell id="erd45-enthaelt" parent="1" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;rounded=1;" value="enthält" vertex="1">
+          <mxGeometry height="80" width="80" x="4441" y="538" as="geometry" />
+        </mxCell>
+        <mxCell id="erd45-berechnet" parent="1" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;rounded=1;" value="berechnet" vertex="1">
+          <mxGeometry height="80" width="80" x="4441" y="268" as="geometry" />
+        </mxCell>
+        <mxCell id="erd45-bestell-id" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;" value="&lt;u&gt;Bestell_ID&lt;/u&gt;" vertex="1">
+          <mxGeometry height="50" width="120" x="4601" y="443" as="geometry" />
+        </mxCell>
+        <mxCell id="erd45-e-kunde-gibt-auf" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-47" target="erd45-gibt-auf" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.85;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;jumpStyle=arc;jumpSize=12;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="3884" y="468" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="erd45-l-kunde-gibt-auf" connectable="0" parent="erd45-e-kunde-gibt-auf" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;1&lt;/span&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.6" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="erd45-e-gibt-auf-bestellung" edge="1" parent="1" source="erd45-gibt-auf" target="erd45-bestellung" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd45-l-gibt-auf-bestellung" connectable="0" parent="erd45-e-gibt-auf-bestellung" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;N&lt;/span&gt;" vertex="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="erd45-e-bestellung-enthaelt" edge="1" parent="1" source="erd45-bestellung" target="erd45-enthaelt" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd45-l-bestellung-enthaelt" connectable="0" parent="erd45-e-bestellung-enthaelt" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;M&lt;/span&gt;" vertex="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="erd45-e-enthaelt-verbrauchsmaterial" edge="1" parent="1" source="erd45-enthaelt" target="erd45-verbrauchsmaterial" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd45-l-enthaelt-verbrauchsmaterial" connectable="0" parent="erd45-e-enthaelt-verbrauchsmaterial" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;N&lt;/span&gt;" vertex="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="erd45-e-bestellung-berechnet" edge="1" parent="1" source="erd45-bestellung" target="erd45-berechnet" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;endArrow=none;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd45-l-bestellung-berechnet" connectable="0" parent="erd45-e-bestellung-berechnet" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;1&lt;/span&gt;" vertex="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="erd45-e-berechnet-rechnungsposition" edge="1" parent="1" source="erd45-berechnet" target="4NgdJYocrXtbnPetFBts-54" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="4481" y="158" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="erd45-l-berechnet-rechnungsposition" connectable="0" parent="erd45-e-berechnet-rechnungsposition" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;N&lt;/span&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.6" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="erd45-e-bestell-id" edge="1" parent="1" source="erd45-bestell-id" target="erd45-bestellung" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
