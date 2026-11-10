@@ -78,17 +78,36 @@ Entscheidung neu aufgemacht.
 
 | # | Frage | Entscheidung | Stand |
 | --- | --- | --- | --- |
-| 1 | Bauteil, Verbrauchsmaterial und Bestellung stehen in der Aufgabenstellung, fehlen im ERD | Als Entitäten aufnehmen, mit Schlüssel und Beziehungen. Attribute später | im ERD seit 09.11. |
-| 2 | Reservierung und Ausleihe sind zwei Entitäten mit fast gleichen Feldern | Eine Entität mit Status, weil die Überlappungsprüfung beide gleich behandeln muss | folgt |
-| 3 | Wie wird der Zeitraum gespeichert? | `von` und `bis` als `date`, dazu eine Zusicherung in der Datenbank gegen Doppelbuchung | folgt |
-| 4 | Der Steuersatz steht an der Rechnung | An die Rechnungsposition, sonst scheitert jede Rechnung mit gemischten Sätzen | folgt |
-| 5 | Preise aus den Stammdaten holen oder kopieren? | Einzelpreis und Steuersatz auf den Beleg kopieren. Eine Rechnung von 2026 muss 2029 denselben Betrag ergeben (GoBD) | folgt |
-| 6 | Rechnungsnummern und Storno | Fortlaufend ohne Lücke, Korrektur nur per Storno, gebuchte Belege nie ändern (UStG) | folgt |
-| 7 | Wohin mit den Messwerten für #3? | Eigene Tabelle, nicht in die Maschinen-Stammdaten | folgt |
-| 8 | Benennung | Deutsch, kleingeschrieben, Einzahl. Gilt für Tabellen und Spalten; im ERD bleiben die Entitätsnamen großgeschrieben | folgt |
+| 1 | Bauteil, Verbrauchsmaterial und Bestellung stehen in der Aufgabenstellung, fehlen im ERD | Als Entitäten aufnehmen, mit Schlüssel und Beziehungen. Attribute später | umgesetzt: im ERD seit 09.11., Attribute seit 10.11. |
+| 2 | Reservierung und Ausleihe sind zwei Entitäten mit fast gleichen Feldern | Eine Entität mit Status, weil die Überlappungsprüfung beide gleich behandeln muss | umgesetzt 10.11.: Entität Ausleihe mit Status, Reservierung ist der Status `reserviert` |
+| 3 | Wie wird der Zeitraum gespeichert? | `von` und `bis` als `date`, dazu eine Zusicherung in der Datenbank gegen Doppelbuchung | umgesetzt 10.11.: Ausschlussbedingung `ausleihe_keine_doppelbuchung` |
+| 4 | Der Steuersatz steht an der Rechnung | An die Rechnungsposition, sonst scheitert jede Rechnung mit gemischten Sätzen | umgesetzt 10.11. |
+| 5 | Preise aus den Stammdaten holen oder kopieren? | Einzelpreis und Steuersatz auf den Beleg kopieren. Eine Rechnung von 2026 muss 2029 denselben Betrag ergeben (GoBD) | umgesetzt 10.11., dazu die Bezeichnung |
+| 6 | Rechnungsnummern und Storno | Fortlaufend ohne Lücke, Korrektur nur per Storno, gebuchte Belege nie ändern (UStG) | umgesetzt 10.11.: Zählertabelle `nummernkreis`, Storno-Rechnung, Trigger gegen Ändern und Löschen |
+| 7 | Wohin mit den Messwerten für #3? | Eigene Tabelle, nicht in die Maschinen-Stammdaten | umgesetzt 10.11.: Entität Messwert |
+| 8 | Benennung | Deutsch, kleingeschrieben, Einzahl. Gilt für Tabellen und Spalten; im ERD bleiben die Entitätsnamen großgeschrieben | umgesetzt 10.11. |
 
-„Folgt" heißt: wird mit dem relationalen Modell und dem SQL-DDL aus #45 umgesetzt. Die
+„Umgesetzt" heißt: steht im ERD, in
+[`relational.md`](../datenmodell/relational.md) und in
+[`schema.sql`](../datenmodell/schema.sql), und `schema-pruefen.sql` zeigt, dass die
+Datenbank die Regel durchsetzt. Die Abnahme durch das Team bleibt davon unberührt. Die
 Begründungen zu jeder Frage stehen in #73.
+
+### Lesarten zum ERD, Antworten vom 09.11. (#45)
+
+Beim Einbau von Entscheidung 1 blieben Fragen offen, wie die Aufgabenstellung zu lesen
+ist. Finn hat sie am 09.11.2026 beantwortet. Die Nummern sind die der Fragenliste vom
+09.11. Sie gelten **vorläufig** wie die acht Entscheidungen oben, bis das Team das ERD
+abnimmt.
+
+| # | Frage | Entscheidung | Von wem |
+| --- | --- | --- | --- |
+| 7 | Ist ein Bauteil ein Exemplar an einer Maschine oder ein Teiletyp je Maschinentyp? | **Exemplar je Maschine** (Maschine hat Bauteil, 1 : N), weil #3 den Verschleiß je Exemplar braucht. Hersteller, Teilenummer und Bezeichnung wiederholen sich je Exemplar, deshalb im relationalen Modell eine eigene Relation `bauteiltyp` (3. NF) | Finn |
+| 8 | Hält eine Wartung fest, welche Bauteile sie bearbeitet hat? | **Ja.** Neue Beziehung Wartung bearbeitet Bauteil (M : N) mit der Maßnahme „geprüft“ oder „getauscht“ | Finn |
+| 9 | Passt Verbrauchsmaterial zu einem Maschinentyp oder zu einer einzelnen Maschine? | **Zum Maschinentyp** (passt zu, M : N) | Finn |
+| 10 | Wird eine Bestellung über Rechnungspositionen abgerechnet oder bekommt sie eine eigene Rechnung? | **Über Rechnungspositionen.** Eine Position gehört zu genau einem von Ausleihe oder Bestellung: zwei Fremdschlüssel und eine Bedingung „genau einer gesetzt“. Ein Nummernkreis für alle Rechnungen, ohne Lücken (GoBD) | Finn |
+| 11 | Dürfen Kunden nur Material für gebuchte Maschinen bestellen? | **Nein, frei**, auch für Maschinen, die nicht vom Verleih sind. Vorschläge kommen über „passt zu“. Der Kunden-Shop dafür ist #94 (Backlog), nicht Teil von #45 | Finn |
+| 12 | Die drawio-Datei an die ältere SVG-Fassung (Commit `2ffc6ec`) angleichen? | **Ja**: Attribute aller Entitäten, Beziehungsnamen, lose hängende Attribute, unbenannte Rauten. Umgesetzt am 10.11. | Finn |
 
 ---
 
@@ -191,7 +210,6 @@ Abgabe: **Freitag 11.12.2026, 8. Stunde.**
 | Definition of Done beschließen | Team | Sprint Planning, vor dem Schätzen |
 | Sprint Goal für Sprint 1 | Team | Sprint Planning |
 | Reihenfolge des Backlogs | Team (delegiert, siehe Punkt 6) | Sprint Planning |
-| Kein Item für die Datenmodell-Arbeit vorhanden | Team | Sprint Planning |
 | Projektanteil am Freitag | Stundenplan, sonst Frau Clemens | vor der Kapazitätsrechnung |
 | #2: Import der Maschinendaten doch gewollt? | Team, mit Blick auf die Aufgabenstellung | Refinement |
 | #3: maschinelles Lernen oder Regelwerk, und wer macht es? | Team | nicht in den ersten Sprints |
