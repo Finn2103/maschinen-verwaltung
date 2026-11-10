@@ -1,0 +1,81 @@
+# PR-Prüfung: Jeder Pull Request nach staging muss tsc, eslint und next build
+# bestehen, bevor er gemergt wird.
+#
+# Warum so:
+# - Dieselben Befehle wie lokal (npm ci, npm run lint, npm run build), nur auf
+#   Linux wie unser Server. Was hier rot wird, wäre auch lokal rot.
+# - Kein paths-Filter: Wird der Check im Branch-Schutz Pflicht, muss er bei
+#   jedem PR laufen, auch bei reinen Doku-PRs. Sonst wartet GitHub auf einen
+#   Check, der nie startet, und der PR lässt sich nicht mergen.
+# - Actions auf Commit-SHA gepinnt, der Tag steht als Kommentar dahinter. Ein
+#   Tag kann umgehängt werden, ein SHA nicht.
+
+name: PR-Prüfung
+
+on:
+  pull_request:
+    branches: [staging]
+  # Nach dem Merge läuft die Prüfung auf staging noch einmal. Das zeigt, ob
+  # staging grün ist, und füllt den npm-Cache, den alle PRs mitbenutzen.
+  push:
+    branches: [staging]
+  # Von Hand starten, z. B. für die Demo im Review.
+  workflow_dispatch:
+
+# Ein neuer Push auf denselben PR bricht den veralteten Lauf ab.
+# Läufe auf staging selbst laufen immer zu Ende.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+# Der Workflow darf den Code lesen, sonst nichts.
+permissions:
+  contents: read
+
+env:
+  NEXT_TELEMETRY_DISABLED: 1
+
+jobs:
+  pruefen:
+    # Dieser Name ist der Check, den der Branch-Schutz später verlangt.
+    name: tsc, eslint, next build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: maschinen-verwaltung
+    steps:
+      - name: Code holen
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # Das Token nicht im Checkout liegen lassen, kein Schritt braucht es.
+          persist-credentials: false
+
+      - name: Node 24 mit npm-Cache
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: maschinen-verwaltung/package-lock.json
+
+      - name: Abhängigkeiten installieren
+        run: npm ci --no-audit --no-fund
+
+      # Next 16 erzeugt Typen wie LayoutProps erst mit next typegen (oder beim
+      # Build). Ohne diesen Schritt scheitert tsc auf einem frischen Checkout.
+      - name: Routen-Typen erzeugen (next typegen)
+        run: npx next typegen
+
+      # tsc läuft vom Repo-Root aus. Dann beginnen die Fehlerpfade mit
+      # maschinen-verwaltung/, und GitHub hängt den Fehler im PR an die Codezeile.
+      - name: Typen prüfen (tsc)
+        working-directory: .
+        run: maschinen-verwaltung/node_modules/.bin/tsc -p maschinen-verwaltung --noEmit
+
+      - name: Code-Regeln prüfen (eslint)
+        run: npm run lint
+
+      # Seit Next 16 prüft next build kein ESLint mehr mit, deshalb der eigene
+      # Schritt davor.
+      - name: Bauen (next build)
+        run: npm run build
