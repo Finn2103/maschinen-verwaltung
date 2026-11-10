@@ -97,8 +97,14 @@ mehr, sondern der Status `reserviert` einer Ausleihe.
 
 ## Noch nicht im Datenmodell
 
-[`docs/rollen-und-rechte.md`](../rollen-und-rechte.md) nennt unter „Für #45
-Datenmodell" vier Punkte, die weder im ERD noch in `schema.sql` stehen: Relationen
-für Rolle und Recht, ein Ort für die Stornofrist, ein Pflichtfeld für den
-Stornogrund nach Fristablauf und ein Protokoll (Audit-Log). Ebenso fehlen die
-Rechte der Datenbank-Rollen (`GRANT` für PostgREST).
+| Punkt | Wohin | Stand |
+| --- | --- | --- |
+| Rolle und Recht als Relationen | eigenes Item, zusammen mit #8 | Finn, 10.11.: nicht mehr #45 |
+| Ort für die Stornofrist | eigenes Item | wie oben |
+| Pflichtfeld Stornogrund nach Fristablauf | eigenes Item | wie oben |
+| Protokoll (Audit-Log) | eigenes Item | wie oben |
+| Rechte der Datenbank-Rollen (`GRANT` für PostgREST) | mit #8 klären | offen |
+| Anschrift des Empfängers auf die Rechnung kopieren? | #45, falls ja | Recherche läuft, Entscheidung offen |
+
+Die ersten vier nennt [`docs/rollen-und-rechte.md`](../rollen-und-rechte.md) unter
+„Für #45 Datenmodell". Seit dem 10.11. gehören sie in ein eigenes Item.

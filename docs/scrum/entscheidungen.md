@@ -207,6 +207,8 @@ Abgabe: **Freitag 11.12.2026, 8. Stunde.**
 | Punkt | Wer entscheidet | Wann |
 | --- | --- | --- |
 | ERD abnehmen: vorläufig angenommen mit Laurins Zustimmung (siehe ERD-Entscheidungen), drei Antworten stehen aus | Team | in #73 |
+| Rollen und Rechte, Stornofrist, Stornogrund und Protokoll im Datenmodell: laut Finn (10.11.) nicht mehr #45, sondern ein eigenes Item zusammen mit #8 | Team legt das Item an | Sprint 3 |
+| Anschrift des Empfängers beim Ausstellen auf die Rechnung kopieren oder aus `kunde` lesen? | Finn, nach Recherche | vor dem Review |
 | Definition of Done beschließen | Team | Sprint Planning, vor dem Schätzen |
 | Sprint Goal für Sprint 1 | Team | Sprint Planning |
 | Reihenfolge des Backlogs | Team (delegiert, siehe Punkt 6) | Sprint Planning |

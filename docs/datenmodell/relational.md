@@ -309,11 +309,16 @@ Bezeichnung und Kategorie deshalb über `maschine.typnummer` aus `maschinentyp`.
 ## 6 Nicht Teil dieses Stands
 
 [`rollen-und-rechte.md`](../rollen-und-rechte.md) nennt unter „Für #45 Datenmodell“ vier
-weitere Punkte. Sie stehen nicht im ERD und sind hier noch nicht umgesetzt:
+weitere Punkte. Seit dem 10.11. kommen sie in ein **eigenes Item** zusammen mit #8, nicht in
+#45 (Entscheidung Finn):
 
 - Relationen für Rolle, Recht und Zuordnung (#8)
 - ein Ort für die einstellbare Stornofrist `X`
 - ein Pflichtfeld für den Grund, wenn nach Ablauf der Frist storniert wird
 - ein Protokoll (Audit-Log), abfragbar je Objekt und je Person
 
-Ebenso offen: die Rechte der Datenbank-Rollen (`GRANT` für PostgREST), die mit #8 kommen.
+Ebenso offen: die Rechte der Datenbank-Rollen (`GRANT` für PostgREST), mit #8 zu klären.
+
+Noch nicht entschieden: ob Name und Anschrift des Empfängers beim Ausstellen auf die Rechnung
+kopiert werden, wie Preis und Steuersatz (§ 14 Abs. 4 UStG). Heute liest die Rechnung die
+Anschrift aus `kunde`.
