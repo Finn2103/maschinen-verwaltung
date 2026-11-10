@@ -4,664 +4,694 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="erd45-titel" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=22;fontStyle=1;" value="Maschinenverleih – ERD in Chen-Notation" vertex="1">
+        <mxCell id="erd45-titel" parent="1" style="text;html=0;align=left;verticalAlign=top;fontSize=22;fontStyle=1;" value="Maschinenverleih – ERD in Chen-Notation" vertex="1">
           <mxGeometry x="30" y="0" width="700" height="34" as="geometry" />
         </mxCell>
         <mxCell id="erd45-legende" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=13;fontColor=#555555;" value="Rechteck = Entität · doppeltes Rechteck = schwache Entität · Raute = Beziehung · doppelte Raute = identifizierende Beziehung · Ellipse = Attribut · &lt;u&gt;unterstrichen&lt;/u&gt; = Schlüssel · &lt;u style=&quot;text-decoration-style: dashed;&quot;&gt;gestrichelt&lt;/u&gt; = partieller Schlüssel" vertex="1">
           <mxGeometry x="30" y="38" width="1800" height="24" as="geometry" />
         </mxCell>
-        <mxCell id="4NgdJYocrXtbnPetFBts-79" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;" value="Zahlung" vertex="1">
+        <mxCell id="4NgdJYocrXtbnPetFBts-79" parent="1" style="rounded=1;html=0;fontSize=13;" value="Zahlung" vertex="1">
           <mxGeometry x="235" y="280" width="130" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="YVBqeQMRxETOPQUzVNE4-82" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;" value="Rechnung" vertex="1">
+        <mxCell id="YVBqeQMRxETOPQUzVNE4-82" parent="1" style="rounded=1;html=0;fontSize=13;" value="Rechnung" vertex="1">
           <mxGeometry x="655" y="280" width="130" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="4NgdJYocrXtbnPetFBts-54" parent="1" style="shape=ext;double=1;rounded=1;whiteSpace=wrap;html=1;fontSize=13;" value="Rechnungsposition" vertex="1">
+        <mxCell id="4NgdJYocrXtbnPetFBts-54" parent="1" style="shape=ext;double=1;rounded=1;html=0;fontSize=13;" value="Rechnungsposition" vertex="1">
           <mxGeometry x="1075" y="280" width="130" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="4NgdJYocrXtbnPetFBts-47" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;" value="Kunde" vertex="1">
+        <mxCell id="4NgdJYocrXtbnPetFBts-47" parent="1" style="rounded=1;html=0;fontSize=13;" value="Kunde" vertex="1">
           <mxGeometry x="655" y="600" width="130" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="4NgdJYocrXtbnPetFBts-50" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;" value="Ausleihe" vertex="1">
+        <mxCell id="4NgdJYocrXtbnPetFBts-50" parent="1" style="rounded=1;html=0;fontSize=13;" value="Ausleihe" vertex="1">
           <mxGeometry x="1075" y="600" width="130" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-bestellung" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;" value="Bestellung" vertex="1">
+        <mxCell id="erd45-bestellung" parent="1" style="rounded=1;html=0;fontSize=13;" value="Bestellung" vertex="1">
           <mxGeometry x="1495" y="740" width="130" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-messwert" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;" value="Messwert" vertex="1">
+        <mxCell id="erd45-messwert" parent="1" style="rounded=1;html=0;fontSize=13;" value="Messwert" vertex="1">
           <mxGeometry x="235" y="980" width="130" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="4NgdJYocrXtbnPetFBts-67" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;" value="Maschine" vertex="1">
+        <mxCell id="4NgdJYocrXtbnPetFBts-67" parent="1" style="rounded=1;html=0;fontSize=13;" value="Maschine" vertex="1">
           <mxGeometry x="655" y="980" width="130" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="4NgdJYocrXtbnPetFBts-75" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;" value="Wartung" vertex="1">
+        <mxCell id="4NgdJYocrXtbnPetFBts-75" parent="1" style="rounded=1;html=0;fontSize=13;" value="Wartung" vertex="1">
           <mxGeometry x="235" y="1180" width="130" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="4NgdJYocrXtbnPetFBts-77" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;" value="Maschinentyp" vertex="1">
+        <mxCell id="4NgdJYocrXtbnPetFBts-77" parent="1" style="rounded=1;html=0;fontSize=13;" value="Maschinentyp" vertex="1">
           <mxGeometry x="1075" y="1180" width="130" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-verbrauchsmaterial" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;" value="Verbrauchsmaterial" vertex="1">
+        <mxCell id="erd45-verbrauchsmaterial" parent="1" style="rounded=1;html=0;fontSize=13;" value="Verbrauchsmaterial" vertex="1">
           <mxGeometry x="1495" y="1180" width="130" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-bauteil" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;" value="Bauteil" vertex="1">
+        <mxCell id="erd45-bauteil" parent="1" style="rounded=1;html=0;fontSize=13;" value="Bauteil" vertex="1">
           <mxGeometry x="655" y="1460" width="130" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="4NgdJYocrXtbnPetFBts-81" parent="1" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;rounded=1;fontStyle=2;" value="begleicht" vertex="1">
+        <mxCell id="4NgdJYocrXtbnPetFBts-81" parent="1" style="rhombus;html=0;rounded=1;fontStyle=2;" value="begleicht" vertex="1">
           <mxGeometry x="455" y="270" width="110" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="4NgdJYocrXtbnPetFBts-80" parent="1" style="rhombus;double=1;whiteSpace=wrap;html=1;shapeInside=1;rounded=1;fontStyle=2;" value="besteht aus" vertex="1">
+        <mxCell id="4NgdJYocrXtbnPetFBts-80" parent="1" style="rhombus;double=1;html=0;rounded=1;fontStyle=2;" value="besteht aus" vertex="1">
           <mxGeometry x="875" y="270" width="110" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-storniert" parent="1" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;rounded=1;fontStyle=2;" value="storniert" vertex="1">
+        <mxCell id="erd45-storniert" parent="1" style="rhombus;html=0;rounded=1;fontStyle=2;" value="storniert" vertex="1">
           <mxGeometry x="665" y="120" width="110" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="4NgdJYocrXtbnPetFBts-55" parent="1" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;rounded=1;fontStyle=2;" value="erhält" vertex="1">
+        <mxCell id="4NgdJYocrXtbnPetFBts-55" parent="1" style="rhombus;html=0;rounded=1;fontStyle=2;" value="erhält" vertex="1">
           <mxGeometry x="665" y="430" width="110" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="4NgdJYocrXtbnPetFBts-113" parent="1" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;rounded=1;fontStyle=2;" value="betrifft" vertex="1">
+        <mxCell id="4NgdJYocrXtbnPetFBts-113" parent="1" style="rhombus;html=0;rounded=1;fontStyle=2;" value="betrifft" vertex="1">
           <mxGeometry x="1085" y="430" width="110" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-berechnet" parent="1" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;rounded=1;fontStyle=2;" value="berechnet" vertex="1">
+        <mxCell id="erd45-berechnet" parent="1" style="rhombus;html=0;rounded=1;fontStyle=2;" value="berechnet" vertex="1">
           <mxGeometry x="1505" y="470" width="110" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="4NgdJYocrXtbnPetFBts-48" parent="1" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;rounded=1;fontStyle=2;" value="tätigt" vertex="1">
+        <mxCell id="4NgdJYocrXtbnPetFBts-48" parent="1" style="rhombus;html=0;rounded=1;fontStyle=2;" value="tätigt" vertex="1">
           <mxGeometry x="875" y="590" width="110" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-gibt-auf" parent="1" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;rounded=1;fontStyle=2;" value="gibt auf" vertex="1">
+        <mxCell id="erd45-gibt-auf" parent="1" style="rhombus;html=0;rounded=1;fontStyle=2;" value="gibt auf" vertex="1">
           <mxGeometry x="1295" y="730" width="110" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="4NgdJYocrXtbnPetFBts-65" parent="1" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;rounded=1;fontStyle=2;" value="umfasst" vertex="1">
+        <mxCell id="4NgdJYocrXtbnPetFBts-65" parent="1" style="rhombus;html=0;rounded=1;fontStyle=2;" value="umfasst" vertex="1">
           <mxGeometry x="875" y="970" width="110" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-liefert" parent="1" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;rounded=1;fontStyle=2;" value="liefert" vertex="1">
+        <mxCell id="erd45-liefert" parent="1" style="rhombus;html=0;rounded=1;fontStyle=2;" value="liefert" vertex="1">
           <mxGeometry x="455" y="970" width="110" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="4NgdJYocrXtbnPetFBts-73" parent="1" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;rounded=1;fontStyle=2;" value="unterliegt" vertex="1">
+        <mxCell id="4NgdJYocrXtbnPetFBts-73" parent="1" style="rhombus;html=0;rounded=1;fontStyle=2;" value="unterliegt" vertex="1">
           <mxGeometry x="455" y="1170" width="110" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="4NgdJYocrXtbnPetFBts-71" parent="1" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;rounded=1;fontStyle=2;" value="ist vom Typ" vertex="1">
+        <mxCell id="4NgdJYocrXtbnPetFBts-71" parent="1" style="rhombus;html=0;rounded=1;fontStyle=2;" value="ist vom Typ" vertex="1">
           <mxGeometry x="875" y="1170" width="110" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-hat" parent="1" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;rounded=1;fontStyle=2;" value="hat" vertex="1">
+        <mxCell id="erd45-hat" parent="1" style="rhombus;html=0;rounded=1;fontStyle=2;" value="hat" vertex="1">
           <mxGeometry x="665" y="1300" width="110" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-passt-zu" parent="1" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;rounded=1;fontStyle=2;" value="passt zu" vertex="1">
+        <mxCell id="erd45-bearbeitet" parent="1" style="rhombus;html=0;rounded=1;fontStyle=2;" value="bearbeitet" vertex="1">
+          <mxGeometry x="455" y="1450" width="110" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="erd45-passt-zu" parent="1" style="rhombus;html=0;rounded=1;fontStyle=2;" value="passt zu" vertex="1">
           <mxGeometry x="1295" y="1170" width="110" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-enthaelt" parent="1" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;rounded=1;fontStyle=2;" value="enthält" vertex="1">
+        <mxCell id="erd45-enthaelt" parent="1" style="rhombus;html=0;rounded=1;fontStyle=2;" value="enthält" vertex="1">
           <mxGeometry x="1505" y="950" width="110" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-e1" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-79" target="4NgdJYocrXtbnPetFBts-81" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e1" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-79" target="4NgdJYocrXtbnPetFBts-81" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e1-k" connectable="0" parent="erd45-e1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
+        <mxCell id="erd45-e1-k" connectable="0" parent="erd45-e1" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
           <mxGeometry relative="1" x="0.0" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e2" edge="1" parent="1" source="YVBqeQMRxETOPQUzVNE4-82" target="4NgdJYocrXtbnPetFBts-81" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e2" edge="1" parent="1" source="YVBqeQMRxETOPQUzVNE4-82" target="4NgdJYocrXtbnPetFBts-81" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e2-k" connectable="0" parent="erd45-e2" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
+        <mxCell id="erd45-e2-k" connectable="0" parent="erd45-e2" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
           <mxGeometry relative="1" x="0.0" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e3" edge="1" parent="1" source="YVBqeQMRxETOPQUzVNE4-82" target="4NgdJYocrXtbnPetFBts-80" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e3" edge="1" parent="1" source="YVBqeQMRxETOPQUzVNE4-82" target="4NgdJYocrXtbnPetFBts-80" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e3-k" connectable="0" parent="erd45-e3" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
+        <mxCell id="erd45-e3-k" connectable="0" parent="erd45-e3" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
           <mxGeometry relative="1" x="0.0" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e4" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-54" target="4NgdJYocrXtbnPetFBts-80" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e4" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-54" target="4NgdJYocrXtbnPetFBts-80" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e4-k" connectable="0" parent="erd45-e4" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
+        <mxCell id="erd45-e4-k" connectable="0" parent="erd45-e4" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
           <mxGeometry relative="1" x="0.0" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e5" edge="1" parent="1" source="YVBqeQMRxETOPQUzVNE4-82" target="erd45-storniert" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;edgeStyle=none;exitX=0.2;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e5" edge="1" parent="1" source="YVBqeQMRxETOPQUzVNE4-82" target="erd45-storniert" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;edgeStyle=none;exitX=0.2;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e5-k" connectable="0" parent="erd45-e5" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
+        <mxCell id="erd45-e5-k" connectable="0" parent="erd45-e5" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
           <mxGeometry relative="1" x="0.0" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e6" edge="1" parent="1" source="YVBqeQMRxETOPQUzVNE4-82" target="erd45-storniert" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;edgeStyle=none;exitX=0.8;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e6" edge="1" parent="1" source="YVBqeQMRxETOPQUzVNE4-82" target="erd45-storniert" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;edgeStyle=none;exitX=0.8;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e6-k" connectable="0" parent="erd45-e6" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
+        <mxCell id="erd45-e6-k" connectable="0" parent="erd45-e6" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
           <mxGeometry relative="1" x="0.0" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e7" edge="1" parent="1" source="YVBqeQMRxETOPQUzVNE4-82" target="4NgdJYocrXtbnPetFBts-55" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e7" edge="1" parent="1" source="YVBqeQMRxETOPQUzVNE4-82" target="4NgdJYocrXtbnPetFBts-55" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e7-k" connectable="0" parent="erd45-e7" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
+        <mxCell id="erd45-e7-k" connectable="0" parent="erd45-e7" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
           <mxGeometry relative="1" x="0.0" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e8" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-47" target="4NgdJYocrXtbnPetFBts-55" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e8" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-47" target="4NgdJYocrXtbnPetFBts-55" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e8-k" connectable="0" parent="erd45-e8" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
+        <mxCell id="erd45-e8-k" connectable="0" parent="erd45-e8" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
           <mxGeometry relative="1" x="0.0" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e9" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-54" target="4NgdJYocrXtbnPetFBts-113" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e9" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-54" target="4NgdJYocrXtbnPetFBts-113" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e9-k" connectable="0" parent="erd45-e9" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
+        <mxCell id="erd45-e9-k" connectable="0" parent="erd45-e9" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
           <mxGeometry relative="1" x="0.0" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e10" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-50" target="4NgdJYocrXtbnPetFBts-113" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e10" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-50" target="4NgdJYocrXtbnPetFBts-113" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e10-k" connectable="0" parent="erd45-e10" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
+        <mxCell id="erd45-e10-k" connectable="0" parent="erd45-e10" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
           <mxGeometry relative="1" x="0.0" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e11" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-54" target="erd45-berechnet" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e11" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-54" target="erd45-berechnet" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="1560" y="310" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e11-k" connectable="0" parent="erd45-e11" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
+        <mxCell id="erd45-e11-k" connectable="0" parent="erd45-e11" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
           <mxGeometry relative="1" x="-0.5" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e12" edge="1" parent="1" source="erd45-bestellung" target="erd45-berechnet" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e12" edge="1" parent="1" source="erd45-bestellung" target="erd45-berechnet" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e12-k" connectable="0" parent="erd45-e12" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
+        <mxCell id="erd45-e12-k" connectable="0" parent="erd45-e12" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
           <mxGeometry relative="1" x="0.0" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e13" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-47" target="4NgdJYocrXtbnPetFBts-48" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e13" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-47" target="4NgdJYocrXtbnPetFBts-48" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e13-k" connectable="0" parent="erd45-e13" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
+        <mxCell id="erd45-e13-k" connectable="0" parent="erd45-e13" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
           <mxGeometry relative="1" x="0.0" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e14" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-50" target="4NgdJYocrXtbnPetFBts-48" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e14" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-50" target="4NgdJYocrXtbnPetFBts-48" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e14-k" connectable="0" parent="erd45-e14" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
+        <mxCell id="erd45-e14-k" connectable="0" parent="erd45-e14" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
           <mxGeometry relative="1" x="0.0" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e15" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-47" target="erd45-gibt-auf" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e15" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-47" target="erd45-gibt-auf" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="688" y="770" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e15-k" connectable="0" parent="erd45-e15" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
+        <mxCell id="erd45-e15-k" connectable="0" parent="erd45-e15" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
           <mxGeometry relative="1" x="-0.75" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e16" edge="1" parent="1" source="erd45-bestellung" target="erd45-gibt-auf" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e16" edge="1" parent="1" source="erd45-bestellung" target="erd45-gibt-auf" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e16-k" connectable="0" parent="erd45-e16" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
+        <mxCell id="erd45-e16-k" connectable="0" parent="erd45-e16" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
           <mxGeometry relative="1" x="0.0" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e17" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-50" target="4NgdJYocrXtbnPetFBts-65" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;jumpStyle=arc;jumpSize=14;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e17" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-50" target="4NgdJYocrXtbnPetFBts-65" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;jumpStyle=arc;jumpSize=14;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="1140" y="1010" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e17-k" connectable="0" parent="erd45-e17" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
+        <mxCell id="erd45-e17-k" connectable="0" parent="erd45-e17" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
           <mxGeometry relative="1" x="-0.85" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e18" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-67" target="4NgdJYocrXtbnPetFBts-65" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e18" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-67" target="4NgdJYocrXtbnPetFBts-65" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e18-k" connectable="0" parent="erd45-e18" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
+        <mxCell id="erd45-e18-k" connectable="0" parent="erd45-e18" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
           <mxGeometry relative="1" x="0.0" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e19" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-67" target="erd45-liefert" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e19" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-67" target="erd45-liefert" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e19-k" connectable="0" parent="erd45-e19" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
+        <mxCell id="erd45-e19-k" connectable="0" parent="erd45-e19" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
           <mxGeometry relative="1" x="0.0" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e20" edge="1" parent="1" source="erd45-messwert" target="erd45-liefert" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e20" edge="1" parent="1" source="erd45-messwert" target="erd45-liefert" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e20-k" connectable="0" parent="erd45-e20" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
+        <mxCell id="erd45-e20-k" connectable="0" parent="erd45-e20" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
           <mxGeometry relative="1" x="0.0" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e21" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-67" target="4NgdJYocrXtbnPetFBts-73" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;exitX=0.15;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e21" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-67" target="4NgdJYocrXtbnPetFBts-73" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;exitX=0.15;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="679.5" y="1210" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e21-k" connectable="0" parent="erd45-e21" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
+        <mxCell id="erd45-e21-k" connectable="0" parent="erd45-e21" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
           <mxGeometry relative="1" x="-0.3" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e22" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-75" target="4NgdJYocrXtbnPetFBts-73" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e22" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-75" target="4NgdJYocrXtbnPetFBts-73" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e22-k" connectable="0" parent="erd45-e22" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
+        <mxCell id="erd45-e22-k" connectable="0" parent="erd45-e22" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
           <mxGeometry relative="1" x="0.0" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e23" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-67" target="4NgdJYocrXtbnPetFBts-71" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;exitX=0.85;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e23" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-67" target="4NgdJYocrXtbnPetFBts-71" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;exitX=0.85;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="760.5" y="1210" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e23-k" connectable="0" parent="erd45-e23" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
+        <mxCell id="erd45-e23-k" connectable="0" parent="erd45-e23" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
           <mxGeometry relative="1" x="-0.3" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e24" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-77" target="4NgdJYocrXtbnPetFBts-71" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e24" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-77" target="4NgdJYocrXtbnPetFBts-71" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e24-k" connectable="0" parent="erd45-e24" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
+        <mxCell id="erd45-e24-k" connectable="0" parent="erd45-e24" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
           <mxGeometry relative="1" x="0.0" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e25" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-67" target="erd45-hat" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e25" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-67" target="erd45-hat" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e25-k" connectable="0" parent="erd45-e25" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
+        <mxCell id="erd45-e25-k" connectable="0" parent="erd45-e25" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
           <mxGeometry relative="1" x="-0.2" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e26" edge="1" parent="1" source="erd45-bauteil" target="erd45-hat" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e26" edge="1" parent="1" source="erd45-bauteil" target="erd45-hat" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e26-k" connectable="0" parent="erd45-e26" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
+        <mxCell id="erd45-e26-k" connectable="0" parent="erd45-e26" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
           <mxGeometry relative="1" x="0.0" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e27" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-77" target="erd45-passt-zu" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e27" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-75" target="erd45-bearbeitet" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="300" y="1490" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="erd45-e27-k" connectable="0" parent="erd45-e27" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="M" vertex="1">
+          <mxGeometry relative="1" x="-0.4" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="erd45-e28" edge="1" parent="1" source="erd45-bauteil" target="erd45-bearbeitet" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e27-k" connectable="0" parent="erd45-e27" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="M" vertex="1">
+        <mxCell id="erd45-e28-k" connectable="0" parent="erd45-e28" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
           <mxGeometry relative="1" x="0.0" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e28" edge="1" parent="1" source="erd45-verbrauchsmaterial" target="erd45-passt-zu" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e29" edge="1" parent="1" source="4NgdJYocrXtbnPetFBts-77" target="erd45-passt-zu" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e28-k" connectable="0" parent="erd45-e28" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
+        <mxCell id="erd45-e29-k" connectable="0" parent="erd45-e29" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="M" vertex="1">
           <mxGeometry relative="1" x="0.0" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e29" edge="1" parent="1" source="erd45-bestellung" target="erd45-enthaelt" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e30" edge="1" parent="1" source="erd45-verbrauchsmaterial" target="erd45-passt-zu" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e29-k" connectable="0" parent="erd45-e29" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="M" vertex="1">
+        <mxCell id="erd45-e30-k" connectable="0" parent="erd45-e30" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
           <mxGeometry relative="1" x="0.0" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e30" edge="1" parent="1" source="erd45-verbrauchsmaterial" target="erd45-enthaelt" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;">
+        <mxCell id="erd45-e31" edge="1" parent="1" source="erd45-bestellung" target="erd45-enthaelt" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;">
           <mxGeometry relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-e30-k" connectable="0" parent="erd45-e30" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
+        <mxCell id="erd45-e31-k" connectable="0" parent="erd45-e31" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="M" vertex="1">
           <mxGeometry relative="1" x="0.0" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="erd45-a-79-1" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="&lt;u&gt;Zahlungs_ID&lt;/u&gt;" vertex="1">
+        <mxCell id="erd45-e32" edge="1" parent="1" source="erd45-verbrauchsmaterial" target="erd45-enthaelt" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=0;endArrow=none;endFill=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="erd45-e32-k" connectable="0" parent="erd45-e32" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
+          <mxGeometry relative="1" x="0.0" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="erd45-a-79-1" parent="1" style="ellipse;html=0;fontSize=11;fontStyle=4;" value="Zahlungs_ID" vertex="1">
           <mxGeometry x="65" y="220" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-79-1-l" edge="1" parent="1" source="erd45-a-79-1" target="4NgdJYocrXtbnPetFBts-79" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-79-1-l" edge="1" parent="1" source="erd45-a-79-1" target="4NgdJYocrXtbnPetFBts-79" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-79-2" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Betrag" vertex="1">
+        <mxCell id="erd45-a-79-2" parent="1" style="ellipse;html=0;fontSize=11;" value="Betrag" vertex="1">
           <mxGeometry x="55" y="290" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-79-2-l" edge="1" parent="1" source="erd45-a-79-2" target="4NgdJYocrXtbnPetFBts-79" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-79-2-l" edge="1" parent="1" source="erd45-a-79-2" target="4NgdJYocrXtbnPetFBts-79" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-79-3" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Zahldatum" vertex="1">
+        <mxCell id="erd45-a-79-3" parent="1" style="ellipse;html=0;fontSize=11;" value="Zahldatum" vertex="1">
           <mxGeometry x="65" y="360" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-79-3-l" edge="1" parent="1" source="erd45-a-79-3" target="4NgdJYocrXtbnPetFBts-79" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-79-3-l" edge="1" parent="1" source="erd45-a-79-3" target="4NgdJYocrXtbnPetFBts-79" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-82-4" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="&lt;u&gt;Rechnungsnr.&lt;/u&gt;" vertex="1">
+        <mxCell id="erd45-a-82-4" parent="1" style="ellipse;html=0;fontSize=11;fontStyle=4;" value="Rechnungsnr." vertex="1">
           <mxGeometry x="505" y="170" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-82-4-l" edge="1" parent="1" source="erd45-a-82-4" target="YVBqeQMRxETOPQUzVNE4-82" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-82-4-l" edge="1" parent="1" source="erd45-a-82-4" target="YVBqeQMRxETOPQUzVNE4-82" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-82-5" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Rechnungsdatum" vertex="1">
+        <mxCell id="erd45-a-82-5" parent="1" style="ellipse;html=0;fontSize=11;" value="Rechnungsdatum" vertex="1">
           <mxGeometry x="495" y="405" width="120" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-82-5-l" edge="1" parent="1" source="erd45-a-82-5" target="YVBqeQMRxETOPQUzVNE4-82" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-82-5-l" edge="1" parent="1" source="erd45-a-82-5" target="YVBqeQMRxETOPQUzVNE4-82" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-54-6" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="&lt;u style=&quot;text-decoration-style: dashed;&quot;&gt;Positionsnr.&lt;/u&gt;" vertex="1">
+        <mxCell id="erd45-a-54-6" parent="1" style="ellipse;html=1;fontSize=11;" value="&lt;u style=&quot;text-decoration-style: dashed;&quot;&gt;Positionsnr.&lt;/u&gt;" vertex="1">
           <mxGeometry x="945" y="200" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-54-6-l" edge="1" parent="1" source="erd45-a-54-6" target="4NgdJYocrXtbnPetFBts-54" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-54-6-l" edge="1" parent="1" source="erd45-a-54-6" target="4NgdJYocrXtbnPetFBts-54" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-54-7" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Bezeichnung" vertex="1">
+        <mxCell id="erd45-a-54-7" parent="1" style="ellipse;html=0;fontSize=11;" value="Bezeichnung" vertex="1">
           <mxGeometry x="1025" y="135" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-54-7-l" edge="1" parent="1" source="erd45-a-54-7" target="4NgdJYocrXtbnPetFBts-54" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-54-7-l" edge="1" parent="1" source="erd45-a-54-7" target="4NgdJYocrXtbnPetFBts-54" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-54-8" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Menge" vertex="1">
+        <mxCell id="erd45-a-54-8" parent="1" style="ellipse;html=0;fontSize=11;" value="Menge" vertex="1">
           <mxGeometry x="1145" y="135" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-54-8-l" edge="1" parent="1" source="erd45-a-54-8" target="4NgdJYocrXtbnPetFBts-54" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-54-8-l" edge="1" parent="1" source="erd45-a-54-8" target="4NgdJYocrXtbnPetFBts-54" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-54-9" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Einzelpreis" vertex="1">
+        <mxCell id="erd45-a-54-9" parent="1" style="ellipse;html=0;fontSize=11;" value="Einzelpreis" vertex="1">
           <mxGeometry x="1255" y="185" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-54-9-l" edge="1" parent="1" source="erd45-a-54-9" target="4NgdJYocrXtbnPetFBts-54" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-54-9-l" edge="1" parent="1" source="erd45-a-54-9" target="4NgdJYocrXtbnPetFBts-54" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-54-10" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Steuersatz" vertex="1">
+        <mxCell id="erd45-a-54-10" parent="1" style="ellipse;html=0;fontSize=11;" value="Steuersatz" vertex="1">
           <mxGeometry x="1300" y="240" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-54-10-l" edge="1" parent="1" source="erd45-a-54-10" target="4NgdJYocrXtbnPetFBts-54" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-54-10-l" edge="1" parent="1" source="erd45-a-54-10" target="4NgdJYocrXtbnPetFBts-54" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-47-11" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="&lt;u&gt;Kundennr.&lt;/u&gt;" vertex="1">
+        <mxCell id="erd45-a-47-11" parent="1" style="ellipse;html=0;fontSize=11;fontStyle=4;" value="Kundennr." vertex="1">
           <mxGeometry x="445" y="500" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-47-11-l" edge="1" parent="1" source="erd45-a-47-11" target="4NgdJYocrXtbnPetFBts-47" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-47-11-l" edge="1" parent="1" source="erd45-a-47-11" target="4NgdJYocrXtbnPetFBts-47" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-47-12" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Name" vertex="1">
+        <mxCell id="erd45-a-47-12" parent="1" style="ellipse;html=0;fontSize=11;" value="Name" vertex="1">
           <mxGeometry x="410" y="555" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-47-12-l" edge="1" parent="1" source="erd45-a-47-12" target="4NgdJYocrXtbnPetFBts-47" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-47-12-l" edge="1" parent="1" source="erd45-a-47-12" target="4NgdJYocrXtbnPetFBts-47" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-47-13" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Adresse" vertex="1">
+        <mxCell id="erd45-a-47-13" parent="1" style="ellipse;html=0;fontSize=11;" value="Adresse" vertex="1">
           <mxGeometry x="400" y="610" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-47-13-l" edge="1" parent="1" source="erd45-a-47-13" target="4NgdJYocrXtbnPetFBts-47" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-47-13-l" edge="1" parent="1" source="erd45-a-47-13" target="4NgdJYocrXtbnPetFBts-47" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-47-14" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="E-Mail" vertex="1">
+        <mxCell id="erd45-a-47-14" parent="1" style="ellipse;html=0;fontSize=11;" value="E-Mail" vertex="1">
           <mxGeometry x="410" y="665" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-47-14-l" edge="1" parent="1" source="erd45-a-47-14" target="4NgdJYocrXtbnPetFBts-47" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-47-14-l" edge="1" parent="1" source="erd45-a-47-14" target="4NgdJYocrXtbnPetFBts-47" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-47-15" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Telefon" vertex="1">
+        <mxCell id="erd45-a-47-15" parent="1" style="ellipse;html=0;fontSize=11;" value="Telefon" vertex="1">
           <mxGeometry x="445" y="720" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-47-15-l" edge="1" parent="1" source="erd45-a-47-15" target="4NgdJYocrXtbnPetFBts-47" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-47-15-l" edge="1" parent="1" source="erd45-a-47-15" target="4NgdJYocrXtbnPetFBts-47" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-50-16" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="&lt;u&gt;Ausleihnr.&lt;/u&gt;" vertex="1">
+        <mxCell id="erd45-a-50-16" parent="1" style="ellipse;html=0;fontSize=11;fontStyle=4;" value="Ausleihnr." vertex="1">
           <mxGeometry x="1275" y="500" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-50-16-l" edge="1" parent="1" source="erd45-a-50-16" target="4NgdJYocrXtbnPetFBts-50" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-50-16-l" edge="1" parent="1" source="erd45-a-50-16" target="4NgdJYocrXtbnPetFBts-50" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-50-17" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="von" vertex="1">
+        <mxCell id="erd45-a-50-17" parent="1" style="ellipse;html=0;fontSize=11;" value="von" vertex="1">
           <mxGeometry x="1320" y="550" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-50-17-l" edge="1" parent="1" source="erd45-a-50-17" target="4NgdJYocrXtbnPetFBts-50" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-50-17-l" edge="1" parent="1" source="erd45-a-50-17" target="4NgdJYocrXtbnPetFBts-50" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-50-18" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="bis" vertex="1">
+        <mxCell id="erd45-a-50-18" parent="1" style="ellipse;html=0;fontSize=11;" value="bis" vertex="1">
           <mxGeometry x="1320" y="600" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-50-18-l" edge="1" parent="1" source="erd45-a-50-18" target="4NgdJYocrXtbnPetFBts-50" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-50-18-l" edge="1" parent="1" source="erd45-a-50-18" target="4NgdJYocrXtbnPetFBts-50" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-50-19" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Status" vertex="1">
+        <mxCell id="erd45-a-50-19" parent="1" style="ellipse;html=0;fontSize=11;" value="Status" vertex="1">
           <mxGeometry x="1275" y="650" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-50-19-l" edge="1" parent="1" source="erd45-a-50-19" target="4NgdJYocrXtbnPetFBts-50" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-50-19-l" edge="1" parent="1" source="erd45-a-50-19" target="4NgdJYocrXtbnPetFBts-50" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-bestellung-20" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="&lt;u&gt;Bestell_ID&lt;/u&gt;" vertex="1">
+        <mxCell id="erd45-a-bestellung-20" parent="1" style="ellipse;html=0;fontSize=11;fontStyle=4;" value="Bestell_ID" vertex="1">
           <mxGeometry x="1710" y="690" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-bestellung-20-l" edge="1" parent="1" source="erd45-a-bestellung-20" target="erd45-bestellung" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-bestellung-20-l" edge="1" parent="1" source="erd45-a-bestellung-20" target="erd45-bestellung" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-bestellung-21" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Bestelldatum" vertex="1">
+        <mxCell id="erd45-a-bestellung-21" parent="1" style="ellipse;html=0;fontSize=11;" value="Bestelldatum" vertex="1">
           <mxGeometry x="1735" y="750" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-bestellung-21-l" edge="1" parent="1" source="erd45-a-bestellung-21" target="erd45-bestellung" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-bestellung-21-l" edge="1" parent="1" source="erd45-a-bestellung-21" target="erd45-bestellung" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-bestellung-22" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Lieferstatus" vertex="1">
+        <mxCell id="erd45-a-bestellung-22" parent="1" style="ellipse;html=0;fontSize=11;" value="Lieferstatus" vertex="1">
           <mxGeometry x="1710" y="810" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-bestellung-22-l" edge="1" parent="1" source="erd45-a-bestellung-22" target="erd45-bestellung" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-bestellung-22-l" edge="1" parent="1" source="erd45-a-bestellung-22" target="erd45-bestellung" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-67-23" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="&lt;u&gt;Inventarnr.&lt;/u&gt;" vertex="1">
+        <mxCell id="erd45-a-67-23" parent="1" style="ellipse;html=0;fontSize=11;fontStyle=4;" value="Inventarnr." vertex="1">
           <mxGeometry x="505" y="865" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-67-23-l" edge="1" parent="1" source="erd45-a-67-23" target="4NgdJYocrXtbnPetFBts-67" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-67-23-l" edge="1" parent="1" source="erd45-a-67-23" target="4NgdJYocrXtbnPetFBts-67" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-67-24" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Seriennr." vertex="1">
+        <mxCell id="erd45-a-67-24" parent="1" style="ellipse;html=0;fontSize=11;" value="Seriennr." vertex="1">
           <mxGeometry x="625" y="845" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-67-24-l" edge="1" parent="1" source="erd45-a-67-24" target="4NgdJYocrXtbnPetFBts-67" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-67-24-l" edge="1" parent="1" source="erd45-a-67-24" target="4NgdJYocrXtbnPetFBts-67" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-67-25" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Betriebsstd." vertex="1">
+        <mxCell id="erd45-a-67-25" parent="1" style="ellipse;html=0;fontSize=11;" value="Betriebsstd." vertex="1">
           <mxGeometry x="745" y="845" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-67-25-l" edge="1" parent="1" source="erd45-a-67-25" target="4NgdJYocrXtbnPetFBts-67" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-67-25-l" edge="1" parent="1" source="erd45-a-67-25" target="4NgdJYocrXtbnPetFBts-67" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-67-26" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Standort" vertex="1">
+        <mxCell id="erd45-a-67-26" parent="1" style="ellipse;html=0;fontSize=11;" value="Standort" vertex="1">
           <mxGeometry x="860" y="865" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-67-26-l" edge="1" parent="1" source="erd45-a-67-26" target="4NgdJYocrXtbnPetFBts-67" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-67-26-l" edge="1" parent="1" source="erd45-a-67-26" target="4NgdJYocrXtbnPetFBts-67" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-messwert-27" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="&lt;u&gt;Messwert_ID&lt;/u&gt;" vertex="1">
+        <mxCell id="erd45-a-messwert-27" parent="1" style="ellipse;html=0;fontSize=11;fontStyle=4;" value="Messwert_ID" vertex="1">
           <mxGeometry x="55" y="880" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-messwert-27-l" edge="1" parent="1" source="erd45-a-messwert-27" target="erd45-messwert" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-messwert-27-l" edge="1" parent="1" source="erd45-a-messwert-27" target="erd45-messwert" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-messwert-28" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Zeitpunkt" vertex="1">
+        <mxCell id="erd45-a-messwert-28" parent="1" style="ellipse;html=0;fontSize=11;" value="Zeitpunkt" vertex="1">
           <mxGeometry x="40" y="935" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-messwert-28-l" edge="1" parent="1" source="erd45-a-messwert-28" target="erd45-messwert" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-messwert-28-l" edge="1" parent="1" source="erd45-a-messwert-28" target="erd45-messwert" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-messwert-29" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Messgröße" vertex="1">
+        <mxCell id="erd45-a-messwert-29" parent="1" style="ellipse;html=0;fontSize=11;" value="Messgröße" vertex="1">
           <mxGeometry x="30" y="990" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-messwert-29-l" edge="1" parent="1" source="erd45-a-messwert-29" target="erd45-messwert" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-messwert-29-l" edge="1" parent="1" source="erd45-a-messwert-29" target="erd45-messwert" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-messwert-30" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Wert" vertex="1">
+        <mxCell id="erd45-a-messwert-30" parent="1" style="ellipse;html=0;fontSize=11;" value="Wert" vertex="1">
           <mxGeometry x="40" y="1045" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-messwert-30-l" edge="1" parent="1" source="erd45-a-messwert-30" target="erd45-messwert" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-messwert-30-l" edge="1" parent="1" source="erd45-a-messwert-30" target="erd45-messwert" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-messwert-31" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Einheit" vertex="1">
+        <mxCell id="erd45-a-messwert-31" parent="1" style="ellipse;html=0;fontSize=11;" value="Einheit" vertex="1">
           <mxGeometry x="55" y="1100" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-messwert-31-l" edge="1" parent="1" source="erd45-a-messwert-31" target="erd45-messwert" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-messwert-31-l" edge="1" parent="1" source="erd45-a-messwert-31" target="erd45-messwert" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-75-32" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="&lt;u&gt;Wartungsnr.&lt;/u&gt;" vertex="1">
+        <mxCell id="erd45-a-75-32" parent="1" style="ellipse;html=0;fontSize=11;fontStyle=4;" value="Wartungsnr." vertex="1">
           <mxGeometry x="55" y="1170" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-75-32-l" edge="1" parent="1" source="erd45-a-75-32" target="4NgdJYocrXtbnPetFBts-75" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-75-32-l" edge="1" parent="1" source="erd45-a-75-32" target="4NgdJYocrXtbnPetFBts-75" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-75-33" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Datum" vertex="1">
+        <mxCell id="erd45-a-75-33" parent="1" style="ellipse;html=0;fontSize=11;" value="Datum" vertex="1">
           <mxGeometry x="40" y="1225" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-75-33-l" edge="1" parent="1" source="erd45-a-75-33" target="4NgdJYocrXtbnPetFBts-75" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-75-33-l" edge="1" parent="1" source="erd45-a-75-33" target="4NgdJYocrXtbnPetFBts-75" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-75-34" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Art" vertex="1">
+        <mxCell id="erd45-a-75-34" parent="1" style="ellipse;html=0;fontSize=11;" value="Art" vertex="1">
           <mxGeometry x="55" y="1280" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-75-34-l" edge="1" parent="1" source="erd45-a-75-34" target="4NgdJYocrXtbnPetFBts-75" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-75-34-l" edge="1" parent="1" source="erd45-a-75-34" target="4NgdJYocrXtbnPetFBts-75" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-77-35" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="&lt;u&gt;Typnr.&lt;/u&gt;" vertex="1">
+        <mxCell id="erd45-a-77-35" parent="1" style="ellipse;html=0;fontSize=11;fontStyle=4;" value="Typnr." vertex="1">
           <mxGeometry x="945" y="1315" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-77-35-l" edge="1" parent="1" source="erd45-a-77-35" target="4NgdJYocrXtbnPetFBts-77" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-77-35-l" edge="1" parent="1" source="erd45-a-77-35" target="4NgdJYocrXtbnPetFBts-77" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-77-36" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Bezeichnung" vertex="1">
+        <mxCell id="erd45-a-77-36" parent="1" style="ellipse;html=0;fontSize=11;" value="Bezeichnung" vertex="1">
           <mxGeometry x="1055" y="1340" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-77-36-l" edge="1" parent="1" source="erd45-a-77-36" target="4NgdJYocrXtbnPetFBts-77" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-77-36-l" edge="1" parent="1" source="erd45-a-77-36" target="4NgdJYocrXtbnPetFBts-77" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-77-37" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Kategorie" vertex="1">
+        <mxCell id="erd45-a-77-37" parent="1" style="ellipse;html=0;fontSize=11;" value="Kategorie" vertex="1">
           <mxGeometry x="1175" y="1340" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-77-37-l" edge="1" parent="1" source="erd45-a-77-37" target="4NgdJYocrXtbnPetFBts-77" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-77-37-l" edge="1" parent="1" source="erd45-a-77-37" target="4NgdJYocrXtbnPetFBts-77" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-77-38" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Tagessatz" vertex="1">
+        <mxCell id="erd45-a-77-38" parent="1" style="ellipse;html=0;fontSize=11;" value="Tagessatz" vertex="1">
           <mxGeometry x="1280" y="1305" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-77-38-l" edge="1" parent="1" source="erd45-a-77-38" target="4NgdJYocrXtbnPetFBts-77" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-77-38-l" edge="1" parent="1" source="erd45-a-77-38" target="4NgdJYocrXtbnPetFBts-77" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-verbrauchsmaterial-39" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="&lt;u&gt;Verbrauchsmaterial_ID&lt;/u&gt;" vertex="1">
+        <mxCell id="erd45-a-verbrauchsmaterial-39" parent="1" style="ellipse;html=0;fontSize=11;fontStyle=4;" value="Verbrauchsmaterial_ID" vertex="1">
           <mxGeometry x="1475" y="1325" width="170" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-verbrauchsmaterial-39-l" edge="1" parent="1" source="erd45-a-verbrauchsmaterial-39" target="erd45-verbrauchsmaterial" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-verbrauchsmaterial-39-l" edge="1" parent="1" source="erd45-a-verbrauchsmaterial-39" target="erd45-verbrauchsmaterial" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-verbrauchsmaterial-40" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Bezeichnung" vertex="1">
+        <mxCell id="erd45-a-verbrauchsmaterial-40" parent="1" style="ellipse;html=0;fontSize=11;" value="Bezeichnung" vertex="1">
           <mxGeometry x="1710" y="1130" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-verbrauchsmaterial-40-l" edge="1" parent="1" source="erd45-a-verbrauchsmaterial-40" target="erd45-verbrauchsmaterial" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-verbrauchsmaterial-40-l" edge="1" parent="1" source="erd45-a-verbrauchsmaterial-40" target="erd45-verbrauchsmaterial" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-verbrauchsmaterial-41" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Einheit" vertex="1">
+        <mxCell id="erd45-a-verbrauchsmaterial-41" parent="1" style="ellipse;html=0;fontSize=11;" value="Einheit" vertex="1">
           <mxGeometry x="1735" y="1190" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-verbrauchsmaterial-41-l" edge="1" parent="1" source="erd45-a-verbrauchsmaterial-41" target="erd45-verbrauchsmaterial" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-verbrauchsmaterial-41-l" edge="1" parent="1" source="erd45-a-verbrauchsmaterial-41" target="erd45-verbrauchsmaterial" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-verbrauchsmaterial-42" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Preis" vertex="1">
+        <mxCell id="erd45-a-verbrauchsmaterial-42" parent="1" style="ellipse;html=0;fontSize=11;" value="Preis" vertex="1">
           <mxGeometry x="1710" y="1250" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-verbrauchsmaterial-42-l" edge="1" parent="1" source="erd45-a-verbrauchsmaterial-42" target="erd45-verbrauchsmaterial" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-verbrauchsmaterial-42-l" edge="1" parent="1" source="erd45-a-verbrauchsmaterial-42" target="erd45-verbrauchsmaterial" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-bauteil-43" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="&lt;u&gt;Bauteil_ID&lt;/u&gt;" vertex="1">
+        <mxCell id="erd45-a-bauteil-43" parent="1" style="ellipse;html=0;fontSize=11;fontStyle=4;" value="Bauteil_ID" vertex="1">
           <mxGeometry x="545" y="1600" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-bauteil-43-l" edge="1" parent="1" source="erd45-a-bauteil-43" target="erd45-bauteil" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-bauteil-43-l" edge="1" parent="1" source="erd45-a-bauteil-43" target="erd45-bauteil" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-bauteil-44" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Teilenummer" vertex="1">
+        <mxCell id="erd45-a-bauteil-44" parent="1" style="ellipse;html=0;fontSize=11;" value="Teilenummer" vertex="1">
           <mxGeometry x="665" y="1625" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-bauteil-44-l" edge="1" parent="1" source="erd45-a-bauteil-44" target="erd45-bauteil" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-bauteil-44-l" edge="1" parent="1" source="erd45-a-bauteil-44" target="erd45-bauteil" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-bauteil-45" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Bezeichnung" vertex="1">
+        <mxCell id="erd45-a-bauteil-45" parent="1" style="ellipse;html=0;fontSize=11;" value="Bezeichnung" vertex="1">
           <mxGeometry x="785" y="1625" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-bauteil-45-l" edge="1" parent="1" source="erd45-a-bauteil-45" target="erd45-bauteil" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-bauteil-45-l" edge="1" parent="1" source="erd45-a-bauteil-45" target="erd45-bauteil" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-bauteil-46" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Hersteller" vertex="1">
+        <mxCell id="erd45-a-bauteil-46" parent="1" style="ellipse;html=0;fontSize=11;" value="Hersteller" vertex="1">
           <mxGeometry x="890" y="1580" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-bauteil-46-l" edge="1" parent="1" source="erd45-a-bauteil-46" target="erd45-bauteil" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-bauteil-46-l" edge="1" parent="1" source="erd45-a-bauteil-46" target="erd45-bauteil" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-bauteil-47" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Einbaudatum" vertex="1">
+        <mxCell id="erd45-a-bauteil-47" parent="1" style="ellipse;html=0;fontSize=11;" value="Einbaudatum" vertex="1">
           <mxGeometry x="905" y="1495" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-bauteil-47-l" edge="1" parent="1" source="erd45-a-bauteil-47" target="erd45-bauteil" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-bauteil-47-l" edge="1" parent="1" source="erd45-a-bauteil-47" target="erd45-bauteil" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-enthaelt-48" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;fontSize=11;" value="Menge" vertex="1">
+        <mxCell id="erd45-a-enthaelt-48" parent="1" style="ellipse;html=0;fontSize=11;" value="Menge" vertex="1">
           <mxGeometry x="1675" y="970" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="erd45-a-enthaelt-48-l" edge="1" parent="1" source="erd45-a-enthaelt-48" target="erd45-enthaelt" style="endArrow=none;html=1;rounded=0;endFill=0;">
+        <mxCell id="erd45-a-enthaelt-48-l" edge="1" parent="1" source="erd45-a-enthaelt-48" target="erd45-enthaelt" style="endArrow=none;html=0;rounded=0;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd45-a-bearbeitet-49" parent="1" style="ellipse;html=0;fontSize=11;" value="Maßnahme" vertex="1">
+          <mxGeometry x="375" y="1575" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="erd45-a-bearbeitet-49-l" edge="1" parent="1" source="erd45-a-bearbeitet-49" target="erd45-bearbeitet" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
