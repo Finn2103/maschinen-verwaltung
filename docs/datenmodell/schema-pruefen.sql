@@ -61,8 +61,8 @@ VALUES ('Minibagger 1,8 t', 'Erdbewegung', 89.00);
 INSERT INTO maschine (inventarnummer, typnummer, seriennummer, standort)
 VALUES ('M-1001', 1, 'SN-4711', 'Köln'),
        ('M-1002', 1, 'SN-4712', 'Bonn');
-INSERT INTO kunde (name, email, telefon)
-VALUES ('Muster Bau GmbH', 'info@muster-bau.example', '0221 000000');
+INSERT INTO kunde (name, strasse, plz, ort, email, telefon)
+VALUES ('Muster Bau GmbH', 'Musterstraße 1', '50667', 'Köln', 'info@muster-bau.example', '0221 000000');
 SELECT pg_temp.erwarte_fehler(
     $$INSERT INTO maschinentyp (bezeichnung, kategorie, tagessatz) VALUES ('Radlader', 'Erdbewegung', -1)$$,
     '23514', 'negativer Tagessatz');
@@ -185,6 +185,28 @@ SELECT pg_temp.pruefe(:storno = :rechnung_a + 1, 'Storno-Rechnung bekommt die n�
 SELECT pg_temp.erwarte_fehler(
     format($$INSERT INTO rechnung (kundennummer, storniert_rechnungsnummer) VALUES (1, %s)$$, :rechnung_a),
     '23505', 'dieselbe Rechnung ein zweites Mal stornieren');
+
+SELECT pg_temp.abschnitt('Empfänger auf der Rechnung (Antwort 19)');
+-- Muster Bau zieht um. Die gebuchte Rechnung muss die Anschrift behalten,
+-- an die sie ausgestellt wurde (GoBD Rz. 59 Bsp. 4), die nächste Rechnung
+-- geht an die neue. Mitgeschickte Empfängerdaten zählen nicht.
+UPDATE kunde SET strasse = 'Hafenweg 7', plz = '53111', ort = 'Bonn' WHERE kundennummer = 1;
+INSERT INTO rechnung (kundennummer, empfaenger_name, empfaenger_strasse, empfaenger_plz, empfaenger_ort)
+VALUES (1, 'Irgendwer', 'Irgendwo 1', '00000', 'Nirgendwo')
+RETURNING rechnungsnummer AS nach_umzug \gset
+SELECT pg_temp.pruefe(
+    (SELECT concat_ws(', ', empfaenger_name, empfaenger_strasse, empfaenger_plz || ' ' || empfaenger_ort)
+       FROM rechnung WHERE rechnungsnummer = :rechnung_a) = 'Muster Bau GmbH, Musterstraße 1, 50667 Köln'
+    AND (SELECT concat_ws(', ', empfaenger_name, empfaenger_strasse, empfaenger_plz || ' ' || empfaenger_ort)
+       FROM rechnung WHERE rechnungsnummer = :nach_umzug) = 'Muster Bau GmbH, Hafenweg 7, 53111 Bonn',
+    'Umzug ändert die gebuchte Rechnung nicht, die nächste geht an die neue Anschrift aus kunde');
+-- Wie aus dem Reservierungsformular (#1): ohne Anschrift.
+INSERT INTO kunde (name, email, telefon)
+VALUES ('Ohne Anschrift KG', 'info@ohne-anschrift.example', '0228 000000')
+RETURNING kundennummer AS ohne_anschrift \gset
+SELECT pg_temp.erwarte_fehler(
+    format($$INSERT INTO rechnung (kundennummer) VALUES (%s)$$, :ohne_anschrift),
+    '23502', 'Kunde ohne Anschrift bekommt keine Rechnung');
 
 SELECT pg_temp.abschnitt('Zahlung');
 INSERT INTO zahlung (rechnungsnummer, betrag, zahldatum) VALUES (:rechnung_a, 624.52, '2026-10-05');

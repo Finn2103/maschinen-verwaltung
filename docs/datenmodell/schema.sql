@@ -33,7 +33,7 @@ CREATE TABLE kunde (
     name          text NOT NULL,
     -- Die Adresse aus dem ERD, für die 1. NF in drei Spalten zerlegt.
     -- Leer erlaubt, weil das Reservierungsformular (#1) keine Adresse
-    -- abfragt. Spätestens vor der ersten Rechnung muss sie da sein.
+    -- abfragt. Ohne sie gibt es aber keine Rechnung (Trigger an rechnung).
     strasse       text,
     plz           text,
     ort           text,
@@ -221,20 +221,51 @@ $$;
 -- die stornierte zeigt (rekursive Beziehung „storniert“ im ERD). Die
 -- stornierte Rechnung selbst bleibt unverändert. UNIQUE: jede Rechnung
 -- wird höchstens einmal storniert.
+--
+-- Antwort 19 (11.11.): Name und Anschrift des Empfängers werden beim
+-- Ausstellen auf die Rechnung kopiert, wie Preis und Steuersatz auf die
+-- Position. § 14 Abs. 4 Nr. 1 UStG verlangt sie auf der Rechnung, und
+-- GoBD Rz. 59 Beispiel 4 nennt eine Rechnung, die nach einem Umzug aus den
+-- aktuellen Stammdaten neu erzeugt wird, nicht ordnungsgemäß. Die Spalten
+-- füllt nur der Trigger unten; NOT NULL heißt: ohne Anschrift keine Rechnung.
 CREATE TABLE rechnung (
     rechnungsnummer            bigint PRIMARY KEY,   -- vergibt nur der Trigger unten
     kundennummer               bigint NOT NULL REFERENCES kunde,
     rechnungsdatum             date NOT NULL DEFAULT current_date,
+    empfaenger_name            text NOT NULL,        -- Kopie aus kunde, setzt der Trigger
+    empfaenger_strasse         text NOT NULL,
+    empfaenger_plz             text NOT NULL,
+    empfaenger_ort             text NOT NULL,
     storniert_rechnungsnummer  bigint UNIQUE REFERENCES rechnung,
     erfasst_am                 timestamptz NOT NULL  -- setzt der Trigger, siehe rechnungsposition
 );
 
 CREATE FUNCTION rechnung_nummer_vergeben() RETURNS trigger
 LANGUAGE plpgsql AS $$
+DECLARE
+    k kunde%ROWTYPE;
 BEGIN
-    -- Eine mitgeschickte Nummer oder Zeit wird überschrieben.
-    NEW.rechnungsnummer := naechste_nummer('rechnung');
-    NEW.erfasst_am := now();
+    -- Empfänger aus kunde kopieren (Antwort 19). Erst prüfen, dann die
+    -- Nummer ziehen.
+    SELECT * INTO k FROM kunde WHERE kundennummer = NEW.kundennummer;
+    IF NOT FOUND THEN
+        -- Gleicher Fehlercode wie der Fremdschlüssel, der sonst greifen
+        -- würde. Er prüft erst nach diesem Trigger, NOT NULL schon davor.
+        RAISE EXCEPTION 'Kunde % gibt es nicht', NEW.kundennummer
+            USING ERRCODE = 'foreign_key_violation';
+    END IF;
+    IF num_nulls(k.strasse, k.plz, k.ort) > 0 THEN
+        RAISE EXCEPTION 'Kunde % hat keine vollständige Anschrift: erst Straße, PLZ und Ort erfassen, dann die Rechnung',
+            NEW.kundennummer USING ERRCODE = 'not_null_violation';
+    END IF;
+
+    -- Mitgeschickte Werte für Empfänger, Nummer und Zeit werden überschrieben.
+    NEW.empfaenger_name    := k.name;
+    NEW.empfaenger_strasse := k.strasse;
+    NEW.empfaenger_plz     := k.plz;
+    NEW.empfaenger_ort     := k.ort;
+    NEW.rechnungsnummer    := naechste_nummer('rechnung');
+    NEW.erfasst_am         := now();
     RETURN NEW;
 END;
 $$;

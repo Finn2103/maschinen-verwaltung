@@ -109,6 +109,45 @@ abnimmt.
 | 11 | Dürfen Kunden nur Material für gebuchte Maschinen bestellen? | **Nein, frei**, auch für Maschinen, die nicht vom Verleih sind. Vorschläge kommen über „passt zu“. Der Kunden-Shop dafür ist #94 (Backlog), nicht Teil von #45 | Finn |
 | 12 | Die drawio-Datei an die ältere SVG-Fassung (Commit `2ffc6ec`) angleichen? | **Ja**: Attribute aller Entitäten, Beziehungsnamen, lose hängende Attribute, unbenannte Rauten. Umgesetzt am 10.11. | Finn |
 
+### Empfänger auf der Rechnung, Antwort vom 11.11. (#45)
+
+Beim Ableiten des Schemas blieb offen, ob die Rechnung Name und Anschrift des Empfängers
+selbst speichert oder zur Laufzeit aus `kunde` liest. Finn hat am 11.11.2026 nach einer
+Recherche entschieden. Gilt **vorläufig** wie die Antworten vom 09.11., bis das Team das
+ERD abnimmt.
+
+| # | Frage | Entscheidung | Von wem |
+| --- | --- | --- | --- |
+| 19 | Name und Anschrift beim Ausstellen auf die Rechnung kopieren? | **Ja, kopieren.** Die Rechnung bekommt `empfaenger_name`, `empfaenger_strasse`, `empfaenger_plz` und `empfaenger_ort`, alle `NOT NULL`. Der Trigger, der die Rechnungsnummer vergibt, füllt sie aus `kunde`. Ein Umzug ändert keine gebuchte Rechnung, ohne Anschrift gibt es keine Rechnung. Umgesetzt am 11.11. | Finn |
+
+**Begründung:**
+
+- Das Gesetz verlangt Name und Anschrift auf der Rechnung und ein unverändertes Doppel über
+  die ganze Aufbewahrungsfrist (§ 14 Abs. 3 und Abs. 4 Nr. 1, § 14b UStG; § 146 Abs. 4 AO).
+- GoBD Rz. 59, Beispiel 4 nennt genau den anderen Weg nicht ordnungsgemäß: die Rechnung
+  aus den aktuellen Stammdaten neu erzeugen, nachdem sich der Kunde geändert hat.
+- GoBD Rz. 76 und 111 ließen statt der Kopie eine Adresshistorie zu. Das wäre eine
+  Tabelle mehr, und jede Abfrage bräuchte das Rechnungsdatum.
+- Gleiches Muster wie Preis und Steuersatz an der Position (ERD-Entscheidung 5), und so
+  machen es auch Business Central und ERPNext.
+- Zusätzlich die ausgestellte Rechnung als Datei (PDF oder E-Rechnung) unveränderbar
+  archivieren (GoBD Rz. 133): gehört zur Abrechnung, nicht zu #45.
+
+**Quellen** (am 10.11.2026 gelesen):
+
+- [§ 14 UStG](https://www.gesetze-im-internet.de/ustg_1980/__14.html) ·
+  [§ 14b UStG](https://www.gesetze-im-internet.de/ustg_1980/__14b.html) ·
+  [§ 146 AO](https://www.gesetze-im-internet.de/ao_1977/__146.html), gesetze-im-internet.de
+- [GoBD, konsolidierte Fassung vom 14.07.2025](https://ao.bundesfinanzministerium.de/ao/2026/Anhaenge/BMF-Schreiben-und-gleichlautende-Laendererlasse/Anhang-33/inhalt.html),
+  AO-Handbuch 2026 des BMF, Anhang 33 (Rz. 59, 76, 111, 133)
+- [Business Central, Tabelle Sales Invoice Header](https://learn.microsoft.com/en-us/dynamics365/business-central/application/base-application/table/microsoft.sales.history.sales-invoice-header),
+  Microsoft Learn
+- [ERPNext, Address](https://docs.frappe.io/erpnext/address), docs.frappe.io
+
+Umgesetzt in [`relational.md`](../datenmodell/relational.md) (3.4 und 4.5),
+[`schema.sql`](../datenmodell/schema.sql) und `schema-pruefen.sql` (zwei Fälle: Umzug,
+Kunde ohne Anschrift).
+
 ---
 
 ## Zurückgezogene Befunde
@@ -208,7 +247,6 @@ Abgabe: **Freitag 11.12.2026, 8. Stunde.**
 | --- | --- | --- |
 | ERD abnehmen: vorläufig angenommen mit Laurins Zustimmung (siehe ERD-Entscheidungen), drei Antworten stehen aus | Team | in #73 |
 | Rollen und Rechte, Stornofrist, Stornogrund und Protokoll im Datenmodell: laut Finn (10.11.) nicht mehr #45, sondern ein eigenes Item zusammen mit #8 | Team legt das Item an | Sprint 3 |
-| Anschrift des Empfängers beim Ausstellen auf die Rechnung kopieren oder aus `kunde` lesen? | Finn, nach Recherche | vor dem Review |
 | Definition of Done beschließen | Team | Sprint Planning, vor dem Schätzen |
 | Sprint Goal für Sprint 1 | Team | Sprint Planning |
 | Reihenfolge des Backlogs | Team (delegiert, siehe Punkt 6) | Sprint Planning |

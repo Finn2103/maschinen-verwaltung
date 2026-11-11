@@ -4,8 +4,8 @@ Vom ERD ([`ERD-Maschinenverwaltung.drawio`](ERD-Maschinenverwaltung.drawio)) zu 
 Tabellen in [`schema.sql`](schema.sql). Dieses Dokument zeigt, **wie** jede Tabelle aus dem
 ERD entsteht und **warum** das Ergebnis in 3. Normalform ist.
 
-- **Stand:** Entwurf vom 10.11.2026 zu #45, auf Grundlage der vorläufig angenommenen
-  ERD-Entscheidungen aus #73 und Finns Antworten vom 09.11. (beide in
+- **Stand:** Entwurf vom 11.11.2026 zu #45, auf Grundlage der vorläufig angenommenen
+  ERD-Entscheidungen aus #73 und Finns Antworten vom 09.11. und 11.11. (alle in
   [`docs/scrum/entscheidungen.md`](../scrum/entscheidungen.md)).
 - **Geprüft:** `schema.sql` läuft fehlerfrei auf einer leeren PostgreSQL 17,
   `schema-pruefen.sql` prüft jede Zusicherung unten mit einem Fall. Aufruf:
@@ -61,7 +61,7 @@ ae/oe/ue.
 
 **Abrechnung**
 
-- `rechnung(`**rechnungsnummer**`, ↑kundennummer, rechnungsdatum, ↑storniert_rechnungsnummer, erfasst_am)`
+- `rechnung(`**rechnungsnummer**`, ↑kundennummer, rechnungsdatum, empfaenger_name, empfaenger_strasse, empfaenger_plz, empfaenger_ort, ↑storniert_rechnungsnummer, erfasst_am)`
 - `rechnungsposition(`**↑rechnungsnummer, positionsnummer**`, bezeichnung, menge, einzelpreis, steuersatz, ↑ausleihnummer, ↑bestell_id)`
 - `zahlung(`**zahlungs_id**`, ↑rechnungsnummer, betrag, zahldatum)`
 - `nummernkreis(`**bezeichnung**`, letzte_nummer)` (technisch, siehe 4.2)
@@ -89,7 +89,7 @@ ae/oe/ue.
 | Bestellung | `bestellung` | |
 | gibt auf (1 : N) | `bestellung.kundennummer` | |
 | enthält (M : N) | `bestellposition` | mit `menge` |
-| Rechnung | `rechnung` | |
+| Rechnung | `rechnung` | Empfängeradresse in drei Spalten zerlegt (1. NF), bewusste Kopie aus `kunde` (3.4, Antwort 19) |
 | erhält (1 : N) | `rechnung.kundennummer` | |
 | storniert (1 : 1, rekursiv) | `rechnung.storniert_rechnungsnummer` | ERD-Entscheidung 6 |
 | Rechnungsposition, besteht aus | `rechnungsposition` | schwache Entität |
@@ -109,6 +109,7 @@ M : N-Relationen heißen nach dem, was eine Zeile ist, wenn es dafür ein Wort g
 | Was | Vorher | Nachher |
 | --- | --- | --- |
 | Adresse des Kunden | ein Attribut „Adresse“ im ERD | `strasse`, `plz`, `ort`. Die Hausnummer bleibt in `strasse`, weil niemand nach ihr sucht |
+| Empfängeradresse der Rechnung | ein Attribut „Empfängeradresse“ im ERD | `empfaenger_strasse`, `empfaenger_plz`, `empfaenger_ort`, zerlegt wie beim Kunden |
 | Zeitraum der Ausleihe | „von – bis“ als eine Angabe | `von` und `bis` als `date` (ERD-Entscheidung 3) |
 | Inhalt einer Bestellung | mehrere Materialien in einer Bestellung | eine Zeile je Material in `bestellposition` |
 
@@ -126,7 +127,7 @@ Betrifft nur Relationen mit zusammengesetztem Schlüssel:
 **Was deshalb bewusst fehlt:** `wartungsmassnahme` hat keine Spalte `inventarnummer`.
 Damit ließe sich in der Datenbank prüfen, dass Wartung und Bauteil zur selben Maschine
 gehören. Die Maschine hängt aber allein an `wartungsnummer`, also nur an einem Teil des
-Schlüssels, und das verletzt die 2. NF. Diese Prüfung macht die Anwendung (siehe 4.5).
+Schlüssels, und das verletzt die 2. NF. Diese Prüfung macht die Anwendung (siehe 4.6).
 
 ### 3.3 Dritte Normalform: keine transitiven Abhängigkeiten
 
@@ -179,6 +180,35 @@ ERD-Entscheidungen 4 und 5: Eine Rechnung von 2026 muss 2029 denselben Betrag er
 (GoBD). Würde die Rechnung den Preis zur Laufzeit aus den Stammdaten lesen, änderte jede
 Preiserhöhung alte Rechnungen. Der Steuersatz steht an der Position, damit eine Rechnung
 gemischte Sätze haben kann.
+
+**Empfänger (Antwort 19 vom 11.11.).** Dasselbe gilt für `rechnung.empfaenger_name`,
+`empfaenger_strasse`, `empfaenger_plz` und `empfaenger_ort`:
+
+- `kunde.strasse` ist die **heutige** Anschrift und ändert sich beim Umzug.
+- `rechnung.empfaenger_strasse` ist die Anschrift, **an die die Rechnung ausgestellt
+  wurde**. Sie hängt an der Rechnung und ändert sich nie.
+
+Deshalb gilt auch nicht `kundennummer → empfaenger_strasse`: Zwei Rechnungen desselben
+Kunden können verschiedene Anschriften tragen, eine vor und eine nach dem Umzug. Ohne diese
+funktionale Abhängigkeit gibt es keine transitive, die 3. NF ist erfüllt.
+
+Warum kopiert und nicht gelesen:
+
+- § 14 Abs. 4 Nr. 1 UStG verlangt den vollständigen Namen und die vollständige Anschrift
+  des Leistungsempfängers auf der Rechnung, § 14b UStG ein unversehrtes Doppel über die
+  ganze Aufbewahrungsfrist.
+- GoBD Rz. 59, Beispiel 4: Wird eine Rechnung aus den **aktuellen** Stammdaten neu
+  erzeugt und der Kunde hat sich inzwischen geändert, stimmt sie nicht mehr mit dem
+  Original überein. Genau das wäre die Rechnung, die die Anschrift aus `kunde` liest.
+- Die Alternative nach GoBD Rz. 76 und 111 wäre eine Adresshistorie mit „gültig ab“ in
+  einer eigenen Tabelle, und jede Abfrage bräuchte dann das Rechnungsdatum. Vier Spalten
+  sind weniger Aufwand.
+- So machen es auch ERP-Systeme: Business Central speichert Name und Anschrift des
+  Rechnungsempfängers im Kopf der gebuchten Rechnung (Tabelle „Sales Invoice Header“),
+  ERPNext behält an gebuchten Belegen den Adresstext.
+
+Quellen mit Links: [`docs/scrum/entscheidungen.md`](../scrum/entscheidungen.md), Abschnitt
+„Empfänger auf der Rechnung“. Wie die Datenbank die Kopie sicherstellt: 4.5.
 
 ### 3.5 Was nicht gespeichert wird
 
@@ -275,7 +305,25 @@ Die Alternative wäre eine gemeinsame Oberrelation „Vorgang“ für Ausleihe u
 gewesen. Sie hätte eine Tabelle mehr gebracht, nur damit die Rechnungsposition einen statt
 zwei Fremdschlüssel hat.
 
-### 4.5 Was die Datenbank nicht prüft
+### 4.5 Empfänger auf der Rechnung, ohne Anschrift keine Rechnung (Antwort 19)
+
+Derselbe Trigger, der die Rechnungsnummer vergibt (`rechnung_nummer_vergeben`, 4.2),
+kopiert vor jedem `INSERT` Name, Straße, PLZ und Ort aus `kunde` in die vier
+`empfaenger_`-Spalten der Rechnung:
+
+1. **Die Anwendung kann es nicht vergessen** und keinen anderen Empfänger mitschicken:
+   mitgeschickte Werte werden überschrieben, wie die Nummer.
+2. **Ohne Anschrift keine Rechnung.** Fehlt beim Kunden Straße, PLZ oder Ort, lehnt der
+   Trigger die Rechnung ab (Fehlercode `23502`, mit Klartext). Die Spalten sind dazu noch
+   `NOT NULL`. Die Nummer wird erst danach gezogen, eine abgelehnte Rechnung kostet also
+   keine.
+3. **Ein Umzug ändert keine gebuchte Rechnung.** `UPDATE` auf `rechnung` lehnt ohnehin
+   der Trigger aus 4.3 ab. Die nächste Rechnung bekommt die neue Anschrift.
+
+Beim Kunden selbst bleibt die Adresse leer erlaubt, weil das Reservierungsformular aus #1
+keine abfragt. Spätestens vor der ersten Rechnung muss die Anwendung sie erfassen.
+
+### 4.6 Was die Datenbank nicht prüft
 
 Diese Regeln gelten, die Anwendung muss sie aber selbst durchsetzen. Die Datenbank kann sie
 nicht ohne Kopien prüfen, die die Normalform verletzen (siehe 3.2):
@@ -284,7 +332,6 @@ nicht ohne Kopien prüfen, die die Normalform verletzen (siehe 3.2):
 | --- | --- |
 | Rechnung und die berechnete Ausleihe oder Bestellung gehören zum selben Kunden | bräuchte die Kundennummer zusätzlich in der Position |
 | Ein Bauteil in einer Wartungsmaßnahme gehört zur Maschine der Wartung | bräuchte die Inventarnummer in `wartungsmassnahme`, verletzt die 2. NF |
-| Vor der ersten Rechnung hat der Kunde eine Adresse | Das Reservierungsformular aus #1 fragt keine Adresse ab, deshalb sind die Adressspalten nicht `NOT NULL` |
 | Eine Storno-Rechnung wird nicht selbst storniert | Ein `CHECK` sieht nur die eigene Zeile |
 | Eine Rechnung hat mindestens eine Position | bräuchte einen Trigger am Ende der Transaktion; der Aufwand lohnt sich erst mit der Abrechnung |
 
@@ -318,7 +365,3 @@ weitere Punkte. Seit dem 10.11. kommen sie in ein **eigenes Item** zusammen mit 
 - ein Protokoll (Audit-Log), abfragbar je Objekt und je Person
 
 Ebenso offen: die Rechte der Datenbank-Rollen (`GRANT` für PostgREST), mit #8 zu klären.
-
-Noch nicht entschieden: ob Name und Anschrift des Empfängers beim Ausstellen auf die Rechnung
-kopiert werden, wie Preis und Steuersatz (§ 14 Abs. 4 UStG). Heute liest die Rechnung die
-Anschrift aus `kunde`.

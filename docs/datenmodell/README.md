@@ -82,7 +82,8 @@ Im relationalen Modell kommen `bauteiltyp` und `messgroesse` dazu, aus der
   Nachvollziehbarkeit über Audit-Logs.
 - **Historisierung.** Preise und Steuersätze gelten zeitabhängig. Eine Rechnung
   muss auch Jahre später denselben Betrag ergeben, also Konditionen auf dem Beleg
-  festschreiben, nicht zur Laufzeit aus Stammdaten nachrechnen.
+  festschreiben, nicht zur Laufzeit aus Stammdaten nachrechnen. Dasselbe gilt seit
+  dem 11.11. für Name und Anschrift des Empfängers (`relational.md`, 3.4).
 - **Maschinendaten.** Für Predictive Maintenance fallen Messwerte in hoher Zahl an.
   Sie gehören nicht in dieselbe Tabelle wie Stammdaten.
 
@@ -104,7 +105,6 @@ mehr, sondern der Status `reserviert` einer Ausleihe.
 | Pflichtfeld Stornogrund nach Fristablauf | eigenes Item | wie oben |
 | Protokoll (Audit-Log) | eigenes Item | wie oben |
 | Rechte der Datenbank-Rollen (`GRANT` für PostgREST) | mit #8 klären | offen |
-| Anschrift des Empfängers auf die Rechnung kopieren? | #45, falls ja | Recherche läuft, Entscheidung offen |
 
 Die ersten vier nennt [`docs/rollen-und-rechte.md`](../rollen-und-rechte.md) unter
 „Für #45 Datenmodell". Seit dem 10.11. gehören sie in ein eigenes Item.
