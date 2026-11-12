@@ -30,7 +30,12 @@ export default async function Startseite({ searchParams }: Props) {
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
-      <h1 className="text-2xl font-semibold tracking-tight">Maschinen suchen</h1>
+      <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+        <h1 className="text-2xl font-semibold tracking-tight">Maschinen suchen</h1>
+        <Link href="/meine-reservierungen" className="text-sm underline underline-offset-2">
+          Meine Reservierungen
+        </Link>
+      </div>
 
       <Suchformular
         werte={filter}
