@@ -37,7 +37,8 @@ env:
 
 jobs:
   pruefen:
-    # Dieser Name ist der Check, den der Branch-Schutz später verlangt.
+    # Dieser Name ist der Check, den das Ruleset auf staging verlangt
+    # („staging: PR-Prüfung Pflicht“). Umbenennen nur zusammen mit dem Ruleset.
     name: tsc, eslint, next build
     runs-on: ubuntu-24.04
     timeout-minutes: 15

@@ -159,6 +159,22 @@ beides nicht. Gilt **vorläufig** wie die Antworten oben, bis das Team das ERD a
 
 ---
 
+## Branch-Schutz auf `staging`, Antwort vom 11.11. (#97)
+
+Seit #97 prüft GitHub Actions jeden Pull Request nach `staging` (Check „tsc, eslint, next
+build“). Offen war, ob der grüne Check Pflicht wird oder nur ein Hinweis bleibt.
+
+| # | Frage | Entscheidung | Von wem |
+| --- | --- | --- | --- |
+| 20 | Soll `staging` den grünen Check vor dem Merge verlangen? | **Ja, Pflicht, mit Bypass.** Das Ruleset „staging: PR-Prüfung Pflicht“ verlangt den Check „tsc, eslint, next build“ vor jedem Merge nach `staging`. Die Rolle Repository-Admin steht auf der Bypass-Liste: Bleibt ein Test aus einem Edge-Case-Grund rot, blockiert sich das Team nicht selbst. Wer den Bypass nutzt, schreibt Grund und Link zum roten Lauf in den PR. Eingerichtet am 12.11., Stand und Alltag in [`CONTRIBUTING.md`](../../CONTRIBUTING.md) („Was davon technisch erzwungen ist“) | Finn |
+
+Bei der Einrichtung bewusst nicht gesetzt, das Team kann nachschärfen: dass ein PR auf dem
+neuesten Stand von `staging` sein muss, und eine Freigabe-Pflicht auf `staging`. Beides
+würde fünf Leute mehr bremsen, als es hilft; die Prüfung nach dem Merge auf `staging` zeigt,
+ob die Kombination passt.
+
+---
+
 ## Zurückgezogene Befunde
 
 Bei der Prüfung des Backlogs wurden vier Widersprüche zur Aufgabenstellung gemeldet. Zwei
