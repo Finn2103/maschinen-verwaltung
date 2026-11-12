@@ -1,6 +1,5 @@
-import { maschinen } from "@/lib/maschinen";
 import { speicher } from "@/lib/speicher";
-import { suche, type Suchfilter } from "@/lib/suche";
+import { auswahlwerte, suche, type Suchfilter } from "@/lib/suche";
 import { Zeitraum } from "@/lib/zeitraum";
 import { Suchformular } from "@/components/Suchformular";
 import Link from "next/link";
@@ -22,15 +21,23 @@ type Props = { searchParams: Promise<Suchfilter> };
 export default async function Startseite({ searchParams }: Props) {
   const filter = await searchParams;
   const fehler = Zeitraum.fehler(filter.von, filter.bis);
-  // Ueber den Speicher, damit in der Anwendung angelegte Reservierungen
-  // mitzaehlen (#85, ADR 0011).
+  // Maschinen und Belegungen ueber den Speicher, damit angelegte
+  // Reservierungen (#85) und angelegte oder geaenderte Maschinen (#2)
+  // mitzaehlen (ADR 0011).
+  const maschinen = await speicher.maschinen();
   const treffer = fehler ? [] : await suche(maschinen, filter, speicher);
+  const { kategorien, standorte } = auswahlwerte(maschinen);
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
       <h1 className="text-2xl font-semibold tracking-tight">Maschinen suchen</h1>
 
-      <Suchformular werte={filter} fehler={fehler} />
+      <Suchformular
+        werte={filter}
+        fehler={fehler}
+        kategorien={kategorien}
+        standorte={standorte}
+      />
 
       <p
         aria-live="polite"

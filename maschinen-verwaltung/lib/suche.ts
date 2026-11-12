@@ -57,3 +57,15 @@ export async function suche(
 
     return passend.filter((_, i) => frei[i]);
 }
+
+/**
+ * Die Auswahlwerte fuer das Suchformular, aus den Maschinen abgeleitet statt
+ * doppelt gepflegt: eine neue Kategorie oder ein neuer Standort erscheint
+ * allein dadurch im Formular, dass eine Maschine ihn hat.
+ */
+export function auswahlwerte(alle: Maschine[]): { kategorien: string[]; standorte: string[] } {
+    return {
+        kategorien: [...new Set(alle.map((m) => m.kategorie))].sort(),
+        standorte: [...new Set(alle.map((m) => m.standort))].sort(),
+    };
+}
