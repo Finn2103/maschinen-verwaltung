@@ -67,6 +67,89 @@ aussehen, als hätte sich das Team die Reihenfolge angeeignet. Deshalb steht es 
 
 ---
 
+## ERD-Entscheidungen (#73)
+
+Acht Fragen zum ERD aus #45, am 09.10. in #73 gestellt, zu jeder ein Vorschlag.
+
+**Stand: vorläufig angenommen.** Laurin, im Team für Datenbanken zuständig, hat am 10.10.
+allen acht Vorschlägen zugestimmt. Die Antworten der übrigen drei stehen aus. Das Datenmodell
+wird mit diesen Festlegungen weitergebaut; widerspricht noch jemand, wird die betroffene
+Entscheidung neu aufgemacht.
+
+| # | Frage | Entscheidung | Stand |
+| --- | --- | --- | --- |
+| 1 | Bauteil, Verbrauchsmaterial und Bestellung stehen in der Aufgabenstellung, fehlen im ERD | Als Entitäten aufnehmen, mit Schlüssel und Beziehungen. Attribute später | umgesetzt: im ERD seit 09.11., Attribute seit 10.11. |
+| 2 | Reservierung und Ausleihe sind zwei Entitäten mit fast gleichen Feldern | Eine Entität mit Status, weil die Überlappungsprüfung beide gleich behandeln muss | umgesetzt 10.11.: Entität Ausleihe mit Status, Reservierung ist der Status `reserviert` |
+| 3 | Wie wird der Zeitraum gespeichert? | `von` und `bis` als `date`, dazu eine Zusicherung in der Datenbank gegen Doppelbuchung | umgesetzt 10.11.: Ausschlussbedingung `ausleihe_keine_doppelbuchung` |
+| 4 | Der Steuersatz steht an der Rechnung | An die Rechnungsposition, sonst scheitert jede Rechnung mit gemischten Sätzen | umgesetzt 10.11. |
+| 5 | Preise aus den Stammdaten holen oder kopieren? | Einzelpreis und Steuersatz auf den Beleg kopieren. Eine Rechnung von 2026 muss 2029 denselben Betrag ergeben (GoBD) | umgesetzt 10.11., dazu die Bezeichnung |
+| 6 | Rechnungsnummern und Storno | Fortlaufend ohne Lücke, Korrektur nur per Storno, gebuchte Belege nie ändern (UStG) | umgesetzt 10.11.: Zählertabelle `nummernkreis`, Storno-Rechnung, Trigger gegen Ändern und Löschen |
+| 7 | Wohin mit den Messwerten für #3? | Eigene Tabelle, nicht in die Maschinen-Stammdaten | umgesetzt 10.11.: Entität Messwert |
+| 8 | Benennung | Deutsch, kleingeschrieben, Einzahl. Gilt für Tabellen und Spalten; im ERD bleiben die Entitätsnamen großgeschrieben | umgesetzt 10.11. |
+
+„Umgesetzt" heißt: steht im ERD, in
+[`relational.md`](../datenmodell/relational.md) und in
+[`schema.sql`](../datenmodell/schema.sql), und `schema-pruefen.sql` zeigt, dass die
+Datenbank die Regel durchsetzt. Die Abnahme durch das Team bleibt davon unberührt. Die
+Begründungen zu jeder Frage stehen in #73.
+
+### Lesarten zum ERD, Antworten vom 09.11. (#45)
+
+Beim Einbau von Entscheidung 1 blieben Fragen offen, wie die Aufgabenstellung zu lesen
+ist. Finn hat sie am 09.11.2026 beantwortet. Die Nummern sind die der Fragenliste vom
+09.11. Sie gelten **vorläufig** wie die acht Entscheidungen oben, bis das Team das ERD
+abnimmt.
+
+| # | Frage | Entscheidung | Von wem |
+| --- | --- | --- | --- |
+| 7 | Ist ein Bauteil ein Exemplar an einer Maschine oder ein Teiletyp je Maschinentyp? | **Exemplar je Maschine** (Maschine hat Bauteil, 1 : N), weil #3 den Verschleiß je Exemplar braucht. Hersteller, Teilenummer und Bezeichnung wiederholen sich je Exemplar, deshalb im relationalen Modell eine eigene Relation `bauteiltyp` (3. NF) | Finn |
+| 8 | Hält eine Wartung fest, welche Bauteile sie bearbeitet hat? | **Ja.** Neue Beziehung Wartung bearbeitet Bauteil (M : N) mit der Maßnahme „geprüft“ oder „getauscht“ | Finn |
+| 9 | Passt Verbrauchsmaterial zu einem Maschinentyp oder zu einer einzelnen Maschine? | **Zum Maschinentyp** (passt zu, M : N) | Finn |
+| 10 | Wird eine Bestellung über Rechnungspositionen abgerechnet oder bekommt sie eine eigene Rechnung? | **Über Rechnungspositionen.** Eine Position gehört zu genau einem von Ausleihe oder Bestellung: zwei Fremdschlüssel und eine Bedingung „genau einer gesetzt“. Ein Nummernkreis für alle Rechnungen, ohne Lücken (GoBD) | Finn |
+| 11 | Dürfen Kunden nur Material für gebuchte Maschinen bestellen? | **Nein, frei**, auch für Maschinen, die nicht vom Verleih sind. Vorschläge kommen über „passt zu“. Der Kunden-Shop dafür ist #94 (Backlog), nicht Teil von #45 | Finn |
+| 12 | Die drawio-Datei an die ältere SVG-Fassung (Commit `2ffc6ec`) angleichen? | **Ja**: Attribute aller Entitäten, Beziehungsnamen, lose hängende Attribute, unbenannte Rauten. Umgesetzt am 10.11. | Finn |
+
+### Empfänger auf der Rechnung, Antwort vom 11.11. (#45)
+
+Beim Ableiten des Schemas blieb offen, ob die Rechnung Name und Anschrift des Empfängers
+selbst speichert oder zur Laufzeit aus `kunde` liest. Finn hat am 11.11.2026 nach einer
+Recherche entschieden. Gilt **vorläufig** wie die Antworten vom 09.11., bis das Team das
+ERD abnimmt.
+
+| # | Frage | Entscheidung | Von wem |
+| --- | --- | --- | --- |
+| 19 | Name und Anschrift beim Ausstellen auf die Rechnung kopieren? | **Ja, kopieren.** Die Rechnung bekommt `empfaenger_name`, `empfaenger_strasse`, `empfaenger_plz` und `empfaenger_ort`, alle `NOT NULL`. Der Trigger, der die Rechnungsnummer vergibt, füllt sie aus `kunde`. Ein Umzug ändert keine gebuchte Rechnung, ohne Anschrift gibt es keine Rechnung. Umgesetzt am 11.11. | Finn |
+
+**Begründung:**
+
+- Das Gesetz verlangt Name und Anschrift auf der Rechnung und ein unverändertes Doppel über
+  die ganze Aufbewahrungsfrist (§ 14 Abs. 3 und Abs. 4 Nr. 1, § 14b UStG; § 146 Abs. 4 AO).
+- GoBD Rz. 59, Beispiel 4 nennt genau den anderen Weg nicht ordnungsgemäß: die Rechnung
+  aus den aktuellen Stammdaten neu erzeugen, nachdem sich der Kunde geändert hat.
+- GoBD Rz. 76 und 111 ließen statt der Kopie eine Adresshistorie zu. Das wäre eine
+  Tabelle mehr, und jede Abfrage bräuchte das Rechnungsdatum.
+- Gleiches Muster wie Preis und Steuersatz an der Position (ERD-Entscheidung 5), und so
+  machen es auch Business Central und ERPNext.
+- Zusätzlich die ausgestellte Rechnung als Datei (PDF oder E-Rechnung) unveränderbar
+  archivieren (GoBD Rz. 133): gehört zur Abrechnung, nicht zu #45.
+
+**Quellen** (am 10.11.2026 gelesen):
+
+- [§ 14 UStG](https://www.gesetze-im-internet.de/ustg_1980/__14.html) ·
+  [§ 14b UStG](https://www.gesetze-im-internet.de/ustg_1980/__14b.html) ·
+  [§ 146 AO](https://www.gesetze-im-internet.de/ao_1977/__146.html), gesetze-im-internet.de
+- [GoBD, konsolidierte Fassung vom 14.07.2025](https://ao.bundesfinanzministerium.de/ao/2026/Anhaenge/BMF-Schreiben-und-gleichlautende-Laendererlasse/Anhang-33/inhalt.html),
+  AO-Handbuch 2026 des BMF, Anhang 33 (Rz. 59, 76, 111, 133)
+- [Business Central, Tabelle Sales Invoice Header](https://learn.microsoft.com/en-us/dynamics365/business-central/application/base-application/table/microsoft.sales.history.sales-invoice-header),
+  Microsoft Learn
+- [ERPNext, Address](https://docs.frappe.io/erpnext/address), docs.frappe.io
+
+Umgesetzt in [`relational.md`](../datenmodell/relational.md) (3.4 und 4.5),
+[`schema.sql`](../datenmodell/schema.sql) und `schema-pruefen.sql` (zwei Fälle: Umzug,
+Kunde ohne Anschrift).
+
+---
+
 ## Zurückgezogene Befunde
 
 Bei der Prüfung des Backlogs wurden vier Widersprüche zur Aufgabenstellung gemeldet. Zwei
@@ -162,11 +245,11 @@ Abgabe: **Freitag 11.12.2026, 8. Stunde.**
 
 | Punkt | Wer entscheidet | Wann |
 | --- | --- | --- |
-| ERD abnehmen, bisher Einzelarbeit, nicht vom Team getragen | Team | Sprint Planning |
+| ERD abnehmen: vorläufig angenommen mit Laurins Zustimmung (siehe ERD-Entscheidungen), drei Antworten stehen aus | Team | in #73 |
+| Rollen und Rechte, Stornofrist, Stornogrund und Protokoll im Datenmodell: laut Finn (10.11.) nicht mehr #45, sondern ein eigenes Item zusammen mit #8 | Team legt das Item an | Sprint 3 |
 | Definition of Done beschließen | Team | Sprint Planning, vor dem Schätzen |
 | Sprint Goal für Sprint 1 | Team | Sprint Planning |
 | Reihenfolge des Backlogs | Team (delegiert, siehe Punkt 6) | Sprint Planning |
-| Kein Item für die Datenmodell-Arbeit vorhanden | Team | Sprint Planning |
 | Projektanteil am Freitag | Stundenplan, sonst Frau Clemens | vor der Kapazitätsrechnung |
 | #2: Import der Maschinendaten doch gewollt? | Team, mit Blick auf die Aufgabenstellung | Refinement |
 | #3: maschinelles Lernen oder Regelwerk, und wer macht es? | Team | nicht in den ersten Sprints |
