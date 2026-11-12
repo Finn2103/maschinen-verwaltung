@@ -1,5 +1,5 @@
-# PR-Prüfung: Jeder Pull Request nach staging muss tsc, eslint und next build
-# bestehen, bevor er gemergt wird.
+# PR-Prüfung: Jeder Pull Request nach staging muss tsc, eslint, die Tests der
+# Fachregeln und next build bestehen, bevor er gemergt wird.
 #
 # Warum so:
 # - Dieselben Befehle wie lokal (npm ci, npm run lint, npm run build), nur auf
@@ -74,6 +74,13 @@ jobs:
 
       - name: Code-Regeln prüfen (eslint)
         run: npm run lint
+
+      # Tests der Fachregeln (Vitest, lib/**/*.test.ts): Überlappung mit
+      # Rückgabetag, Suche (#85), Reservierungskonflikt, Prüfregeln und
+      # Protokoll aus #2, Meine Reservierungen. Vor dem Build, weil ein roter
+      # Test schneller gefunden ist und der Build die Tests nicht braucht.
+      - name: Fachregeln testen (vitest)
+        run: npm test
 
       # Seit Next 16 prüft next build kein ESLint mehr mit, deshalb der eigene
       # Schritt davor.
