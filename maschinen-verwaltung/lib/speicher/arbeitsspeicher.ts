@@ -105,4 +105,12 @@ export const arbeitsspeicher: ReservierungSpeicher & MaschinenSpeicher = {
         angelegteReservierungen.push(reservierung);
         return reservierung;
     },
+
+    async reservierung(id: string): Promise<Reservierung | undefined> {
+        return angelegteReservierungen.find((r) => r.id === id);
+    },
+
+    async reservierungenVon(email: string): Promise<Reservierung[]> {
+        return angelegteReservierungen.filter((r) => r.kunde.hatEmail(email));
+    },
 };
