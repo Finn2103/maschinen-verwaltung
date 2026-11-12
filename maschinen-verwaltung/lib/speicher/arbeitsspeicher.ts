@@ -13,23 +13,67 @@
 
 import { Belegungsplan } from "../belegungsplan";
 import type { Maschine, MaschinenSpeicher } from "../maschine";
-import { beispielBelegungen, beispielMaschinen } from "../maschinen";
+import type { Maschinentyp } from "../maschinentyp";
+import { beispielBelegungen, beispielMaschinen, beispielTypen } from "../maschinen";
+import type { Protokolleintrag } from "../protokoll";
 import { Reservierung, type Kunde, type ReservierungSpeicher } from "../reservierung";
 import { Zeitraum } from "../zeitraum";
 
 // Eine Kopie, damit die Beispieldaten selbst unveraendert bleiben.
 const maschinenListe: Maschine[] = [...beispielMaschinen];
 
+// Das Aenderungsprotokoll (#2). Nur anhaengen, nie aendern oder loeschen.
+// Fuer die Beispieldaten gibt es keine Eintraege: sie stammen aus der Zeit vor
+// dem Protokoll.
+const protokoll: Protokolleintrag[] = [];
+
 const angelegteReservierungen: Reservierung[] = [];
 let naechsteNummer = 1;
 
 export const arbeitsspeicher: ReservierungSpeicher & MaschinenSpeicher = {
     async maschinen(): Promise<Maschine[]> {
-        return [...maschinenListe];
+        return [...maschinenListe].sort((a, b) => a.inventarnummer.localeCompare(b.inventarnummer));
     },
 
     async maschine(inventarnummer: string): Promise<Maschine | undefined> {
         return maschinenListe.find((m) => m.inventarnummer === inventarnummer);
+    },
+
+    async maschinentypen(): Promise<Maschinentyp[]> {
+        return [...beispielTypen].sort((a, b) => a.bezeichnung.localeCompare(b.bezeichnung, "de"));
+    },
+
+    async maschineAnlegen(maschine: Maschine, eintrag: Protokolleintrag): Promise<boolean> {
+        if (maschinenListe.some((m) => m.inventarnummer === maschine.inventarnummer)) {
+            return false;
+        }
+        maschinenListe.push(maschine);
+        protokoll.push(eintrag);
+        return true;
+    },
+
+    async maschineAendern(maschine: Maschine, eintraege: Protokolleintrag[]): Promise<void> {
+        const stelle = maschinenListe.findIndex((m) => m.inventarnummer === maschine.inventarnummer);
+        if (stelle === -1) {
+            // Kann nur passieren, wenn die Fachlogik vorher nicht geprueft hat.
+            throw new Error(`Maschine ${maschine.inventarnummer} gibt es nicht`);
+        }
+        maschinenListe[stelle] = maschine;
+        protokoll.push(...eintraege);
+    },
+
+    async protokollFuer(inventarnummer: string): Promise<Protokolleintrag[]> {
+        // Neueste zuerst. Bei gleichem Zeitpunkt (mehrere Felder in einer
+        // Aenderung) bleibt die Feldreihenfolge des Formulars erhalten.
+        return protokoll
+            .map((eintrag, stelle) => ({ eintrag, stelle }))
+            .filter(({ eintrag }) => eintrag.inventarnummer === inventarnummer)
+            .sort((a, b) =>
+                a.eintrag.zeitpunkt === b.eintrag.zeitpunkt
+                    ? a.stelle - b.stelle
+                    : b.eintrag.zeitpunkt.localeCompare(a.eintrag.zeitpunkt),
+            )
+            .map(({ eintrag }) => eintrag);
     },
 
     /**
