@@ -1,4 +1,5 @@
 import { maschinen } from "@/lib/maschinen";
+import { speicher } from "@/lib/speicher";
 import { suche, type Suchfilter } from "@/lib/suche";
 import { Zeitraum } from "@/lib/zeitraum";
 import { Suchformular } from "@/components/Suchformular";
@@ -21,7 +22,9 @@ type Props = { searchParams: Promise<Suchfilter> };
 export default async function Startseite({ searchParams }: Props) {
   const filter = await searchParams;
   const fehler = Zeitraum.fehler(filter.von, filter.bis);
-  const treffer = fehler ? [] : suche(maschinen, filter);
+  // Ueber den Speicher, damit in der Anwendung angelegte Reservierungen
+  // mitzaehlen (#85, ADR 0011).
+  const treffer = fehler ? [] : await suche(maschinen, filter, speicher);
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
