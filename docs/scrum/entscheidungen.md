@@ -148,6 +148,15 @@ Umgesetzt in [`relational.md`](../datenmodell/relational.md) (3.4 und 4.5),
 [`schema.sql`](../datenmodell/schema.sql) und `schema-pruefen.sql` (zwei Fälle: Umzug,
 Kunde ohne Anschrift).
 
+### Baujahr und Wartungsintervall, Antwort vom 12.11. (#2)
+
+#2 (Maschinenstammdaten) verlangt Baujahr und Wartungsintervall, das Schema aus #45 hatte
+beides nicht. Gilt **vorläufig** wie die Antworten oben, bis das Team das ERD abnimmt.
+
+| # | Frage | Entscheidung | Von wem |
+| --- | --- | --- | --- |
+| 36 | Schema ergänzen oder die Felder aus dem Formular von #2 nehmen? | **Schema ergänzen.** `maschine.baujahr` Pflicht, ab 1900, nicht nach dem laufenden Jahr; `maschine.wartungsintervall` freiwillig, ganze Betriebsstunden größer als 0. Dieselben Regeln wie im Formular. Die Seriennummer bleibt Pflicht. Umgesetzt am 12.11. in ERD, [`relational.md`](../datenmodell/relational.md) (4.6), [`schema.sql`](../datenmodell/schema.sql) und `schema-pruefen.sql` | Finn |
+
 ---
 
 ## Zurückgezogene Befunde

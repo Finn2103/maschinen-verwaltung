@@ -53,12 +53,25 @@ CREATE TABLE maschinentyp (
     tagessatz    numeric(10,2) NOT NULL CHECK (tagessatz >= 0)   -- aktueller Preis je Tag, netto
 );
 
+-- Baujahr und Wartungsintervall verlangt #2 (Maschinenstammdaten), nachgetragen
+-- nach Finns Antwort 36 (12.11.). Die Regeln sind dieselben wie im Formular
+-- (Maschine.pruefe in maschinen-verwaltung/lib/maschine.ts):
+--   baujahr            Pflicht, ab 1900, nicht nach dem laufenden Jahr
+--   wartungsintervall  freiwillig, ganze Betriebsstunden, größer als 0;
+--                      NULL heißt: die Maschine hat keins
+-- Die Obergrenze hängt am heutigen Datum. Sie wird mit der Zeit nur weiter,
+-- eine einmal gültige Zeile wird also nie ungültig, auch nicht beim
+-- Wiedereinspielen einer Sicherung.
 CREATE TABLE maschine (
-    inventarnummer   text PRIMARY KEY,            -- vergibt der Verleih, z. B. M-1001
-    typnummer        integer NOT NULL REFERENCES maschinentyp,
-    seriennummer     text NOT NULL,
-    standort         text NOT NULL,
-    betriebsstunden  numeric(10,1) NOT NULL DEFAULT 0 CHECK (betriebsstunden >= 0)
+    inventarnummer     text PRIMARY KEY,          -- vergibt der Verleih, z. B. M-1001
+    typnummer          integer NOT NULL REFERENCES maschinentyp,
+    seriennummer       text NOT NULL,
+    baujahr            smallint NOT NULL,
+    standort           text NOT NULL,
+    betriebsstunden    numeric(10,1) NOT NULL DEFAULT 0 CHECK (betriebsstunden >= 0),
+    wartungsintervall  integer CHECK (wartungsintervall > 0),   -- in Betriebsstunden
+    CONSTRAINT maschine_baujahr_sinnvoll
+        CHECK (baujahr >= 1900 AND baujahr <= extract(year FROM current_date))
 );
 
 -- ERD-Entscheidung 7: Messwerte in eine eigene Tabelle, nicht in die

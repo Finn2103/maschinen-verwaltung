@@ -545,27 +545,39 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="erd45-a-67-23" parent="1" style="ellipse;html=0;fontSize=11;fontStyle=4;" value="Inventarnr." vertex="1">
-          <mxGeometry x="505" y="865" width="110" height="40" as="geometry" />
+          <mxGeometry x="400" y="900" width="110" height="40" as="geometry" />
         </mxCell>
         <mxCell id="erd45-a-67-23-l" edge="1" parent="1" source="erd45-a-67-23" target="4NgdJYocrXtbnPetFBts-67" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="erd45-a-67-24" parent="1" style="ellipse;html=0;fontSize=11;" value="Seriennr." vertex="1">
-          <mxGeometry x="625" y="845" width="110" height="40" as="geometry" />
+          <mxGeometry x="515" y="860" width="110" height="40" as="geometry" />
         </mxCell>
         <mxCell id="erd45-a-67-24-l" edge="1" parent="1" source="erd45-a-67-24" target="4NgdJYocrXtbnPetFBts-67" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="erd45-a-67-25" parent="1" style="ellipse;html=0;fontSize=11;" value="Betriebsstd." vertex="1">
-          <mxGeometry x="745" y="845" width="110" height="40" as="geometry" />
+          <mxGeometry x="745" y="840" width="110" height="40" as="geometry" />
         </mxCell>
         <mxCell id="erd45-a-67-25-l" edge="1" parent="1" source="erd45-a-67-25" target="4NgdJYocrXtbnPetFBts-67" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="erd45-a-67-26" parent="1" style="ellipse;html=0;fontSize=11;" value="Standort" vertex="1">
-          <mxGeometry x="860" y="865" width="110" height="40" as="geometry" />
+          <mxGeometry x="990" y="900" width="110" height="40" as="geometry" />
         </mxCell>
         <mxCell id="erd45-a-67-26-l" edge="1" parent="1" source="erd45-a-67-26" target="4NgdJYocrXtbnPetFBts-67" style="endArrow=none;html=0;rounded=0;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd2-a-67-baujahr" parent="1" style="ellipse;html=0;fontSize=11;" value="Baujahr" vertex="1">
+          <mxGeometry x="630" y="840" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="erd2-a-67-baujahr-l" edge="1" parent="1" source="erd2-a-67-baujahr" target="4NgdJYocrXtbnPetFBts-67" style="endArrow=none;html=0;rounded=0;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd2-a-67-wartungsintervall" parent="1" style="ellipse;html=0;fontSize=11;" value="Wartungsintervall" vertex="1">
+          <mxGeometry x="858" y="860" width="125" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="erd2-a-67-wartungsintervall-l" edge="1" parent="1" source="erd2-a-67-wartungsintervall" target="4NgdJYocrXtbnPetFBts-67" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="erd45-a-messwert-27" parent="1" style="ellipse;html=0;fontSize=11;fontStyle=4;" value="Messwert_ID" vertex="1">
