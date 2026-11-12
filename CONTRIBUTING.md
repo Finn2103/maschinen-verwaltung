@@ -50,7 +50,7 @@ abzweigen und per Pull Request nach `staging` zurückgehen. Nicht von `main`, ni
 | --- | --- |
 | `main` | Abgabestand. Bekommt nur geprüfte Stände aus `staging` |
 | `staging` | Arbeitsstand des Teams. Ziel jedes Pull Requests |
-| `feat/…` `fix/…` `infra/…` `docs/…` | Ein Branch je Issue, abgezweigt von `staging` |
+| `feat/…` `fix/…` `infra/…` `docs/…` `test/…` | Ein Branch je Issue, abgezweigt von `staging` |
 
 **Vor jedem Abzweigen `git fetch` und `staging` aktualisieren.** Fünf Leute arbeiten im
 selben Repository. Wer von einem alten Stand abzweigt, baut sich einen Konflikt.
@@ -65,6 +65,7 @@ feat/<issue-nr>-kurzbeschreibung     neue Funktion
 fix/<issue-nr>-kurzbeschreibung      Fehlerbehebung
 infra/<issue-nr>-kurzbeschreibung    Server, Container, Netz, IaC
 docs/<issue-nr>-kurzbeschreibung     Dokumentation, UML, ADR
+test/<issue-nr>-kurzbeschreibung     automatische Tests, ohne Änderung am Verhalten
 ```
 
 Ein PR pro Issue, Ziel ist **`staging`**. Im PR-Text `Closes #<issue-nr>`. Das Issue
@@ -125,6 +126,7 @@ chore(web): Next.js-Projekt mit TypeScript und Tailwind anlegen
 | `fix` | Fehlerbehebung |
 | `infra` | Server, Container, Netz, Infrastructure as Code |
 | `docs` | Dokumentation, UML, ADR, Lerntagebuch |
+| `test` | Automatische Tests hinzufügen oder ändern. Ändert kein Verhalten |
 | `chore` | Gerüst, Abhängigkeiten, Werkzeuge. Ändert kein Verhalten |
 
 `chore` ist der Typ für alles, was das Projekt aufbaut, ohne dass sich für einen Nutzer
