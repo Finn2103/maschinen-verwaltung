@@ -58,9 +58,32 @@ $$;
 SELECT pg_temp.abschnitt('Stammdaten');
 INSERT INTO maschinentyp (bezeichnung, kategorie, tagessatz)
 VALUES ('Minibagger 1,8 t', 'Erdbewegung', 89.00);
-INSERT INTO maschine (inventarnummer, typnummer, seriennummer, standort)
-VALUES ('M-1001', 1, 'SN-4711', 'Köln'),
-       ('M-1002', 1, 'SN-4712', 'Bonn');
+INSERT INTO maschine (inventarnummer, typnummer, seriennummer, baujahr, standort, wartungsintervall)
+VALUES ('M-1001', 1, 'SN-4711', 2021, 'Köln', 500),
+       ('M-1002', 1, 'SN-4712', 2019, 'Bonn', NULL);
+SELECT pg_temp.pruefe(true, 'Maschine mit Wartungsintervall und Maschine ohne (NULL)');
+
+SELECT pg_temp.abschnitt('Maschine: Baujahr und Wartungsintervall (#2, Antwort 36)');
+SELECT pg_temp.erwarte_fehler(
+    $$INSERT INTO maschine (inventarnummer, typnummer, seriennummer, standort) VALUES ('M-1090', 1, 'SN-0', 'Köln')$$,
+    '23502', 'Maschine ohne Baujahr');
+SELECT pg_temp.erwarte_fehler(
+    $$INSERT INTO maschine (inventarnummer, typnummer, seriennummer, baujahr, standort) VALUES ('M-1090', 1, 'SN-0', 1899, 'Köln')$$,
+    '23514', 'Baujahr vor 1900');
+SELECT pg_temp.erwarte_fehler(
+    format($$INSERT INTO maschine (inventarnummer, typnummer, seriennummer, baujahr, standort) VALUES ('M-1090', 1, 'SN-0', %s, 'Köln')$$,
+           extract(year FROM current_date)::int + 1),
+    '23514', 'Baujahr im nächsten Jahr');
+INSERT INTO maschine (inventarnummer, typnummer, seriennummer, baujahr, standort)
+VALUES ('M-1091', 1, 'SN-1', extract(year FROM current_date), 'Köln');
+SELECT pg_temp.pruefe(true, 'Baujahr im laufenden Jahr ist erlaubt');
+SELECT pg_temp.erwarte_fehler(
+    $$INSERT INTO maschine (inventarnummer, typnummer, seriennummer, baujahr, standort, wartungsintervall) VALUES ('M-1092', 1, 'SN-2', 2020, 'Köln', 0)$$,
+    '23514', 'Wartungsintervall 0 Stunden');
+SELECT pg_temp.erwarte_fehler(
+    $$INSERT INTO maschine (inventarnummer, typnummer, seriennummer, baujahr, standort, wartungsintervall) VALUES ('M-1092', 1, 'SN-2', 2020, 'Köln', -500)$$,
+    '23514', 'negatives Wartungsintervall');
+DELETE FROM maschine WHERE inventarnummer = 'M-1091';
 INSERT INTO kunde (name, strasse, plz, ort, email, telefon)
 VALUES ('Muster Bau GmbH', 'Musterstraße 1', '50667', 'Köln', 'info@muster-bau.example', '0221 000000');
 SELECT pg_temp.erwarte_fehler(

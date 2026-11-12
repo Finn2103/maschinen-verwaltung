@@ -6,7 +6,8 @@ ERD entsteht und **warum** das Ergebnis in 3. Normalform ist.
 
 - **Stand:** Entwurf vom 11.11.2026 zu #45, auf Grundlage der vorläufig angenommenen
   ERD-Entscheidungen aus #73 und Finns Antworten vom 09.11. und 11.11. (alle in
-  [`docs/scrum/entscheidungen.md`](../scrum/entscheidungen.md)).
+  [`docs/scrum/entscheidungen.md`](../scrum/entscheidungen.md)). Nachtrag 12.11. für #2:
+  Baujahr und Wartungsintervall der Maschine (Antwort 36, siehe 4.6).
 - **Geprüft:** `schema.sql` läuft fehlerfrei auf einer leeren PostgreSQL 17,
   `schema-pruefen.sql` prüft jede Zusicherung unten mit einem Fall. Aufruf:
   [`schema-pruefen.ps1`](schema-pruefen.ps1).
@@ -41,7 +42,7 @@ ae/oe/ue.
 **Maschine**
 
 - `maschinentyp(`**typnummer**`, bezeichnung, kategorie, tagessatz)`
-- `maschine(`**inventarnummer**`, ↑typnummer, seriennummer, standort, betriebsstunden)`
+- `maschine(`**inventarnummer**`, ↑typnummer, seriennummer, baujahr, standort, betriebsstunden, wartungsintervall)`
 - `messgroesse(`**messgroesse_id**`, bezeichnung, einheit)` (aus der Normalisierung, siehe 3.3)
 - `messwert(`**messwert_id**`, ↑inventarnummer, ↑messgroesse_id, zeitpunkt, wert)`
 
@@ -127,7 +128,7 @@ Betrifft nur Relationen mit zusammengesetztem Schlüssel:
 **Was deshalb bewusst fehlt:** `wartungsmassnahme` hat keine Spalte `inventarnummer`.
 Damit ließe sich in der Datenbank prüfen, dass Wartung und Bauteil zur selben Maschine
 gehören. Die Maschine hängt aber allein an `wartungsnummer`, also nur an einem Teil des
-Schlüssels, und das verletzt die 2. NF. Diese Prüfung macht die Anwendung (siehe 4.6).
+Schlüssels, und das verletzt die 2. NF. Diese Prüfung macht die Anwendung (siehe 4.7).
 
 ### 3.3 Dritte Normalform: keine transitiven Abhängigkeiten
 
@@ -323,7 +324,30 @@ kopiert vor jedem `INSERT` Name, Straße, PLZ und Ort aus `kunde` in die vier
 Beim Kunden selbst bleibt die Adresse leer erlaubt, weil das Reservierungsformular aus #1
 keine abfragt. Spätestens vor der ersten Rechnung muss die Anwendung sie erfassen.
 
-### 4.6 Was die Datenbank nicht prüft
+### 4.6 Baujahr und Wartungsintervall der Maschine (#2, Antwort 36)
+
+#2 (Maschinenstammdaten) verlangt Baujahr und Wartungsintervall. Nachgetragen am 12.11.,
+mit denselben Regeln wie das Formular (`Maschine.pruefe` in
+`maschinen-verwaltung/lib/maschine.ts`):
+
+| Spalte | Typ | Regel in der Datenbank |
+| --- | --- | --- |
+| `baujahr` | `smallint NOT NULL` | Pflicht. `maschine_baujahr_sinnvoll`: ab 1900, nicht nach dem laufenden Jahr |
+| `wartungsintervall` | `integer`, darf `NULL` sein | in ganzen Betriebsstunden, größer als 0. `NULL` heißt: die Maschine hat keins |
+
+- **Warum `NULL` statt 0:** 0 Stunden wäre ein Intervall, das sofort fällig ist. „Kein
+  Intervall“ ist etwas anderes, deshalb leer. Das Formular sagt dasselbe.
+- **Obergrenze am heutigen Datum:** Die Bedingung liest `current_date`. Sie wird mit der Zeit
+  nur weiter, eine einmal gültige Zeile wird also nie ungültig, auch nicht beim
+  Wiedereinspielen einer Sicherung. Eine feste Obergrenze wie 2100 ließe Tippfehler durch.
+- **Keine neue Abhängigkeit:** Beide Werte gehören zum einzelnen Exemplar, nicht zum Typ.
+  Zwei Minibagger desselben Typs können verschiedene Baujahre haben, und das Intervall legt
+  der Verleih je Maschine fest. Die 3. NF bleibt erfüllt.
+
+Ob eine Wartung fällig ist (Betriebsstunden seit der letzten Wartung ≥ Intervall), wird
+beim Lesen berechnet, wie die Werte in 3.5.
+
+### 4.7 Was die Datenbank nicht prüft
 
 Diese Regeln gelten, die Anwendung muss sie aber selbst durchsetzen. Die Datenbank kann sie
 nicht ohne Kopien prüfen, die die Normalform verletzen (siehe 3.2):
@@ -347,6 +371,8 @@ nicht ohne Kopien prüfen, die die Normalform verletzen (siehe 3.2):
 | `Maschine.inventarnummer`, z. B. `M-1001` | `maschine.inventarnummer` (Text, vergibt der Verleih) |
 | `Maschine.bezeichnung`, `Maschine.kategorie` | `maschinentyp.bezeichnung`, `maschinentyp.kategorie` |
 | `Maschine.standort` | `maschine.standort` |
+| `Maschine.baujahr` (#2) | `maschine.baujahr` |
+| `Maschine.wartungsintervall` in Betriebsstunden, `null` = keins (#2) | `maschine.wartungsintervall`, `NULL` = keins |
 
 Die Speicher-Umsetzung für PostgreSQL (ADR 0011, `lib/speicher/postgres.ts`) liest
 Bezeichnung und Kategorie deshalb über `maschine.typnummer` aus `maschinentyp`.
