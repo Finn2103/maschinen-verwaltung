@@ -15,7 +15,7 @@ export class Belegungsplan {
 
     /** Die Belegung, die den Zeitraum blockiert, oder undefined. */
     konfliktMit(zeitraum: Zeitraum): Zeitraum | undefined {
-        return this.zeitraeume.find((belegung) => belegung.ueberlapt(zeitraum));
+        return this.zeitraeume.find((belegung) => belegung.ueberlappt(zeitraum));
     }
 
     istFrei(zeitraum: Zeitraum): boolean {
