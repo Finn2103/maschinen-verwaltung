@@ -4,22 +4,17 @@
 // freie Funktion daneben. Jetzt entscheidet die Maschine selbst, ob sie zu
 // Kategorie und Standort eines Suchfilters passt.
 //
-// Ob sie in einem Zeitraum frei ist, beantwortet sie seit #85 NICHT mehr
-// selbst. Ihre "belegungen" sind nur die Beispieldaten, Reservierungen aus der
-// Anwendung kennt allein der Speicher. Eine Methode "istVerfuegbarIn" an der
-// Maschine gab deshalb eine falsche Antwort, sobald jemand reserviert hatte.
-// Wer wissen will, ob eine Maschine frei ist, fragt den Belegungsplan aus dem
-// Speicher: speicher.belegungsplanFuer(inventarnummer), so wie reservieren()
-// und die Suche (ADR 0011).
+// Ob sie in einem Zeitraum frei ist, beantwortet sie seit #85 NICHT selbst.
+// Belegungen gehoeren nicht zur Maschine, sondern zu den Reservierungen, so
+// steht es auch im Datenmodell (#45: die Zeitraeume liegen in "ausleihe", nicht
+// in "maschine"). Wer wissen will, ob eine Maschine frei ist, fragt den
+// Belegungsplan aus dem Speicher: speicher.belegungsplanFuer(inventarnummer).
 //
 // WICHTIG, Server-Client-Grenze: Klasseninstanzen koennen nicht als Props an
 // eine Client-Komponente uebergeben werden. React verlangt dort
 // serialisierbare Werte, eine Instanz verliert ueber die Grenze ihren Prototyp
 // und damit ihre Methoden. Deshalb gibt es "alsAnzeige()": das Fachobjekt
 // bleibt auf dem Server, ueber die Grenze geht ein einfaches Objekt.
-
-import { Belegungsplan } from "./belegungsplan";
-import { Zeitraum } from "./zeitraum";
 
 /** Was eine Client-Komponente von einer Maschine sehen muss, ohne Verhalten. */
 export type MaschineAnzeige = {
@@ -30,23 +25,12 @@ export type MaschineAnzeige = {
 };
 
 export class Maschine {
-    /**
-     * Belegungen aus den Beispieldaten. Liest nur der Speicher
-     * (lib/speicher/arbeitsspeicher.ts) und legt sie mit den angelegten
-     * Reservierungen zusammen. Nicht direkt fuer eine Verfuegbarkeit benutzen,
-     * siehe Dateikopf.
-     */
-    readonly belegungen: Belegungsplan;
-
     constructor(
         readonly inventarnummer: string,
         readonly bezeichnung: string,
         readonly kategorie: string,
         readonly standort: string,
-        belegungen: Zeitraum[] = [],
-    ) {
-        this.belegungen = new Belegungsplan(belegungen);
-    }
+    ) {}
 
     /** Fuer die Suche: passt diese Maschine zu Kategorie und Standort? */
     passtZu(kategorie?: string, standort?: string): boolean {
@@ -65,3 +49,17 @@ export class Maschine {
         };
     }
 }
+
+/**
+ * Der Vertrag zwischen Fachlogik und Speicher fuer Maschinen (ADR 0011), wie
+ * ReservierungSpeicher in reservierung.ts.
+ *
+ * Seit #2 lassen sich Maschinen anlegen und aendern. Dann darf keine Stelle
+ * mehr die Beispieldaten direkt lesen, sonst sieht sie neue und geaenderte
+ * Maschinen nicht: derselbe Fehler wie bei #85, nur mit Maschinen statt
+ * Reservierungen. Deshalb fragt jede Seite den Speicher.
+ */
+export type MaschinenSpeicher = {
+    maschinen(): Promise<Maschine[]>;
+    maschine(inventarnummer: string): Promise<Maschine | undefined>;
+};

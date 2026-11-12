@@ -1,9 +1,10 @@
-// Umsetzung der Schnittstelle fuer den Zwischenstand ohne Datenbank (ADR 0011).
+// Umsetzung der Schnittstellen fuer den Zwischenstand ohne Datenbank (ADR 0011).
 //
-// ACHTUNG, Zwischenstand: die Liste liegt im Arbeitsspeicher des Serverprozesses.
-// Sie ist nach einem Neustart leer und im Entwicklungsmodus auch nach einem
-// Neuladen des Codes. Das Akzeptanzkriterium "nach dem Absenden ist die
-// Reservierung gespeichert" aus #1 ist damit NICHT erfuellt.
+// ACHTUNG, Zwischenstand: die Listen liegen im Arbeitsspeicher des
+// Serverprozesses. Sie sind nach einem Neustart wieder auf dem Stand der
+// Beispieldaten und im Entwicklungsmodus auch nach einem Neuladen des Codes.
+// Das Akzeptanzkriterium "nach dem Absenden ist die Reservierung gespeichert"
+// aus #1 ist damit NICHT erfuellt.
 //
 // Ebenso der Nummernkreis: "naechsteNummer" lebt im Prozess und faengt nach
 // einem Neustart wieder bei R-0001 an. Fortlaufende Nummern ohne Luecke
@@ -11,23 +12,33 @@
 // Datenbanksequenz. Notiert fuer #45.
 
 import { Belegungsplan } from "../belegungsplan";
-import { maschinen } from "../maschinen";
+import type { Maschine, MaschinenSpeicher } from "../maschine";
+import { beispielBelegungen, beispielMaschinen } from "../maschinen";
 import { Reservierung, type Kunde, type ReservierungSpeicher } from "../reservierung";
 import { Zeitraum } from "../zeitraum";
+
+// Eine Kopie, damit die Beispieldaten selbst unveraendert bleiben.
+const maschinenListe: Maschine[] = [...beispielMaschinen];
 
 const angelegteReservierungen: Reservierung[] = [];
 let naechsteNummer = 1;
 
-export const arbeitsspeicher: ReservierungSpeicher = {
+export const arbeitsspeicher: ReservierungSpeicher & MaschinenSpeicher = {
+    async maschinen(): Promise<Maschine[]> {
+        return [...maschinenListe];
+    },
+
+    async maschine(inventarnummer: string): Promise<Maschine | undefined> {
+        return maschinenListe.find((m) => m.inventarnummer === inventarnummer);
+    },
+
     /**
      * Beispieldaten UND angelegte Reservierungen. Ohne das Zusammenlegen
      * koennte man dieselbe Maschine zweimal fuer denselben Zeitraum buchen,
      * weil die Konfliktpruefung die eigene vorige Reservierung nicht sieht.
      */
     async belegungsplanFuer(inventarnummer: string): Promise<Belegungsplan> {
-        const ausBeispieldaten =
-            maschinen.find((m) => m.inventarnummer === inventarnummer)?.belegungen ??
-            new Belegungsplan();
+        const ausBeispieldaten = new Belegungsplan(beispielBelegungen[inventarnummer] ?? []);
 
         const ausReservierungen = new Belegungsplan(
             angelegteReservierungen
