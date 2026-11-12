@@ -30,7 +30,7 @@ export class Zeitraum {
      * Richtungen und Gleichheit in einem Ausdruck ab.
      */
     ueberlappt(anderer: Zeitraum): boolean {
-        return this.von < anderer.bis && anderer.von < this.bis;
+        return this.von <= anderer.bis && anderer.von <= this.bis;
     }
 
     /**
