@@ -1,10 +1,16 @@
 // Die Maschine traegt ihre Regeln selbst (ADR 0004).
 //
 // Vorher war Maschine ein reiner Datentyp und die Verfuegbarkeitspruefung eine
-// freie Funktion daneben. Jetzt entscheidet die Maschine selbst, ob sie in
-// einem Zeitraum frei ist und ob sie zu einem Suchfilter passt. Die
-// Konfliktsuche delegiert sie an ihren Belegungsplan, weil das dessen Aufgabe
-// ist und nicht ihre.
+// freie Funktion daneben. Jetzt entscheidet die Maschine selbst, ob sie zu
+// Kategorie und Standort eines Suchfilters passt.
+//
+// Ob sie in einem Zeitraum frei ist, beantwortet sie seit #85 NICHT mehr
+// selbst. Ihre "belegungen" sind nur die Beispieldaten, Reservierungen aus der
+// Anwendung kennt allein der Speicher. Eine Methode "istVerfuegbarIn" an der
+// Maschine gab deshalb eine falsche Antwort, sobald jemand reserviert hatte.
+// Wer wissen will, ob eine Maschine frei ist, fragt den Belegungsplan aus dem
+// Speicher: speicher.belegungsplanFuer(inventarnummer), so wie reservieren()
+// und die Suche (ADR 0011).
 //
 // WICHTIG, Server-Client-Grenze: Klasseninstanzen koennen nicht als Props an
 // eine Client-Komponente uebergeben werden. React verlangt dort
@@ -24,6 +30,12 @@ export type MaschineAnzeige = {
 };
 
 export class Maschine {
+    /**
+     * Belegungen aus den Beispieldaten. Liest nur der Speicher
+     * (lib/speicher/arbeitsspeicher.ts) und legt sie mit den angelegten
+     * Reservierungen zusammen. Nicht direkt fuer eine Verfuegbarkeit benutzen,
+     * siehe Dateikopf.
+     */
     readonly belegungen: Belegungsplan;
 
     constructor(
@@ -36,15 +48,10 @@ export class Maschine {
         this.belegungen = new Belegungsplan(belegungen);
     }
 
-    istVerfuegbarIn(zeitraum: Zeitraum): boolean {
-        return this.belegungen.istFrei(zeitraum);
-    }
-
-    /** Fuer die Suche: trifft diese Maschine die Filterkriterien? */
-    passtZu(kategorie?: string, standort?: string, zeitraum?: Zeitraum | null): boolean {
+    /** Fuer die Suche: passt diese Maschine zu Kategorie und Standort? */
+    passtZu(kategorie?: string, standort?: string): boolean {
         if (kategorie && this.kategorie !== kategorie) return false;
         if (standort && this.standort !== standort) return false;
-        if (zeitraum && !this.istVerfuegbarIn(zeitraum)) return false;
         return true;
     }
 
