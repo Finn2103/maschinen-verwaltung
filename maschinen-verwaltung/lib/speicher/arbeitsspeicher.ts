@@ -15,12 +15,15 @@
 // schema.sql).
 
 import { Belegungsplan } from "../belegungsplan";
+import type { Benutzer } from "../benutzer";
 import type { Maschine, MaschinenSpeicher } from "../maschine";
 import type { Maschinentyp } from "../maschinentyp";
 import { beispielBelegungen, beispielMaschinen, beispielTypen } from "../maschinen";
 import type { Protokolleintrag } from "../protokoll";
+import type { AbgelehnterZugriff, Recht, RechteSpeicher, Umfang } from "../rechte";
 import { Reservierung, type Kunde, type ReservierungSpeicher } from "../reservierung";
 import { Zeitraum } from "../zeitraum";
+import { beispielBenutzer, ROLLE_RECHT } from "./rechtematrix";
 
 // Eine Kopie, damit die Beispieldaten selbst unveraendert bleiben.
 const maschinenListe: Maschine[] = [...beispielMaschinen];
@@ -33,7 +36,15 @@ const protokoll: Protokolleintrag[] = [];
 const angelegteReservierungen: Reservierung[] = [];
 let naechsteNummer = 1;
 
-export const arbeitsspeicher: ReservierungSpeicher & MaschinenSpeicher = {
+// Rollen und Rechte (#8): die Zeilen von rolle_recht und die Beispielbenutzer
+// fuer die Probe-Anmeldung (lib/speicher/rechtematrix.ts).
+const benutzerListe: Benutzer[] = [...beispielBenutzer];
+const rolleRecht = [...ROLLE_RECHT];
+
+// Abgelehnte Zugriffe (#8, Kriterium 5). Nur anhaengen, wie das Protokoll.
+const abgelehnt: AbgelehnterZugriff[] = [];
+
+export const arbeitsspeicher: ReservierungSpeicher & MaschinenSpeicher & RechteSpeicher = {
     async maschinen(): Promise<Maschine[]> {
         return [...maschinenListe].sort((a, b) => a.inventarnummer.localeCompare(b.inventarnummer));
     },
@@ -115,5 +126,36 @@ export const arbeitsspeicher: ReservierungSpeicher & MaschinenSpeicher = {
 
     async reservierungenVon(email: string): Promise<Reservierung[]> {
         return angelegteReservierungen.filter((r) => r.kunde.hatEmail(email));
+    },
+
+    async benutzer(benutzerId: string): Promise<Benutzer | undefined> {
+        return benutzerListe.find((b) => b.benutzerId === benutzerId);
+    },
+
+    async alleBenutzer(): Promise<Benutzer[]> {
+        return [...benutzerListe];
+    },
+
+    /** Wie die Abfrage aus relational.md 4.7: benutzer JOIN rolle_recht, nur aktive. */
+    async umfang(benutzerId: string, recht: Recht): Promise<Umfang | undefined> {
+        const benutzer = benutzerListe.find((b) => b.benutzerId === benutzerId && b.aktiv);
+        if (!benutzer) return undefined;
+        return rolleRecht.find((z) => z.rolle === benutzer.rolle && z.recht === recht)?.umfang;
+    },
+
+    async zugriffAbgelehntMerken(eintrag: AbgelehnterZugriff): Promise<void> {
+        abgelehnt.push(eintrag);
+    },
+
+    async abgelehnteZugriffe(): Promise<AbgelehnterZugriff[]> {
+        // Neueste zuerst; bei gleichem Zeitpunkt der spaeter gemerkte zuerst.
+        return abgelehnt
+            .map((eintrag, stelle) => ({ eintrag, stelle }))
+            .sort((a, b) =>
+                a.eintrag.zeitpunkt === b.eintrag.zeitpunkt
+                    ? b.stelle - a.stelle
+                    : b.eintrag.zeitpunkt.localeCompare(a.eintrag.zeitpunkt),
+            )
+            .map(({ eintrag }) => eintrag);
     },
 };

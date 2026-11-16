@@ -2,7 +2,8 @@
 // Nach #45 wird hier auf die PostgreSQL-Umsetzung umgestellt. Nur diese Zeile.
 
 import type { MaschinenSpeicher } from "../maschine";
+import type { RechteSpeicher } from "../rechte";
 import type { ReservierungSpeicher } from "../reservierung";
 import { arbeitsspeicher } from "./arbeitsspeicher";
 
-export const speicher: ReservierungSpeicher & MaschinenSpeicher = arbeitsspeicher;
+export const speicher: ReservierungSpeicher & MaschinenSpeicher & RechteSpeicher = arbeitsspeicher;

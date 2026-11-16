@@ -10,9 +10,17 @@
 // und es muss Felder mit verschiedenen Typen in einer Spalte fassen. Ein
 // leerer Text heisst "kein Wert".
 //
-// Die Tabelle dafuer in der Datenbank gehoert zum eigenen Item fuer Rollen,
-// Rechte und Protokoll (docs/datenmodell/relational.md, Abschnitt 6), nicht zu
-// #2. Bis dahin liegt das Protokoll im Arbeitsspeicher.
+// BENUTZER ist die E-Mail-Adresse des angemeldeten Benutzers. Bis zur
+// Anmeldung (#43) kommt er aus der Probe-Anmeldung in der Kopfleiste (#8,
+// Antwort 60 vom 16.11.); vorher trug man ein Kuerzel ins Formular ein.
+//
+// Die Tabelle dafuer steht seit #99 im Schema: "protokoll" in
+// docs/datenmodell/schema.sql, beschrieben in relational.md 4.10. Dort
+// schreibt ein Trigger je Aenderung, den Benutzer liest er ueber
+// aktueller_benutzer() aus SET LOCAL app.benutzer_id (relational.md 4.8). Die
+// App nutzt die Datenbank noch nicht (ADR 0011), deshalb liegt das Protokoll
+// bis zur PostgreSQL-Umsetzung im Arbeitsspeicher. Mit ihr schreibt der
+// Trigger die Eintraege, und die Fachlogik muss sie nicht mehr selbst anlegen.
 
 export class Protokolleintrag {
     constructor(

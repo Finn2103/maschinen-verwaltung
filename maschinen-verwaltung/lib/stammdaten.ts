@@ -7,31 +7,23 @@
 // Inventarnummer schon vergeben ist, und was sich gegenueber dem
 // gespeicherten Stand geaendert hat. Dazu das Protokoll.
 //
-// BENUTZER: Ohne Anmeldung (#43) gibt es kein "ich". Bis dahin traegt, wer
-// speichert, sein Kuerzel selbst im Formular ein. Das ist eine Selbstauskunft,
-// keine gepruefte Identitaet, und so entschieden (Antwort 37). Mit der
-// Anmeldung kommt der Benutzer aus der Sitzung, an dieser Datei aendert sich
-// dann nur, woher das Argument "benutzer" stammt.
+// BENUTZER: "benutzer" ist, was im Protokoll steht, die E-Mail-Adresse des
+// angemeldeten Benutzers. Er kommt nicht aus dem Formular, sondern aus der
+// Anfrage: bis zur Anmeldung (#43) aus der Probe-Anmeldung in der Kopfleiste
+// (Antwort 60 vom 16.11., ersetzt das Kuerzel im Formular aus Antwort 37).
+// Ob er Maschinen anlegen oder bearbeiten darf, prueft die Server Action
+// vorher (lib/rechte.ts). Mit #43 aendert sich an dieser Datei nichts.
 
 import { Maschine, type MaschinenSpeicher } from "./maschine";
 import { FELDNAMEN, type Feldfehler, type MaschinenEingabe } from "./maschinenfelder";
 import { DATENSATZ_ANGELEGT, Protokolleintrag } from "./protokoll";
 
-/** Fehler an einem Maschinenfeld oder am Kuerzel. */
-export type StammdatenFehler = Feldfehler & { benutzer?: string };
+/** Fehler an einem Maschinenfeld. */
+export type StammdatenFehler = Feldfehler;
 
 export type StammdatenErgebnis =
     | { ok: true; maschine: Maschine; aenderungen: number }
     | { ok: false; fehler: StammdatenFehler };
-
-const KUERZEL_MAX = 40;
-
-function benutzerFehler(benutzer: string): string | undefined {
-    const b = benutzer.trim();
-    if (!b) return "Bitte Ihr Kürzel angeben, zum Beispiel f.jendras. Es steht im Änderungsprotokoll.";
-    if (b.length > KUERZEL_MAX) return `Bitte höchstens ${KUERZEL_MAX} Zeichen angeben.`;
-    return undefined;
-}
 
 export async function maschineAnlegen(
     speicher: MaschinenSpeicher,
@@ -53,9 +45,6 @@ export async function maschineAnlegen(
         }
     }
 
-    const fuerBenutzer = benutzerFehler(benutzer);
-    if (fuerBenutzer) fehler.benutzer = fuerBenutzer;
-
     if (!geprueft.maschine || Object.keys(fehler).length > 0) {
         return { ok: false, fehler };
     }
@@ -63,7 +52,7 @@ export async function maschineAnlegen(
     const eintrag = new Protokolleintrag(
         inventarnummer,
         jetzt.toISOString(),
-        benutzer.trim(),
+        benutzer,
         DATENSATZ_ANGELEGT,
         "",
         inventarnummer,
@@ -107,9 +96,6 @@ export async function maschineAendern(
     const geprueft = Maschine.pruefe({ ...eingabe, inventarnummer }, typen, jetzt.getFullYear());
     const fehler: StammdatenFehler = { ...geprueft.fehler };
 
-    const fuerBenutzer = benutzerFehler(benutzer);
-    if (fuerBenutzer) fehler.benutzer = fuerBenutzer;
-
     if (!geprueft.maschine || Object.keys(fehler).length > 0) {
         return { ok: false, fehler };
     }
@@ -128,7 +114,7 @@ export async function maschineAendern(
             new Protokolleintrag(
                 inventarnummer,
                 zeitpunkt,
-                benutzer.trim(),
+                benutzer,
                 FELDNAMEN[a.feld],
                 a.alt,
                 a.neu,
