@@ -12,8 +12,8 @@
 //
 // Felder nach dem Datenmodell aus #45 (maschine: inventarnummer, typnummer,
 // seriennummer, standort, betriebsstunden) und nach den Kriterien von #2
-// (Baujahr, Wartungsintervall). Baujahr und Wartungsintervall stehen NICHT im
-// Schema aus #45, das ist als Frage an Finn offen (Bericht #29).
+// (Baujahr, Wartungsintervall). Baujahr und Wartungsintervall stehen seit #103
+// auch im Schema (docs/datenmodell/schema.sql).
 //
 // WICHTIG, Server-Client-Grenze: Klasseninstanzen koennen nicht als Props an
 // eine Client-Komponente uebergeben werden. React verlangt dort

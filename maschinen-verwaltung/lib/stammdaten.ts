@@ -8,8 +8,8 @@
 // gespeicherten Stand geaendert hat. Dazu das Protokoll.
 //
 // BENUTZER: Ohne Anmeldung (#43) gibt es kein "ich". Bis dahin traegt, wer
-// speichert, sein Kuerzel selbst ein. Das ist eine Selbstauskunft, keine
-// gepruefte Identitaet, und als Frage an Finn offen (Bericht #29). Mit der
+// speichert, sein Kuerzel selbst im Formular ein. Das ist eine Selbstauskunft,
+// keine gepruefte Identitaet, und so entschieden (Antwort 37). Mit der
 // Anmeldung kommt der Benutzer aus der Sitzung, an dieser Datei aendert sich
 // dann nur, woher das Argument "benutzer" stammt.
 

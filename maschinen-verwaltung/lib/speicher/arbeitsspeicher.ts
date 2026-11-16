@@ -8,8 +8,11 @@
 //
 // Ebenso der Nummernkreis: "naechsteNummer" lebt im Prozess und faengt nach
 // einem Neustart wieder bei R-0001 an. Fortlaufende Nummern ohne Luecke
-// verlangt die Aufgabenstellung fuer Belege, und das gehoert in eine
-// Datenbanksequenz. Notiert fuer #45.
+// verlangt die Aufgabenstellung fuer Belege. Das Schema aus #45 loest das fuer
+// Rechnungen bewusst mit der Zaehlertabelle "nummernkreis" statt einer
+// Sequenz, weil eine Sequenz bei einem Rollback Luecken hinterlaesst. Die
+// Ausleihe bekommt dort ihre Nummer ueber IDENTITY (docs/datenmodell/
+// schema.sql).
 
 import { Belegungsplan } from "../belegungsplan";
 import type { Maschine, MaschinenSpeicher } from "../maschine";
