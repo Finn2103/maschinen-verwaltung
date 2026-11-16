@@ -1,4 +1,5 @@
--- Schema der Maschinenverwaltung, von Hand geschrieben (#45).
+-- Schema der Maschinenverwaltung, von Hand geschrieben (#45, ergänzt um
+-- Benutzer, Rollen, Rechte, Stornofrist und Protokoll in #99).
 --
 -- Quelle ist das ERD (ERD-Maschinenverwaltung.drawio). Wie aus dem ERD diese
 -- Tabellen werden und warum sie in 3. NF sind, steht in relational.md.
@@ -40,6 +41,201 @@ CREATE TABLE kunde (
     email         text NOT NULL,
     telefon       text NOT NULL
 );
+
+
+-- =====================================================================
+-- Benutzer, Rolle, Recht (#99)
+-- =====================================================================
+
+-- Rollen und Rechte stehen als Zeilen in der Datenbank, nicht als Namen im
+-- Code (#8: „zur Laufzeit änderbar, ohne Code anzupassen“). Matrix und
+-- Entscheidungen: docs/rollen-und-rechte.md, Fassung vom 16.11.2026.
+-- „ohne Anmeldung“ ist keine Rolle, sondern ein Besucher ohne Benutzer.
+
+CREATE TABLE rolle (
+    rolle        text PRIMARY KEY,                -- z. B. mitarbeiter
+    bezeichnung  text NOT NULL UNIQUE,            -- z. B. Mitarbeiter
+    CONSTRAINT rolle_schluessel_kleingeschrieben CHECK (rolle ~ '^[a-z_]+$')
+);
+
+-- Eine Zeile je Aktion der Matrix. Der Schlüssel heißt objekt.aktion.
+CREATE TABLE recht (
+    recht        text PRIMARY KEY,                -- z. B. maschine.anlegen
+    bezeichnung  text NOT NULL UNIQUE,            -- z. B. Maschine anlegen
+    CONSTRAINT recht_schluessel_objekt_punkt_aktion CHECK (recht ~ '^[a-z_]+\.[a-z_]+$')
+);
+
+-- Rolle darf Recht, M:N mit dem Umfang. Recht vergeben ist ein INSERT,
+-- Recht entziehen ein DELETE, beides ohne Schemaänderung.
+--   alle    alle Datensätze
+--   eigene  nur die eigenen: benutzer.kundennummer ist die Kundennummer des
+--           Datensatzes (Kunde, Ausleihe, Rechnung, Bestellung)
+-- „ja, mit Grund“ aus der Matrix ist hier „alle“. Den Grund verlangt der
+-- Trigger an ausleihe, nicht das Recht.
+CREATE TABLE rolle_recht (
+    rolle   text NOT NULL REFERENCES rolle,
+    recht   text NOT NULL REFERENCES recht,
+    umfang  text NOT NULL DEFAULT 'alle' CHECK (umfang IN ('alle', 'eigene')),
+    PRIMARY KEY (rolle, recht)
+);
+
+-- Kein Passwort hier, die Anmeldung ist #43. Ob die Benutzer später in
+-- Supabase Auth stehen, ist offen (F13). Deshalb eine eigene Tabelle mit
+-- einer UUID als Schlüssel, wie in Supabase Auth: Fällt #43 darauf, wird
+-- benutzer_id = auth.users.id und bekommt dorthin einen Fremdschlüssel.
+--
+-- Eine Rolle je Person (F7), deshalb ein Fremdschlüssel und keine Tabelle
+-- benutzer_rolle. kundennummer verbindet einen Benutzer der Rolle Kunde mit
+-- seinem Kundendatensatz, höchstens einer je Kunde. Leer erlaubt: Personal
+-- hat keinen, und ein Kunde legt seinen Kundendatensatz nach dem Konto
+-- selbst an (F14). Umgekehrt braucht ein Kunde kein Konto (#1, bis #43).
+--
+-- Auf einen Benutzer zeigt das Protokoll. Er wird deshalb nicht gelöscht,
+-- sondern auf aktiv = false gesetzt.
+CREATE TABLE benutzer (
+    benutzer_id   uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    email         text NOT NULL,
+    name          text NOT NULL,
+    aktiv         boolean NOT NULL DEFAULT true,
+    kundennummer  bigint UNIQUE REFERENCES kunde,
+    rolle         text NOT NULL REFERENCES rolle
+);
+
+-- Info@… und info@… sind dasselbe Postfach, also dasselbe Konto. Deshalb
+-- ist die E-Mail-Adresse in Kleinschreibung eindeutig.
+CREATE UNIQUE INDEX benutzer_email_eindeutig ON benutzer (lower(email));
+
+-- Wer gerade ändert. Bis #43 setzt die Anwendung das je Anfrage in ihrer
+-- Transaktion:  SET LOCAL app.benutzer_id = '<uuid>';
+-- Nicht gesetzt heißt: nicht angemeldet, das Ergebnis ist NULL. Fällt #43
+-- auf Supabase Auth, steht hier  SELECT auth.uid();  und sonst ändert sich
+-- nichts. Ein gesetzter Wert, den es in benutzer nicht gibt, lässt jede
+-- Änderung am Fremdschlüssel des Protokolls scheitern.
+CREATE FUNCTION aktueller_benutzer() RETURNS uuid
+LANGUAGE sql STABLE AS $$
+    SELECT NULLIF(current_setting('app.benutzer_id', true), '')::uuid;
+$$;
+
+INSERT INTO rolle (rolle, bezeichnung) VALUES
+    ('kunde',       'Kunde'),
+    ('mitarbeiter', 'Mitarbeiter'),
+    ('manager',     'Manager'),
+    ('owner',       'Owner'),
+    ('admin',       'Admin');
+
+-- Die 26 Aktionen der Matrix, in ihrer Reihenfolge.
+INSERT INTO recht (recht, bezeichnung) VALUES
+    -- Suchen und reservieren (#1)
+    ('maschine.suchen',                'Maschinen suchen, freie Zeiträume sehen'),
+    ('ausleihe.reservieren',           'Verbindlich reservieren'),
+    ('ausleihe.sehen',                 'Reservierungen sehen'),
+    ('ausleihe.stornieren',            'Stornieren bis zur Stornofrist'),
+    ('ausleihe.stornieren_nach_frist', 'Stornieren nach Ablauf der Frist'),
+    -- Auftrag (#9)
+    ('ausleihe.status_sehen',          'Auftragsstatus sehen'),
+    ('ausleihe.aendern',               'Auftrag ändern, als neuer Eintrag'),
+    -- Maschinen (#2, #3)
+    ('maschine.liste',                 'Verwaltungsliste mit allen Feldern'),
+    ('maschine.anlegen',               'Maschine anlegen'),
+    ('maschine.bearbeiten',            'Maschine bearbeiten'),
+    ('maschine.ausser_dienst',         'Maschine außer Dienst stellen'),
+    ('wartung.sehen',                  'Wartungsübersicht sehen'),
+    -- Kunden (#7, #20)
+    ('kunde.anlegen',                  'Kunden anlegen'),
+    ('kunde.suchen',                   'Kunden suchen'),
+    ('kunde.sehen',                    'Kundendaten sehen'),
+    ('kunde.bearbeiten',               'Kundendaten bearbeiten'),
+    -- Rechnung und Bestellung
+    ('rechnung.sehen',                 'Rechnungen sehen'),
+    ('rechnung.erstellen',             'Rechnung erstellen'),
+    ('rechnung.stornieren',            'Rechnung stornieren, als Storno-Rechnung'),
+    ('bestellung.bestellen',           'Verbrauchsmaterial bestellen, Bestellungen sehen'),
+    -- Protokoll
+    ('protokoll.datensatz',            'Änderungsprotokoll eines Datensatzes'),
+    ('protokoll.personen',             'Auswertung über Personen'),
+    ('protokoll.abgelehnte_zugriffe',  'Abgelehnte Zugriffe sehen'),
+    -- Benutzer und Einstellungen (#8)
+    ('benutzer.rolle_zuweisen',        'Rolle zuweisen'),
+    ('rolle.rechte_aendern',           'Rechte einer Rolle ändern'),
+    ('einstellung.stornofrist',        'Stornofrist einstellen');
+
+-- Die Matrix aus docs/rollen-und-rechte.md, eine Zeile je Aktion wie dort.
+-- NULL heißt „nein“ und ergibt keine Zeile. Das gibt 105 Zeilen in
+-- rolle_recht, 8 davon mit „eigene“.
+INSERT INTO rolle_recht (rolle, recht, umfang)
+SELECT r.rolle, m.recht, r.umfang
+  FROM (VALUES
+    -- recht                           kunde     mitarbeiter manager owner   admin
+    ('maschine.suchen',                'alle',   'alle',     'alle', 'alle', 'alle'),
+    ('ausleihe.reservieren',           'alle',   'alle',     'alle', 'alle', 'alle'),
+    ('ausleihe.sehen',                 'eigene', 'alle',     'alle', 'alle', 'alle'),
+    ('ausleihe.stornieren',            'eigene', 'alle',     'alle', 'alle', 'alle'),
+    ('ausleihe.stornieren_nach_frist', NULL,     'alle',     'alle', 'alle', 'alle'),
+    ('ausleihe.status_sehen',          'eigene', 'alle',     'alle', 'alle', 'alle'),
+    ('ausleihe.aendern',               NULL,     'alle',     'alle', 'alle', 'alle'),
+    ('maschine.liste',                 NULL,     'alle',     'alle', 'alle', 'alle'),
+    ('maschine.anlegen',               NULL,     'alle',     'alle', 'alle', 'alle'),
+    ('maschine.bearbeiten',            NULL,     'alle',     'alle', 'alle', 'alle'),
+    ('maschine.ausser_dienst',         NULL,     'alle',     'alle', 'alle', 'alle'),
+    ('wartung.sehen',                  NULL,     'alle',     'alle', 'alle', 'alle'),
+    ('kunde.anlegen',                  'eigene', 'alle',     'alle', 'alle', 'alle'),
+    ('kunde.suchen',                   NULL,     'alle',     'alle', 'alle', 'alle'),
+    ('kunde.sehen',                    'eigene', 'alle',     'alle', 'alle', 'alle'),
+    ('kunde.bearbeiten',               'eigene', 'alle',     'alle', 'alle', 'alle'),
+    ('rechnung.sehen',                 'eigene', 'alle',     'alle', 'alle', 'alle'),
+    ('rechnung.erstellen',             NULL,     'alle',     'alle', 'alle', 'alle'),
+    ('rechnung.stornieren',            NULL,     'alle',     'alle', 'alle', 'alle'),
+    ('bestellung.bestellen',           'eigene', 'alle',     'alle', 'alle', 'alle'),
+    ('protokoll.datensatz',            NULL,     'alle',     'alle', 'alle', 'alle'),
+    ('protokoll.personen',             NULL,     NULL,       'alle', 'alle', 'alle'),
+    ('protokoll.abgelehnte_zugriffe',  NULL,     NULL,       NULL,   'alle', 'alle'),
+    ('benutzer.rolle_zuweisen',        NULL,     NULL,       NULL,   'alle', 'alle'),
+    ('rolle.rechte_aendern',           NULL,     NULL,       NULL,   NULL,   'alle'),
+    ('einstellung.stornofrist',        NULL,     NULL,       'alle', 'alle', 'alle')
+  ) AS m (recht, kunde, mitarbeiter, manager, owner, admin)
+  CROSS JOIN LATERAL (VALUES
+    ('kunde', m.kunde), ('mitarbeiter', m.mitarbeiter), ('manager', m.manager),
+    ('owner', m.owner), ('admin', m.admin)
+  ) AS r (rolle, umfang)
+ WHERE r.umfang IS NOT NULL;
+
+
+-- =====================================================================
+-- Einstellungen (#99)
+-- =====================================================================
+
+-- Regeln, die die Leitung ändert, ohne dass jemand Code anfasst. Eine Zeile
+-- je Einstellung, geändert per UPDATE. Wann und von wem zuletzt, setzt der
+-- Trigger.
+--
+-- stornofrist_tage (F8): ein Wert für alle Maschinen, in ganzen Tagen vor
+-- Mietbeginn, Startwert 3. Was er bewirkt: Trigger an ausleihe.
+--
+-- wert ist Text, damit auch künftige Einstellungen in dieselbe Tabelle
+-- passen. Was für einen Schlüssel gültig ist, prüft je ein CHECK.
+CREATE TABLE einstellung (
+    schluessel     text PRIMARY KEY,
+    wert           text NOT NULL,
+    geaendert_am   timestamptz NOT NULL,          -- setzt der Trigger
+    geaendert_von  uuid REFERENCES benutzer,      -- setzt der Trigger; leer: beim Einrichten
+    CONSTRAINT einstellung_stornofrist_ganze_tage
+        CHECK (schluessel <> 'stornofrist_tage' OR wert ~ '^[0-9]{1,3}$')
+);
+
+CREATE FUNCTION einstellung_aenderung_vermerken() RETURNS trigger
+LANGUAGE plpgsql AS $$
+BEGIN
+    NEW.geaendert_am  := now();
+    NEW.geaendert_von := aktueller_benutzer();
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER einstellung_aenderung_vermerken
+    BEFORE INSERT OR UPDATE ON einstellung
+    FOR EACH ROW EXECUTE FUNCTION einstellung_aenderung_vermerken();
+
+INSERT INTO einstellung (schluessel, wert) VALUES ('stornofrist_tage', '3');
 
 
 -- =====================================================================
@@ -193,7 +389,20 @@ CREATE TABLE ausleihe (
     bis             date NOT NULL,
     status          text NOT NULL DEFAULT 'reserviert'
                     CHECK (status IN ('reserviert', 'ausgeliehen', 'zurueckgegeben', 'storniert')),
+    -- #99: Wann und von wem storniert wurde, setzt der Trigger unten, den
+    -- Grund schickt die Anwendung. Nach Ablauf der Stornofrist ist er Pflicht.
+    storniert_am    timestamptz,
+    storniert_von   uuid REFERENCES benutzer,     -- leer: nicht angemeldet (bis #43)
+    stornogrund     text,
     CONSTRAINT ausleihe_zeitraum_gueltig CHECK (von <= bis),
+    -- Status storniert genau dann, wenn storniert_am gesetzt ist. Wer und
+    -- warum gibt es nur bei einem Storno, und ein Grund aus Leerzeichen ist
+    -- kein Grund.
+    CONSTRAINT ausleihe_storniert_genau_mit_zeitpunkt
+        CHECK ((status = 'storniert') = (storniert_am IS NOT NULL)),
+    CONSTRAINT ausleihe_storno_angaben_nur_bei_storno
+        CHECK (status = 'storniert' OR num_nonnulls(storniert_von, stornogrund) = 0),
+    CONSTRAINT ausleihe_stornogrund_nicht_leer CHECK (btrim(stornogrund) <> ''),
     -- Keine zwei Ausleihen derselben Maschine mit überlappendem Zeitraum.
     -- Hält auch bei zwei gleichzeitigen Anfragen, an denen eine Prüfung nur
     -- in der Anwendung scheitert. Stornierte Ausleihen geben den Zeitraum frei.
@@ -202,6 +411,47 @@ CREATE TABLE ausleihe (
         daterange(von, bis, '[]') WITH &&
     ) WHERE (status <> 'storniert')
 );
+
+-- #99, Entscheidung 3 und F8: Storniert wird bis stornofrist_tage vor
+-- Mietbeginn ohne Grund, danach nur mit Grund. Gezählt in Kalendertagen,
+-- deutsche Zeit. Beispiel mit 3 Tagen: Mietbeginn 20.11., bis einschließlich
+-- 17.11. ohne Grund, ab 18.11. nur mit Grund.
+--
+-- Greift beim Wechsel nach „storniert“. Zeitpunkt und Benutzer setzt der
+-- Trigger, mitgeschickte Werte zählen nicht (wie bei der Rechnung). Wer
+-- überhaupt stornieren darf, etwa der Kunde nur eigene und nur in der Frist,
+-- prüft die Anwendung gegen rolle_recht (#8).
+CREATE FUNCTION ausleihe_storno_pruefen() RETURNS trigger
+LANGUAGE plpgsql AS $$
+DECLARE
+    frist      integer;
+    storno_am  date;
+BEGIN
+    IF NEW.status <> 'storniert' OR (TG_OP = 'UPDATE' AND OLD.status = 'storniert') THEN
+        RETURN NEW;
+    END IF;
+
+    SELECT wert::integer INTO frist FROM einstellung WHERE schluessel = 'stornofrist_tage';
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Einstellung stornofrist_tage fehlt' USING ERRCODE = 'no_data_found';
+    END IF;
+
+    NEW.storniert_am  := now();
+    NEW.storniert_von := aktueller_benutzer();
+    storno_am := (NEW.storniert_am AT TIME ZONE 'Europe/Berlin')::date;
+
+    IF storno_am > NEW.von - frist AND NULLIF(btrim(NEW.stornogrund), '') IS NULL THEN
+        RAISE EXCEPTION 'Ausleihe %: Stornofrist abgelaufen (% Tage vor Mietbeginn am %), Storno nur mit Grund',
+            NEW.ausleihnummer, frist, to_char(NEW.von, 'DD.MM.YYYY')
+            USING ERRCODE = 'check_violation';
+    END IF;
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER ausleihe_storno_pruefen
+    BEFORE INSERT OR UPDATE ON ausleihe
+    FOR EACH ROW EXECUTE FUNCTION ausleihe_storno_pruefen();
 
 
 -- =====================================================================
@@ -364,6 +614,104 @@ CREATE TRIGGER zahlung_unveraenderbar
 
 
 -- =====================================================================
+-- Protokoll (#99)
+-- =====================================================================
+
+-- Änderungsprotokoll für Maschine (#2), Ausleihe (#9), Kunde (#7) sowie
+-- Rechnung und Bestellung (F12). Felder wie lib/protokoll.ts: Zeitpunkt,
+-- Benutzer, Feld, alter und neuer Wert, dazu Objekt und Schlüssel, damit es
+-- je Objekt abfragbar ist.
+--
+-- objekt_id ist bewusst kein Fremdschlüssel: Das Protokoll muss sein Objekt
+-- überleben, auch das Löschen. Es zeigt auf fünf Tabellen mit verschiedenen
+-- Schlüsseltypen, deshalb als Text (M-1001, 42).
+--
+-- Eine Zeile je geändertem Feld, feld ist der Spaltenname. Beim Anlegen eine
+-- Zeile „Datensatz angelegt“ wie in lib/protokoll.ts, beim Löschen
+-- „Datensatz gelöscht“ mit dem ganzen alten Datensatz als JSON in alt. NULL
+-- in alt oder neu heißt: kein Wert.
+CREATE TABLE protokoll (
+    protokoll_id  bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    zeitpunkt     timestamptz NOT NULL DEFAULT now(),
+    benutzer_id   uuid REFERENCES benutzer,      -- leer: nicht angemeldet (bis #43)
+    objekt        text NOT NULL
+                  CHECK (objekt IN ('maschine', 'ausleihe', 'kunde', 'rechnung', 'bestellung')),
+    objekt_id     text NOT NULL,
+    feld          text NOT NULL,
+    alt           text,
+    neu           text
+);
+
+-- Ein Trigger für alle fünf Tabellen, das Argument ist der Name der
+-- Schlüsselspalte. AFTER, damit vergebene Werte wie die Rechnungsnummer
+-- schon feststehen. Bricht die Änderung ab, verschwindet auch der Eintrag.
+CREATE FUNCTION protokollieren() RETURNS trigger
+LANGUAGE plpgsql AS $$
+DECLARE
+    schluessel  text := TG_ARGV[0];
+    wer         uuid := aktueller_benutzer();
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        INSERT INTO protokoll (benutzer_id, objekt, objekt_id, feld)
+        VALUES (wer, TG_TABLE_NAME, to_jsonb(NEW) ->> schluessel, 'Datensatz angelegt');
+    ELSIF TG_OP = 'UPDATE' THEN
+        INSERT INTO protokoll (benutzer_id, objekt, objekt_id, feld, alt, neu)
+        SELECT wer, TG_TABLE_NAME, to_jsonb(NEW) ->> schluessel, n.key, a.value, n.value
+          FROM jsonb_each_text(to_jsonb(NEW)) AS n
+          JOIN jsonb_each_text(to_jsonb(OLD)) AS a ON a.key = n.key
+         WHERE n.value IS DISTINCT FROM a.value
+         ORDER BY n.key;
+    ELSE
+        INSERT INTO protokoll (benutzer_id, objekt, objekt_id, feld, alt)
+        VALUES (wer, TG_TABLE_NAME, to_jsonb(OLD) ->> schluessel, 'Datensatz gelöscht', to_jsonb(OLD)::text);
+    END IF;
+    RETURN NULL;
+END;
+$$;
+
+CREATE TRIGGER maschine_protokollieren
+    AFTER INSERT OR UPDATE OR DELETE ON maschine
+    FOR EACH ROW EXECUTE FUNCTION protokollieren('inventarnummer');
+
+CREATE TRIGGER ausleihe_protokollieren
+    AFTER INSERT OR UPDATE OR DELETE ON ausleihe
+    FOR EACH ROW EXECUTE FUNCTION protokollieren('ausleihnummer');
+
+CREATE TRIGGER kunde_protokollieren
+    AFTER INSERT OR UPDATE OR DELETE ON kunde
+    FOR EACH ROW EXECUTE FUNCTION protokollieren('kundennummer');
+
+-- Eine Rechnung wird nie geändert (4.3). Im Protokoll steht deshalb nur,
+-- wann und von wem sie angelegt wurde, auch bei einer Storno-Rechnung.
+CREATE TRIGGER rechnung_protokollieren
+    AFTER INSERT OR UPDATE OR DELETE ON rechnung
+    FOR EACH ROW EXECUTE FUNCTION protokollieren('rechnungsnummer');
+
+CREATE TRIGGER bestellung_protokollieren
+    AFTER INSERT OR UPDATE OR DELETE ON bestellung
+    FOR EACH ROW EXECUTE FUNCTION protokollieren('bestell_id');
+
+-- Wie bei den Belegen: Ein Protokoll, in dem man nachträglich schreiben
+-- kann, belegt nichts.
+CREATE FUNCTION protokoll_unveraenderbar() RETURNS trigger
+LANGUAGE plpgsql AS $$
+BEGIN
+    RAISE EXCEPTION '% auf protokoll: Protokolleinträge werden nicht geändert oder gelöscht', TG_OP;
+END;
+$$;
+
+CREATE TRIGGER protokoll_unveraenderbar
+    BEFORE UPDATE OR DELETE ON protokoll
+    FOR EACH ROW EXECUTE FUNCTION protokoll_unveraenderbar();
+
+-- Abfragbar je Objekt (Verlauf eines Datensatzes, Mockup 09) und je
+-- Benutzer (Auswertung über Personen, Entscheidung 4). Nach Zeit sortiert
+-- lesen, auch die neuesten zuerst, geht mit demselben Index.
+CREATE INDEX protokoll_je_objekt ON protokoll (objekt, objekt_id, zeitpunkt);
+CREATE INDEX protokoll_je_benutzer ON protokoll (benutzer_id, zeitpunkt);
+
+
+-- =====================================================================
 -- Indizes auf Fremdschlüsseln
 -- =====================================================================
 -- PostgreSQL legt für Fremdschlüssel keinen Index an. Ohne ihn liest jede
@@ -384,5 +732,9 @@ CREATE INDEX ON rechnung (kundennummer);
 CREATE INDEX ON rechnungsposition (ausleihnummer) WHERE ausleihnummer IS NOT NULL;
 CREATE INDEX ON rechnungsposition (bestell_id) WHERE bestell_id IS NOT NULL;
 CREATE INDEX ON zahlung (rechnungsnummer);
+CREATE INDEX ON benutzer (rolle);
+CREATE INDEX ON rolle_recht (recht);
+CREATE INDEX ON einstellung (geaendert_von);
+CREATE INDEX ON ausleihe (storniert_von) WHERE storniert_von IS NOT NULL;
 
 COMMIT;
