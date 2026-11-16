@@ -50,7 +50,7 @@ abzweigen und per Pull Request nach `staging` zurückgehen. Nicht von `main`, ni
 | --- | --- |
 | `main` | Abgabestand. Bekommt nur geprüfte Stände aus `staging` |
 | `staging` | Arbeitsstand des Teams. Ziel jedes Pull Requests |
-| `feat/…` `fix/…` `infra/…` `docs/…` | Ein Branch je Issue, abgezweigt von `staging` |
+| `feat/…` `fix/…` `infra/…` `docs/…` `test/…` | Ein Branch je Issue, abgezweigt von `staging` |
 
 **Vor jedem Abzweigen `git fetch` und `staging` aktualisieren.** Fünf Leute arbeiten im
 selben Repository. Wer von einem alten Stand abzweigt, baut sich einen Konflikt.
@@ -65,6 +65,7 @@ feat/<issue-nr>-kurzbeschreibung     neue Funktion
 fix/<issue-nr>-kurzbeschreibung      Fehlerbehebung
 infra/<issue-nr>-kurzbeschreibung    Server, Container, Netz, IaC
 docs/<issue-nr>-kurzbeschreibung     Dokumentation, UML, ADR
+test/<issue-nr>-kurzbeschreibung     automatische Tests, ohne Änderung am Verhalten
 ```
 
 Ein PR pro Issue, Ziel ist **`staging`**. Im PR-Text `Closes #<issue-nr>`. Das Issue
@@ -72,7 +73,10 @@ schließt der PR. Den Status auf `Done` setzt, wer die Abnahme gemacht hat.
 
 ### Was davon technisch erzwungen ist
 
-Damit hier nichts Falsches steht, der tatsächliche Stand des Branch-Schutzes auf `main`:
+Damit hier nichts Falsches steht, der tatsächliche Stand auf GitHub. Zuletzt über die
+GitHub-API nachgesehen am 12.11.2026.
+
+#### `main`: Branch-Schutz (seit 24.09.2026)
 
 | Regel | gesetzt | gilt für Admins |
 | --- | --- | --- |
@@ -95,6 +99,50 @@ Freigabe zu warten. **Wer den Bypass nutzt, hält es fest**, in der Commit-Messa
 Lerntagebuch. Ein Bypass, den niemand sieht, ist ein umgangener Prozess; ein
 dokumentierter ist eine Entscheidung.
 
+#### `staging`: Ruleset „staging: PR-Prüfung Pflicht“ (seit 12.11.2026, #97)
+
+Jeder Pull Request nach `staging` läuft automatisch durch die PR-Prüfung
+([`.github/workflows/pr-pruefung.yml`](.github/workflows/pr-pruefung.yml)): `tsc`,
+`eslint`, die Tests der Fachregeln (`npm test`) und `next build`. Nach jedem Merge läuft
+sie auf `staging` noch einmal. Der Check heißt **„tsc, eslint, next build“**, und genau
+diesen Check verlangt das Ruleset.
+
+| Regel | gesetzt | gilt für Admins |
+| --- | --- | --- |
+| Check „tsc, eslint, next build“ grün, bevor nach `staging` gemergt wird | ja | **nein** (Bypass) |
+| Der Check muss aus GitHub Actions kommen | ja | – |
+| PR muss auf dem neuesten Stand von `staging` sein | nein | – |
+| Pull Request mit Freigabe nötig | nein | – |
+
+Was das im Alltag heißt:
+
+- **Check rot:** Der Merge-Knopf ist gesperrt, am Check steht „Required“. Den Fehler im
+  Log nachsehen (tsc- und Testfehler hängen im PR direkt an der Codezeile), Korrektur auf
+  denselben Branch pushen. Der neue Lauf startet von selbst, ein noch laufender alter Lauf
+  wird abgebrochen.
+- **Direkt auf `staging` pushen** geht für Schreibrechte nur mit einem Commit, dessen
+  Check schon grün ist (so beschreibt es GitHub für Rulesets). Der normale Weg bleibt der
+  Pull Request.
+- **Warum kein „neuester Stand“:** Sonst müsste nach jedem Merge jeder offene PR
+  aktualisiert werden und noch einmal laufen. Ob die Kombination passt, zeigt der Lauf nach
+  dem Merge auf `staging`.
+- **„Muss aus GitHub Actions kommen“:** Ein Status mit demselben Namen, von Hand über die
+  API gesetzt, zählt nicht.
+- **Job-Namen nicht umbenennen.** Wer `name: tsc, eslint, next build` in der Workflow-Datei
+  ändert, muss das Ruleset im selben Zug anpassen. Sonst wartet jeder PR auf einen Check,
+  der nie kommt.
+
+**Bypass:** Auf der Bypass-Liste steht die Rolle Repository-Admin, derzeit nur der Scrum
+Master. Gedacht für den Ausnahmefall, dass ein Check aus einem Grund rot bleibt, der
+nichts mit dem PR zu tun hat (Entscheidung vom 11.11.2026, siehe
+[`docs/scrum/entscheidungen.md`](docs/scrum/entscheidungen.md)). Gemergt wird dann über
+„Merge without waiting for requirements to be met“ oder `gh pr merge --admin`. Wie auf
+`main` gilt: **Wer den Bypass nutzt, schreibt den Grund und den Link zum roten Lauf in den
+PR.**
+
+Nachgewiesen am 12.11.2026 mit einem Demo-PR (rot, abgebrochen, grün, Cache-Treffer). Die
+Läufe sind in #97 verlinkt.
+
 ### Was noch offen ist
 
 Am 25.09.2026 festgelegt wurde der Branch-Fluss. Noch nicht beschlossen:
@@ -103,8 +151,8 @@ Am 25.09.2026 festgelegt wurde der Branch-Fluss. Noch nicht beschlossen:
 - Wann geht `staging` nach `main`, und wer gibt das frei?
 - Bleibt der Admin-Bypass auf `main`, oder wird `enforce_admins` eingeschaltet?
 
-Der Branch-Schutz oben gilt für `main`. **`staging` ist nicht geschützt**, dort zählt die
-Absprache. Was beschlossen wird, kommt in
+Auf `staging` erzwingt das Ruleset nur den grünen Check. Eine Freigabe-Pflicht gibt es
+dort nicht, da zählt die Absprache. Was beschlossen wird, kommt in
 [`docs/scrum/entscheidungen.md`](docs/scrum/entscheidungen.md).
 
 ## Commits
@@ -125,6 +173,7 @@ chore(web): Next.js-Projekt mit TypeScript und Tailwind anlegen
 | `fix` | Fehlerbehebung |
 | `infra` | Server, Container, Netz, Infrastructure as Code |
 | `docs` | Dokumentation, UML, ADR, Lerntagebuch |
+| `test` | Automatische Tests hinzufügen oder ändern. Ändert kein Verhalten |
 | `chore` | Gerüst, Abhängigkeiten, Werkzeuge. Ändert kein Verhalten |
 
 `chore` ist der Typ für alles, was das Projekt aufbaut, ohne dass sich für einen Nutzer

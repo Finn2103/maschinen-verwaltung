@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { maschinen } from "@/lib/maschinen";
 import { speicher } from "@/lib/speicher";
 import { zeitraumDeutsch } from "@/lib/datum";
 import { Reservierungsformular } from "@/components/Reservierungsformular";
@@ -20,7 +19,7 @@ type Props = {
 // ein Promise und muss awaited werden.
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { inventarnummer } = await params;
-  const maschine = maschinen.find((m) => m.inventarnummer === inventarnummer);
+  const maschine = await speicher.maschine(inventarnummer);
 
   return {
     title: maschine ? `${maschine.bezeichnung} reservieren` : "Maschine nicht gefunden",
@@ -31,11 +30,12 @@ export default async function Reservieren({ params, searchParams }: Props) {
   const { inventarnummer } = await params;
   const { von, bis } = await searchParams;
 
-  const maschine = maschinen.find((m) => m.inventarnummer === inventarnummer);
+  // Maschine und Belegungen ueber den Speicher: so sind angelegte oder
+  // geaenderte Maschinen (#2) und bereits angelegte Reservierungen mit dabei
+  // (ADR 0011).
+  const maschine = await speicher.maschine(inventarnummer);
   if (!maschine) notFound();
 
-  // Ueber den Speicher, nicht ueber maschine.belegungen: so sind bereits
-  // angelegte Reservierungen mit dabei (ADR 0011).
   const plan = await speicher.belegungsplanFuer(inventarnummer);
   const belegungen = plan.alle();
 

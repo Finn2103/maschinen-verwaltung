@@ -1,11 +1,18 @@
-import { kategorien, standorte } from "@/lib/maschinen";
 import type { Suchfilter } from "@/lib/suche";
 import Link from "next/link";
 import { suchlinkOhne } from "@/lib/suchlink";
 
-type Props = { werte: Suchfilter; fehler: string | null };
+// Kategorien und Standorte kommen von der Seite, die sie aus dem Speicher
+// ableitet. Vorher las das Formular sie aus den Beispieldaten, dann fehlte
+// der Standort einer neu angelegten Maschine in der Auswahl (#2).
+type Props = {
+    werte: Suchfilter;
+    fehler: string | null;
+    kategorien: string[];
+    standorte: string[];
+};
 
-export function Suchformular({ werte, fehler }: Props) {
+export function Suchformular({ werte, fehler, kategorien, standorte }: Props) {
     const zeitraumGesetzt = Boolean(werte.von || werte.bis);
     const filterGesetzt = Boolean(werte.kategorie || werte.standort);
 

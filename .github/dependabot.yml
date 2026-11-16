@@ -1,0 +1,41 @@
+# Dependabot: hält Abhängigkeiten aktuell und öffnet dafür Pull Requests nach staging.
+# Optionen: https://docs.github.com/en/code-security/reference/supply-chain-security/dependabot-options-reference
+#
+# Wirkt erst, wenn die Datei auf dem Default-Branch (main) liegt. Die PRs gehen
+# trotzdem nach staging (target-branch), wie jeder andere PR auch.
+version: 2
+updates:
+  # npm-Pakete der Web-Anwendung (package.json und package-lock.json)
+  - package-ecosystem: "npm"
+    directory: "/maschinen-verwaltung"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Berlin"
+    target-branch: "staging"
+    # Neue Versionen erst nach 7 Tagen vorschlagen: fehlerhafte oder
+    # kompromittierte Releases werden meist in den ersten Tagen zurückgezogen.
+    cooldown:
+      default-days: 7
+    # Conventional Commits wie in CONTRIBUTING.md:
+    # chore(deps): … für Laufzeit-, chore(deps-dev): … für Entwicklungs-Abhängigkeiten
+    commit-message:
+      prefix: "chore"
+      prefix-development: "chore"
+      include: "scope"
+
+  # Actions in .github/workflows (auf Commit-SHA gepinnt, Dependabot zieht SHA und Versionskommentar nach)
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Berlin"
+    target-branch: "staging"
+    cooldown:
+      default-days: 7
+    # chore(ci): …
+    commit-message:
+      prefix: "chore(ci)"

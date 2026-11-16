@@ -47,6 +47,19 @@ export class Kunde {
         }
         return null;
     }
+
+    /**
+     * Gehoert diese E-Mail-Adresse zum Kunden? Fuer "Meine Reservierungen"
+     * (#1). Gross- und Kleinschreibung und Leerzeichen am Rand zaehlen nicht:
+     * "Einkauf@Reuter-Bau.de " ist dieselbe Adresse wie "einkauf@reuter-bau.de".
+     */
+    hatEmail(email: string): boolean {
+        return Kunde.normiereEmail(this.email) === Kunde.normiereEmail(email);
+    }
+
+    static normiereEmail(email: string): string {
+        return email.trim().toLowerCase();
+    }
 }
 
 /** Was das Formular nach einer erfolgreichen Reservierung anzeigt. */
@@ -90,4 +103,8 @@ export type ReservierungSpeicher = {
         zeitraum: Zeitraum,
         kunde: Kunde,
     ): Promise<Reservierung>;
+    /** Eine Reservierung ueber ihre Vorgangsnummer, z. B. R-0001. */
+    reservierung(id: string): Promise<Reservierung | undefined>;
+    /** Alle Reservierungen eines Kunden, erkannt an der E-Mail-Adresse (#1). */
+    reservierungenVon(email: string): Promise<Reservierung[]>;
 };

@@ -71,15 +71,30 @@ export function Reservierungsformular({ maschine, von, bis }: Props) {
             {zeitraumDeutsch(ergebnis.reservierung.von, ergebnis.reservierung.bis)}
           </dd>
         </dl>
+        <p className="mt-3 text-sm">
+          Mit Ihrer E-Mail-Adresse und der Vorgangsnummer{" "}
+          <span className="font-mono">{ergebnis.reservierung.id}</span> finden Sie
+          die Reservierung jederzeit unter „Meine Reservierungen“. Bitte notieren
+          Sie sich die Nummer.
+        </p>
         <p className="mt-3 text-sm text-neutral-600 dark:text-neutral-400">
           Eine Bestätigung per E-Mail wird noch nicht verschickt, der Mailserver
           aus #12 und #13 steht noch nicht. Die Reservierung liegt im
           Arbeitsspeicher des Servers und ist nach einem Neustart weg, siehe
           ADR 0011.
         </p>
-        <Link href="/" className="mt-4 inline-block text-sm underline underline-offset-2">
-          Zurück zur Suche
-        </Link>
+        <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+          {/* Nur die Vorgangsnummer in der Adresse, die E-Mail-Adresse nie. */}
+          <Link
+            href={`/meine-reservierungen?vorgang=${encodeURIComponent(ergebnis.reservierung.id)}`}
+            className="underline underline-offset-2"
+          >
+            Meine Reservierungen
+          </Link>
+          <Link href="/" className="underline underline-offset-2">
+            Zurück zur Suche
+          </Link>
+        </div>
       </div>
     );
   }
