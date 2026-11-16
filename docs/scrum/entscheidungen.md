@@ -187,6 +187,37 @@ beide mit #8.
 
 ---
 
+## Rechteprüfung bis zur Anmeldung, Antworten vom 16.11. (#8 Teil 1)
+
+#8 verlangt, dass die Rechte serverseitig geprüft werden. Die Anmeldung selbst (#43) gibt es
+noch nicht. Teil 1 baut die Prüfung gegen die Matrix aus #99 trotzdem jetzt.
+
+| # | Frage | Entscheidung | Von wem |
+| --- | --- | --- | --- |
+| 60 | Woher kommt der Benutzer, solange es keine Anmeldung gibt? | **Probe-Anmeldung in der Kopfleiste:** „ohne Anmeldung“ oder einer von fünf Beispielbenutzern, je Rolle einer. Jede Seite und jede Server Action prüft. Das Feld „Ihr Kürzel“ im Stammdatenformular (Antwort 37) entfällt, im Protokoll steht der gewählte Benutzer | Finn |
+| 61 | Den Protokoll-Schutz aus F15 (nur Trigger schreiben ins Protokoll, `TRUNCATE` sperren) schon in Teil 1? | **Nein, später mit F15.** „Wir müssen irgendwo nen Schnitt machen.“ Teil 1 ändert das Schema nicht | Finn |
+| 62 | Mengenänderungen an `bestellposition` protokollieren? | **Nein.** F12 nennt Rechnung und Bestellung, keine Positionen | Finn |
+
+Beim Umsetzen festgelegt, nicht vom Team entschieden (Begründungen in
+`maschinen-verwaltung/lib/rechte.ts`):
+
+- Die Prüfung fragt nur, ob es für Rolle und Recht eine Zeile in `rolle_recht` gibt. Kein
+  Rollenname steht im Code.
+- „Ohne Anmeldung“ ist keine Rolle. Was der Besucher darf, steht als Liste im Code: suchen
+  (F5), bis #43 dazu reservieren und Meine Reservierungen mit E-Mail und Vorgangsnummer (F6).
+- Im Änderungsprotokoll steht die E-Mail-Adresse des Benutzers.
+- Abgelehnte Zugriffe liegen wie das Protokoll im Arbeitsspeicher, bis F16 entschieden ist.
+  Owner und Admin sehen sie unter „Abgelehnte Zugriffe“ (Mockup 13).
+- Keine Aktion und kein Recht „Storno zurücknehmen“: ob es das braucht, wird erst geklärt
+  (Antwort 58).
+
+Die Probe-Anmeldung ist eine Selbstauskunft wie vorher das Kürzel: Jeder kann jede Rolle
+wählen, ein Passwort gibt es nicht. Geprüft wird trotzdem auf dem Server, was die gewählte
+Rolle darf. Mit #43 ersetzt die echte Sitzung den Cookie der Probe-Anmeldung, an der Prüfung
+ändert sich nichts.
+
+---
+
 ## Branch-Schutz auf `staging`, Antwort vom 11.11. (#97)
 
 Seit #97 prüft GitHub Actions jeden Pull Request nach `staging` (Check „tsc, eslint, next
