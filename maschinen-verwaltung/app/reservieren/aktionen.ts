@@ -24,6 +24,7 @@
 import { reservieren } from "@/lib/reservieren";
 import { Kunde, type Feld, type ReservierungAnzeige } from "@/lib/reservierung";
 import { speicher } from "@/lib/speicher";
+import { zielText, zugriff } from "../sitzung";
 
 export type Eingaben = {
   von: string;
@@ -35,7 +36,8 @@ export type Eingaben = {
 
 export type FormularZustand =
   | { ok: true; reservierung: ReservierungAnzeige }
-  | { ok: false; fehler: string; feld: Feld; eingaben: Eingaben }
+  // feld null: die Meldung gehoert zu keinem Feld, z. B. ein abgelehnter Zugriff.
+  | { ok: false; fehler: string; feld: Feld | null; eingaben: Eingaben }
   | null;
 
 export async function reservierungAbsenden(
@@ -51,6 +53,15 @@ export async function reservierungAbsenden(
     email: text("email"),
     telefon: text("telefon"),
   };
+
+  // Rechtepruefung (#8) als Erstes: die Action laesst sich auch ohne das
+  // Formular direkt aufrufen. Ohne Anmeldung ist Reservieren bis #43 erlaubt
+  // (F6), Name und E-Mail-Adresse kommen bis dahin aus dem Formular.
+  const zugang = await zugriff(
+    "ausleihe.reservieren",
+    `Aktion: Reservieren (${zielText(text("inventarnummer"))})`,
+  );
+  if (!zugang.erlaubt) return { ok: false, fehler: zugang.meldung, feld: null, eingaben };
 
   const ergebnis = await reservieren(
     speicher,

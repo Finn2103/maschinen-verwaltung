@@ -12,16 +12,20 @@
 // Diese Komponente kennt weder Speicher noch Fachobjekt. Sie bekommt Text und
 // einfache Listen, und Feldnamen aus lib/maschinenfelder.ts, einer Datei ohne
 // Logik. So bleibt die Klasse Maschine aus dem Browser-Bundle heraus.
+//
+// Das Feld "Ihr Kuerzel" gibt es seit #8 Teil 1 nicht mehr (Antwort 60): wer
+// im Protokoll steht, kommt aus der Probe-Anmeldung, nicht aus dem Formular.
+// Die Seite reicht es nur zur Anzeige herein ("protokolliertAls").
 
 import { useActionState, useEffect, type ReactNode } from "react";
 import Link from "next/link";
 import type { FormularEingaben, StammdatenZustand } from "@/app/verwaltung/maschinen/aktionen";
 import { FELDNAMEN, MASCHINEN_FELDER, type MaschinenFeld } from "@/lib/maschinenfelder";
 
-type FeldName = MaschinenFeld | "benutzer";
+type FeldName = MaschinenFeld;
 
-const REIHENFOLGE: FeldName[] = [...MASCHINEN_FELDER, "benutzer"];
-const BESCHRIFTUNG: Record<FeldName, string> = { ...FELDNAMEN, benutzer: "Ihr Kürzel" };
+const REIHENFOLGE: FeldName[] = [...MASCHINEN_FELDER];
+const BESCHRIFTUNG: Record<FeldName, string> = FELDNAMEN;
 
 type Props = {
   modus: "anlegen" | "aendern";
@@ -29,12 +33,14 @@ type Props = {
   vorgabe: FormularEingaben;
   typen: { typnummer: number; bezeichnung: string }[];
   standorte: string[];
+  /** Wer beim Speichern im Aenderungsprotokoll steht, nur zur Anzeige. */
+  protokolliertAls: string;
 };
 
 const hinweisId = (name: FeldName) => `${name}-hinweis`;
 const fehlerId = (name: FeldName) => `${name}-fehler`;
 
-export function Maschinenformular({ modus, aktion, vorgabe, typen, standorte }: Props) {
+export function Maschinenformular({ modus, aktion, vorgabe, typen, standorte, protokolliertAls }: Props) {
   const [zustand, absenden, laeuft] = useActionState<StammdatenZustand, FormData>(aktion, null);
 
   const fehler = zustand?.fehler ?? {};
@@ -105,6 +111,15 @@ export function Maschinenformular({ modus, aktion, vorgabe, typen, standorte }: 
       key={zustand ? JSON.stringify(zustand.eingaben) : "vorgabe"}
       className="mt-6 max-w-2xl space-y-6"
     >
+      {zustand?.zugriff && (
+        <p
+          role="alert"
+          className="rounded border-l-4 border-red-700 bg-red-50 p-3 text-sm text-red-900 dark:border-red-400 dark:bg-red-950 dark:text-red-100"
+        >
+          {zustand.zugriff} Nichts gespeichert.
+        </p>
+      )}
+
       {betroffen.length > 0 && (
         <div
           role="alert"
@@ -241,20 +256,10 @@ export function Maschinenformular({ modus, aktion, vorgabe, typen, standorte }: 
         )}
       </fieldset>
 
-      <fieldset className="grid gap-4 sm:grid-cols-2">
-        <legend className="mb-2 text-sm font-semibold">Änderungsprotokoll</legend>
-        {rahmen(
-          "benutzer",
-          true,
-          "Steht im Änderungsprotokoll. Bis zur Anmeldung (#43) tragen Sie es selbst ein.",
-          <input
-            type="text"
-            required
-            defaultValue={werte.benutzer}
-            {...attribute("benutzer", true)}
-          />,
-        )}
-      </fieldset>
+      <p className="text-sm text-neutral-600 dark:text-neutral-400">
+        Im Änderungsprotokoll steht: <span className="font-mono">{protokolliertAls}</span>{" "}
+        (oben in der Probe-Anmeldung gewählt)
+      </p>
 
       <div className="flex flex-wrap items-center gap-5">
         <button

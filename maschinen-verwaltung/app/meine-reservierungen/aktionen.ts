@@ -10,6 +10,7 @@
 
 import { speicher } from "@/lib/speicher";
 import { meineReservierungen, type UebersichtFeld } from "@/lib/uebersicht";
+import { zugriff } from "../sitzung";
 
 /** Eine Zeile der Uebersicht, serialisierbar fuer die Client-Komponente. */
 export type UebersichtZeile = {
@@ -25,6 +26,8 @@ export type UebersichtZustand =
   | {
       ok: false;
       fehler: Partial<Record<UebersichtFeld, string>>;
+      /** Abgelehnter Zugriff (#8), gehoert zu keinem Feld. */
+      zugriff?: string;
       eingaben: Record<UebersichtFeld, string>;
     }
   | null;
@@ -37,6 +40,12 @@ export async function uebersichtAbfragen(
     email: String(daten.get("email") ?? "").trim(),
     vorgangsnummer: String(daten.get("vorgangsnummer") ?? "").trim(),
   };
+
+  // Rechtepruefung (#8) als Erstes. Umfang "eigene": welche Reservierungen
+  // die eigenen sind, weist der Kunde bis #43 mit E-Mail-Adresse und
+  // Vorgangsnummer nach (lib/uebersicht.ts). Das gilt auch fuer Personal.
+  const zugang = await zugriff("ausleihe.sehen", "Aktion: Meine Reservierungen");
+  if (!zugang.erlaubt) return { ok: false, fehler: {}, zugriff: zugang.meldung, eingaben };
 
   const ergebnis = await meineReservierungen(speicher, eingaben.email, eingaben.vorgangsnummer);
   if (!ergebnis.ok) return { ok: false, fehler: ergebnis.fehler, eingaben };

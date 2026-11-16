@@ -2,7 +2,9 @@ import { speicher } from "@/lib/speicher";
 import { auswahlwerte, suche, type Suchfilter } from "@/lib/suche";
 import { Zeitraum } from "@/lib/zeitraum";
 import { Suchformular } from "@/components/Suchformular";
+import { KeinZugriff } from "@/components/KeinZugriff";
 import Link from "next/link";
+import { zugriff } from "./sitzung";
 
 // Benennt die Seite, nicht die Anwendung (WCAG 2.4.2).
 //
@@ -19,6 +21,17 @@ export const metadata = {
 type Props = { searchParams: Promise<Suchfilter> };
 
 export default async function Startseite({ searchParams }: Props) {
+  // Suchen darf jeder, auch ohne Anmeldung (F5). Geprueft wird trotzdem, damit
+  // es greift, falls das Recht einer Rolle entzogen wird (#8).
+  const zugang = await zugriff("maschine.suchen", "/");
+  if (!zugang.erlaubt) {
+    return (
+      <div className="mx-auto w-full max-w-3xl px-4">
+        <KeinZugriff meldung={zugang.meldung} />
+      </div>
+    );
+  }
+
   const filter = await searchParams;
   const fehler = Zeitraum.fehler(filter.von, filter.bis);
   // Maschinen und Belegungen ueber den Speicher, damit angelegte

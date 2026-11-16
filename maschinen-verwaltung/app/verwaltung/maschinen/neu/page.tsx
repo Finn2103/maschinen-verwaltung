@@ -1,13 +1,20 @@
 import Link from "next/link";
+import { KeinZugriff } from "@/components/KeinZugriff";
 import { Maschinenformular } from "@/components/Maschinenformular";
+import { imProtokoll } from "@/lib/benutzer";
+import { zugriff } from "../../../sitzung";
 import { maschineAnlegenAbsenden } from "../aktionen";
 import { formulardaten } from "../formulardaten";
 
-// Maschine anlegen (#2, Mockup 07 und 08).
+// Maschine anlegen (#2, Mockup 07 und 08). Recht "maschine.anlegen" (#8);
+// die Action prueft beim Absenden noch einmal selbst.
 
 export const metadata = { title: "Maschine anlegen" };
 
 export default async function MaschineAnlegen() {
+  const zugang = await zugriff("maschine.anlegen", "/verwaltung/maschinen/neu");
+  if (!zugang.erlaubt) return <KeinZugriff meldung={zugang.meldung} />;
+
   const { typen, standorte } = await formulardaten();
 
   return (
@@ -22,6 +29,7 @@ export default async function MaschineAnlegen() {
         aktion={maschineAnlegenAbsenden}
         typen={typen}
         standorte={standorte}
+        protokolliertAls={imProtokoll(zugang.benutzer)}
         vorgabe={{
           inventarnummer: "",
           typnummer: "",
@@ -30,7 +38,6 @@ export default async function MaschineAnlegen() {
           betriebsstunden: "0",
           wartungsintervall: "",
           standort: "",
-          benutzer: "",
         }}
       />
     </main>

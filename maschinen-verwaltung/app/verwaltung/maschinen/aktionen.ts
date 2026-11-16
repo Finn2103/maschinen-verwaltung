@@ -10,24 +10,37 @@
 // anlegen. revalidatePath vorher, damit Liste, Suche und Formular den neuen
 // Stand zeigen (Next.js-Doku, "Redirect after a mutation").
 //
-// KEINE RECHTEPRUEFUNG: wer Stammdaten pflegen darf (Mitarbeiter und Admin,
-// docs/rollen-und-rechte.md), kommt mit #8 und der Anmeldung aus #43.
+// RECHTEPRUEFUNG (#8 Teil 1): als Erstes, vor jedem Lesen und Schreiben.
+// Anlegen und Bearbeiten duerfen Mitarbeiter, Manager, Owner und Admin
+// (docs/rollen-und-rechte.md). Dass die Seite mit dem Formular schon prueft,
+// reicht nicht: eine Server Action laesst sich ohne die Seite direkt aufrufen.
+// Wer im Protokoll steht, kommt aus derselben Pruefung, nicht aus dem
+// Formular.
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { imProtokoll } from "@/lib/benutzer";
 import { MASCHINEN_FELDER, type MaschinenEingabe } from "@/lib/maschinenfelder";
 import { speicher } from "@/lib/speicher";
 import { maschineAendern, maschineAnlegen, type StammdatenFehler } from "@/lib/stammdaten";
+import { zielText, zugriff } from "../../sitzung";
 
-/** Alle Formularwerte als Text, dazu das Kuerzel fuer das Protokoll. */
-export type FormularEingaben = MaschinenEingabe & { benutzer: string };
+/** Alle Formularwerte als Text. */
+export type FormularEingaben = MaschinenEingabe;
 
-/** null vor dem ersten Absenden. Nach einem Erfolg wird weitergeleitet. */
-export type StammdatenZustand = { fehler: StammdatenFehler; eingaben: FormularEingaben } | null;
+/**
+ * null vor dem ersten Absenden. Nach einem Erfolg wird weitergeleitet.
+ * "zugriff" ist die Meldung eines abgelehnten Zugriffs (#8).
+ */
+export type StammdatenZustand = {
+  fehler: StammdatenFehler;
+  zugriff?: string;
+  eingaben: FormularEingaben;
+} | null;
 
 function lies(daten: FormData): FormularEingaben {
   const text = (feld: string) => String(daten.get(feld) ?? "");
-  const eingaben = { benutzer: text("benutzer") } as FormularEingaben;
+  const eingaben = {} as FormularEingaben;
   for (const feld of MASCHINEN_FELDER) eingaben[feld] = text(feld);
   return eingaben;
 }
@@ -37,7 +50,13 @@ export async function maschineAnlegenAbsenden(
   daten: FormData,
 ): Promise<StammdatenZustand> {
   const eingaben = lies(daten);
-  const ergebnis = await maschineAnlegen(speicher, eingaben, eingaben.benutzer);
+  const zugang = await zugriff(
+    "maschine.anlegen",
+    `Aktion: Maschine anlegen (${zielText(eingaben.inventarnummer)})`,
+  );
+  if (!zugang.erlaubt) return { fehler: {}, zugriff: zugang.meldung, eingaben };
+
+  const ergebnis = await maschineAnlegen(speicher, eingaben, imProtokoll(zugang.benutzer));
   if (!ergebnis.ok) return { fehler: ergebnis.fehler, eingaben };
 
   revalidatePath("/", "layout");
@@ -49,11 +68,17 @@ export async function maschineAendernAbsenden(
   daten: FormData,
 ): Promise<StammdatenZustand> {
   const eingaben = lies(daten);
+  const zugang = await zugriff(
+    "maschine.bearbeiten",
+    `Aktion: Maschine bearbeiten (${zielText(eingaben.inventarnummer)})`,
+  );
+  if (!zugang.erlaubt) return { fehler: {}, zugriff: zugang.meldung, eingaben };
+
   const ergebnis = await maschineAendern(
     speicher,
     eingaben.inventarnummer,
     eingaben,
-    eingaben.benutzer,
+    imProtokoll(zugang.benutzer),
   );
   if (!ergebnis.ok) return { fehler: ergebnis.fehler, eingaben };
 
