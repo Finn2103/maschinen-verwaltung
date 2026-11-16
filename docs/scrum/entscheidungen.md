@@ -157,6 +157,34 @@ beides nicht. Gilt **vorläufig** wie die Antworten oben, bis das Team das ERD a
 | --- | --- | --- | --- |
 | 36 | Schema ergänzen oder die Felder aus dem Formular von #2 nehmen? | **Schema ergänzen.** `maschine.baujahr` Pflicht, ab 1900, nicht nach dem laufenden Jahr; `maschine.wartungsintervall` freiwillig, ganze Betriebsstunden größer als 0. Dieselben Regeln wie im Formular. Die Seriennummer bleibt Pflicht. Umgesetzt am 12.11. in ERD, [`relational.md`](../datenmodell/relational.md) (4.6), [`schema.sql`](../datenmodell/schema.sql) und `schema-pruefen.sql` | Finn |
 
+### Rollen und Rechte im Datenmodell, Fassung vom 16.11. (#99)
+
+Grundlage ist die Rollenmatrix vom 16.11. in [`rollen-und-rechte.md`](../rollen-und-rechte.md),
+dort mit allen Fragen F1 bis F17. Für das Datenmodell zählen diese:
+
+| # | Frage | Entscheidung | Von wem |
+| --- | --- | --- | --- |
+| F7 | Eine Rolle je Person oder mehrere? | **Eine.** `benutzer.rolle` statt einer Relation `benutzer_rolle` | Finn |
+| F8 | Stornofrist: wie viele Tage, ein Wert für alle Maschinen? | **Ein Wert, 3 Tage**, einstellbar: `einstellung.stornofrist_tage` | Finn |
+| F12 | Protokoll für Maschine, Ausleihe und Kunde? | **Dazu Rechnung und Bestellung** | Finn |
+| F13 | Benutzer: eigene Tabelle oder Supabase Auth? | **Später, mit #43.** Bis dahin eine eigene Relation mit UUID, die später auf `auth.users` zeigen kann | Finn |
+| F14 | Wer legt das Kundenkonto an? | **Der Kunde selbst.** `benutzer.kundennummer` darf leer sein, bis er seinen Kundendatensatz angelegt hat | Finn |
+
+Beim Umsetzen festgelegt, nicht vom Team entschieden (Begründungen in
+[`relational.md`](../datenmodell/relational.md), 4.7 bis 4.10):
+
+- Der Storno-Tag zählt in deutscher Zeit: bei 3 Tagen und Mietbeginn am 20.11. bis
+  einschließlich 17.11. ohne Grund.
+- Wer ändert, liest die Datenbank an einer Stelle (`aktueller_benutzer()`): bis #43 aus einer
+  Sitzungsvariable, danach aus `auth.uid()`.
+- Das Protokoll schreibt eine Zeile je geändertem Feld, beim Löschen den alten Datensatz.
+  Es zeigt ohne Fremdschlüssel auf sein Objekt, damit es das Löschen überlebt.
+- E-Mail-Adressen der Benutzer sind ohne Groß- und Kleinschreibung eindeutig.
+
+Umgesetzt am 16.11. in ERD, `relational.md`, [`schema.sql`](../datenmodell/schema.sql) und
+`schema-pruefen.sql`. Offen bleiben F15 (Datenbank-Rechte) und F16 (abgelehnte Zugriffe),
+beide mit #8.
+
 ---
 
 ## Branch-Schutz auf `staging`, Antwort vom 11.11. (#97)
@@ -271,7 +299,7 @@ Abgabe: **Freitag 11.12.2026, 8. Stunde.**
 | Punkt | Wer entscheidet | Wann |
 | --- | --- | --- |
 | ERD abnehmen: vorläufig angenommen mit Laurins Zustimmung (siehe ERD-Entscheidungen), drei Antworten stehen aus | Team | in #73 |
-| Rollen und Rechte, Stornofrist, Stornogrund und Protokoll im Datenmodell: laut Finn (10.11.) nicht mehr #45, sondern ein eigenes Item zusammen mit #8 | Team legt das Item an | Sprint 3 |
+| Datenbank-Rechte (`GRANT`, Row Level Security) und abgelehnte Zugriffe speichern (F15, F16); Rollen, Rechte, Stornofrist und Protokoll selbst stehen seit #99 im Datenmodell | Team | mit #8 |
 | Definition of Done beschließen | Team | Sprint Planning, vor dem Schätzen |
 | Sprint Goal für Sprint 1 | Team | Sprint Planning |
 | Reihenfolge des Backlogs | Team (delegiert, siehe Punkt 6) | Sprint Planning |

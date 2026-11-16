@@ -4,11 +4,11 @@ Reihenfolge: fachliches Bild zuerst, Tabellen danach.
 
 | Datei | Inhalt | Status |
 | --- | --- | --- |
-| `ERD-Maschinenverwaltung.drawio` | ERD in Chen-Notation (drawio-Quelle) | Entwurf vom 10.11., vorläufig abgenommen (siehe unten) |
-| `erd_maschinenverleih_chen.svg` | Export des ERD zum Ansehen ohne drawio | Export vom 10.11. |
-| [`relational.md`](relational.md) | Überführung in Relationen, Normalisierung (3. NF), Schlüssel, Zusicherungen | Entwurf vom 10.11. |
-| [`schema.sql`](schema.sql) | Explizites SQL-DDL für PostgreSQL, von Hand geschrieben | Entwurf vom 10.11., läuft fehlerfrei auf leerer PostgreSQL 17 |
-| [`schema-pruefen.sql`](schema-pruefen.sql) | Prüft jede Zusicherung aus `schema.sql` mit einem Fall | 10.11.: alle Fälle bestanden |
+| `ERD-Maschinenverwaltung.drawio` | ERD in Chen-Notation (drawio-Quelle) | Entwurf vom 10.11., vorläufig abgenommen (siehe unten); ergänzt am 16.11. um #99 |
+| `erd_maschinenverleih_chen.svg` | Export des ERD zum Ansehen ohne drawio | Export vom 16.11. |
+| [`relational.md`](relational.md) | Überführung in Relationen, Normalisierung (3. NF), Schlüssel, Zusicherungen | Entwurf vom 10.11., Nachtrag 16.11. für #99 |
+| [`schema.sql`](schema.sql) | Explizites SQL-DDL für PostgreSQL, von Hand geschrieben | Entwurf vom 10.11., ergänzt am 16.11. um #99, läuft fehlerfrei auf leerer PostgreSQL 17 |
+| [`schema-pruefen.sql`](schema-pruefen.sql) | Prüft jede Zusicherung aus `schema.sql` mit einem Fall | 16.11.: alle 97 Fälle bestanden |
 | [`schema-pruefen.ps1`](schema-pruefen.ps1) | Spielt beides in einem Wegwerf-Container ein | |
 
 Die drawio-Datei ist die Quelle, das SVG wird daraus exportiert und bei
@@ -49,7 +49,8 @@ umgesetzt, dazu Finns Antworten 7 bis 12 vom 09.11. Liste und Stand je Punkt:
 
 **Zwölf Entitäten:** Kunde, Ausleihe, Maschine, Maschinentyp, Messwert, Wartung,
 Bauteil, Verbrauchsmaterial, Bestellung, Rechnung, Rechnungsposition (schwach),
-Zahlung.
+Zahlung. Seit dem 16.11. (#99) fünf mehr: Benutzer, Rolle, Recht, Einstellung,
+Protokolleintrag, siehe [unten](#rollen-rechte-stornofrist-und-protokoll-99).
 
 **Seit dem 09.11. neu im ERD:**
 
@@ -96,15 +97,25 @@ Nicht alles muss abgebildet werden. Wichtiger ist, dass die abgebildeten
 Beziehungen stimmen. Die Reservierung ist seit dem 10.11. keine eigene Entität
 mehr, sondern der Status `reserviert` einer Ausleihe.
 
+## Rollen, Rechte, Stornofrist und Protokoll (#99)
+
+Seit dem 16.11. im Datenmodell, nach der Rollenmatrix vom 16.11.
+([`docs/rollen-und-rechte.md`](../rollen-und-rechte.md), Abschnitt „Was #99 baut“).
+Im ERD neu: fünf Entitäten und sechs Beziehungen.
+
+| Neu | Was | Wo in `relational.md` |
+| --- | --- | --- |
+| Rolle **darf** Recht, mit Umfang | M : N; 5 Rollen, 26 Rechte, 105 Zuordnungen; Recht vergeben ist ein `INSERT` | 4.7 |
+| Benutzer **hat** Rolle | N : 1, eine Rolle je Person (F7), kein Passwort (#43) | 4.7 |
+| Benutzer **gehört zu** Kunde | 1 : 1, auf beiden Seiten freiwillig (F14) | 4.7 |
+| Benutzer **ändert** Einstellung | 1 : N; Einstellung `stornofrist_tage = 3`, ändern per `UPDATE` (F8) | 4.9 |
+| Benutzer **storniert** Ausleihe | 1 : N; an der Ausleihe Storno-Zeitpunkt und Stornogrund, nach Fristablauf nur mit Grund | 4.9 |
+| Benutzer **verursacht** Protokolleintrag | 1 : N; für Maschine, Ausleihe, Kunde, Rechnung und Bestellung (F12), unveränderbar, je Objekt und je Benutzer abfragbar | 4.10 |
+
 ## Noch nicht im Datenmodell
 
 | Punkt | Wohin | Stand |
 | --- | --- | --- |
-| Rolle und Recht als Relationen | eigenes Item, zusammen mit #8 | Finn, 10.11.: nicht mehr #45 |
-| Ort für die Stornofrist | eigenes Item | wie oben |
-| Pflichtfeld Stornogrund nach Fristablauf | eigenes Item | wie oben |
-| Protokoll (Audit-Log) | eigenes Item | wie oben |
-| Rechte der Datenbank-Rollen (`GRANT` für PostgREST) | mit #8 klären | offen |
-
-Die ersten vier nennt [`docs/rollen-und-rechte.md`](../rollen-und-rechte.md) unter
-„Für #45 Datenmodell". Seit dem 10.11. gehören sie in ein eigenes Item.
+| Benutzer in Supabase Auth (`auth.users`) oder eigene Relation | #43 | F13, später; `benutzer_id` ist schon eine UUID wie in Supabase Auth |
+| Rechte der Datenbank-Rollen (`GRANT`, Row Level Security für PostgREST) | #8 | F15, später |
+| Abgelehnte Zugriffe speichern (`zugriff_abgelehnt`) | #8 | F16, später |
