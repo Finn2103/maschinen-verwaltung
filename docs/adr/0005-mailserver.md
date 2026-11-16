@@ -104,8 +104,20 @@ Für Personen mit Docker-Erfahrung ist die Verwaltung verständlich, allerdings 
 Stalwart verfügt ebenfalls über Dokumentation und eine moderne Verwaltung.   
 Da die Lösung im Vergleich zu Mailcow möglicherweise weniger bekannt ist, kann die Einarbeitung für das Team etwas mehr Zeit benötigen.
 
-## Fazit
-Auf Grundlage der festgelegten Gewichtungen und Bewertungen erreicht docker-mailserver den höchsten Nutzwert. Besonders positiv fallen der geringe Ressourcenbedarf, die Docker-Kompatibilität und der vergleichsweise geringe Wartungsaufwand auf.
+# Fazit
+Auf Grundlage der durchgeführten Nutzwertanalyse haben wir uns für docker-mailserver entschieden.
+
+Ausschlaggebend für die Entscheidung sind insbesondere die sehr gute Docker-Kompatibilität, der geringe Ressourcenbedarf und der vergleichsweise geringe Wartungsaufwand. Da unsere bestehende Serverarchitektur bereits auf Containern basiert, kann docker-mailserver gut in die vorhandene Infrastruktur integriert werden. Dadurch bleibt die technische Struktur einheitlich und der zusätzliche Administrationsaufwand wird reduziert.
+
+Obwohl Mailcow beim Funktionsumfang mehr zu bieten hat, reicht docker-mailserver dennoch für alle wichtigen Funktionen des Projekts. Für die geplanten Buchungsbestätigungen und den späteren Rechnungsversand benötigen wir vor allem einen zuverlässigen und sicheren Mailversand sowie Funktionen wie SPF, DKIM und TLS. Ein möglichst großer Funktionsumfang ist daher nicht das wichtigste Ziel.
+
+Zusätzlich spricht der geringere Ressourcenbedarf für docker-mailserver, da auf dem Server neben dem Mailserver weitere Container betrieben werden können. Die vorhandenen Serverressourcen können dadurch effizienter genutzt werden.
+
+Insgesamt stellt docker-mailserver somit den besten Kompromiss aus Funktionalität, Wartbarkeit, Ressourcenverbrauch und Integration in die bestehende Infrastruktur dar. Aus diesen Gründen wurde docker-mailserver als geeignetste Lösung ausgewählt.
+
+
+
+
 
 
 
