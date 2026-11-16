@@ -8,8 +8,7 @@ Matrix abbildet, ist [#99](https://github.com/Finn2103/maschinen-verwaltung/issu
 - **Status:** entschieden. Die Matrix unten ist die abgegebene Fassung 1 vom 16.11.2026.
 - **Entschieden von:** Finn Jendras, am 12.10.2026 (erste Fassung) und am 16.11.2026
   (diese Fassung). Das Team hatte keine Zeit zum Abstimmen, Finn hat allein entschieden.
-- **Noch offen:** der Startwert der Stornofrist (3 oder 7 Tage) und die Punkte, die an #43
-  hängen, siehe [Offene Punkte](#offene-punkte).
+- **Noch offen:** die Punkte, die an #43 hängen, siehe [Offene Punkte](#offene-punkte).
 
 ## Warum diese Datei entstanden ist
 
@@ -92,7 +91,7 @@ vorgeschlagen entschieden wurde oder aus einer Antwort F1 bis F14 folgt. Die Spa
 | Stornieren nach Ablauf der Frist | nein | nein | ja, mit Grund | ja, mit Grund | ja, mit Grund | ja, mit Grund | Entscheidung 3 |
 
 Die Stornofrist ist **ein** Wert in Tagen vor Mietbeginn für alle Maschinen, einstellbar
-(`einstellung.stornofrist_tage`, F8). Der Startwert ist noch offen.
+(`einstellung.stornofrist_tage`, F8). Startwert: **3 Tage** vor Mietbeginn.
 
 ### Auftrag (#9)
 
@@ -179,8 +178,9 @@ vor Mietbeginn selbst stornieren. `X` ist **keine Konstante im Code**, sondern v
 einstellbar. Ein Mitarbeiter darf immer stornieren, nach Ablauf der Frist aber nur **mit
 Angabe eines Grundes**.
 
-- 16.11.: `X` ist ein Wert für alle Maschinen, `einstellung.stornofrist_tage` (F8). Die
-  Regel gilt für jede Ausleihe, egal ob sie noch Reservierung oder schon Auftrag ist (F9).
+- 16.11.: `X` ist ein Wert für alle Maschinen, `einstellung.stornofrist_tage`, Startwert
+  3 Tage (F8). Die Regel gilt für jede Ausleihe, egal ob sie noch Reservierung oder schon
+  Auftrag ist (F9).
 
 **4. Protokoll: Belegshistorie und Personenauswertung sind getrennt.** Mitarbeiter sehen die
 Historie eines einzelnen Datensatzes, weil sie im Alltag wissen müssen, warum er so
@@ -220,7 +220,7 @@ Fragen F1 bis F17. Wo Finn eine Begründung notiert hat, steht sie darunter.
 | F5 | Maschinen suchen ohne Anmeldung? | Ja | ohne Anmeldung `ja` beim Suchen |
 | F6 | Reservieren nur mit Konto? | Ja, nur mit Konto, ab #43 | ohne Anmeldung `nein` bei „Verbindlich reservieren" und „Reservierungen sehen" |
 | F7 | Eine Rolle je Person oder mehrere? | Eine Rolle | #99: `benutzer.rolle` statt Tabelle `benutzer_rolle` |
-| F8 | Stornofrist: ein Wert für alle Maschinen? | Ja, ein Wert, einstellbar | #99: Zeile `stornofrist_tage` in `einstellung`. Startwert offen |
+| F8 | Stornofrist: ein Wert für alle Maschinen? | Ja, ein Wert, einstellbar, Startwert 3 Tage | #99: Zeile `stornofrist_tage` in `einstellung`, Wert 3 |
 | F9 | Reservierung und Auftrag: ein Datensatz? | Ja, Ausleihe mit Status | Zeile „Auftrag stornieren" entfällt |
 | F10 | Ändert der Kunde seine Adresse selbst? | Ja, die eigene | Kunde `eigene` bei „Kundendaten bearbeiten" |
 | F11 | Rechnung stornieren nur Manager und Owner? | **Nein,** der Mitarbeiter auch | Mitarbeiter `ja` bei „Rechnung stornieren" |
@@ -278,7 +278,7 @@ Was #99 nach der Fassung vom 16.11.2026 baut:
 | `recht` | neu: `recht` (z. B. `maschine.anlegen`), `bezeichnung` | eine Zeile je Matrix-Zeile, also 26 |
 | `rolle_recht` | neu, M : N: ↑`rolle`, ↑`recht`, `umfang` (`alle` oder `eigene`) | Recht vergeben = ein INSERT. Nach der Matrix 105 Zeilen, davon 8 mit `eigene`. „ohne Anmeldung" ist keine Rolle |
 | `benutzer_rolle` | entfällt | eine Rolle je Person, dafür reicht `benutzer.rolle` (F7) |
-| `einstellung` | neu: `schluessel`, `wert`, `geaendert_am`, ↑`geaendert_von` | Zeile `stornofrist_tage`, ändern per UPDATE (F8). Startwert offen |
+| `einstellung` | neu: `schluessel`, `wert`, `geaendert_am`, ↑`geaendert_von` | Zeile `stornofrist_tage`, Startwert 3, ändern per UPDATE (F8) |
 | `ausleihe` | drei Spalten mehr: `storniert_am`, ↑`storniert_von`, `stornogrund` | Storno nach Ablauf der Frist ohne Grund lehnt die Datenbank ab. Status storniert genau dann, wenn `storniert_am` gesetzt ist |
 | `protokoll` | neu: `protokoll_id`, `zeitpunkt`, ↑`benutzer_id`, `objekt`, `objekt_id`, `feld`, `alt`, `neu` | Einträge für Maschine, Ausleihe, Kunde, Rechnung und Bestellung (F12). Kein UPDATE oder DELETE. Index je Objekt und je Benutzer |
 
@@ -326,8 +326,6 @@ als Organisation, nicht eine Person in der Oberfläche.
 
 ## Offene Punkte
 
-- [ ] **Startwert der Stornofrist:** 3 oder 7 Tage vor Mietbeginn. Entscheidet Finn. Der
-      Wert bleibt danach einstellbar (F8)
 - [ ] **Benutzer:** eigene Tabelle oder Supabase Auth (`auth.users`)? Hängt an #43 (F13)
 - [ ] **Datenbank-Rechte** für PostgREST (GRANT, Row Level Security): in #99 oder in #8?
       Später (F15)
