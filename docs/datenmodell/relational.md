@@ -7,7 +7,10 @@ ERD entsteht und **warum** das Ergebnis in 3. Normalform ist.
 - **Stand:** Entwurf vom 11.11.2026 zu #45, auf Grundlage der vorläufig angenommenen
   ERD-Entscheidungen aus #73 und Finns Antworten vom 09.11. und 11.11. (alle in
   [`docs/scrum/entscheidungen.md`](../scrum/entscheidungen.md)). Nachtrag 12.11. für #2:
-  Baujahr und Wartungsintervall der Maschine (Antwort 36, siehe 4.6).
+  Baujahr und Wartungsintervall der Maschine (Antwort 36, siehe 4.6). Nachtrag 16.11. für
+  #99: Benutzer, Rolle, Recht, Einstellung, Storno an der Ausleihe und Protokoll nach der
+  Rollenmatrix vom 16.11. ([`rollen-und-rechte.md`](../rollen-und-rechte.md), siehe 4.7 bis
+  4.10).
 - **Geprüft:** `schema.sql` läuft fehlerfrei auf einer leeren PostgreSQL 17,
   `schema-pruefen.sql` prüft jede Zusicherung unten mit einem Fall. Aufruf:
   [`schema-pruefen.ps1`](schema-pruefen.ps1).
@@ -26,18 +29,28 @@ ae/oe/ue.
 | Entität | Relation, Schlüsselattribut wird Primärschlüssel | Kunde → `kunde(`**kundennummer**`, …)` |
 | Beziehung 1 : N | Fremdschlüssel auf der N-Seite | Kunde 1 tätigt N Ausleihe → `ausleihe.↑kundennummer` |
 | Beziehung M : N | eigene Relation, beide Fremdschlüssel zusammen sind der Primärschlüssel, Beziehungsattribute kommen mit | Bestellung enthält Verbrauchsmaterial → `bestellposition` mit `menge` |
+| Beziehung 1 : 1, auf beiden Seiten freiwillig | Fremdschlüssel auf einer Seite, eindeutig, leer erlaubt | Benutzer gehört zu Kunde → `benutzer.↑kundennummer` (UNIQUE) |
 | schwache Entität | Primärschlüssel aus dem Schlüssel der starken Entität und dem partiellen Schlüssel | Rechnungsposition → **rechnungsnummer, positionsnummer** |
 | rekursive Beziehung 1 : 1 | Fremdschlüssel auf die eigene Relation, eindeutig | Rechnung storniert Rechnung → `rechnung.↑storniert_rechnungsnummer` (UNIQUE) |
 | zwei sich ausschließende N : 1 | zwei Fremdschlüssel, eine Bedingung „genau einer gesetzt“ | Rechnungsposition betrifft Ausleihe **oder** berechnet Bestellung |
 
 ---
 
-## 2 Das Ergebnis: 18 Relationen
+## 2 Das Ergebnis: 24 Relationen
 
 **Kunde und Ausleihe**
 
 - `kunde(`**kundennummer**`, name, strasse, plz, ort, email, telefon)`
-- `ausleihe(`**ausleihnummer**`, ↑kundennummer, ↑inventarnummer, von, bis, status)`
+- `ausleihe(`**ausleihnummer**`, ↑kundennummer, ↑inventarnummer, von, bis, status, storniert_am, ↑storniert_von, stornogrund)`
+
+**Benutzer, Rolle, Recht (#99)**
+
+- `rolle(`**rolle**`, bezeichnung)`
+- `recht(`**recht**`, bezeichnung)`
+- `rolle_recht(`**↑rolle, ↑recht**`, umfang)`
+- `benutzer(`**benutzer_id**`, email, name, aktiv, ↑kundennummer, ↑rolle)`
+- `einstellung(`**schluessel**`, wert, geaendert_am, ↑geaendert_von)`
+- `protokoll(`**protokoll_id**`, zeitpunkt, ↑benutzer_id, objekt, objekt_id, feld, alt, neu)`
 
 **Maschine**
 
@@ -97,9 +110,19 @@ ae/oe/ue.
 | betrifft (N : 1) | `rechnungsposition.ausleihnummer` | genau eines von beiden (Antwort 10) |
 | berechnet (N : 1) | `rechnungsposition.bestell_id` | genau eines von beiden (Antwort 10) |
 | Zahlung, begleicht (N : 1) | `zahlung`, `zahlung.rechnungsnummer` | |
+| Rolle | `rolle` | fünf Zeilen (F1, F2) |
+| Recht | `recht` | eine Zeile je Aktion der Matrix, 26 |
+| darf (M : N) | `rolle_recht` | mit `umfang` (`alle` oder `eigene`) |
+| Benutzer | `benutzer` | eigene Relation, solange #43 offen ist (F13) |
+| hat (N : 1) | `benutzer.rolle` | eine Rolle je Person (F7), deshalb keine Relation `benutzer_rolle` |
+| gehört zu (1 : 1) | `benutzer.kundennummer` | eindeutig, auf beiden Seiten leer erlaubt (F14, #1) |
+| storniert (1 : N) | `ausleihe.storniert_von` | dazu `storniert_am` und `stornogrund` an der Ausleihe |
+| Einstellung, ändert (N : 1) | `einstellung`, `einstellung.geaendert_von` | Zeile `stornofrist_tage` (F8) |
+| Protokolleintrag, verursacht (N : 1) | `protokoll`, `protokoll.benutzer_id` | `objekt`, `objekt_id` ohne Fremdschlüssel, siehe 4.10 |
 
 M : N-Relationen heißen nach dem, was eine Zeile ist, wenn es dafür ein Wort gibt
-(Bestellposition, Wartungsmaßnahme), sonst nach der Beziehung (`passt_zu`).
+(Bestellposition, Wartungsmaßnahme), sonst nach den beiden Relationen (`rolle_recht`) oder
+nach der Beziehung (`passt_zu`).
 
 ---
 
@@ -124,11 +147,12 @@ Betrifft nur Relationen mit zusammengesetztem Schlüssel:
 | `bestellposition` | bestell_id, verbrauchsmaterial_id | menge | ja |
 | `wartungsmassnahme` | wartungsnummer, bauteil_id | massnahme | ja |
 | `passt_zu` | verbrauchsmaterial_id, typnummer | keine | trivial erfüllt |
+| `rolle_recht` | rolle, recht | umfang | ja: der Kunde hat `ausleihe.sehen` mit `eigene`, aber `maschine.suchen` mit `alle`. Der Umfang hängt also weder an der Rolle allein noch am Recht allein |
 
 **Was deshalb bewusst fehlt:** `wartungsmassnahme` hat keine Spalte `inventarnummer`.
 Damit ließe sich in der Datenbank prüfen, dass Wartung und Bauteil zur selben Maschine
 gehören. Die Maschine hängt aber allein an `wartungsnummer`, also nur an einem Teil des
-Schlüssels, und das verletzt die 2. NF. Diese Prüfung macht die Anwendung (siehe 4.7).
+Schlüssels, und das verletzt die 2. NF. Diese Prüfung macht die Anwendung (siehe 4.11).
 
 ### 3.3 Dritte Normalform: keine transitiven Abhängigkeiten
 
@@ -166,6 +190,11 @@ Platz.
 | `maschine`: Bezeichnung und Kategorie | stehen nicht in `maschine`, sondern schon im ERD am Maschinentyp |
 | `maschinentyp`: kategorie | Die Kategorie bestimmt kein weiteres Attribut. Eine eigene Relation würde nichts auflösen |
 | `ausleihe`: kundennummer und inventarnummer | Fremdschlüssel, hängen an der Ausleihe |
+| `ausleihe`: storniert_am, storniert_von, stornogrund | beschreiben den einen Storno der einen Ausleihe. Eine eigene Relation „Storno“ hätte denselben Schlüssel (`ausleihnummer`) und wäre nur eine 1 : 1-Abspaltung |
+| `benutzer`: rolle und die Bezeichnung der Rolle | die Bezeichnung steht nicht in `benutzer`, sondern in `rolle`. Sonst hinge sie transitiv an `benutzer_id → rolle → bezeichnung` |
+| `benutzer`: email → name | `email` ist ein zweiter Schlüsselkandidat (eindeutig). Hängt etwas an einem Schlüsselkandidaten, ist das keine transitive Abhängigkeit |
+| `protokoll`: gleicher Zeitpunkt und Benutzer in mehreren Zeilen | Eine Änderung an drei Feldern gibt drei Zeilen mit gleichem Zeitpunkt und Benutzer. Es gibt aber kein Attribut „Änderung“, von dem beides abhinge, also keine transitive Abhängigkeit. Die Alternative wäre `aenderung` plus `aenderungsfeld`; eine Zeile je Feld entspricht `lib/protokoll.ts` und hält „Verlauf eines Feldes“ zu einer einfachen Abfrage |
+| `einstellung`: wert als Text | Keine Frage der Normalform, sondern des Typs: Text passt für jede künftige Einstellung, was gültig ist, prüft je Schlüssel ein `CHECK` (4.9) |
 
 ### 3.4 Bewusste Kopien sind keine Redundanz
 
@@ -219,6 +248,8 @@ Abgeleitete Werte stehen in keiner Tabelle, sie werden beim Lesen berechnet:
 - offener Betrag = Rechnungsbetrag − Summe der Zahlungen
 - „ist storniert“ = es gibt eine Rechnung, deren `storniert_rechnungsnummer` auf diese zeigt
 - „ist ausgebaut“ = es gibt eine Wartungsmaßnahme `getauscht` zu diesem Bauteil
+- „Storno nach Fristablauf“ = der Storno-Tag liegt nach `von − stornofrist_tage`. Das prüft
+  der Trigger beim Stornieren (4.9), gespeichert wird nur der Grund
 
 Gespeichert würden sie in der nächsten Änderung auseinanderlaufen.
 
@@ -347,7 +378,128 @@ mit denselben Regeln wie das Formular (`Maschine.pruefe` in
 Ob eine Wartung fällig ist (Betriebsstunden seit der letzten Wartung ≥ Intervall), wird
 beim Lesen berechnet, wie die Werte in 3.5.
 
-### 4.7 Was die Datenbank nicht prüft
+### 4.7 Rollen und Rechte sind Zeilen (#99, #8)
+
+#8 verlangt Rechte, die „zur Laufzeit änderbar“ sind, „ohne Code anzupassen“. Deshalb steht
+die Matrix aus [`rollen-und-rechte.md`](../rollen-und-rechte.md) als Daten in drei
+Relationen, nicht als Namen im Code:
+
+| Relation | Inhalt nach der Fassung vom 16.11. |
+| --- | --- |
+| `rolle` | 5 Zeilen: kunde, mitarbeiter, manager, owner, admin |
+| `recht` | 26 Zeilen, eine je Aktion, Schlüssel `objekt.aktion`, z. B. `maschine.anlegen` |
+| `rolle_recht` | 105 Zeilen, 8 davon mit `umfang = 'eigene'` (alle beim Kunden) |
+
+- **Recht vergeben** ist ein `INSERT` einer Zeile in `rolle_recht`, **entziehen** ein
+  `DELETE`. Eine neue Rolle, etwa der Werkstattplaner aus F17, ist ein `INSERT` in `rolle`.
+  Keins davon ändert das Schema.
+- **Umfang:** `alle` oder `eigene`. „Eigene“ heißt beim Kunden: `benutzer.kundennummer` ist
+  die Kundennummer des Datensatzes, bei Ausleihe, Rechnung, Bestellung und den eigenen
+  Kundendaten.
+- **„ja, mit Grund“** aus der Matrix ist hier `alle`. Den Grund verlangt nicht das Recht,
+  sondern die Ausleihe (4.9).
+- **„ohne Anmeldung“ ist keine Rolle**, sondern ein Besucher ohne Zeile in `benutzer`. Was
+  er darf (nur suchen, F5), regeln #8 und die Datenbank-Rechte (F15).
+- **Eine Rolle je Person (F7):** `benutzer.rolle` ist ein Fremdschlüssel. Eine Relation
+  `benutzer_rolle` braucht es erst, wenn eine Person mehrere Rollen haben soll.
+- **Benutzer und Kunde (F14):** `benutzer.kundennummer` ist eindeutig und darf leer sein.
+  Ein Kunde kann sein Konto anlegen, bevor es seinen Kundendatensatz gibt, und ein Kunde
+  ohne Konto bleibt möglich, solange ohne Anmeldung reserviert wird (#1, bis #43).
+- **E-Mail eindeutig ohne Groß- und Kleinschreibung:** ein eindeutiger Index auf
+  `lower(email)`. `Info@…` und `info@…` sind dasselbe Postfach.
+- **Benutzer werden nicht gelöscht,** sondern auf `aktiv = false` gesetzt. Das Protokoll
+  zeigt auf sie, der Fremdschlüssel verhindert das Löschen.
+
+So fragt #8 ein Recht ab:
+
+```sql
+SELECT rr.umfang
+  FROM benutzer b JOIN rolle_recht rr ON rr.rolle = b.rolle
+ WHERE b.benutzer_id = $1 AND b.aktiv AND rr.recht = 'ausleihe.sehen';
+-- keine Zeile: darf nicht · 'alle' · 'eigene'
+```
+
+**Supabase Auth (F13, #43):** `benutzer_id` ist eine UUID wie `auth.users.id`. Fällt #43
+auf Supabase Auth, bekommt `benutzer_id` einen Fremdschlüssel auf `auth.users`, sonst
+ändert sich an diesen Relationen nichts.
+
+### 4.8 Wer ändert: der angemeldete Benutzer
+
+Storno, Einstellung und Protokoll brauchen den Benutzer, der gerade ändert. Die Datenbank
+liest ihn an einer Stelle, der Funktion `aktueller_benutzer()`:
+
+- **Bis #43:** Die Anwendung setzt ihn je Anfrage in ihrer Transaktion,
+  `SET LOCAL app.benutzer_id = '<uuid>'`. Nicht gesetzt heißt nicht angemeldet, das Ergebnis
+  ist leer.
+- **Mit Supabase Auth:** Die Funktion liefert `auth.uid()`. Sonst ändert sich nichts.
+- Ein gesetzter Benutzer, den es nicht gibt, lässt jede protokollierte Änderung am
+  Fremdschlüssel von `protokoll.benutzer_id` scheitern (Fehlercode `23503`).
+
+Die Spalten, die den Benutzer und den Zeitpunkt halten (`ausleihe.storniert_von`,
+`storniert_am`, `einstellung.geaendert_von`, `geaendert_am`, alles im Protokoll), setzen
+Trigger. Mitgeschickte Werte werden überschrieben, wie die Rechnungsnummer in 4.2.
+
+### 4.9 Stornofrist und Stornogrund (Entscheidung 3, F8)
+
+**Die Frist ist ein Wert in der Datenbank:** `einstellung` mit der Zeile
+`stornofrist_tage = 3`. Ändern ist ein `UPDATE`, ein Trigger vermerkt Zeitpunkt und
+Benutzer. Ein `CHECK` lässt nur ganze Tage von 0 bis 999 zu.
+
+**Ohne Grund nur in der Frist.** Ein Trigger vor jedem Wechsel nach `storniert`:
+
+1. setzt `storniert_am` auf jetzt und `storniert_von` auf den Benutzer (4.8),
+2. rechnet den Storno-Tag in deutscher Zeit und vergleicht ihn mit `von − stornofrist_tage`,
+3. lehnt den Storno ab, wenn der Tag danach liegt und kein Grund angegeben ist (Fehlercode
+   `23514`, mit Klartext).
+
+Beispiel mit 3 Tagen und Mietbeginn am 20.11.: bis einschließlich 17.11. ohne Grund, ab
+18.11. nur mit Grund. Ein Grund aus Leerzeichen zählt nicht.
+
+**Vollständig storniert:** `CHECK`-Bedingungen an `ausleihe`:
+
+| Bedingung | Bedeutung |
+| --- | --- |
+| `ausleihe_storniert_genau_mit_zeitpunkt` | Status `storniert` genau dann, wenn `storniert_am` gesetzt ist |
+| `ausleihe_storno_angaben_nur_bei_storno` | `storniert_von` und `stornogrund` nur bei einer stornierten Ausleihe |
+| `ausleihe_stornogrund_nicht_leer` | ein Grund ist nie leer oder nur Leerzeichen |
+
+**Nicht hier geprüft:** wer stornieren darf. Der Kunde storniert nur eigene und nur in der
+Frist, Personal auch danach (Matrix). Das prüft die Anwendung gegen `rolle_recht` (#8). Die
+Datenbank sorgt dafür, dass ein Storno nach der Frist **immer** einen Grund hat, egal wer
+storniert.
+
+### 4.10 Protokoll (Entscheidung 4, F12)
+
+Jede Änderung an `maschine`, `ausleihe`, `kunde`, `rechnung` und `bestellung` schreibt ein
+Trigger in `protokoll`, in derselben Transaktion. Bricht die Änderung ab, gibt es auch
+keinen Eintrag.
+
+| Änderung | Einträge |
+| --- | --- |
+| Anlegen | eine Zeile, `feld = 'Datensatz angelegt'` (wie `DATENSATZ_ANGELEGT` in `lib/protokoll.ts`) |
+| Ändern | eine Zeile je geändertem Feld, `feld` ist der Spaltenname, mit `alt` und `neu` |
+| Löschen | eine Zeile, `feld = 'Datensatz gelöscht'`, der ganze alte Datensatz als JSON in `alt` |
+
+- **Unveränderbar:** Ein Trigger lehnt `UPDATE` und `DELETE` auf `protokoll` ab, wie bei
+  den Belegen (4.3).
+- **Je Objekt und je Benutzer abfragbar:** die Indizes `protokoll_je_objekt`
+  (`objekt, objekt_id, zeitpunkt`) für den Verlauf eines Datensatzes (Mockup 09) und
+  `protokoll_je_benutzer` (`benutzer_id, zeitpunkt`) für die Auswertung über Personen.
+- **`objekt_id` ist kein Fremdschlüssel.** Das Protokoll muss sein Objekt überleben: Ein
+  Fremdschlüssel verhinderte das Löschen einer Maschine mit Verlauf oder müsste den Bezug
+  beim Löschen leeren. Fünf Fremdschlüssel nebeneinander wie bei der Rechnungsposition
+  (4.4) hätten dasselbe Problem. Deshalb Objekt und Schlüssel als Text, `M-1001` wie `42`.
+- **Rechnung:** Sie wird nie geändert (4.3). Im Protokoll steht deshalb nur, wann und von wem
+  sie angelegt wurde, auch bei einer Storno-Rechnung.
+- **`alt` und `neu` sind Text**, so wie in `lib/protokoll.ts`. Leer (`NULL`) heißt kein Wert,
+  im Code ist das der leere Text. `feld` ist der Spaltenname, die Oberfläche übersetzt ihn
+  in den Feldnamen aus dem Formular.
+
+Rechtlicher Rahmen (Mitbestimmung, Zweckbindung) und wer die Auswertung über Personen sehen
+darf: [`rollen-und-rechte.md`](../rollen-und-rechte.md), „Rechtlicher Hinweis zum
+Protokoll“.
+
+### 4.11 Was die Datenbank nicht prüft
 
 Diese Regeln gelten, die Anwendung muss sie aber selbst durchsetzen. Die Datenbank kann sie
 nicht ohne Kopien prüfen, die die Normalform verletzen (siehe 3.2):
@@ -358,6 +510,9 @@ nicht ohne Kopien prüfen, die die Normalform verletzen (siehe 3.2):
 | Ein Bauteil in einer Wartungsmaßnahme gehört zur Maschine der Wartung | bräuchte die Inventarnummer in `wartungsmassnahme`, verletzt die 2. NF |
 | Eine Storno-Rechnung wird nicht selbst storniert | Ein `CHECK` sieht nur die eigene Zeile |
 | Eine Rechnung hat mindestens eine Position | bräuchte einen Trigger am Ende der Transaktion; der Aufwand lohnt sich erst mit der Abrechnung |
+| Wer was darf (Rolle, Recht, Umfang) | die Matrix steht in der Datenbank (4.7), geprüft wird sie in der Anwendung (#8). In der Datenbank selbst ginge das erst mit den Datenbank-Rechten (F15) |
+| Nur Trigger schreiben ins Protokoll | Wer `INSERT` auf `protokoll` darf, regeln die Datenbank-Rechte (F15, #8) |
+| Eine stornierte Ausleihe bleibt storniert | Zurücknehmen geht, wenn die Anwendung `storniert_am` und `stornogrund` mit leert; das Protokoll hält den Storno fest. Ob das erlaubt sein soll, steht in keiner Entscheidung |
 
 ---
 
@@ -373,21 +528,37 @@ nicht ohne Kopien prüfen, die die Normalform verletzen (siehe 3.2):
 | `Maschine.standort` | `maschine.standort` |
 | `Maschine.baujahr` (#2) | `maschine.baujahr` |
 | `Maschine.wartungsintervall` in Betriebsstunden, `null` = keins (#2) | `maschine.wartungsintervall`, `NULL` = keins |
+| `Protokolleintrag(inventarnummer, zeitpunkt, benutzer, feld, alt, neu)` (#2) | `protokoll` mit `objekt = 'maschine'`, `objekt_id` = Inventarnummer, `benutzer_id`, `feld`, `alt`, `neu` |
+| `DATENSATZ_ANGELEGT` = „Datensatz angelegt“ | `protokoll.feld = 'Datensatz angelegt'` |
+| leerer Text in `alt` oder `neu` = kein Wert | `NULL` |
+| Feldname wie im Formular, z. B. „Betriebsstunden“ | Spaltenname, z. B. `betriebsstunden` |
 
 Die Speicher-Umsetzung für PostgreSQL (ADR 0011, `lib/speicher/postgres.ts`) liest
-Bezeichnung und Kategorie deshalb über `maschine.typnummer` aus `maschinentyp`.
+Bezeichnung und Kategorie deshalb über `maschine.typnummer` aus `maschinentyp`. Das
+Protokoll liegt im Code bis heute im Arbeitsspeicher; auf die Tabelle umstellen gehört zur
+Rechteprüfung (#8).
 
 ---
 
-## 6 Nicht Teil dieses Stands
+## 6 Rollen, Rechte, Stornofrist und Protokoll
 
-[`rollen-und-rechte.md`](../rollen-und-rechte.md) nennt unter „Für #45 Datenmodell“ vier
-weitere Punkte. Seit dem 10.11. kommen sie in ein **eigenes Item** zusammen mit #8, nicht in
-#45 (Entscheidung Finn):
+Bis zum 16.11. standen hier die vier Punkte, die
+[`rollen-und-rechte.md`](../rollen-und-rechte.md) unter „Für #45 Datenmodell“ nennt. Seit
+dem 10.11. gehören sie nicht mehr zu #45, sondern zu
+[#99](https://github.com/Finn2103/maschinen-verwaltung/issues/99), und sind dort umgesetzt:
 
-- Relationen für Rolle, Recht und Zuordnung (#8)
-- ein Ort für die einstellbare Stornofrist `X`
-- ein Pflichtfeld für den Grund, wenn nach Ablauf der Frist storniert wird
-- ein Protokoll (Audit-Log), abfragbar je Objekt und je Person
+| Punkt | Wo |
+| --- | --- |
+| Relationen für Rolle, Recht und Zuordnung | 4.7 |
+| ein Ort für die einstellbare Stornofrist | 4.9, `einstellung.stornofrist_tage` |
+| ein Pflichtfeld für den Grund nach Ablauf der Frist | 4.9, `ausleihe.stornogrund` |
+| ein Protokoll, abfragbar je Objekt und je Person | 4.10 |
 
-Ebenso offen: die Rechte der Datenbank-Rollen (`GRANT` für PostgREST), mit #8 zu klären.
+Weiter offen, alle mit #43 oder #8:
+
+- **Benutzer in Supabase Auth** oder in der eigenen Relation (F13, #43). Die Relation ist so
+  gebaut, dass beides geht (4.7).
+- **Datenbank-Rechte** für PostgREST (`GRANT`, Row Level Security), F15. Dazu gehört, dass
+  nur die Trigger ins Protokoll schreiben.
+- **Abgelehnte Zugriffe speichern** (`zugriff_abgelehnt`, #8 Kriterium 5), F16.
+- **Werkstattplaner** als eigene Rolle (F17): wäre ein `INSERT` in `rolle`.

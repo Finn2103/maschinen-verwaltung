@@ -1,4 +1,4 @@
--- Prüft die Zusicherungen aus schema.sql (#45).
+-- Prüft die Zusicherungen aus schema.sql (#45, #99).
 --
 -- Läuft NACH schema.sql auf derselben, sonst leeren Datenbank. Jeder Fall
 -- meldet „ok: …“. Wird eine Zusicherung nicht eingehalten, bricht das
@@ -52,8 +52,82 @@ BEGIN
 END;
 $$;
 
+-- Der Ausführungsplan einer Abfrage als Text, um zu zeigen, welchen Index
+-- sie benutzt.
+CREATE FUNCTION pg_temp.plan(abfrage text)
+RETURNS text LANGUAGE plpgsql AS $$
+DECLARE
+    zeile text;
+    plan  text := '';
+BEGIN
+    FOR zeile IN EXECUTE 'EXPLAIN ' || abfrage LOOP
+        plan := plan || zeile || E'\n';
+    END LOOP;
+    RETURN plan;
+END;
+$$;
+
 -- Ab hier gehen Abfrageergebnisse ins Leere, sichtbar sind nur die Meldungen.
 \o /dev/null
+
+SELECT pg_temp.abschnitt('Rollen und Rechte (#99, Matrix vom 16.11.)');
+SELECT pg_temp.pruefe((SELECT count(*) FROM rolle) = 5, 'fünf Rollen als Zeilen, nicht als Namen im Code (F1, F2)');
+SELECT pg_temp.pruefe((SELECT count(*) FROM recht) = 26, '26 Rechte, eins je Aktion der Matrix');
+SELECT pg_temp.pruefe(
+    (SELECT count(*) FROM rolle_recht) = 105
+    AND (SELECT count(*) FROM rolle_recht WHERE umfang = 'eigene') = 8,
+    'Matrix: 105 vergebene Rechte, davon 8 mit Umfang „eigene“');
+SELECT pg_temp.pruefe(
+    (SELECT array_agg(recht ORDER BY recht) FROM rolle_recht WHERE rolle = 'kunde' AND umfang = 'eigene')
+    = '{ausleihe.sehen,ausleihe.status_sehen,ausleihe.stornieren,bestellung.bestellen,kunde.anlegen,kunde.bearbeiten,kunde.sehen,rechnung.sehen}',
+    'Kunde: nur eigene Ausleihen, Rechnungen, Bestellungen und Kundendaten (F10, F14)');
+SELECT pg_temp.pruefe(
+    (SELECT array_agg(recht ORDER BY recht) FROM (
+        SELECT recht FROM rolle_recht WHERE rolle = 'owner'
+        EXCEPT SELECT recht FROM rolle_recht WHERE rolle = 'manager') AS nur_owner)
+    = '{benutzer.rolle_zuweisen,protokoll.abgelehnte_zugriffe}'
+    AND NOT EXISTS (SELECT recht FROM rolle_recht WHERE rolle = 'manager'
+                    EXCEPT SELECT recht FROM rolle_recht WHERE rolle = 'owner'),
+    'Owner ist eine eigene Rolle: zwei Rechte mehr als der Manager (F2)');
+SELECT pg_temp.pruefe((SELECT count(*) FROM rolle_recht WHERE rolle = 'admin') = 26, 'Admin hat jedes Recht (F3)');
+SELECT pg_temp.pruefe(
+    (SELECT array_agg(rolle ORDER BY rolle) FROM rolle_recht WHERE recht = 'protokoll.personen') = '{admin,manager,owner}',
+    'Auswertung über Personen: Manager, Owner und Admin, nicht der Mitarbeiter (Entscheidung 4, F4)');
+SELECT pg_temp.pruefe(
+    EXISTS (SELECT 1 FROM rolle_recht WHERE rolle = 'mitarbeiter' AND recht = 'rechnung.stornieren'),
+    'Mitarbeiter storniert Rechnungen (F11)');
+SELECT pg_temp.pruefe(
+    (SELECT array_agg(rolle) FROM rolle_recht WHERE recht = 'rolle.rechte_aendern') = '{admin}',
+    'Rechte einer Rolle ändert nur der Admin');
+INSERT INTO rolle_recht (rolle, recht) VALUES ('mitarbeiter', 'protokoll.personen');
+SELECT pg_temp.pruefe(
+    (SELECT umfang FROM rolle_recht WHERE rolle = 'mitarbeiter' AND recht = 'protokoll.personen') = 'alle',
+    'Recht vergeben ist ein INSERT einer Zeile, ohne Angabe gilt der Umfang „alle“');
+DELETE FROM rolle_recht WHERE rolle = 'mitarbeiter' AND recht = 'protokoll.personen';
+SELECT pg_temp.pruefe((SELECT count(*) FROM rolle_recht) = 105, 'Recht entziehen ist ein DELETE, die Matrix ist wieder wie vorher');
+INSERT INTO rolle (rolle, bezeichnung) VALUES ('werkstattplaner', 'Werkstattplaner');
+INSERT INTO rolle_recht (rolle, recht) VALUES ('werkstattplaner', 'wartung.sehen');
+SELECT pg_temp.pruefe(true, 'neue Rolle mit einem Recht, ohne Schemaänderung (so ginge F17)');
+DELETE FROM rolle_recht WHERE rolle = 'werkstattplaner';
+DELETE FROM rolle WHERE rolle = 'werkstattplaner';
+SELECT pg_temp.erwarte_fehler(
+    $$INSERT INTO rolle_recht (rolle, recht) VALUES ('kunde', 'maschine.suchen')$$,
+    '23505', 'dasselbe Recht zweimal für eine Rolle');
+SELECT pg_temp.erwarte_fehler(
+    $$INSERT INTO rolle_recht (rolle, recht, umfang) VALUES ('kunde', 'maschine.anlegen', 'teilweise')$$,
+    '23514', 'unbekannter Umfang');
+SELECT pg_temp.erwarte_fehler(
+    $$INSERT INTO rolle_recht (rolle, recht) VALUES ('gast', 'maschine.suchen')$$,
+    '23503', 'Recht für eine Rolle, die es nicht gibt (ohne Anmeldung ist keine Rolle)');
+SELECT pg_temp.erwarte_fehler(
+    $$INSERT INTO rolle_recht (rolle, recht) VALUES ('kunde', 'maschine.loeschen')$$,
+    '23503', 'Rolle bekommt ein Recht, das es nicht gibt');
+SELECT pg_temp.erwarte_fehler(
+    $$INSERT INTO recht (recht, bezeichnung) VALUES ('anlegen', 'ohne Objekt')$$,
+    '23514', 'Rechte heißen objekt.aktion');
+SELECT pg_temp.erwarte_fehler(
+    $$INSERT INTO rolle (rolle, bezeichnung) VALUES ('Werkstatt Planer', 'Werkstattplaner')$$,
+    '23514', 'Rollenschlüssel nur kleingeschrieben, ohne Leerzeichen');
 
 SELECT pg_temp.abschnitt('Stammdaten');
 INSERT INTO maschinentyp (bezeichnung, kategorie, tagessatz)
@@ -93,6 +167,53 @@ SELECT pg_temp.erwarte_fehler(
     $$INSERT INTO kunde (name, email) VALUES ('Ohne Telefon', 'x@example.org')$$,
     '23502', 'Kunde ohne Telefonnummer');
 
+SELECT pg_temp.abschnitt('Benutzer (#99, F7, F13, F14)');
+INSERT INTO benutzer (email, name, rolle)
+VALUES ('mia@verleih.example', 'Mia Mitarbeiterin', 'mitarbeiter')
+RETURNING benutzer_id AS mitarbeiterin \gset
+INSERT INTO benutzer (email, name, rolle)
+VALUES ('otto@verleih.example', 'Otto Owner', 'owner')
+RETURNING benutzer_id AS owner \gset
+INSERT INTO benutzer (email, name, kundennummer, rolle)
+VALUES ('einkauf@muster-bau.example', 'Muster Bau, Einkauf', 1, 'kunde')
+RETURNING benutzer_id AS kunde_muster \gset
+SELECT pg_temp.pruefe(true, 'Benutzer mit genau einer Rolle, Kunde mit Verweis auf seinen Kundendatensatz');
+INSERT INTO benutzer (email, name, rolle) VALUES ('neu@kunde.example', 'Neue Kundin', 'kunde');
+SELECT pg_temp.pruefe(true, 'Kunde mit Konto, aber noch ohne Kundendatensatz: den legt er danach selbst an (F14)');
+SELECT pg_temp.pruefe(
+    (SELECT rr.umfang
+       FROM benutzer b JOIN rolle_recht rr ON rr.rolle = b.rolle
+      WHERE b.benutzer_id = :'kunde_muster' AND b.aktiv AND rr.recht = 'ausleihe.sehen') = 'eigene',
+    'Abfrage für #8: der Kunde darf Reservierungen sehen, Umfang „eigene“');
+SELECT pg_temp.pruefe(
+    NOT EXISTS (SELECT 1
+                  FROM benutzer b JOIN rolle_recht rr ON rr.rolle = b.rolle
+                 WHERE b.benutzer_id = :'kunde_muster' AND b.aktiv AND rr.recht = 'kunde.suchen'),
+    'Abfrage für #8: der Kunde darf keine anderen Kunden suchen');
+SELECT pg_temp.erwarte_fehler(
+    $$INSERT INTO benutzer (email, name, rolle) VALUES ('Mia@Verleih.example', 'Mia doppelt', 'mitarbeiter')$$,
+    '23505', 'dieselbe E-Mail-Adresse in anderer Schreibweise');
+SELECT pg_temp.erwarte_fehler(
+    $$INSERT INTO benutzer (email, name, kundennummer, rolle) VALUES ('zweiter@muster-bau.example', 'Zweites Konto', 1, 'kunde')$$,
+    '23505', 'zweites Konto für denselben Kundendatensatz');
+SELECT pg_temp.erwarte_fehler(
+    $$INSERT INTO benutzer (email, name) VALUES ('ohne@rolle.example', 'Ohne Rolle')$$,
+    '23502', 'Benutzer ohne Rolle');
+SELECT pg_temp.erwarte_fehler(
+    $$INSERT INTO benutzer (email, name, rolle) VALUES ('gast@verleih.example', 'Gast', 'gast')$$,
+    '23503', 'Benutzer mit einer Rolle, die es nicht gibt');
+
+SELECT pg_temp.abschnitt('Stornofrist als Einstellung (#99, F8)');
+SELECT pg_temp.pruefe(
+    (SELECT wert FROM einstellung WHERE schluessel = 'stornofrist_tage') = '3',
+    'Stornofrist steht als Wert in der Datenbank, Startwert 3 Tage');
+SELECT pg_temp.erwarte_fehler(
+    $$UPDATE einstellung SET wert = 'drei' WHERE schluessel = 'stornofrist_tage'$$,
+    '23514', 'Stornofrist als Wort statt als Zahl');
+SELECT pg_temp.erwarte_fehler(
+    $$UPDATE einstellung SET wert = '-1' WHERE schluessel = 'stornofrist_tage'$$,
+    '23514', 'negative Stornofrist');
+
 SELECT pg_temp.abschnitt('Ausleihe: keine Doppelbuchung (ERD-Entscheidungen 2 und 3)');
 -- Wie M-1001 in lib/maschinen.ts: belegt vom 24. bis 28.09.
 INSERT INTO ausleihe (kundennummer, inventarnummer, von, bis)
@@ -114,12 +235,16 @@ INSERT INTO ausleihe (kundennummer, inventarnummer, von, bis, status)
 VALUES (1, 'M-1002', '2026-09-24', '2026-09-28', 'ausgeliehen')
 RETURNING ausleihnummer AS ausleihe_m1002 \gset
 SELECT pg_temp.pruefe(true, 'andere Maschine im selben Zeitraum ist frei');
-UPDATE ausleihe SET status = 'storniert' WHERE ausleihnummer = :erste_ausleihe;
+-- Der Mietbeginn liegt in der Vergangenheit, die Frist ist also abgelaufen:
+-- Storno nur mit Grund (#99).
+UPDATE ausleihe SET status = 'storniert', stornogrund = 'Baustelle verschoben'
+ WHERE ausleihnummer = :erste_ausleihe;
 INSERT INTO ausleihe (kundennummer, inventarnummer, von, bis)
 VALUES (1, 'M-1001', '2026-09-24', '2026-09-28');
 SELECT pg_temp.pruefe(true, 'stornierte Ausleihe gibt den Zeitraum frei');
 SELECT pg_temp.erwarte_fehler(
-    format($$UPDATE ausleihe SET status = 'reserviert' WHERE ausleihnummer = %s$$, :erste_ausleihe),
+    format($$UPDATE ausleihe SET status = 'reserviert', storniert_am = NULL, stornogrund = NULL
+              WHERE ausleihnummer = %s$$, :erste_ausleihe),
     '23P01', 'Storno zurücknehmen, wenn der Zeitraum inzwischen vergeben ist');
 SELECT pg_temp.erwarte_fehler(
     $$INSERT INTO ausleihe (kundennummer, inventarnummer, von, bis) VALUES (1, 'M-1002', '2026-11-10', '2026-11-01')$$,
@@ -127,6 +252,63 @@ SELECT pg_temp.erwarte_fehler(
 SELECT pg_temp.erwarte_fehler(
     $$INSERT INTO ausleihe (kundennummer, inventarnummer, von, bis, status) VALUES (1, 'M-1002', '2026-12-01', '2026-12-02', 'verloren')$$,
     '23514', 'unbekannter Status');
+
+SELECT pg_temp.abschnitt('Stornofrist und Stornogrund (#99, Entscheidung 3, F8)');
+-- Termine relativ zu heute (deutsche Zeit), damit die Fälle an jedem Tag
+-- gleich ausgehen. Eigene Maschine, damit nichts mit den Fällen oben kollidiert.
+INSERT INTO maschine (inventarnummer, typnummer, seriennummer, baujahr, standort)
+VALUES ('M-1003', 1, 'SN-4713', 2022, 'Köln');
+SELECT (now() AT TIME ZONE 'Europe/Berlin')::date AS heute \gset
+SET app.benutzer_id = :'mitarbeiterin';
+INSERT INTO ausleihe (kundennummer, inventarnummer, von, bis)
+VALUES (1, 'M-1003', :'heute'::date + 10, :'heute'::date + 11)
+RETURNING ausleihnummer AS in_zehn_tagen \gset
+INSERT INTO ausleihe (kundennummer, inventarnummer, von, bis)
+VALUES (1, 'M-1003', :'heute'::date + 3, :'heute'::date + 3)
+RETURNING ausleihnummer AS in_drei_tagen \gset
+INSERT INTO ausleihe (kundennummer, inventarnummer, von, bis)
+VALUES (1, 'M-1003', :'heute'::date + 2, :'heute'::date + 2)
+RETURNING ausleihnummer AS in_zwei_tagen \gset
+INSERT INTO ausleihe (kundennummer, inventarnummer, von, bis)
+VALUES (1, 'M-1003', :'heute'::date + 1, :'heute'::date + 1)
+RETURNING ausleihnummer AS morgen \gset
+UPDATE ausleihe SET status = 'storniert' WHERE ausleihnummer = :in_zehn_tagen;
+SELECT pg_temp.pruefe(
+    (SELECT storniert_am IS NOT NULL AND storniert_von = :'mitarbeiterin' AND stornogrund IS NULL
+       FROM ausleihe WHERE ausleihnummer = :in_zehn_tagen),
+    'Storno 10 Tage vor Mietbeginn ohne Grund; Zeitpunkt und Benutzer setzt die Datenbank');
+UPDATE ausleihe SET status = 'storniert' WHERE ausleihnummer = :in_drei_tagen;
+SELECT pg_temp.pruefe(true, 'Storno genau 3 Tage vor Mietbeginn ist noch in der Frist, ohne Grund');
+SELECT pg_temp.erwarte_fehler(
+    format($$UPDATE ausleihe SET status = 'storniert' WHERE ausleihnummer = %s$$, :in_zwei_tagen),
+    '23514', 'Storno 2 Tage vor Mietbeginn ohne Grund');
+SELECT pg_temp.erwarte_fehler(
+    format($$UPDATE ausleihe SET status = 'storniert', stornogrund = '   ' WHERE ausleihnummer = %s$$, :in_zwei_tagen),
+    '23514', 'Storno nach Fristablauf mit einem Grund aus Leerzeichen');
+UPDATE ausleihe
+   SET status = 'storniert', stornogrund = 'Maschine defekt, Ersatz angeboten',
+       storniert_am = '2000-01-01', storniert_von = :'owner'
+ WHERE ausleihnummer = :in_zwei_tagen;
+SELECT pg_temp.pruefe(
+    (SELECT storniert_am > '2000-01-01' AND storniert_von = :'mitarbeiterin'
+       FROM ausleihe WHERE ausleihnummer = :in_zwei_tagen),
+    'Storno 2 Tage vor Mietbeginn mit Grund; mitgeschickter Zeitpunkt und Benutzer zählen nicht');
+SELECT pg_temp.erwarte_fehler(
+    $$INSERT INTO ausleihe (kundennummer, inventarnummer, von, bis, storniert_am) VALUES (1, 'M-1003', '2027-01-04', '2027-01-05', now())$$,
+    '23514', 'Storno-Zeitpunkt an einer Ausleihe, die nicht storniert ist');
+SELECT pg_temp.erwarte_fehler(
+    $$INSERT INTO ausleihe (kundennummer, inventarnummer, von, bis, stornogrund) VALUES (1, 'M-1003', '2027-01-04', '2027-01-05', 'vorsorglich')$$,
+    '23514', 'Stornogrund an einer Ausleihe, die nicht storniert ist');
+SET app.benutzer_id = :'owner';
+UPDATE einstellung SET wert = '1' WHERE schluessel = 'stornofrist_tage';
+SELECT pg_temp.pruefe(
+    (SELECT geaendert_von = :'owner' AND geaendert_am IS NOT NULL
+       FROM einstellung WHERE schluessel = 'stornofrist_tage'),
+    'Stornofrist per UPDATE auf 1 Tag geändert, mit Zeitpunkt und Benutzer');
+UPDATE ausleihe SET status = 'storniert' WHERE ausleihnummer = :morgen;
+SELECT pg_temp.pruefe(true, 'mit 1 Tag Frist: Storno 1 Tag vor Mietbeginn wieder ohne Grund');
+UPDATE einstellung SET wert = '3' WHERE schluessel = 'stornofrist_tage';
+RESET app.benutzer_id;
 
 SELECT pg_temp.abschnitt('Bestellung und Verbrauchsmaterial');
 INSERT INTO verbrauchsmaterial (bezeichnung, einheit, preis)
@@ -278,6 +460,78 @@ SELECT pg_temp.erwarte_fehler(
     $$DELETE FROM maschine WHERE inventarnummer = 'M-1001'$$,
     '23503', 'Maschine mit Ausleihen, Bauteilen und Messwerten löschen');
 
+SELECT pg_temp.abschnitt('Protokoll (#99, F12)');
+SELECT pg_temp.pruefe(
+    (SELECT benutzer_id IS NULL AND alt IS NULL AND neu IS NULL
+       FROM protokoll WHERE objekt = 'maschine' AND objekt_id = 'M-1001' AND feld = 'Datensatz angelegt'),
+    'Maschine anlegen: Eintrag „Datensatz angelegt“, Benutzer leer, weil niemand angemeldet war');
+SELECT max(protokoll_id) AS stand FROM protokoll \gset
+SET app.benutzer_id = :'mitarbeiterin';
+UPDATE maschine SET standort = 'Bonn', betriebsstunden = 120.5 WHERE inventarnummer = 'M-1001';
+SELECT pg_temp.pruefe(
+    (SELECT array_agg(feld || ': ' || alt || ' → ' || neu ORDER BY feld)
+       FROM protokoll WHERE protokoll_id > :stand AND objekt = 'maschine' AND objekt_id = 'M-1001'
+                        AND benutzer_id = :'mitarbeiterin')
+    = '{"betriebsstunden: 0.0 → 120.5","standort: Köln → Bonn"}',
+    'Maschine ändern: je geändertem Feld ein Eintrag mit altem und neuem Wert und Benutzer');
+SELECT max(protokoll_id) AS stand FROM protokoll \gset
+UPDATE maschine SET standort = standort WHERE inventarnummer = 'M-1001';
+SELECT pg_temp.pruefe(
+    NOT EXISTS (SELECT 1 FROM protokoll WHERE protokoll_id > :stand),
+    'UPDATE ohne geänderten Wert: kein Eintrag');
+UPDATE maschine SET wartungsintervall = NULL WHERE inventarnummer = 'M-1001';
+SELECT pg_temp.pruefe(
+    (SELECT alt = '500' AND neu IS NULL FROM protokoll
+      WHERE protokoll_id > :stand AND feld = 'wartungsintervall'),
+    'Wert gelöscht: neu ist leer');
+UPDATE kunde SET telefon = '0221 111111' WHERE kundennummer = 1;
+SELECT pg_temp.pruefe(
+    EXISTS (SELECT 1 FROM protokoll WHERE objekt = 'kunde' AND objekt_id = '1' AND feld = 'telefon'
+                                      AND alt = '0221 000000' AND neu = '0221 111111'),
+    'Kunde ändern erzeugt einen Eintrag');
+SELECT pg_temp.pruefe(
+    (SELECT array_agg(feld ORDER BY feld) FROM protokoll
+      WHERE objekt = 'ausleihe' AND objekt_id = :'in_zwei_tagen' AND feld <> 'Datensatz angelegt')
+    = '{status,storniert_am,storniert_von,stornogrund}'
+    AND EXISTS (SELECT 1 FROM protokoll WHERE objekt = 'ausleihe' AND objekt_id = :'in_zwei_tagen'
+                                          AND feld = 'stornogrund' AND neu = 'Maschine defekt, Ersatz angeboten'),
+    'Ausleihe stornieren erzeugt Einträge für Status, Zeitpunkt, Benutzer und Grund');
+UPDATE bestellung SET lieferstatus = 'versandt' WHERE bestell_id = :bestellung;
+SELECT pg_temp.pruefe(
+    EXISTS (SELECT 1 FROM protokoll WHERE objekt = 'bestellung' AND objekt_id = :'bestellung'
+                                      AND feld = 'lieferstatus' AND alt = 'offen' AND neu = 'versandt'),
+    'Bestellung ändern erzeugt einen Eintrag (F12)');
+SELECT pg_temp.pruefe(
+    (SELECT count(*) FROM protokoll WHERE objekt = 'rechnung' AND feld = 'Datensatz angelegt')
+    = (SELECT count(*) FROM rechnung)
+    AND EXISTS (SELECT 1 FROM protokoll WHERE objekt = 'rechnung' AND objekt_id = :'storno'),
+    'jede Rechnung, auch die Storno-Rechnung, steht mit ihrer Nummer im Protokoll (F12)');
+SELECT pg_temp.pruefe(
+    (SELECT alt::jsonb ->> 'seriennummer' FROM protokoll
+      WHERE objekt = 'maschine' AND objekt_id = 'M-1091' AND feld = 'Datensatz gelöscht') = 'SN-1',
+    'gelöschte Maschine: Eintrag „Datensatz gelöscht“ mit dem alten Datensatz');
+SET app.benutzer_id = '00000000-0000-0000-0000-000000000000';
+SELECT pg_temp.erwarte_fehler(
+    $$UPDATE kunde SET telefon = '0221 222222' WHERE kundennummer = 1$$,
+    '23503', 'Änderung unter einem Benutzer, den es nicht gibt');
+RESET app.benutzer_id;
+SELECT pg_temp.erwarte_fehler(
+    $$UPDATE protokoll SET neu = 'geschönt' WHERE objekt = 'kunde'$$,
+    'P0001', 'Protokolleintrag ändern');
+SELECT pg_temp.erwarte_fehler(
+    $$DELETE FROM protokoll WHERE benutzer_id IS NULL$$,
+    'P0001', 'Protokolleintrag löschen');
+SET enable_seqscan = off;
+SELECT pg_temp.pruefe(
+    pg_temp.plan($$SELECT * FROM protokoll WHERE objekt = 'maschine' AND objekt_id = 'M-1001' ORDER BY zeitpunkt$$)
+        LIKE '%protokoll_je_objekt%',
+    'Verlauf eines Datensatzes liest über den Index protokoll_je_objekt');
+SELECT pg_temp.pruefe(
+    pg_temp.plan(format($$SELECT * FROM protokoll WHERE benutzer_id = %L ORDER BY zeitpunkt$$, :'mitarbeiterin'))
+        LIKE '%protokoll_je_benutzer%',
+    'Auswertung je Benutzer liest über den Index protokoll_je_benutzer');
+RESET enable_seqscan;
+
 SELECT pg_temp.abschnitt('Überblick');
 \o
 \set QUIET off
@@ -288,3 +542,11 @@ SELECT conrelid::regclass AS tabelle, conname AS zusicherung
   FROM pg_constraint
  WHERE connamespace = 'public'::regnamespace AND contype IN ('c', 'x')
  ORDER BY 1, 2;
+SELECT tgrelid::regclass AS tabelle, tgname AS trigger
+  FROM pg_trigger
+ WHERE NOT tgisinternal AND tgrelid::regclass::text NOT LIKE 'pg_%'
+ ORDER BY 1, 2;
+SELECT objekt, count(*) AS eintraege
+  FROM protokoll
+ GROUP BY objekt
+ ORDER BY objekt;

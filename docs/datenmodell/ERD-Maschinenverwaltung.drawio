@@ -1,6 +1,6 @@
 <mxfile host="Electron">
   <diagram name="Seite-1" id="urK9CFS8pT_kvHvl9Enk">
-    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1900" pageHeight="1800" background="#ffffff" math="0" shadow="0">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1900" pageHeight="2600" background="#ffffff" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -716,6 +716,276 @@
           <mxGeometry x="375" y="1575" width="110" height="40" as="geometry" />
         </mxCell>
         <mxCell id="erd45-a-bearbeitet-49-l" edge="1" parent="1" source="erd45-a-bearbeitet-49" target="erd45-bearbeitet" style="endArrow=none;html=0;rounded=0;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-trenner" parent="1" style="line;strokeWidth=1;html=0;strokeColor=#999999;" value="" vertex="1">
+          <mxGeometry x="30" y="1700" width="1820" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-titel" parent="1" style="text;html=0;align=left;verticalAlign=top;fontSize=18;fontStyle=1;" value="Benutzer, Rollen und Rechte (#99, 16.11.2026)" vertex="1">
+          <mxGeometry x="30" y="1720" width="900" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-hinweis" parent="1" style="text;html=0;align=left;verticalAlign=top;fontSize=13;fontColor=#555555;" value="Kunde und Ausleihe gestrichelt: dieselben Entitäten wie oben, hier wiederholt, damit die neuen Beziehungen kurz bleiben." vertex="1">
+          <mxGeometry x="30" y="1750" width="1500" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-protokoll" parent="1" style="rounded=1;html=0;fontSize=13;" value="Protokolleintrag" vertex="1">
+          <mxGeometry x="660" y="1830" width="130" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-kunde" parent="1" style="rounded=1;html=0;fontSize=13;dashed=1;dashPattern=6 4;fontColor=#555555;strokeColor=#555555;" value="Kunde" vertex="1">
+          <mxGeometry x="200" y="2120" width="130" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-benutzer" parent="1" style="rounded=1;html=0;fontSize=13;" value="Benutzer" vertex="1">
+          <mxGeometry x="660" y="2120" width="130" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-ausleihe" parent="1" style="rounded=1;html=0;fontSize=13;dashed=1;dashPattern=6 4;fontColor=#555555;strokeColor=#555555;" value="Ausleihe" vertex="1">
+          <mxGeometry x="1140" y="2120" width="130" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-einstellung" parent="1" style="rounded=1;html=0;fontSize=13;" value="Einstellung" vertex="1">
+          <mxGeometry x="200" y="2260" width="130" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-rolle" parent="1" style="rounded=1;html=0;fontSize=13;" value="Rolle" vertex="1">
+          <mxGeometry x="660" y="2390" width="130" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-recht" parent="1" style="rounded=1;html=0;fontSize=13;" value="Recht" vertex="1">
+          <mxGeometry x="1140" y="2390" width="130" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-verursacht" parent="1" style="rhombus;html=0;rounded=1;fontStyle=2;" value="verursacht" vertex="1">
+          <mxGeometry x="670" y="1960" width="110" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-gehoert-zu" parent="1" style="rhombus;html=0;rounded=1;fontStyle=2;" value="gehört zu" vertex="1">
+          <mxGeometry x="430" y="2110" width="110" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-storniert" parent="1" style="rhombus;html=0;rounded=1;fontStyle=2;" value="storniert" vertex="1">
+          <mxGeometry x="910" y="2110" width="110" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-aendert" parent="1" style="rhombus;html=0;rounded=1;fontStyle=2;" value="ändert" vertex="1">
+          <mxGeometry x="430" y="2250" width="110" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-hat" parent="1" style="rhombus;html=0;rounded=1;fontStyle=2;" value="hat" vertex="1">
+          <mxGeometry x="670" y="2245" width="110" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-darf" parent="1" style="rhombus;html=0;rounded=1;fontStyle=2;" value="darf" vertex="1">
+          <mxGeometry x="910" y="2380" width="110" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-e1" edge="1" parent="1" source="erd99-benutzer" target="erd99-verursacht" style="edgeStyle=none;rounded=0;html=0;endArrow=none;endFill=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-e1-k" connectable="0" parent="erd99-e1" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
+          <mxGeometry relative="1" x="0.0" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="erd99-e2" edge="1" parent="1" source="erd99-protokoll" target="erd99-verursacht" style="edgeStyle=none;rounded=0;html=0;endArrow=none;endFill=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-e2-k" connectable="0" parent="erd99-e2" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
+          <mxGeometry relative="1" x="0.0" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="erd99-e3" edge="1" parent="1" source="erd99-kunde" target="erd99-gehoert-zu" style="edgeStyle=none;rounded=0;html=0;endArrow=none;endFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-e3-k" connectable="0" parent="erd99-e3" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
+          <mxGeometry relative="1" x="0.0" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="erd99-e4" edge="1" parent="1" source="erd99-benutzer" target="erd99-gehoert-zu" style="edgeStyle=none;rounded=0;html=0;endArrow=none;endFill=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-e4-k" connectable="0" parent="erd99-e4" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
+          <mxGeometry relative="1" x="0.0" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="erd99-e5" edge="1" parent="1" source="erd99-benutzer" target="erd99-storniert" style="edgeStyle=none;rounded=0;html=0;endArrow=none;endFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-e5-k" connectable="0" parent="erd99-e5" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
+          <mxGeometry relative="1" x="0.0" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="erd99-e6" edge="1" parent="1" source="erd99-ausleihe" target="erd99-storniert" style="edgeStyle=none;rounded=0;html=0;endArrow=none;endFill=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-e6-k" connectable="0" parent="erd99-e6" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
+          <mxGeometry relative="1" x="0.0" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="erd99-e7" edge="1" parent="1" source="erd99-benutzer" target="erd99-aendert" style="edgeStyle=none;rounded=0;html=0;endArrow=none;endFill=0;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-e7-k" connectable="0" parent="erd99-e7" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
+          <mxGeometry relative="1" x="0.0" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="erd99-e8" edge="1" parent="1" source="erd99-einstellung" target="erd99-aendert" style="edgeStyle=none;rounded=0;html=0;endArrow=none;endFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-e8-k" connectable="0" parent="erd99-e8" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
+          <mxGeometry relative="1" x="0.0" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="erd99-e9" edge="1" parent="1" source="erd99-benutzer" target="erd99-hat" style="edgeStyle=none;rounded=0;html=0;endArrow=none;endFill=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-e9-k" connectable="0" parent="erd99-e9" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
+          <mxGeometry relative="1" x="0.0" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="erd99-e10" edge="1" parent="1" source="erd99-rolle" target="erd99-hat" style="edgeStyle=none;rounded=0;html=0;endArrow=none;endFill=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-e10-k" connectable="0" parent="erd99-e10" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="1" vertex="1">
+          <mxGeometry relative="1" x="0.0" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="erd99-e11" edge="1" parent="1" source="erd99-rolle" target="erd99-darf" style="edgeStyle=none;rounded=0;html=0;endArrow=none;endFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-e11-k" connectable="0" parent="erd99-e11" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="M" vertex="1">
+          <mxGeometry relative="1" x="0.0" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="erd99-e12" edge="1" parent="1" source="erd99-recht" target="erd99-darf" style="edgeStyle=none;rounded=0;html=0;endArrow=none;endFill=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-e12-k" connectable="0" parent="erd99-e12" style="edgeLabel;html=0;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;labelBackgroundColor=default;" value="N" vertex="1">
+          <mxGeometry relative="1" x="0.0" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="erd99-a-p1" parent="1" style="ellipse;html=0;fontSize=11;fontStyle=4;" value="Protokoll_ID" vertex="1">
+          <mxGeometry x="480" y="1805" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-p1-l" edge="1" parent="1" source="erd99-a-p1" target="erd99-protokoll" style="endArrow=none;html=0;rounded=0;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-p2" parent="1" style="ellipse;html=0;fontSize=11;" value="Zeitpunkt" vertex="1">
+          <mxGeometry x="455" y="1860" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-p2-l" edge="1" parent="1" source="erd99-a-p2" target="erd99-protokoll" style="endArrow=none;html=0;rounded=0;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-p3" parent="1" style="ellipse;html=0;fontSize=11;" value="Objekt" vertex="1">
+          <mxGeometry x="480" y="1915" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-p3-l" edge="1" parent="1" source="erd99-a-p3" target="erd99-protokoll" style="endArrow=none;html=0;rounded=0;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-p4" parent="1" style="ellipse;html=0;fontSize=11;" value="Objekt_ID" vertex="1">
+          <mxGeometry x="850" y="1795" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-p4-l" edge="1" parent="1" source="erd99-a-p4" target="erd99-protokoll" style="endArrow=none;html=0;rounded=0;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-p5" parent="1" style="ellipse;html=0;fontSize=11;" value="Feld" vertex="1">
+          <mxGeometry x="880" y="1845" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-p5-l" edge="1" parent="1" source="erd99-a-p5" target="erd99-protokoll" style="endArrow=none;html=0;rounded=0;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-p6" parent="1" style="ellipse;html=0;fontSize=11;" value="alter Wert" vertex="1">
+          <mxGeometry x="880" y="1895" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-p6-l" edge="1" parent="1" source="erd99-a-p6" target="erd99-protokoll" style="endArrow=none;html=0;rounded=0;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-p7" parent="1" style="ellipse;html=0;fontSize=11;" value="neuer Wert" vertex="1">
+          <mxGeometry x="850" y="1945" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-p7-l" edge="1" parent="1" source="erd99-a-p7" target="erd99-protokoll" style="endArrow=none;html=0;rounded=0;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-b1" parent="1" style="ellipse;html=0;fontSize=11;fontStyle=4;" value="Benutzer_ID" vertex="1">
+          <mxGeometry x="535" y="2040" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-b1-l" edge="1" parent="1" source="erd99-a-b1" target="erd99-benutzer" style="endArrow=none;html=0;rounded=0;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-b2" parent="1" style="ellipse;html=0;fontSize=11;" value="aktiv" vertex="1">
+          <mxGeometry x="400" y="2035" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-b2-l" edge="1" parent="1" source="erd99-a-b2" target="erd99-benutzer" style="endArrow=none;html=0;rounded=0;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-b3" parent="1" style="ellipse;html=0;fontSize=11;" value="E-Mail" vertex="1">
+          <mxGeometry x="845" y="2040" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-b3-l" edge="1" parent="1" source="erd99-a-b3" target="erd99-benutzer" style="endArrow=none;html=0;rounded=0;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-b4" parent="1" style="ellipse;html=0;fontSize=11;" value="Name" vertex="1">
+          <mxGeometry x="805" y="2215" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-b4-l" edge="1" parent="1" source="erd99-a-b4" target="erd99-benutzer" style="endArrow=none;html=0;rounded=0;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-a1" parent="1" style="ellipse;html=0;fontSize=11;" value="storniert am" vertex="1">
+          <mxGeometry x="1330" y="2080" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-a1-l" edge="1" parent="1" source="erd99-a-a1" target="erd99-ausleihe" style="endArrow=none;html=0;rounded=0;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-a2" parent="1" style="ellipse;html=0;fontSize=11;" value="Stornogrund" vertex="1">
+          <mxGeometry x="1330" y="2160" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-a2-l" edge="1" parent="1" source="erd99-a-a2" target="erd99-ausleihe" style="endArrow=none;html=0;rounded=0;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-e1" parent="1" style="ellipse;html=0;fontSize=11;fontStyle=4;" value="Schlüssel" vertex="1">
+          <mxGeometry x="90" y="2350" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-e1-l" edge="1" parent="1" source="erd99-a-e1" target="erd99-einstellung" style="endArrow=none;html=0;rounded=0;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-e2" parent="1" style="ellipse;html=0;fontSize=11;" value="Wert" vertex="1">
+          <mxGeometry x="210" y="2370" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-e2-l" edge="1" parent="1" source="erd99-a-e2" target="erd99-einstellung" style="endArrow=none;html=0;rounded=0;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-e3" parent="1" style="ellipse;html=0;fontSize=11;" value="geändert am" vertex="1">
+          <mxGeometry x="330" y="2350" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-e3-l" edge="1" parent="1" source="erd99-a-e3" target="erd99-einstellung" style="endArrow=none;html=0;rounded=0;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-r1" parent="1" style="ellipse;html=0;fontSize=11;fontStyle=4;" value="Rolle" vertex="1">
+          <mxGeometry x="500" y="2470" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-r1-l" edge="1" parent="1" source="erd99-a-r1" target="erd99-rolle" style="endArrow=none;html=0;rounded=0;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-r2" parent="1" style="ellipse;html=0;fontSize=11;" value="Bezeichnung" vertex="1">
+          <mxGeometry x="640" y="2490" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-r2-l" edge="1" parent="1" source="erd99-a-r2" target="erd99-rolle" style="endArrow=none;html=0;rounded=0;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-d1" parent="1" style="ellipse;html=0;fontSize=11;" value="Umfang" vertex="1">
+          <mxGeometry x="910" y="2490" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-d1-l" edge="1" parent="1" source="erd99-a-d1" target="erd99-darf" style="endArrow=none;html=0;rounded=0;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-x1" parent="1" style="ellipse;html=0;fontSize=11;fontStyle=4;" value="Recht" vertex="1">
+          <mxGeometry x="1330" y="2360" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-x1-l" edge="1" parent="1" source="erd99-a-x1" target="erd99-recht" style="endArrow=none;html=0;rounded=0;endFill=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-x2" parent="1" style="ellipse;html=0;fontSize=11;" value="Bezeichnung" vertex="1">
+          <mxGeometry x="1330" y="2420" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="erd99-a-x2-l" edge="1" parent="1" source="erd99-a-x2" target="erd99-recht" style="endArrow=none;html=0;rounded=0;endFill=0;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
