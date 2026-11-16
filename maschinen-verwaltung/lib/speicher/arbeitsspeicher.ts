@@ -8,8 +8,9 @@
 //
 // Ebenso der Nummernkreis: "naechsteNummer" lebt im Prozess und faengt nach
 // einem Neustart wieder bei R-0001 an. Fortlaufende Nummern ohne Luecke
-// verlangt die Aufgabenstellung fuer Belege, und das gehoert in eine
-// Datenbanksequenz. Notiert fuer #45.
+// verlangt die Aufgabenstellung fuer Belege. Das Datenmodell aus #45 loest das
+// bewusst mit einer Zaehlertabelle statt einer Sequenz (eine Sequenz kann
+// Luecken lassen), die Datenbank-Umsetzung zaehlt dort hoch.
 
 import { Belegungsplan } from "../belegungsplan";
 import type { Maschine, MaschinenSpeicher } from "../maschine";

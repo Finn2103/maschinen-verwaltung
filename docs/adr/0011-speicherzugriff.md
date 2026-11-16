@@ -39,10 +39,14 @@ Fachlogik vorgibt.**
 
 ```ts
 export type ReservierungSpeicher = {
-  belegungenFuer(inventarnummer: string): Promise<Belegung[]>;
-  anlegen(neu: Omit<Reservierung, "id">): Promise<Reservierung>;
+  belegungsplanFuer(inventarnummer: string): Promise<Belegungsplan>;
+  anlegen(inventarnummer: string, zeitraum: Zeitraum, kunde: Kunde): Promise<Reservierung>;
+  reservierung(id: string): Promise<Reservierung | undefined>;
+  reservierungenVon(email: string): Promise<Reservierung[]>;
 };
 ```
+
+Stand nach #85; maßgeblich ist der Typ in `lib/reservierung.ts`.
 
 Davon gibt es zwei Umsetzungen und **eine** Stelle, die auswählt:
 
