@@ -73,8 +73,10 @@ darf nur mit Angabe eines Grundes. **Fett** ist, was am 16.11.2026 anders als im
 vorgeschlagen entschieden wurde oder aus einer Antwort F1 bis F14 folgt. Die Spalte
 „Grundlage" nennt, woher die Zeile kommt.
 
-- Die Spalte „ohne Anmeldung" gilt, sobald es Konten gibt (#43). Bis dahin reichen zum
-  Reservieren Name und E-Mail-Adresse, wie heute in der App (F6).
+- Die Spalte „ohne Anmeldung" gilt schon jetzt. Bis es Konten gibt (#43), meldet man sich
+  über die Probe-Anmeldung in der Kopfleiste an (Antwort 60). Reservieren und „Meine
+  Reservierungen" gehen nur angemeldet (F6, #125). Name und E-Mail-Adresse kommen beim
+  Reservieren bis #43 weiter aus dem Formular.
 - **Owner und Manager** unterscheiden sich in zwei Zeilen: Rolle zuweisen und abgelehnte
   Zugriffe sehen darf nur der Owner (F2).
 - **Admin** hat in jeder Zeile ein Recht. Auch er storniert nach Ablauf der Frist nur mit
@@ -300,8 +302,9 @@ Matrix. Der Kunde legt sein Konto selbst an (F14).
 
 Der Knopf heißt heute schon „Verbindlich reservieren", die Entscheidung passt also zum
 gebauten Stand. Was fehlt, ist der Bezug zu einem angemeldeten Kunden: derzeit werden Name,
-E-Mail und Telefon im Formular erfasst, statt aus dem Konto zu kommen. Sobald es Konten gibt
-(#43), reserviert nur noch, wer angemeldet ist (F6).
+E-Mail und Telefon im Formular erfasst, statt aus dem Konto zu kommen. Reservieren darf
+schon jetzt nur, wer angemeldet ist (F6), bis #43 über die Probe-Anmeldung (#125). Aus dem
+Konto kommen die Kundendaten mit #43.
 
 ## Rechtlicher Hinweis zum Protokoll
 

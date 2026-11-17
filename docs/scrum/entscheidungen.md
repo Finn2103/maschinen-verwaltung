@@ -203,8 +203,10 @@ Beim Umsetzen festgelegt, nicht vom Team entschieden (Begründungen in
 
 - Die Prüfung fragt nur, ob es für Rolle und Recht eine Zeile in `rolle_recht` gibt. Kein
   Rollenname steht im Code.
-- „Ohne Anmeldung“ ist keine Rolle. Was der Besucher darf, steht als Liste im Code: suchen
-  (F5), bis #43 dazu reservieren und Meine Reservierungen mit E-Mail und Vorgangsnummer (F6).
+- „Ohne Anmeldung“ ist keine Rolle. Was der Besucher darf, steht als Liste im Code: nur
+  suchen (F5). Reservieren und Meine Reservierungen gehen nur angemeldet (F6), bis #43 über
+  die Probe-Anmeldung. Korrigiert mit #125, vorher stand hier „bis #43 auch ohne
+  Anmeldung“.
 - Im Änderungsprotokoll steht die E-Mail-Adresse des Benutzers.
 - Abgelehnte Zugriffe liegen wie das Protokoll im Arbeitsspeicher, bis F16 entschieden ist.
   Owner und Admin sehen sie unter „Abgelehnte Zugriffe“ (Mockup 13).
@@ -215,6 +217,13 @@ Die Probe-Anmeldung ist eine Selbstauskunft wie vorher das Kürzel: Jeder kann j
 wählen, ein Passwort gibt es nicht. Geprüft wird trotzdem auf dem Server, was die gewählte
 Rolle darf. Mit #43 ersetzt die echte Sitzung den Cookie der Probe-Anmeldung, an der Prüfung
 ändert sich nichts.
+
+**Nachtrag 17.11. (#125): Meine Reservierungen mit Anmeldung.** Der Kunde weist sich weiter
+mit E-Mail-Adresse und Vorgangsnummer aus (Entscheidung vom 12.11., `lib/uebersicht.ts`),
+nur die Anmeldung kommt davor (Weg A in #125). Name und E-Mail-Adresse kommen beim
+Reservieren weiter aus dem Formular. Die eigenen Reservierungen aus dem Konto (Weg B) kommen
+mit #43. Grundlage ist Finns Vorgabe vom 17.11. für die Fehler aus dem Klicktest: nichts
+Neues, aber was nicht funktioniert, soll funktionieren.
 
 ---
 

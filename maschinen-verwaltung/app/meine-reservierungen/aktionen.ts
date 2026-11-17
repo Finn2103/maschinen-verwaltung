@@ -41,9 +41,11 @@ export async function uebersichtAbfragen(
     vorgangsnummer: String(daten.get("vorgangsnummer") ?? "").trim(),
   };
 
-  // Rechtepruefung (#8) als Erstes. Umfang "eigene": welche Reservierungen
-  // die eigenen sind, weist der Kunde bis #43 mit E-Mail-Adresse und
-  // Vorgangsnummer nach (lib/uebersicht.ts). Das gilt auch fuer Personal.
+  // Rechtepruefung (#8) als Erstes, nur mit Anmeldung (F6, #125), bis #43
+  // ueber die Probe-Anmeldung. Umfang "eigene": welche Reservierungen die
+  // eigenen sind, weist der Kunde auch angemeldet mit E-Mail-Adresse und
+  // Vorgangsnummer nach (lib/uebersicht.ts, Weg A in #125). Das gilt auch
+  // fuer Personal.
   const zugang = await zugriff("ausleihe.sehen", "Aktion: Meine Reservierungen");
   if (!zugang.erlaubt) return { ok: false, fehler: {}, zugriff: zugang.meldung, eingaben };
 

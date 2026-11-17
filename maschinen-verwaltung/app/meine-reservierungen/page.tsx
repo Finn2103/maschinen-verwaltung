@@ -1,12 +1,17 @@
 import Link from "next/link";
 import { Reservierungsuebersicht } from "@/components/Reservierungsuebersicht";
+import { KeinZugriff } from "@/components/KeinZugriff";
+import { zugriff } from "../sitzung";
 
 // "Meine Reservierungen" (#1, Mockup 05, Rolle Kunde).
 //
+// Nur mit Anmeldung (F6, #125), bis #43 ueber die Probe-Anmeldung. Die Seite
+// prueft selbst, die Action beim Abfragen noch einmal.
+//
 // Woran die Seite den Kunden erkennt, hat Finn am 12.11. entschieden: E-Mail-
-// Adresse und Vorgangsnummer zusammen (Begruendung in lib/uebersicht.ts). Mit
-// der Anmeldung aus #43 faellt das Formular weg, dann kommt der Kunde aus der
-// Sitzung.
+// Adresse und Vorgangsnummer zusammen (Begruendung in lib/uebersicht.ts). Das
+// bleibt auch mit Probe-Anmeldung so (Weg A in #125). Die eigenen
+// Reservierungen aus dem Konto statt aus dem Formular kommen mit #43.
 //
 // ?vorgang=R-0001 belegt die Vorgangsnummer vor, wenn man aus der
 // Bestaetigung kommt. Die Nummer allein zeigt nichts, die E-Mail-Adresse steht
@@ -17,6 +22,15 @@ export const metadata = { title: "Meine Reservierungen" };
 type Props = { searchParams: Promise<{ vorgang?: string }> };
 
 export default async function MeineReservierungen({ searchParams }: Props) {
+  const zugang = await zugriff("ausleihe.sehen", "/meine-reservierungen");
+  if (!zugang.erlaubt) {
+    return (
+      <div className="mx-auto w-full max-w-3xl px-4">
+        <KeinZugriff meldung={zugang.meldung} />
+      </div>
+    );
+  }
+
   const { vorgang } = await searchParams;
 
   return (

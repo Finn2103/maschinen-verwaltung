@@ -81,16 +81,14 @@ export type Umfang = "alle" | "eigene";
  * steht deshalb nicht in rolle_recht.
  *
  * - suchen: ja (F5)
- * - reservieren und die eigenen Reservierungen sehen: nur bis #43. Bis dahin
- *   reichen dafuer Name und E-Mail-Adresse, wie heute in der App (F6), und
- *   "eigene" weist der Kunde mit E-Mail-Adresse und Vorgangsnummer nach
- *   (lib/uebersicht.ts, Entscheidung vom 12.11.). Mit #43 fallen beide Zeilen
- *   weg.
+ * - sonst nichts. Reservieren und "Meine Reservierungen" nur mit Konto (F6).
+ *   Bis zur Anmeldung (#43) heisst das: oben in der Probe-Anmeldung einen
+ *   Benutzer waehlen, z. B. den Kunden (#125). Angemeldet bleibt es bei Name
+ *   und E-Mail-Adresse aus dem Formular und bei "eigene" per E-Mail-Adresse
+ *   und Vorgangsnummer (lib/uebersicht.ts, Weg A in #125).
  */
 export const OHNE_ANMELDUNG: ReadonlyMap<Recht, Umfang> = new Map<Recht, Umfang>([
     ["maschine.suchen", "alle"],
-    ["ausleihe.reservieren", "alle"],
-    ["ausleihe.sehen", "eigene"],
 ]);
 
 /** Die Gruende fuer eine Ablehnung, wie im Mockup 13. */
