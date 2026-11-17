@@ -15,13 +15,16 @@
 // Nach dem Setzen zeigt Next.js die aktuelle Seite neu an, mit dem neuen
 // Benutzer (Next.js-Doku, cookies, "Understanding Cookie Behavior in Server
 // Functions"). Eine Weiterleitung braucht es nicht.
+//
+// Zurueck kommt eine kurze Meldung, als wer man jetzt arbeitet. Die Kopfleiste
+// zeigt sie als Statusmeldung (components/ProbeWechsel.tsx, #124).
 
 import { cookies } from "next/headers";
 import { angemeldeterBenutzer } from "@/lib/rechte";
 import { speicher } from "@/lib/speicher";
 import { PROBE_COOKIE } from "./sitzung";
 
-export async function probeAnmelden(daten: FormData): Promise<void> {
+export async function probeAnmelden(_vorherigeMeldung: string | null, daten: FormData): Promise<string> {
   const gewaehlt = String(daten.get("benutzer") ?? "");
   const kekse = await cookies();
 
@@ -30,8 +33,9 @@ export async function probeAnmelden(daten: FormData): Promise<void> {
   const benutzer = await angemeldeterBenutzer(speicher, gewaehlt);
   if (!benutzer) {
     kekse.delete(PROBE_COOKIE);
-    return;
+    return "Abgemeldet, jetzt ohne Anmeldung.";
   }
 
   kekse.set(PROBE_COOKIE, benutzer.benutzerId, { httpOnly: true, sameSite: "lax", path: "/" });
+  return `Gewechselt zu ${benutzer.name} · ${benutzer.rollenname}.`;
 }
