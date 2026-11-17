@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { KeinZugriff } from "@/components/KeinZugriff";
 import { Maschinenformular } from "@/components/Maschinenformular";
+import { imProtokoll } from "@/lib/benutzer";
 import { speicher } from "@/lib/speicher";
+import { zielText, zugriff } from "../../../sitzung";
 import { maschineAendernAbsenden } from "../aktionen";
 import { formulardaten } from "../formulardaten";
 
 // Maschine bearbeiten (#2). Nach dem Speichern leitet die Action hierher
 // zurueck, mit ?gespeichert=<Anzahl geaenderter Felder>.
+//
+// Recht "maschine.bearbeiten" (#8), geprueft vor dem Lesen der Maschine.
 
 type Props = {
   params: Promise<{ inventarnummer: string }>;
@@ -23,6 +28,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function MaschineBearbeiten({ params, searchParams }: Props) {
   const { inventarnummer } = await params;
   const { gespeichert } = await searchParams;
+
+  const zugang = await zugriff("maschine.bearbeiten", `/verwaltung/maschinen/${zielText(inventarnummer)}`);
+  if (!zugang.erlaubt) return <KeinZugriff meldung={zugang.meldung} />;
 
   const maschine = await speicher.maschine(inventarnummer);
   if (!maschine) notFound();
@@ -66,7 +74,8 @@ export default async function MaschineBearbeiten({ params, searchParams }: Props
         aktion={maschineAendernAbsenden}
         typen={typen}
         standorte={standorte}
-        vorgabe={{ ...maschine.alsEingabe(), benutzer: "" }}
+        vorgabe={maschine.alsEingabe()}
+        protokolliertAls={imProtokoll(zugang.benutzer)}
       />
     </main>
   );

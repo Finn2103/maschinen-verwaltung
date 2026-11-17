@@ -1,14 +1,20 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { KeinZugriff } from "@/components/KeinZugriff";
 import { zeitpunktDeutsch } from "@/lib/datum";
 import { speicher } from "@/lib/speicher";
+import { zielText, zugriff } from "../../../../sitzung";
 
 // Aenderungsprotokoll einer Maschine (#2, Mockup 09): Zeitpunkt, Benutzer,
 // Feld, alter und neuer Wert, neueste zuerst.
 //
 // Nur lesen. Es gibt hier keinen Knopf zum Aendern oder Loeschen, und der
 // Speicher hat keine Methode dafuer.
+//
+// Recht "protokoll.datensatz" (#8): das Protokoll eines Datensatzes sieht
+// das Personal. Die Auswertung ueber Personen ist ein eigenes Recht und hat
+// noch keine Seite.
 
 type Props = { params: Promise<{ inventarnummer: string }> };
 
@@ -29,6 +35,13 @@ const leer = (text: string) =>
 
 export default async function Protokoll({ params }: Props) {
   const { inventarnummer } = await params;
+
+  const zugang = await zugriff(
+    "protokoll.datensatz",
+    `/verwaltung/maschinen/${zielText(inventarnummer)}/protokoll`,
+  );
+  if (!zugang.erlaubt) return <KeinZugriff meldung={zugang.meldung} />;
+
   const maschine = await speicher.maschine(inventarnummer);
   if (!maschine) notFound();
 
@@ -100,8 +113,8 @@ export default async function Protokoll({ params }: Props) {
 
       <p className="mt-6 text-xs text-neutral-600 dark:text-neutral-400">
         Das Protokoll liegt wie die Maschinen im Arbeitsspeicher des Servers und ist nach einem
-        Neustart leer (ADR 0011). Die Tabelle dafür kommt mit dem Item zu Rollen, Rechten und
-        Protokoll.
+        Neustart leer (ADR 0011). Die Tabelle dafür steht seit #99 im Datenmodell; die
+        Anwendung schreibt hinein, sobald sie PostgreSQL nutzt.
       </p>
     </main>
   );

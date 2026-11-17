@@ -510,7 +510,7 @@ nicht ohne Kopien prüfen, die die Normalform verletzen (siehe 3.2):
 | Ein Bauteil in einer Wartungsmaßnahme gehört zur Maschine der Wartung | bräuchte die Inventarnummer in `wartungsmassnahme`, verletzt die 2. NF |
 | Eine Storno-Rechnung wird nicht selbst storniert | Ein `CHECK` sieht nur die eigene Zeile |
 | Eine Rechnung hat mindestens eine Position | bräuchte einen Trigger am Ende der Transaktion; der Aufwand lohnt sich erst mit der Abrechnung |
-| Wer was darf (Rolle, Recht, Umfang) | die Matrix steht in der Datenbank (4.7), geprüft wird sie in der Anwendung (#8). In der Datenbank selbst ginge das erst mit den Datenbank-Rechten (F15) |
+| Wer was darf (Rolle, Recht, Umfang) | die Matrix steht in der Datenbank (4.7), geprüft wird sie in der Anwendung (#8, `lib/rechte.ts`). In der Datenbank selbst ginge das erst mit den Datenbank-Rechten (F15) |
 | Nur Trigger schreiben ins Protokoll | Wer `INSERT` auf `protokoll` darf, regeln die Datenbank-Rechte (F15, #8) |
 | Eine stornierte Ausleihe bleibt storniert | Zurücknehmen geht, wenn die Anwendung `storniert_am` und `stornogrund` mit leert; das Protokoll hält den Storno fest. Ob das erlaubt sein soll, steht in keiner Entscheidung |
 
@@ -532,11 +532,18 @@ nicht ohne Kopien prüfen, die die Normalform verletzen (siehe 3.2):
 | `DATENSATZ_ANGELEGT` = „Datensatz angelegt“ | `protokoll.feld = 'Datensatz angelegt'` |
 | leerer Text in `alt` oder `neu` = kein Wert | `NULL` |
 | Feldname wie im Formular, z. B. „Betriebsstunden“ | Spaltenname, z. B. `betriebsstunden` |
+| `Benutzer(benutzerId, email, name, rolle, rollenname, kundennummer, aktiv)` (#8) | `benutzer`, dazu `rolle.bezeichnung` als `rollenname` |
+| `RECHTE`, 26 Schlüssel mit Bezeichnung (#8) | `recht` |
+| `ROLLE_RECHT` im Arbeitsspeicher, 105 Zeilen (#8) | `rolle_recht`; `lib/rechte.test.ts` vergleicht beide mit `schema.sql` |
+| `RechteSpeicher.umfang(benutzerId, recht)` (#8) | die Abfrage aus 4.7 |
+| `AbgelehnterZugriff(zeitpunkt, benutzer, rolle, ziel, grund)` (#8) | noch keine Relation (F16) |
 
 Die Speicher-Umsetzung für PostgreSQL (ADR 0011, `lib/speicher/postgres.ts`) liest
 Bezeichnung und Kategorie deshalb über `maschine.typnummer` aus `maschinentyp`. Das
-Protokoll liegt im Code bis heute im Arbeitsspeicher; auf die Tabelle umstellen gehört zur
-Rechteprüfung (#8).
+Protokoll liegt im Code bis heute im Arbeitsspeicher. Auf die Tabelle umgestellt wird es mit
+dieser PostgreSQL-Umsetzung, nicht mit der Rechteprüfung: #8 Teil 1 prüft gegen eine Kopie
+der Matrix im Arbeitsspeicher und setzt `SET LOCAL app.benutzer_id` erst, wenn es eine
+Datenbankverbindung gibt.
 
 ---
 

@@ -1,6 +1,8 @@
 import Link from "next/link";
+import { KeinZugriff } from "@/components/KeinZugriff";
 import { speicher } from "@/lib/speicher";
 import { zahlDeutsch } from "@/lib/zahl";
+import { kann, zugriff } from "../../sitzung";
 
 // Maschinenliste der Verwaltung (#2, Mockup 06): "Maschinen sind ueber
 // Inventarnummer, Typ und Standort auffindbar."
@@ -13,12 +15,23 @@ import { zahlDeutsch } from "@/lib/zahl";
 // Die Spalte "Status" aus dem Mockup (verfuegbar, verliehen, in Wartung) fehlt:
 // Ausleihe (#9) und Wartung (#3) gibt es noch nicht, ein Status ohne Grundlage
 // waere erfunden.
+//
+// Recht "maschine.liste" (#8): die Liste mit allen Feldern ist fuer das
+// Personal. Die Links "Maschine anlegen" und "Bearbeiten" erscheinen nur,
+// wenn die Rolle das darf; geprueft wird trotzdem auf den Seiten dahinter.
 
 export const metadata = { title: "Maschinen verwalten" };
 
 type Props = { searchParams: Promise<{ q?: string; angelegt?: string }> };
 
 export default async function Maschinenliste({ searchParams }: Props) {
+  const zugang = await zugriff("maschine.liste", "/verwaltung/maschinen");
+  if (!zugang.erlaubt) return <KeinZugriff meldung={zugang.meldung} />;
+  const [anlegen, bearbeiten] = await Promise.all([
+    kann("maschine.anlegen"),
+    kann("maschine.bearbeiten"),
+  ]);
+
   const { q = "", angelegt } = await searchParams;
   const alle = await speicher.maschinen();
   const treffer = alle.filter((m) => m.trifftSuchbegriff(q));
@@ -29,12 +42,14 @@ export default async function Maschinenliste({ searchParams }: Props) {
       <div className="flex flex-wrap items-end gap-x-4 gap-y-3">
         <h1 className="text-2xl font-semibold tracking-tight">Maschinen</h1>
         <p className="text-sm text-neutral-600 dark:text-neutral-400">{alle.length} Datensätze</p>
-        <Link
-          href="/verwaltung/maschinen/neu"
-          className="ml-auto rounded bg-neutral-900 px-4 py-2 text-sm font-medium text-white dark:bg-neutral-100 dark:text-neutral-900"
-        >
-          Maschine anlegen
-        </Link>
+        {anlegen && (
+          <Link
+            href="/verwaltung/maschinen/neu"
+            className="ml-auto rounded bg-neutral-900 px-4 py-2 text-sm font-medium text-white dark:bg-neutral-100 dark:text-neutral-900"
+          >
+            Maschine anlegen
+          </Link>
+        )}
       </div>
 
       {neu && (
@@ -130,12 +145,14 @@ export default async function Maschinenliste({ searchParams }: Props) {
                   </td>
                   <td className="py-2 pr-4">{m.standort}</td>
                   <td className="py-2 text-right">
-                    <Link
-                      href={`/verwaltung/maschinen/${m.inventarnummer}`}
-                      className="underline underline-offset-2"
-                    >
-                      Bearbeiten<span className="sr-only"> {m.inventarnummer}</span>
-                    </Link>
+                    {bearbeiten && (
+                      <Link
+                        href={`/verwaltung/maschinen/${m.inventarnummer}`}
+                        className="underline underline-offset-2"
+                      >
+                        Bearbeiten<span className="sr-only"> {m.inventarnummer}</span>
+                      </Link>
+                    )}
                   </td>
                 </tr>
               ))}

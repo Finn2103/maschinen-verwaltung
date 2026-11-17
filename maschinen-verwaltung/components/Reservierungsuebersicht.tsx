@@ -65,6 +65,14 @@ export function Reservierungsuebersicht({ vorgang }: Props) {
 
   return (
     <>
+      {zustand && !zustand.ok && zustand.zugriff && (
+        <p
+          role="alert"
+          className="mt-6 rounded border-l-4 border-red-700 bg-red-50 p-3 text-sm text-red-900 dark:border-red-400 dark:bg-red-950 dark:text-red-100"
+        >
+          {zustand.zugriff}
+        </p>
+      )}
       <form
         action={abfragen}
         noValidate
