@@ -92,10 +92,12 @@ describe("Wer an welche Stelle der App darf", () => {
     // Recht und wer es hat. ohne = ohne Anmeldung.
     const PERSONAL = { ohne: false, kunde: false, mitarbeiter: true, manager: true, owner: true, admin: true };
     const ALLE = { ohne: true, kunde: true, mitarbeiter: true, manager: true, owner: true, admin: true };
+    // F6: nur mit Konto, bis #43 ueber die Probe-Anmeldung (#125).
+    const ANGEMELDET = { ...ALLE, ohne: false };
     const stellen: [string, Recht, Record<string, boolean>][] = [
         ["Maschinen suchen", "maschine.suchen", ALLE],
-        ["Verbindlich reservieren (ohne Anmeldung bis #43)", "ausleihe.reservieren", ALLE],
-        ["Meine Reservierungen (ohne Anmeldung bis #43)", "ausleihe.sehen", ALLE],
+        ["Verbindlich reservieren", "ausleihe.reservieren", ANGEMELDET],
+        ["Meine Reservierungen", "ausleihe.sehen", ANGEMELDET],
         ["Verwaltungsliste", "maschine.liste", PERSONAL],
         ["Maschine anlegen", "maschine.anlegen", PERSONAL],
         ["Maschine bearbeiten", "maschine.bearbeiten", PERSONAL],
@@ -128,9 +130,20 @@ describe("Wer an welche Stelle der App darf", () => {
         expect(!ergebnis.erlaubt && ergebnis.meldung).toBe("Ihre Rolle Kunde darf das nicht: Maschine anlegen.");
     });
 
-    it("lässt ohne Anmeldung nur suchen, reservieren und die eigenen Reservierungen sehen (bis #43)", () => {
-        expect([...OHNE_ANMELDUNG.keys()]).toEqual(["maschine.suchen", "ausleihe.reservieren", "ausleihe.sehen"]);
+    it("lässt ohne Anmeldung nur suchen (F5, F6)", () => {
+        expect([...OHNE_ANMELDUNG.keys()]).toEqual(["maschine.suchen"]);
     });
+
+    it.each(["ausleihe.reservieren", "ausleihe.sehen"] as const)(
+        "lehnt %s ohne Anmeldung mit „keine Anmeldung“ ab und hält es fest (#125)",
+        async (recht) => {
+            const ergebnis = await pruefe(speicher, null, recht, "/meine-reservierungen");
+            expect(!ergebnis.erlaubt && ergebnis.grund).toBe("keine Anmeldung");
+            expect(!ergebnis.erlaubt && ergebnis.meldung).toContain("wählen Sie oben einen Benutzer aus");
+            const [eintrag] = await speicher.abgelehnteZugriffe();
+            expect([eintrag.benutzer, eintrag.grund]).toEqual(["", "keine Anmeldung"]);
+        },
+    );
 });
 
 describe("Umfang „eigene“", () => {

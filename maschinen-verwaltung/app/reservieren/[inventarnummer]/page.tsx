@@ -4,6 +4,8 @@ import Link from "next/link";
 import { speicher } from "@/lib/speicher";
 import { zeitraumDeutsch } from "@/lib/datum";
 import { Reservierungsformular } from "@/components/Reservierungsformular";
+import { KeinZugriff } from "@/components/KeinZugriff";
+import { zielText, zugriff } from "../../sitzung";
 
 // In Next.js 16 sind params und searchParams Promises und muessen awaited
 // werden. In 15 gab es dafuer nur eine Warnung, in 16 schlaegt der
@@ -29,6 +31,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function Reservieren({ params, searchParams }: Props) {
   const { inventarnummer } = await params;
   const { von, bis } = await searchParams;
+
+  // Reservieren nur mit Anmeldung (F6, #125). Die Seite prueft selbst, nicht
+  // erst die Action beim Absenden: ohne Recht soll man das Formular gar nicht
+  // ausfuellen. Die Action prueft trotzdem noch einmal (direkter Aufruf).
+  const zugang = await zugriff("ausleihe.reservieren", `/reservieren/${zielText(inventarnummer)}`);
+  if (!zugang.erlaubt) {
+    return (
+      <div className="mx-auto w-full max-w-3xl px-4">
+        <KeinZugriff meldung={zugang.meldung} />
+      </div>
+    );
+  }
 
   // Maschine und Belegungen ueber den Speicher: so sind angelegte oder
   // geaenderte Maschinen (#2) und bereits angelegte Reservierungen mit dabei

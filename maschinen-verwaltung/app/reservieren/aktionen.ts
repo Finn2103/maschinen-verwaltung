@@ -55,8 +55,9 @@ export async function reservierungAbsenden(
   };
 
   // Rechtepruefung (#8) als Erstes: die Action laesst sich auch ohne das
-  // Formular direkt aufrufen. Ohne Anmeldung ist Reservieren bis #43 erlaubt
-  // (F6), Name und E-Mail-Adresse kommen bis dahin aus dem Formular.
+  // Formular direkt aufrufen. Reservieren nur mit Anmeldung (F6, #125), bis
+  // #43 ueber die Probe-Anmeldung. Name und E-Mail-Adresse kommen weiter aus
+  // dem Formular (Weg A in #125).
   const zugang = await zugriff(
     "ausleihe.reservieren",
     `Aktion: Reservieren (${zielText(text("inventarnummer"))})`,

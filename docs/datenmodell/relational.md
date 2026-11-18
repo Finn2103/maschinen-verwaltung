@@ -404,7 +404,8 @@ Relationen, nicht als Namen im Code:
   `benutzer_rolle` braucht es erst, wenn eine Person mehrere Rollen haben soll.
 - **Benutzer und Kunde (F14):** `benutzer.kundennummer` ist eindeutig und darf leer sein.
   Ein Kunde kann sein Konto anlegen, bevor es seinen Kundendatensatz gibt, und ein Kunde
-  ohne Konto bleibt möglich, solange ohne Anmeldung reserviert wird (#1, bis #43).
+  ohne Konto bleibt möglich, solange Name und E-Mail-Adresse beim Reservieren aus dem
+  Formular kommen (#1, bis #43).
 - **E-Mail eindeutig ohne Groß- und Kleinschreibung:** ein eindeutiger Index auf
   `lower(email)`. `Info@…` und `info@…` sind dasselbe Postfach.
 - **Benutzer werden nicht gelöscht,** sondern auf `aktiv = false` gesetzt. Das Protokoll
