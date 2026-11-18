@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 const leer = (text: string) =>
   text === "" ? (
-    <span className="text-neutral-500">
+    <span className="text-neutral-600 dark:text-neutral-400">
       <span aria-hidden="true">—</span>
       <span className="sr-only">kein Wert</span>
     </span>
@@ -77,7 +77,9 @@ export default async function Protokoll({ params }: Props) {
           </p>
         </div>
       ) : (
-        <div className="mt-6 overflow-x-auto">
+        // "relative" haelt die absolut positionierten sr-only-Texte im
+        // Scrollbereich, sonst scrollt auf dem Handy die ganze Seite seitlich.
+        <div className="relative mt-6 overflow-x-auto">
           <table className="w-full border-collapse text-sm">
             <caption className="sr-only">
               Änderungen an {maschine.inventarnummer}, neueste zuerst
