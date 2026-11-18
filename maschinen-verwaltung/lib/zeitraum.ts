@@ -57,3 +57,14 @@ export class Zeitraum {
         return new Zeitraum(von, bis);
     }
 }
+
+
+// // vorher, freie Funktion in verfuegbarkeit.ts
+// function ueberlappt(a: Zeitraum, b: Zeitraum): boolean {
+//     return a.von <= b.bis && b.von <= a.bis;
+// }
+
+// // jetzt, Methode in zeitraum.ts
+// ueberlappt(anderer: Zeitraum): boolean {
+//     return this.von <= anderer.bis && anderer.von <= this.bis;
+// }
