@@ -116,7 +116,10 @@ export default async function Maschinenliste({ searchParams }: Props) {
           </p>
         </div>
       ) : (
-        <div className="mt-4 overflow-x-auto">
+        // "relative": die sr-only-Texte in der Tabelle ("Aktion", "M-1001") sind
+        // absolut positioniert. Ohne Bezugsrahmen hier ragen sie aus dem
+        // Scrollbereich, und auf dem Handy scrollt die ganze Seite seitlich.
+        <div className="relative mt-4 overflow-x-auto">
           <table className="w-full border-collapse text-sm">
             <caption className="sr-only">Maschinen, nach Inventarnummer sortiert</caption>
             <thead>
