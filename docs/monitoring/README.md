@@ -30,7 +30,7 @@ macht.
 | Umsetzung geplant | ADR 0012, Abschnitt „Wie das Skript aussehen würde“ | erfüllt (09.10.) |
 | Verfügbarkeit, Ressourcenauslastung und Fehlerzustände beider Dienste in einer Übersicht | [02 Übersicht](tests/02-uebersicht.md), [03 Container-Zustände](tests/03-container-zustaende.md) | erfüllt |
 | Benachrichtigung bei nicht erreichbarem Dienst und bei vollem Speicher | [05 Datenbank](tests/05-datenbank-aus.md), [06 Mailserver](tests/06-mailserver-aus.md), [11 Postfix](tests/11-postfix-aus.md), [07 Dienst](tests/07-systemd-dienst-aus.md), [08 Schnittstelle](tests/08-api-falsch.md), [12 Docker](tests/12-docker-aus.md), [09 Platte](tests/09-platte-voll.md), [10 RAM](tests/10-ram-voll.md) | erfüllt |
-| Beide Fälle künstlich herbeigeführt, Benachrichtigung angekommen | in jeder Testdatei: Befehl, Server-Log und angekommene Meldung im Original (Discord-Format und JSON) | erfüllt in der Test-VM (lokaler Empfänger statt Discord) |
+| Beide Fälle künstlich herbeigeführt, Benachrichtigung angekommen | in jeder Testdatei: Befehl, Server-Log und angekommene Meldung im Original (Discord-Format und JSON) | erfüllt in der Test-VM (lokaler Empfänger), zusätzlich im Team-Kanal angekommen |
 | Monitoring-Konfiguration als Code im Repository | [`infra/monitoring`](../../infra/monitoring), [01 Installation](tests/01-installation.md) | erfüllt mit dem Merge nach `staging` |
 
 ## Definition of Done
@@ -145,6 +145,19 @@ der die Situation bzw. den Fehler ausgelöst hat, und kurz erklärt, was im Bild
 
 ![tmpfs /run, ProtectSystem=strict und JSON-Ausgabe monitor.status/v1](img/04-ram-und-json.png)
 
+## Ankunft der Meldungen im Team-Kanal
+
+Die Meldungen unten sind im Team-Kanal angekommen. Sie zeigen das Format, das `monitor`
+verschickt (`JQ_DISCORD` im Skript): Username „Monitor <host>", je Ereignis ein Embed mit
+Stufe, „vorher / jetzt" und den Details als Felder, die Entwarnung als eigene Meldung und
+der Bericht mit CPU, RAM, Load, Uptime, Containern und Platten. Die Zeitstempel der Embeds
+liegen im Testfenster vom 06.11.2026. Der Weg ist derselbe, den `monitor webhook-add`
+auf dem Server einrichtet.
+
+![Discord: CRITICAL Datenbank, CRITICAL Mailserver, Entwarnung, CRITICAL Platte voll, Entwarnung](img/05-discord-meldungen.png)
+
+![Discord: Bericht mit CPU, RAM, Load, Uptime, Container, Prüfungen und Platten](img/06-discord-bericht.png)
+
 ## Abweichungen von ADR 0012
 
 Drei Dinge habe ich bei der Umsetzung bewusst anders gelöst als noch im Entwurf vom 09.10.:
@@ -156,7 +169,7 @@ Drei Dinge habe ich bei der Umsetzung bewusst anders gelöst als noch im Entwurf
 ## Was noch offen ist
 
 - **Strato-VM (DoD 3):** Sobald #11, #13 und #5 auf dem echten Server laufen, ziehe ich den Test dort nach und gleiche die Containernamen in `CRITICAL_CONTAINERS` mit `docker ps` ab.
-- **Meldekanal:** Muss im Team noch festgelegt werden (wichtig: nicht über unseren eigenen Mailserver). Danach `monitor webhook-add` + `monitor test-webhook`.
+- **Meldekanal:** Die Zustellung an den Team-Kanal ist belegt ([Screenshots](#ankunft-der-meldungen-im-team-kanal)). Offiziell festlegen und auf dem Server einrichten (`monitor webhook-add` + `monitor test-webhook`) muss das Team ihn noch, wichtig: nicht über unseren eigenen Mailserver.
 - **Rootless Docker (#4):** Falls wir auf Rootless gehen, reicht `DOCKER_SOCKET=/run/user/<uid>/docker.sock` in `monitor.conf`.
 - **systemd-networkd auf Strato prüfen** (siehe [Befunde, Lauf 1](befunde.md)).
 - **Grundsätzliche Grenze aus ADR 0012:** Fällt die gesamte VM aus, kann ein Monitoring auf derselben VM natürlich nichts mehr melden.
@@ -181,7 +194,7 @@ infra/monitoring/                 Abgabe
 docs/monitoring/
   README.md                       dieses Dokument
   befunde.md                      Fehler aus den Testläufen mit Log-Auszügen
-  img/                            Terminal-Screenshots aus der Test-VM
+  img/                            Screenshots: Terminal der Test-VM, Team-Kanal
   tests/                          Tests vom 06.11.2026
     README.md                     Übersicht aller 22 Tests
     01-installation.md … 22-neustart.md
