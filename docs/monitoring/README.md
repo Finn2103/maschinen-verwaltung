@@ -69,7 +69,7 @@ macht.
 | ERROR | `unhealthy`, Neustart-Schleife, gestoppt obwohl er laufen soll, RAM ab 95 %, Platte ab 90 % |
 | CRITICAL | Datenbank oder Mailserver aus, ihr Port nicht erreichbar, Docker aus, OOM-Killer, RAM ab 98 %, Platte ab 95 % |
 
-**Spam-Schutz:** Eine neue Stufe muss erst zwei Durchläufe stabil anliegen, und pro Prüfung gehen höchstens zwei Meldungen in zehn Minuten raus. Verschlechterungen und die Entwarnung nach einem gemeldeten Problem gehen immer sofort durch.
+**Spam-Schutz:** Eine neue Stufe muss erst zwei Durchläufe stabil anliegen, und pro Prüfung gehen höchstens zwei Meldungen in zehn Minuten raus. Die Entwarnung nach einem gemeldeten Problem wird nicht vom Spam-Schutz zurückgehalten; bestätigt wird sie wie jeder Wechsel über zwei Durchläufe. Fällt eine Prüfung weg (zum Beispiel Modul-Ausfall), gilt dasselbe: erst nach zwei Durchläufen ohne sie geht die Entwarnung raus.
 
 **Schnittstelle für andere Programme:** `status.json` (`monitor.status/v1`), Webhook-Events (`monitor.event/v1`), Berichte (`monitor.report/v1`) und der Exit-Code von `monitor status` (0 bis 3 je nach höchster Stufe, 4 wenn der Dienst nicht läuft).
 

@@ -792,7 +792,7 @@ run_cycle() {
 declare -A NOTIFIED=() PENDING=() PCOUNT=() NLOG=() SUPPRESSED=()
 CHANGES='[]'
 
-# Entscheidet nach Bestätigungszahl und Zeitfenster, welche Änderungen gemeldet werden (Entwarnung & Verschlechterung immer sofort)
+# Entscheidet nach Bestätigungszahl und Zeitfenster, welche Änderungen gemeldet werden (die Entwarnung wird nicht vom Spam-Schutz zurückgehalten)
 decide_changes() {
   local file=$1 now id lvl n prev
   now=$(date +%s)
@@ -843,10 +843,22 @@ decide_changes() {
   for id in "${!NOTIFIED[@]}"; do
     [[ -n ${seen[$id]:-} ]] && continue
     if (( ${NOTIFIED[$id]} > 0 )); then
-      out+=("$(jq -nc --arg id "$id" --argjson p "${NOTIFIED[$id]}" \
-                 '{id:$id, previous:$p, suppressed:0, gone:true}')")
+      # Weggefallene Prüfung (z. B. Modul-Ausfall): Entwarnung erst nach Bestätigung wie
+      # jeder Wechsel, sonst meldet ein einzelner Timeout sofort Entwarnung für einen
+      # bestehenden Fehler.
+      if [[ ${PENDING[$id]:-} == gone ]]; then
+        PCOUNT[$id]=$(( ${PCOUNT[$id]:-0} + 1 ))
+      else
+        PENDING[$id]=gone; PCOUNT[$id]=1
+      fi
+      if (( PCOUNT[$id] >= CONFIRM_CYCLES )); then
+        out+=("$(jq -nc --arg id "$id" --argjson p "${NOTIFIED[$id]}" \
+                   '{id:$id, previous:$p, suppressed:0, gone:true}')")
+        unset 'NOTIFIED[$id]' 'PENDING[$id]' 'PCOUNT[$id]' 'NLOG[$id]' 'SUPPRESSED[$id]'
+      fi
+    else
+      unset 'NOTIFIED[$id]' 'PENDING[$id]' 'PCOUNT[$id]' 'NLOG[$id]' 'SUPPRESSED[$id]'
     fi
-    unset 'NOTIFIED[$id]' 'PENDING[$id]' 'PCOUNT[$id]' 'NLOG[$id]' 'SUPPRESSED[$id]'
   done
 
   if (( ${#out[@]} == 0 )); then CHANGES='[]'

@@ -163,15 +163,20 @@ Fälle 5 bis 18.
 
 ## Konsequenzen
 
-- Getestet werden kann erst, wenn [#11](https://github.com/Finn2103/maschinen-verwaltung/issues/11) und [#13](https://github.com/Finn2103/maschinen-verwaltung/issues/13) fertig sind. Dazu gehört auch, die Platte
-  vollzuschreiben und Docker zu stoppen.
+- Getestet ist das Skript in einer Test-VM mit Containern der echten Software (PostgreSQL 17,
+  docker-mailserver 17.0.0): Ausfälle, volle Platte, voller Arbeitsspeicher und Docker-Ausfall
+  wurden künstlich herbeigeführt, die Meldungen sind angekommen. Auf der Strato-VM wird
+  nachgetestet, sobald [#11](https://github.com/Finn2103/maschinen-verwaltung/issues/11),
+  [#13](https://github.com/Finn2103/maschinen-verwaltung/issues/13) und
+  [#5](https://github.com/Finn2103/maschinen-verwaltung/issues/5) fertig sind.
 - Das Monitoring läuft bewusst außerhalb von Docker und weicht damit von
   [ADR 0002](0002-container-plattform.md) ab. Installiert wird es trotzdem per Skript aus
   dem Repository.
 - Fällt die ganze VM aus, meldet das kein Monitoring auf derselben VM. Das wird als Grenze
   dokumentiert.
-- Webhook-Adresse und Datenbank-Zugang liegen nicht im Repository, sondern nur auf dem
-  Server ([Definition of Done](../scrum/definition-of-done.md), Punkt 6).
+- Die Webhook-Adresse ist das einzige Geheimnis und liegt nur auf dem Server, nicht im
+  Repository ([Definition of Done](../scrum/definition-of-done.md), Punkt 6). Zugangsdaten
+  für die Datenbank gibt es nicht mehr, das Skript prüft ohne Anmeldung.
 - Prompt und Bewertung zum Skript kommen nach [`docs/ki/prompts`](../ki/prompts/README.md).
 
 ## Fragen und Antworten
@@ -214,9 +219,9 @@ Fälle 5 bis 18.
 - Umgesetzt in der Domänenschicht im Next.js-Server, siehe [TECHSTACK](../TECHSTACK.md)
 - Das Skript ist ein Betriebswerkzeug
 
-**Wie erreicht das Skript die Health-URLs der Container?**
-- Es läuft direkt auf dem Server
-- Der Server erreicht die Container im Docker-Netz
+**Wie kommt das Skript an die Health-Checks der Container?**
+- Es liest das Ergebnis der Docker-Healthchecks über die Docker-API mit (`State.Health`)
+- Eigene URLs ruft es dafür nicht auf; PostgreSQL, SMTP und IMAP prüft es an den Ports
 - Von außen erreichbar sind nur der API-Gateway und der Pooler von Supabase
 
 ## Quellen

@@ -15,6 +15,10 @@ stehen in [`tests/`](tests/README.md).
 | 06.11. | `monitor status` ohne `sudo` las falschen Pfad (`/dev/shm`) | Skript |
 | 06.11. | Gefilterte Webhooks übernahmen falsches Gesamt-Level bei Entwarnung | Skript |
 
+| 19.11. | VIES-Endpoints in der Standardkonfiguration liefen bei jedem Durchlauf mit: bei 10 s Takt über 17.000 Anfragen pro Tag an die EU-API, Sperrgefahr | Konfiguration |
+| 19.11. | Weggefallene Prüfungen (`gone`) umgingen die Bestätigung und meldeten sofort Entwarnung | Skript |
+| 19.11. | Doku und Code widersprachen sich zur Entwarnung („immer sofort"), ADR 0012 teils veraltet | Doku |
+
 ## 06.11. · Lauf 1: Container über 127.0.0.1 nicht erreichbar
 
 Beim ersten Test kamen SMTP, IMAP und `psql` über die veröffentlichten Ports gar nicht an:
@@ -144,3 +148,22 @@ Gesamt-Level der Meldung nicht neu berechnet wurde (eine reine Entwarnung konnte
 Discord mit `WARNING` statt „Entwarnung“ erscheinen, wenn ein anderes Event herausgefiltert
 wurde), und `monitor install --config` brach ab, wenn Quelle und Ziel dieselbe Datei waren.
 Beides ist behoben und im Testlauf vom 06.11. nachgewiesen.
+
+## 19.11. · Gegenlesen vor dem Commit
+
+Vor dem Commit habe ich das Skript noch einmal mit Claude gegengelesen. Drei Punkte:
+
+1. **VIES bei jedem Durchlauf:** Die zwei VIES-Endpoints standen in der Standardkonfiguration
+   und liefen alle 10 s mit – über 17.000 Anfragen pro Tag an eine EU-Behörden-API, dafür
+   droht eine Sperre. #7 nutzt VIES noch gar nicht. Die Endpoints sind aus der
+   Standardkonfiguration raus, ein Beispiel steht auskommentiert in `monitor.conf`.
+2. **Falsche Entwarnung bei `gone`:** Fällt ein Modul einmal aus (Timeout), verschwinden
+   seine Prüfungen. Bisher kam dann sofort die Entwarnung für einen bereits gemeldeten Fehler,
+   der eigentliche Fehler wurde erst einen Durchlauf später gemeldet. Jetzt wird eine
+   weggefallene Prüfung wie jeder Wechsel über zwei Durchläufe bestätigt, bevor die
+   Entwarnung rausgeht (`decide_changes`).
+3. **Doku widersprach dem Code:** README und Kommentar sagten „Entwarnung geht immer sofort
+   durch". Richtig ist: Sie wird nicht vom Spam-Schutz zurückgehalten, bestätigt wird sie
+   aber wie jeder Wechsel. Doku und Kommentar sind korrigiert, dazu die Konsequenzen und das
+   FAQ in ADR 0012 (Test mit Containern der echten Software, Health-Checks über die
+   Docker-API).
