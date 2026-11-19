@@ -1,0 +1,1413 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC2034
+# monitor – Monitoring für Container, Dienste, Ressourcen und Schnittstellen (#14, ADR 0012)
+
+#  KONFIGURATION (Standardwerte, überschrieben durch /etc/monitor/monitor.conf)
+INTERVAL=10
+CHECKS="system docker services endpoints"
+COLLECT_TIMEOUT=25
+CPU_THRESHOLDS="85 95 -"
+MEMORY_THRESHOLDS="85 95 98"
+DISK_THRESHOLDS="80 90 95"
+LOAD_THRESHOLDS="2 4 -"
+DISK_PATHS="auto"
+DISK_TOP_DIRS=5
+DOCKER_SOCKET="/var/run/docker.sock"
+CRITICAL_CONTAINERS=""
+IGNORE_CONTAINERS=""
+RESTART_LOOP_WINDOW=120
+PORT_CHECKS="auto"
+PORT_TIMEOUT=5
+SERVICES="docker"
+CRITICAL_SERVICES="docker"
+ENDPOINTS='[]'
+WEBHOOKS='[]'
+CONFIRM_CYCLES=2
+NOTIFY_WINDOW=600
+NOTIFY_MAX=2
+REPORT_INTERVAL=3600
+REPORT_ON_START=1
+DELIVERY_RETRIES=3
+LOG_LEVEL=INFO
+RUN_DIR="/run/monitor"
+#  Ab hier keine Konfiguration
+
+set -uo pipefail
+VERSION="2.0.0"
+MODULES="system docker services endpoints"
+SELF=$(readlink -f "${BASH_SOURCE[0]}")
+MONITOR_CONF="${MONITOR_CONF:-/etc/monitor/monitor.conf}"
+INSTALL_BIN=/usr/local/bin/monitor
+UNIT_FILE=/etc/systemd/system/monitor.service
+
+# Lädt die Konfiguration nur, wenn sie root gehört und nicht für andere beschreibbar ist
+load_config() {
+  [[ -e $MONITOR_CONF ]] || return 0
+  if (( EUID == 0 )); then
+    local owner mode
+    read -r owner mode < <(stat -c '%u %a' "$MONITOR_CONF")
+    if [[ $owner != 0 ]] || (( (8#$mode & 8#022) != 0 )); then
+      echo "monitor: $MONITOR_CONF muss root gehören und darf nur für root beschreibbar sein" >&2
+      exit 4
+    fi
+  elif [[ ! -r $MONITOR_CONF ]]; then
+    return 0
+  fi
+  # shellcheck source=/dev/null
+  source "$MONITOR_CONF"
+}
+load_config
+
+# Weicht auf /dev/shm aus, wenn /run/monitor nicht les- und nicht beschreibbar ist (z. B. ohne root)
+if [[ ! -r $RUN_DIR/status.json && ! -w ${RUN_DIR%/*} && ! -w $RUN_DIR ]]; then
+  RUN_DIR="/dev/shm/monitor-$EUID"
+fi
+WORK_DIR="$RUN_DIR/work"
+STATUS_FILE="$RUN_DIR/status.json"
+
+# === 1. Grundlagen (Stufen, Logging, Hilfsfunktionen) ===
+
+LEVEL_NAMES=(INFO WARNING ERROR CRITICAL)
+declare -A LEVEL_NUM=([INFO]=0 [WARNING]=1 [ERROR]=2 [CRITICAL]=3)
+
+# Wandelt einen Stufennamen (INFO..CRITICAL) in eine Zahl (0..3) um
+level_num()  { echo "${LEVEL_NUM[$1]:-0}"; }
+level_name() { echo "${LEVEL_NAMES[$1]:-INFO}"; }
+
+# Schreibt eine Meldung mit systemd-Journal-Priorität nach stderr
+log() {
+  local lvl=$1; shift
+  (( ${LEVEL_NUM[$lvl]:-0} >= ${LEVEL_NUM[$LOG_LEVEL]:-0} )) || return 0
+  local prio=""
+  if [[ -n ${INVOCATION_ID:-} ]]; then
+    case $lvl in INFO) prio="<6>" ;; WARNING) prio="<4>" ;; ERROR) prio="<3>" ;; CRITICAL) prio="<2>" ;; esac
+  fi
+  printf '%s[%s] %s\n' "$prio" "$lvl" "$*" >&2
+}
+
+# Bricht mit Fehlermeldung und Exit-Code 4 ab
+die() { echo "monitor: $*" >&2; exit 4; }
+
+# Gibt ein einzelnes Prüfergebnis im einheitlichen JSON-Format (monitor.check/v1) aus
+emit() {
+  local details=${7:-"{}"}
+  jq -nc --arg id "$1" --arg kind "$2" --arg name "$3" --arg level "$4" \
+    --arg status "$5" --arg message "$6" --argjson details "$details" \
+    '{id:$id, kind:$kind, name:$name, level:$level, status:$status,
+      message:$message, details:($details | with_entries(select(.value != null)))}'
+}
+
+# Ordnet einen Messwert den drei Schwellwerten (WARNING ERROR CRITICAL) zu
+level_for() {
+  awk -v v="$1" -v t="$2" 'BEGIN {
+    split(t, a, " "); split("WARNING ERROR CRITICAL", n, " "); l = "INFO"
+    for (i = 1; i <= 3; i++) if (a[i] != "-" && a[i] != "" && v + 0 >= a[i] + 0) l = n[i]
+    print l }'
+}
+
+# Formatiert Sekunden als lesbare Laufzeit (Tage/Std/Min)
+human_duration() {
+  local s=$1 d=$(( $1 / 86400 )) h=$(( $1 % 86400 / 3600 )) m=$(( $1 % 3600 / 60 ))
+  if (( d > 0 )); then echo "$d Tage $h Std $m Min"
+  elif (( h > 0 )); then echo "$h Std $m Min"
+  else echo "$m Min $(( s % 60 )) s"; fi
+}
+
+# Aktuelle Zeit in Millisekunden für Laufzeitmessungen
+now_ms() { date +%s%3N; }
+
+# Legt Arbeits- und Versandordner im RAM (/run/monitor) an
+ensure_dirs() {
+  mkdir -p "$RUN_DIR" "$WORK_DIR" || die "kann $RUN_DIR nicht anlegen"
+  mkdir -p "$RUN_DIR/outbox" && chmod 0700 "$RUN_DIR/outbox"
+}
+
+# Startet eine Teilprüfung parallel im Hintergrund und puffert ihre Ausgabe im RAM
+bg() {
+  local f
+  f=$(mktemp -p "$MONITOR_WORK" part.XXXXXX) || return 1
+  "$@" >"$f" &
+}
+
+# Wartet auf alle parallelen Teilprüfungen und gibt deren Ergebnisse gesammelt aus
+flush_bg() {
+  wait
+  local f
+  for f in "$MONITOR_WORK"/part.*; do
+    [[ -e $f ]] || continue
+    cat "$f"; rm -f "$f"
+  done
+}
+
+# === 2. Modul system (CPU, RAM, Load/Uptime, Platten & Inodes) ===
+
+# Führt alle Systemprüfungen parallel aus
+check_system() {
+  bg check_cpu
+  bg check_memory
+  bg check_load
+  check_disks
+  flush_bg
+}
+
+# Misst die CPU-Auslastung über 1 Sekunde direkt aus /proc/stat
+check_cpu() {
+  local u1 n1 s1 i1 w1 q1 sq1 st1 u2 n2 s2 i2 w2 q2 sq2 st2
+  read -r _ u1 n1 s1 i1 w1 q1 sq1 st1 _ </proc/stat
+  sleep 1
+  read -r _ u2 n2 s2 i2 w2 q2 sq2 st2 _ </proc/stat
+  local busy=$(( (u2 + n2 + s2 + q2 + sq2 + st2) - (u1 + n1 + s1 + q1 + sq1 + st1) ))
+  local idle=$(( (i2 + w2) - (i1 + w1) )) iowait=$(( w2 - w1 ))
+  local total=$(( busy + idle )) pct io level
+  read -r pct io < <(awk -v b="$busy" -v w="$iowait" -v t="$total" \
+    'BEGIN { printf "%.1f %.1f\n", (t>0 ? b*100/t : 0), (t>0 ? w*100/t : 0) }')
+  level=$(level_for "$pct" "$CPU_THRESHOLDS")
+  emit system/cpu system cpu "$level" "${pct}%" "CPU-Auslastung $pct %" \
+    "$(jq -nc --argjson p "$pct" --argjson io "$io" --argjson c "$(nproc)" \
+        --arg top "$(top_processes cpu)" \
+        '{used_percent:$p, iowait_percent:$io, cores:$c, top_processes:$top}')"
+}
+
+# Liest RAM- und Swap-Belegung in einem Durchgang aus /proc/meminfo
+check_memory() {
+  local total avail used swap_total swap_used pct level
+  read -r total avail used swap_total swap_used pct < <(awk '
+    /^MemTotal:/ {t=$2} /^MemAvailable:/ {a=$2} /^SwapTotal:/ {st=$2} /^SwapFree:/ {sf=$2}
+    END { printf "%d %d %d %d %d %.1f\n", t/1024, a/1024, (t-a)/1024, st/1024, (st-sf)/1024, (t>0 ? (t-a)*100/t : 0) }' /proc/meminfo)
+  level=$(level_for "$pct" "$MEMORY_THRESHOLDS")
+  emit system/memory system memory "$level" "${pct}%" \
+    "RAM belegt $pct % ($used von $total MB)" \
+    "$(jq -nc --argjson p "$pct" --argjson t "$total" --argjson a "$avail" \
+        --argjson st "$swap_total" --argjson su "$swap_used" \
+        --arg top "$(top_processes mem)" \
+        '{used_percent:$p, total_mb:$t, available_mb:$a, swap_total_mb:$st, swap_used_mb:$su, top_processes:$top}')"
+}
+
+# Liest Load Average (1/5/15 Min) und Uptime aus /proc
+check_load() {
+  local l1 l5 l15 cores up per_core level
+  read -r l1 l5 l15 _ </proc/loadavg
+  cores=$(nproc)
+  read -r up per_core < <(awk -v l="$l5" -v c="$cores" '{ printf "%d %.2f\n", $1, (c>0 ? l/c : 0) }' /proc/uptime)
+  level=$(level_for "$per_core" "$LOAD_THRESHOLDS")
+  emit system/load system load "$level" "$l5" \
+    "Load $l1 $l5 $l15 bei $cores Kernen, Uptime $(human_duration "$up")" \
+    "$(jq -nc --argjson a "$l1" --argjson b "$l5" --argjson c "$l15" --argjson k "$cores" \
+        --argjson p "$per_core" --argjson u "$up" --arg uh "$(human_duration "$up")" \
+        --arg boot "$(uptime -s 2>/dev/null)" \
+        '{load1:$a, load5:$b, load15:$c, cores:$k, load5_per_core:$p, uptime_seconds:$u, uptime:$uh, booted_at:$boot}')"
+}
+
+# Liefert die drei größten Prozesse nach CPU oder RAM
+top_processes() {
+  ps -eo pid,pcpu,pmem,comm --sort=-p"$1" --no-headers 2>/dev/null | head -n 3 |
+    awk '{printf "%s%s (PID %s, CPU %s %%, RAM %s %%)", (NR>1?"; ":""), $4, $1, $2, $3}'
+}
+
+# Ermittelt alle zu prüfenden Einhängepunkte und startet je Platte eine Prüfung
+check_disks() {
+  local -a args=(-P -T) paths=()
+  if [[ $DISK_PATHS == auto ]]; then
+    args+=(-x tmpfs -x devtmpfs -x overlay -x squashfs -x efivarfs -x nsfs -x ramfs -x fuse.portal)
+  else
+    read -ra paths <<<"$DISK_PATHS"
+    args+=(-- "${paths[@]}")
+  fi
+  local -A seen=()
+  local dev type size used avail pct mnt
+  while read -r dev type size used avail pct mnt; do
+    [[ -n ${seen[$mnt]:-} || ! -d $mnt ]] && continue
+    seen[$mnt]=1
+    bg check_one_disk "$dev" "$type" "$size" "$used" "$avail" "${pct%\%}" "$mnt"
+  done < <(timeout 10 df "${args[@]}" 2>/dev/null | tail -n +2)
+}
+
+# Prüft Speicherplatz, Inodes und bei Alarm die größten Ordner einer Platte
+check_one_disk() {
+  local dev=$1 type=$2 size=$3 used=$4 avail=$5 pct=$6 mnt=$7 ipct level ilevel msg top='[]'
+  ipct=$(timeout 5 df -P -i -- "$mnt" 2>/dev/null | awk 'NR == 2 { gsub("%", "", $5); print ($5 == "-" ? 0 : $5) }')
+  ipct=${ipct:-0}
+  level=$(level_for "$pct" "$DISK_THRESHOLDS")
+  ilevel=$(level_for "$ipct" "$DISK_THRESHOLDS")
+  msg="Platte $mnt zu $pct % belegt ($(( avail / 1024 )) MB frei)"
+  if (( ${LEVEL_NUM[$ilevel]:-0} > ${LEVEL_NUM[$level]:-0} )); then
+    level=$ilevel
+    msg="Inodes auf $mnt zu $ipct % belegt"
+  fi
+  if (( DISK_TOP_DIRS > 0 && ${LEVEL_NUM[$level]:-0} >= 2 )); then
+    top=$(timeout 8 du -x -k -d 1 -- "$mnt" 2>/dev/null | sort -rn | tail -n +2 | head -n "$DISK_TOP_DIRS" |
+      jq -Rsc 'split("\n") | map(select(length > 0) | split("\t") | {path: .[1], size_mb: ((.[0] | tonumber) / 1024 | floor)})')
+    [[ -n $top ]] || top='[]'
+  fi
+  emit "disk/$mnt" disk "$mnt" "$level" "${pct}%" "$msg" \
+    "$(jq -nc --arg m "$mnt" --arg d "$dev" --arg t "$type" --argjson p "$pct" --argjson ip "$ipct" \
+        --argjson s "$((size / 1024))" --argjson u "$((used / 1024))" --argjson a "$((avail / 1024))" \
+        --argjson top "$top" \
+        '{mount:$m, used_percent:$p, inode_percent:$ip, free_mb:$a, size_mb:$s, used_mb:$u,
+          device:$d, fstype:$t, largest_dirs:(if ($top | length) > 0 then $top else null end)}')"
+}
+
+# === 3. Modul docker (Container-Zustände, Ressourcen & automatische Port-Erkennung) ===
+
+# Bewertet alle 13 Docker-Zustände, Healthchecks, OOM, Neustarts und CPU/RAM-Statistiken
+read -r -d '' JQ_DOCKER <<'JQ'
+def ts: if . == null or . == "" or startswith("0001-") then null
+        else (sub("\\.[0-9]+"; "") | sub("\\+00:00$"; "Z") | try fromdateiso8601 catch null) end;
+def mb: if . == null then null else (. / 1048576 * 10 | round / 10) end;
+def short($n): if . == null then null elif length > $n then .[0:$n] + "…" else . end;
+
+$i[0] as $c
+| ($s[0] // null) as $st
+| ($c.Name | ltrimstr("/")) as $name
+| ($c.Config.Labels // {}) as $lab
+| select(($lab["monitor.ignore"] // "") != "true")
+| select($ignore == "" or ($name | test($ignore) | not))
+| $c.State as $state
+| ($state.Health.Status // "none") as $health
+| ($c.RestartCount // 0) as $restarts
+| ($state.StartedAt | ts) as $started
+| ($c.HostConfig.RestartPolicy.Name // "no") as $policy
+| ((($lab["monitor.level"] // "") == "CRITICAL") or ($critical | index($name) != null)) as $important
+| ($policy == "always" or $policy == "unless-stopped"
+   or ($lab["monitor.expect"] // "") == "running" or $important) as $should_run
+| ($state.ExitCode // 0) as $code
+
+| ( if $state.Status == "running" then
+      if $health == "unhealthy" then
+        ["ERROR", "unhealthy", "Healthcheck meldet unhealthy (\($state.Health.FailingStreak // 0) Fehlversuche in Folge)"]
+      elif $restarts > 0 and $started != null and ($now - $started) < $window then
+        ["ERROR", "restart-loop", "Neustart-Schleife: \($restarts) Neustarts, letzter vor \($now - $started) s"]
+      elif $health == "starting" then
+        ["WARNING", "starting", "läuft, Healthcheck noch nicht bestanden"]
+      elif $health == "healthy" then
+        ["INFO", "healthy", "läuft, Healthcheck bestanden"]
+      else
+        ["INFO", "running", "läuft (ohne Healthcheck)"]
+      end
+    elif $state.Status == "restarting" then
+      ["ERROR", "restarting", "startet neu (\($restarts) Neustarts, letzter Exit-Code \($code))"]
+    elif $state.Status == "paused" then
+      ["WARNING", "paused", "pausiert"]
+    elif $state.Status == "created" then
+      ["WARNING", "created", "angelegt, aber nie gestartet"]
+    elif $state.Status == "exited" then
+      if $state.OOMKilled then
+        ["CRITICAL", "oom-killed", "vom Kernel beendet, Arbeitsspeicher reichte nicht (OOM)"]
+      elif $should_run then
+        ["ERROR", "exited", "gestoppt (Exit-Code \($code)), sollte aber laufen"]
+      elif $code == 0 then
+        ["INFO", "exited", "beendet mit Exit-Code 0 (einmaliger Job)"]
+      elif $code == 137 then
+        ["ERROR", "exited", "hart beendet (Exit-Code 137, SIGKILL), z. B. durch den OOM-Killer bei einem Unterprozess"]
+      else
+        ["ERROR", "exited", "beendet mit Fehler, Exit-Code \($code)"]
+      end
+    elif $state.Status == "dead" then
+      ["CRITICAL", "dead", "dead: Docker konnte den Container nicht sauber beenden"]
+    elif $state.Status == "removing" then
+      ["WARNING", "removing", "wird gerade entfernt"]
+    else
+      ["WARNING", ($state.Status // "unknown"), "unbekannter Zustand \($state.Status)"]
+    end ) as $r
+
+| ($r[0] | if $important and . == "ERROR" then "CRITICAL" else . end) as $level
+
+| ( if $st == null or $st.cpu_stats == null then null else
+      (($st.cpu_stats.cpu_usage.total_usage // 0) - ($st.precpu_stats.cpu_usage.total_usage // 0)) as $cd
+      | (($st.cpu_stats.system_cpu_usage // 0) - ($st.precpu_stats.system_cpu_usage // 0)) as $sd
+      | (if $sd > 0 and $cd >= 0 then ($cd / $sd * ($st.cpu_stats.online_cpus // 1) * 100 * 10 | round / 10) else null end)
+    end ) as $cpu
+| ( if $st == null or $st.memory_stats.usage == null then null else
+      ($st.memory_stats.usage - ($st.memory_stats.stats.inactive_file // 0)) end ) as $mem
+| ($st.memory_stats.limit // null) as $limit
+| ([ (if $cpu != null then "CPU \($cpu) %" else empty end),
+     (if $mem != null then "RAM \($mem | mb) MB" else empty end) ] | join(", ")) as $usage
+
+| {
+    id: "container/\($name)",
+    kind: "container",
+    name: $name,
+    level: $level,
+    status: $r[1],
+    message: ("\($name): \($r[2])" + (if $usage != "" then " · \($usage)" else "" end)),
+    details: ({
+      state: $state.Status,
+      health: $health,
+      exit_code: (if $state.Status == "running" then null else $code end),
+      restart_count: $restarts,
+      cpu_percent: $cpu,
+      mem_mb: ($mem | mb),
+      mem_limit_mb: ($limit | mb),
+      mem_percent: (if $mem != null and ($limit // 0) > 0 then ($mem / $limit * 1000 | round / 10) else null end),
+      compose_dir: $lab["com.docker.compose.project.working_dir"],
+      compose_file: $lab["com.docker.compose.project.config_files"],
+      compose_service: $lab["com.docker.compose.service"],
+      mounts: ([$c.Mounts[]? | "\(.Source) -> \(.Destination)"] | if length > 0 then join(", ") else null end),
+      log_path: (if ($c.LogPath // "") != "" then $c.LogPath else null end),
+      health_output: (($state.Health.Log // []) | last | .Output // null | short(300)),
+      image: $c.Config.Image,
+      restart_policy: $policy,
+      started_at: (if ($state.StartedAt // "") | startswith("0001-") then null else $state.StartedAt end),
+      finished_at: (if ($state.FinishedAt // "") | startswith("0001-") then null else $state.FinishedAt end),
+      oom_killed: (if $state.OOMKilled then true else null end),
+      error: (if ($state.Error // "") != "" then $state.Error else null end),
+      container_id: ($c.Id[0:12]),
+      hint: "docker logs --tail 50 \($name)"
+    } | with_entries(select(.value != null)))
+  }
+JQ
+
+# Extrahiert veröffentlichte TCP-Ports aller relevanten Container für die Port-Prüfung
+read -r -d '' JQ_PORTS <<'JQ'
+. as $c
+| ($c.Name | ltrimstr("/")) as $name
+| ($c.Config.Labels // {}) as $lab
+| select(($lab["monitor.ignore"] // "") != "true")
+| select($ignore == "" or ($name | test($ignore) | not))
+| ((($lab["monitor.level"] // "") == "CRITICAL") or ($critical | index($name) != null)) as $important
+| ($c.HostConfig.RestartPolicy.Name // "no") as $policy
+| ($c.State.Status == "running") as $running
+| select($running or $policy == "always" or $policy == "unless-stopped"
+         or ($lab["monitor.expect"] // "") == "running" or $important)
+| (if $running then $c.NetworkSettings.Ports else $c.HostConfig.PortBindings end) // {}
+| [ to_entries[] | select(.key | endswith("/tcp")) | (.key | split("/")[0]) as $private
+    | (.value // [])[] | select((.HostPort // "") != "")
+    | {host: (if (.HostIp // "") | test("^(0\\.0\\.0\\.0|::|)$") then "127.0.0.1" else .HostIp end),
+       port: .HostPort, private: $private} ]
+| unique_by(.port)[]
+| [$name, .host, .port, .private, (if $important then "CRITICAL" else "ERROR" end), $c.State.Status]
+| @tsv
+JQ
+
+# Fragt die Docker-Engine direkt über ihren Unix-Socket ab
+docker_api() {
+  curl -sS --fail --unix-socket "$DOCKER_SOCKET" -m "${2:-5}" "http://localhost$1"
+}
+
+# Prüft zuletzt bekannte Container-Ports weiter, auch wenn der Docker-Daemon ausgefallen ist
+check_known_ports() {
+  [[ $PORT_CHECKS == auto && -s $RUN_DIR/ports.tsv ]] || return 0
+  local name host port private fail state
+  while IFS=$'\t' read -r name host port private fail state; do
+    [[ -n $port ]] && bg check_port "$name" "$host" "$port" "$private" "$fail" docker-down
+  done <"$RUN_DIR/ports.tsv"
+  flush_bg
+}
+
+# Prüft Docker-Daemon, holt Container-Inspect/Stats parallel und prüft alle Container-Ports
+check_docker() {
+  local list version
+  if [[ ! -S $DOCKER_SOCKET ]] || ! version=$(docker_api /version 5); then
+    emit docker/daemon docker daemon CRITICAL unreachable \
+      "Docker-API nicht erreichbar über $DOCKER_SOCKET" \
+      "$(jq -nc --arg s "$DOCKER_SOCKET" --arg st "$(systemctl is-active docker 2>/dev/null)" \
+          '{socket:$s, systemd_state:$st, hint:"systemctl status docker; journalctl -u docker"}')"
+    check_known_ports
+    return 0
+  fi
+  if ! list=$(docker_api "/containers/json?all=1" 10); then
+    emit docker/daemon docker daemon ERROR api-error "Docker-API antwortet, Containerliste fehlt"
+    return 0
+  fi
+
+  local dir="$MONITOR_WORK/api" id
+  mkdir -p "$dir"
+  while read -r id; do
+    docker_api "/containers/$id/json" 5 >"$dir/$id.inspect" 2>/dev/null &
+  done < <(jq -r '.[].Id' <<<"$list")
+  while read -r id; do
+    docker_api "/containers/$id/stats?stream=false" 8 >"$dir/$id.stats" 2>/dev/null &
+  done < <(jq -r '.[] | select(.State == "running") | .Id' <<<"$list")
+  wait
+
+  local now critical f
+  now=$(date +%s)
+  critical=$(jq -nc --arg s "$CRITICAL_CONTAINERS" '$s | split(" ") | map(select(length > 0))')
+  for f in "$dir"/*.inspect; do
+    [[ -s $f ]] || continue
+    id=$(basename "$f" .inspect)
+    jq -c -n --slurpfile i "$f" --slurpfile s <(cat "$dir/$id.stats" 2>/dev/null) \
+      --argjson now "$now" --argjson window "$RESTART_LOOP_WINDOW" \
+      --argjson critical "$critical" --arg ignore "$IGNORE_CONTAINERS" \
+      "$JQ_DOCKER" 2>/dev/null
+  done
+
+  if [[ $PORT_CHECKS == auto ]]; then
+    local targets name host port private fail state
+    targets=$(jq -r --argjson critical "$critical" --arg ignore "$IGNORE_CONTAINERS" \
+                "$JQ_PORTS" "$dir"/*.inspect 2>/dev/null)
+    printf '%s\n' "$targets" >"$RUN_DIR/ports.tsv.$BASHPID" 2>/dev/null &&
+      mv -f "$RUN_DIR/ports.tsv.$BASHPID" "$RUN_DIR/ports.tsv" 2>/dev/null
+    while IFS=$'\t' read -r name host port private fail state; do
+      [[ -n $port ]] && bg check_port "$name" "$host" "$port" "$private" "$fail" "$state"
+    done <<<"$targets"
+    flush_bg
+  fi
+
+  local total running ver api_ver
+  read -r total running < <(jq -r '[length, ([.[] | select(.State == "running")] | length)] | @tsv' <<<"$list")
+  read -r ver api_ver < <(jq -r '[.Version, .ApiVersion] | @tsv' <<<"$version")
+  emit docker/daemon docker daemon INFO running \
+    "Docker $ver erreichbar, $running von $total Containern laufen" \
+    "$(jq -nc --arg v "$ver" --arg av "$api_ver" --argjson t "$total" --argjson r "$running" --arg s "$DOCKER_SOCKET" \
+        '{version:$v, api_version:$av, containers_total:$t, containers_running:$r, socket:$s}')"
+}
+
+# === 4. Modul services (systemd-Dienste) ===
+
+# Startet für jeden konfigurierten systemd-Dienst eine parallele Prüfung
+check_services() {
+  local svc
+  for svc in $SERVICES; do bg check_one_service "$svc"; done
+  flush_bg
+}
+
+# Fragt den Zustand eines einzelnen systemd-Dienstes über systemctl show ab
+check_one_service() {
+  local svc=$1 key val level status msg
+  local -A p=()
+  while IFS='=' read -r key val; do
+    p[$key]=$val
+  done < <(timeout 5 systemctl show "$svc" \
+             -p LoadState,ActiveState,SubState,Result,FragmentPath,NRestarts,MainPID,ActiveEnterTimestamp,InactiveEnterTimestamp 2>/dev/null)
+
+  if [[ ${p[LoadState]:-} == not-found || -z ${p[LoadState]:-} ]]; then
+    level=WARNING status=not-found msg="Dienst $svc ist auf diesem Server nicht vorhanden"
+  else
+    status=${p[ActiveState]:-unknown}
+    case $status in
+      active)                            level=INFO    msg="Dienst $svc läuft (${p[SubState]:-})" ;;
+      activating|reloading|deactivating) level=WARNING msg="Dienst $svc ist im Übergang: $status" ;;
+      failed)                            level=ERROR   msg="Dienst $svc ist ausgefallen (${p[Result]:-})" ;;
+      *)                                 level=ERROR   msg="Dienst $svc läuft nicht ($status)" ;;
+    esac
+    [[ $level == ERROR && " $CRITICAL_SERVICES " == *" $svc "* ]] && level=CRITICAL
+  fi
+
+  emit "service/$svc" service "$svc" "$level" "$status" "$msg" \
+    "$(jq -nc --arg sub "${p[SubState]:-}" --arg res "${p[Result]:-}" --arg unit "${p[FragmentPath]:-}" \
+        --arg r "${p[NRestarts]:-}" --arg pid "${p[MainPID]:-}" \
+        --arg since "${p[ActiveEnterTimestamp]:-}" --arg down "${p[InactiveEnterTimestamp]:-}" --arg s "$svc" \
+        '{sub_state:$sub, result:$res, unit_file:$unit, restarts:($r | tonumber? // null),
+          main_pid:($pid | tonumber? // null), active_since:$since, inactive_since:$down,
+          hint:"systemctl status \($s); journalctl -u \($s) -n 50"}
+         | with_entries(select(.value != "" and .value != 0 or .key == "restarts"))')"
+}
+
+# === 5. Modul endpoints & passwortlose Port-Prüfungen ===
+
+# Parst die JSON-Liste ENDPOINTS und prüft alle Einträge parallel
+check_endpoints() {
+  local ep
+  jq -e 'type == "array"' <<<"$ENDPOINTS" >/dev/null 2>&1 || {
+    emit monitor/endpoints monitor endpoints ERROR config "ENDPOINTS ist keine gültige JSON-Liste"
+    return 0
+  }
+  while read -r ep; do bg check_one_endpoint "$ep"; done < <(jq -c '.[]' <<<"$ENDPOINTS")
+  flush_bg
+}
+
+# Verteilt einen Endpoint-Eintrag an den passenden Prüftyp (http oder socket)
+check_one_endpoint() {
+  local ep=$1 type
+  type=$(jq -r '.type // (if has("port") then "tcp" else "http" end)' <<<"$ep")
+  case $type in
+    http)                   check_http "$ep" ;;
+    tcp|postgres|smtp|imap) check_socket "$ep" "$type" ;;
+    *) local n; n=$(jq -r '.name // "ohne-name"' <<<"$ep")
+       emit "endpoint/$n" endpoint "$n" ERROR config "unbekannter Typ $type (http, tcp, postgres, smtp, imap)" ;;
+  esac
+}
+
+# Berechnet die Stufe eines Endpoints aus Erfolg, Antwortzeit und slow_ms
+endpoint_level() {
+  if (( $1 )); then (( $3 > 0 && $2 > $3 )) && echo WARNING || echo INFO
+  else echo "$4"; fi
+}
+
+# Prüft eine HTTP(S)-Schnittstelle mit Methode, Headern, Body und erwartetem Statuscode
+check_http() {
+  local ep=$1 tmp="$MONITOR_WORK/endpoint.$BASHPID"
+  local name url method timeout fail_level slow_ms expect has_body body h out rc code secs ms ok=0 level status msg snippet=""
+  {
+    IFS= read -r name; IFS= read -r url; IFS= read -r method; IFS= read -r timeout
+    IFS= read -r fail_level; IFS= read -r slow_ms; IFS= read -r expect; IFS= read -r has_body; IFS= read -r body
+  } < <(jq -r '(.name // .url), .url, ((.method // "GET") | ascii_upcase), (.timeout // 5),
+               (.level // "ERROR"), (.slow_ms // 0), ((.expect // 200) | tojson), has("body"),
+               (.body // "" | if type == "string" then . else tojson end | @json)' <<<"$ep")
+  body=$(jq -r '.' <<<"$body")
+
+  local -a args=(-sS -o "$tmp.body" -w '%{http_code} %{time_total}' -X "$method" -m "$timeout" --max-redirs 0)
+  while IFS= read -r h; do [[ -n $h ]] && args+=(-H "$h"); done \
+    < <(jq -r '.headers // {} | to_entries[] | "\(.key): \(.value)"' <<<"$ep")
+  [[ $has_body == true ]] && args+=(--data-binary "$body")
+
+  out=$(curl "${args[@]}" "$url" 2>"$tmp.err"); rc=$?
+  read -r code secs <<<"$out"
+  [[ ${code:-} =~ ^[0-9]+$ ]] || code=0
+  code=$((10#$code))
+  ms=$(awk -v s="${secs:-0}" 'BEGIN { printf "%d", s * 1000 }')
+
+  [[ $expect =~ (^|[^0-9])$code([^0-9]|$) ]] && ok=1
+  level=$(endpoint_level "$ok" "$ms" "$slow_ms" "$fail_level")
+  if (( ok )); then
+    status="http-$code" msg="$name antwortet mit $code in $ms ms"
+    [[ $level == WARNING ]] && status=slow msg="$name antwortet langsam: $ms ms (Grenze $slow_ms ms)"
+  elif (( rc != 0 )); then
+    status=unreachable msg="$name nicht erreichbar: $(head -c 200 "$tmp.err" | tr '\n' ' ')"
+  else
+    status="http-$code" msg="$name antwortet mit $code, erwartet $expect"
+  fi
+  [[ $level != INFO ]] && snippet=$(head -c 300 "$tmp.body" 2>/dev/null | tr -d '\000')
+  rm -f "$tmp.body" "$tmp.err"
+
+  emit "endpoint/$name" endpoint "$name" "$level" "$status" "$msg" \
+    "$(jq -nc --arg m "$method" --arg u "$url" --argjson c "$code" --argjson ms "$ms" \
+        --argjson e "$expect" --argjson rc "$rc" --arg b "$snippet" \
+        '{type:"http", method:$m, url:$u, http_code:$c, expected:$e, time_ms:$ms,
+          curl_exit:(if $rc != 0 then $rc else null end), response:(if $b != "" then $b else null end)}')"
+}
+
+# Liest bei TCP/SMTP/IMAP/POP3 optional das Begrüßungsbanner und schließt sauber
+read -r -d '' TCP_PROBE <<'SH'
+exec 3<>"/dev/tcp/$1/$2" || exit 7
+line=""
+if [[ -n $3 ]]; then IFS= read -r -t "$5" line <&3 || exit 8; fi
+[[ -n $4 ]] && printf "%b" "$4" >&3
+exec 3>&-
+printf "%s" "$line"
+SH
+
+# Sendet ein PostgreSQL-Startpaket ohne Passwort (wie pg_isready) und liest das Antwortbyte
+read -r -d '' PG_PROBE <<'SH'
+exec 3<>"/dev/tcp/$1/$2" || exit 7
+printf "\x00\x00\x00\x29\x00\x03\x00\x00user\x00postgres\x00database\x00postgres\x00\x00" >&3
+IFS= read -r -N 1 t <&3 || exit 8
+case $t in
+  R) echo R ;;
+  E) f=$(head -c 400 <&3 | tr "\0" "\n")
+     printf "E %s %s\n" "$(grep -aoE '^C[0-9A-Z]{5}$' <<<"$f" | head -n1 | cut -c2-)" \
+       "$(grep -a '^M' <<<"$f" | tail -n1 | cut -c2-)" ;;
+  *) echo "?" ;;
+esac
+SH
+
+# Ordnet einen Container-Port seinem Standardprotokoll zu
+port_protocol() {
+  case $1 in
+    5432|6543) echo postgres ;;
+    25|587|2525) echo smtp ;;
+    143) echo imap ;;
+    80|3000|4000|5000|8000|8080) echo http ;;
+    443|8443) echo https ;;
+    *) echo tcp ;;
+  esac
+}
+
+# Führt eine passwortlose Protokollprüfung (PostgreSQL, SMTP, IMAP, HTTP oder TCP) durch
+probe() {
+  local proto=$1 host=$2 port=$3 timeout=$4 banner=${5:-} send=${6:-} tmp="$MONITOR_WORK/probe.$BASHPID" t0 err
+  case $proto in
+    smtp) [[ -n $banner ]] || banner='^220'; [[ -n $send ]] || send='QUIT\r\n' ;;
+    imap) [[ -n $banner ]] || banner='^\* OK'; [[ -n $send ]] || send='a1 LOGOUT\r\n' ;;
+  esac
+  P_OK=0 P_WARN=0 P_STATUS="" P_TEXT=""
+  t0=$(now_ms)
+  case $proto in
+    postgres) P_REPLY=$(timeout -k 1 "$timeout" bash -c "$PG_PROBE" _ "$host" "$port" 2>"$tmp") ;;
+    http|https) P_REPLY="HTTP $(curl -s -k -o /dev/null -w '%{http_code}' -m "$timeout" "$proto://$host:$port/" 2>"$tmp")" ;;
+    *) P_REPLY=$(timeout -k 1 "$timeout" bash -c "$TCP_PROBE" _ "$host" "$port" "$banner" "$send" "$timeout" 2>"$tmp") ;;
+  esac
+  P_RC=$?
+  P_MS=$(( $(now_ms) - t0 ))
+  P_REPLY=${P_REPLY//$'\r'/}
+  err=$(grep -o 'Connection refused\|No route to host\|Name or service not known\|Network is unreachable' "$tmp" 2>/dev/null | head -n1)
+  rm -f "$tmp"
+
+  if (( P_RC == 124 || P_RC == 137 )); then
+    P_STATUS=timeout P_TEXT="antwortet nicht innerhalb von $timeout s"
+  elif [[ $proto == http || $proto == https ]]; then
+    if (( P_RC == 0 )) && [[ $P_REPLY != "HTTP 000" ]]; then
+      P_OK=1 P_STATUS=http-up P_TEXT="antwortet mit $P_REPLY"
+    else
+      P_STATUS=unreachable P_TEXT="nicht erreichbar (curl $P_RC)"
+    fi
+  elif (( P_RC == 7 || P_RC == 1 )); then
+    P_STATUS=unreachable P_TEXT="nicht erreichbar${err:+ ($err)}"
+  elif [[ $proto == postgres ]]; then
+    case $P_REPLY in
+      R)          P_OK=1 P_STATUS=pg-ready P_TEXT="PostgreSQL nimmt Verbindungen an (fordert Anmeldung an)" ;;
+      "E 57P03"*) P_WARN=1 P_STATUS=pg-starting P_TEXT="PostgreSQL startet gerade" ;;
+      "E 53300"*) P_STATUS=pg-full P_TEXT="PostgreSQL nimmt keine Verbindungen mehr an (zu viele)" ;;
+      "E 57P0"*)  P_STATUS=pg-shutdown P_TEXT="PostgreSQL fährt herunter: ${P_REPLY#E * }" ;;
+      E*)         P_OK=1 P_STATUS=pg-answers P_TEXT="PostgreSQL antwortet, lehnt Verbindung ohne Anmeldung ab: ${P_REPLY#E * }" ;;
+      *)          P_STATUS=no-protocol P_TEXT="verbunden, antwortet aber nicht wie PostgreSQL" ;;
+    esac
+  elif (( P_RC == 8 )); then
+    P_STATUS=no-banner P_TEXT="verbunden, aber keine Antwort"
+  elif (( P_RC == 0 )) && [[ -z $banner || $P_REPLY =~ $banner ]]; then
+    P_OK=1 P_STATUS=${proto}-ok P_TEXT="erreichbar${P_REPLY:+, meldet \"${P_REPLY:0:60}\"}"
+  else
+    P_STATUS=bad-banner P_TEXT="meldet \"${P_REPLY:0:60}\", erwartet /$banner/"
+  fi
+}
+
+# Prüft einen automatisch erkannten Container-Port und meldet sein Ergebnis
+check_port() {
+  local name=$1 host=$2 port=$3 private=$4 fail=$5 state=$6 proto level msg
+  proto=$(port_protocol "$private")
+  probe "$proto" "$host" "$port" "$PORT_TIMEOUT"
+  if (( P_OK )); then level=INFO; elif (( P_WARN )); then level=WARNING; else level=$fail; fi
+  msg="$name:$port ($proto): $P_TEXT, $P_MS ms"
+  case $state in
+    running) ;;
+    docker-down) msg+=" · Docker nicht erreichbar, Port aus dem letzten Durchlauf" ;;
+    *) msg+=" · Container $state" ;;
+  esac
+  emit "port/$name:$port" port "$name:$port" "$level" "$P_STATUS" "$msg" \
+    "$(jq -nc --arg c "$name" --arg h "$host" --argjson p "$port" --argjson cp "$private" --arg pr "$proto" \
+        --arg r "$P_REPLY" --argjson ms "$P_MS" --arg st "$state" \
+        '{type:"port", container:$c, host:$h, port:$p, container_port:$cp, protocol:$pr,
+          reply:(if $r != "" then $r[0:200] else null end), time_ms:$ms, container_state:$st}')"
+}
+
+# Prüft einen konfigurierten Socket-Endpoint (tcp, postgres, smtp, imap)
+check_socket() {
+  local ep=$1 type=$2 name host port timeout fail_level slow_ms banner send level status msg
+  {
+    IFS= read -r name; IFS= read -r host; IFS= read -r port; IFS= read -r timeout
+    IFS= read -r fail_level; IFS= read -r slow_ms; IFS= read -r banner; IFS= read -r send
+  } < <(jq -r '(.name // "\(.host // "127.0.0.1"):\(.port)"), (.host // "127.0.0.1"), (.port // 0),
+               (.timeout // 5), (.level // "ERROR"), (.slow_ms // 0),
+               (.banner // "" | @json), (.send // "" | @json)' <<<"$ep")
+  banner=$(jq -r . <<<"$banner"); send=$(jq -r . <<<"$send")
+  probe "$type" "$host" "$port" "$timeout" "$banner" "$send"
+  if (( P_OK )); then
+    level=$(endpoint_level 1 "$P_MS" "$slow_ms" "$fail_level") status=$P_STATUS
+    msg="$name: $host:$port $P_TEXT in $P_MS ms"
+    [[ $level == WARNING ]] && status=slow msg="$name: $host:$port antwortet langsam: $P_MS ms (Grenze $slow_ms ms)"
+  else
+    level=$fail_level status=$P_STATUS msg="$name: $host:$port $P_TEXT"
+    (( P_WARN )) && level=WARNING
+  fi
+  emit "endpoint/$name" endpoint "$name" "$level" "$status" "$msg" \
+    "$(jq -nc --arg t "$type" --arg h "$host" --argjson p "$port" --arg b "$banner" --arg o "$P_REPLY" \
+        --argjson ms "$P_MS" --argjson rc "$P_RC" \
+        '{type:$t, host:$h, port:$p, expected_banner:(if $b != "" then $b else null end),
+          reply:(if $o != "" then $o[0:200] else null end), time_ms:$ms,
+          exit:(if $rc != 0 then $rc else null end)}')"
+}
+
+# === 6. Durchlauf (baut den Gesamtzustand monitor.status/v1 im RAM) ===
+
+# Fasst alle einzelnen Prüfergebnisse zu einem status.json-Dokument zusammen
+read -r -d '' JQ_SNAPSHOT <<'JQ'
+def lnum: {"INFO":0, "WARNING":1, "ERROR":2, "CRITICAL":3}[.] // 0;
+def lname: ["INFO", "WARNING", "ERROR", "CRITICAL"][.];
+
+. as $checks
+| ($checks | map(select(.id == "system/cpu"))[0].details // {}) as $cpu
+| ($checks | map(select(.id == "system/memory"))[0].details // {}) as $mem
+| ($checks | map(select(.id == "system/load"))[0].details // {}) as $load
+| ($checks | map(select(.kind == "container"))) as $containers
+| {
+    schema: "monitor.status/v1",
+    version: $version,
+    host: $host,
+    time: $time,
+    epoch: $epoch,
+    interval: $interval,
+    cycle_ms: $ms,
+    level: ([$checks[].level | lnum] | max // 0 | lname),
+    counts: {
+      INFO:     ([$checks[] | select(.level == "INFO")] | length),
+      WARNING:  ([$checks[] | select(.level == "WARNING")] | length),
+      ERROR:    ([$checks[] | select(.level == "ERROR")] | length),
+      CRITICAL: ([$checks[] | select(.level == "CRITICAL")] | length)
+    },
+    system: {
+      cpu_percent: $cpu.used_percent,
+      mem_percent: $mem.used_percent,
+      mem_total_mb: $mem.total_mb,
+      load1: $load.load1, load5: $load.load5, load15: $load.load15,
+      cores: $load.cores,
+      uptime_seconds: $load.uptime_seconds,
+      uptime: $load.uptime,
+      disks: [$checks[] | select(.kind == "disk")
+              | {mount: .details.mount, used_percent: .details.used_percent, free_mb: .details.free_mb, level: .level}]
+    },
+    containers: {
+      total: ($containers | length),
+      running: ([$containers[] | select(.details.state == "running")] | length),
+      problems: ([$containers[] | select(.level != "INFO")] | length)
+    },
+    checks: ($checks | sort_by([-(.level | lnum), .id]))
+  }
+JQ
+
+# Führt genau ein Prüfmodul im eigenen Arbeitsordner aus
+collect() {
+  local name=${1:?Modulname fehlt}
+  [[ " $MODULES " == *" $name "* ]] || die "unbekanntes Prüfmodul: $name (vorhanden: $MODULES)"
+  MONITOR_WORK="${MONITOR_WORK:-$WORK_DIR}/$name"
+  mkdir -p "$MONITOR_WORK" || die "kann $MONITOR_WORK nicht anlegen"
+  "check_$name"
+}
+
+# Startet alle aktivierten Module parallel mit Zeitlimit und schreibt status.json atomar
+run_cycle() {
+  local target=$1 dir t0 c rc
+  dir=$(mktemp -d -p "$WORK_DIR" cycle.XXXXXX) || return 1
+  t0=$(now_ms)
+  local -A pids=()
+
+  for c in $CHECKS; do
+    MONITOR_WORK="$dir" timeout -k 2 "$COLLECT_TIMEOUT" "$SELF" _collect "$c" \
+      >"$dir/$c.jsonl" 2>"$dir/$c.err" &
+    pids[$c]=$!
+  done
+  for c in "${!pids[@]}"; do
+    wait "${pids[$c]}"; rc=$?
+    if (( rc == 124 || rc == 137 )); then
+      emit "monitor/$c" monitor "$c" ERROR timeout \
+        "Prüfmodul $c hat das Zeitlimit von ${COLLECT_TIMEOUT} s überschritten" >>"$dir/$c.jsonl"
+    elif (( rc != 0 )); then
+      emit "monitor/$c" monitor "$c" ERROR failed \
+        "Prüfmodul $c ist mit Fehler $rc abgebrochen" \
+        "$(jq -nc --arg e "$(tail -c 500 "$dir/$c.err")" '{stderr:$e}')" >>"$dir/$c.jsonl"
+    fi
+  done
+
+  local ms=$(( $(now_ms) - t0 ))
+  cat "$dir"/*.jsonl 2>/dev/null | jq -cR 'fromjson? | select(type == "object" and has("id"))' |
+    jq -s --arg host "$(hostname)" --arg time "$(date -Iseconds)" \
+      --argjson epoch "$(date +%s)" --argjson ms "$ms" --argjson interval "$INTERVAL" \
+      --arg version "$VERSION" "$JQ_SNAPSHOT" >"$target.tmp" &&
+    mv -f "$target.tmp" "$target"
+  rm -rf "$dir"
+}
+
+# === 7. Spam-Schutz (Zustand ausschließlich in RAM-Variablen) ===
+
+declare -A NOTIFIED=() PENDING=() PCOUNT=() NLOG=() SUPPRESSED=()
+CHANGES='[]'
+
+# Entscheidet nach Bestätigungszahl und Zeitfenster, welche Änderungen gemeldet werden (Entwarnung & Verschlechterung immer sofort)
+decide_changes() {
+  local file=$1 now id lvl n prev
+  now=$(date +%s)
+  local -A seen=()
+  local out=()
+
+  while IFS=$'\t' read -r id lvl; do
+    seen[$id]=1
+    n=${LEVEL_NUM[$lvl]:-0}
+    prev=${NOTIFIED[$id]:-0}
+
+    if (( n == prev )); then
+      PENDING[$id]=""; PCOUNT[$id]=0
+      continue
+    fi
+    if [[ ${PENDING[$id]:-} == "$n" ]]; then
+      PCOUNT[$id]=$(( ${PCOUNT[$id]:-0} + 1 ))
+    else
+      PENDING[$id]=$n; PCOUNT[$id]=1
+    fi
+    (( PCOUNT[$id] >= CONFIRM_CYCLES )) || continue
+
+    local entry kept="" count=0 maxlvl=-1 t l
+    for entry in ${NLOG[$id]:-}; do
+      t=${entry%%:*}; l=${entry##*:}
+      if (( now - t < NOTIFY_WINDOW )); then
+        kept+="$entry "; count=$(( count + 1 )); (( l > maxlvl )) && maxlvl=$l
+      fi
+    done
+    NLOG[$id]=$kept
+
+    if (( count >= NOTIFY_MAX && n <= maxlvl && !(n == 0 && prev > 0) )); then
+      if (( PCOUNT[$id] == CONFIRM_CYCLES )); then
+        SUPPRESSED[$id]=$(( ${SUPPRESSED[$id]:-0} + 1 ))
+        log INFO "$id: Wechsel zu ${LEVEL_NAMES[$n]} unterdrückt (Spam-Schutz, $count Meldungen in ${NOTIFY_WINDOW} s)"
+      fi
+      continue
+    fi
+
+    out+=("$(jq -nc --arg id "$id" --argjson p "$prev" --argjson s "${SUPPRESSED[$id]:-0}" \
+               '{id:$id, previous:$p, suppressed:$s, gone:false}')")
+    NOTIFIED[$id]=$n
+    NLOG[$id]+="$now:$n "
+    SUPPRESSED[$id]=0
+    PENDING[$id]=""; PCOUNT[$id]=0
+  done < <(jq -r '.checks[] | [.id, .level] | @tsv' "$file")
+
+  for id in "${!NOTIFIED[@]}"; do
+    [[ -n ${seen[$id]:-} ]] && continue
+    if (( ${NOTIFIED[$id]} > 0 )); then
+      out+=("$(jq -nc --arg id "$id" --argjson p "${NOTIFIED[$id]}" \
+                 '{id:$id, previous:$p, suppressed:0, gone:true}')")
+    fi
+    unset 'NOTIFIED[$id]' 'PENDING[$id]' 'PCOUNT[$id]' 'NLOG[$id]' 'SUPPRESSED[$id]'
+  done
+
+  if (( ${#out[@]} == 0 )); then CHANGES='[]'
+  else CHANGES=$(printf '%s\n' "${out[@]}" | jq -sc '.'); fi
+}
+
+# === 8. Meldungen & Webhooks (JSON und Discord mit Wiederholung) ===
+
+# Erzeugt aus status.json und CHANGES eine Änderungsmeldung (monitor.event/v1)
+read -r -d '' JQ_EVENT <<'JQ'
+def lnum: {"INFO":0, "WARNING":1, "ERROR":2, "CRITICAL":3}[.] // 0;
+def lname: ["INFO", "WARNING", "ERROR", "CRITICAL"][.];
+
+. as $s
+| [ $changes[] as $c
+    | if $c.gone then
+        {id: $c.id, kind: ($c.id | split("/")[0]), name: ($c.id | split("/")[1:] | join("/")),
+         level: "INFO", status: "gone", message: "\($c.id) gibt es nicht mehr", details: {}}
+      else
+        ($s.checks[] | select(.id == $c.id))
+      end
+    | . + {previous_level: ($c.previous | lname),
+           change: (if (.level | lnum) == 0 then "recovered"
+                    elif (.level | lnum) > $c.previous then "worse" else "better" end),
+           suppressed_changes: $c.suppressed} ] as $events
+| {
+    schema: "monitor.event/v1",
+    type: "change",
+    host: $s.host,
+    time: $s.time,
+    level: ([$events[].level | lnum] | max // 0 | lname),
+    summary: {level: $s.level, counts: $s.counts, system: $s.system, containers: $s.containers},
+    events: ($events | sort_by(-(.level | lnum)))
+  }
+JQ
+
+# Erzeugt aus status.json einen regelmäßigen Statusbericht (monitor.report/v1)
+read -r -d '' JQ_REPORT <<'JQ'
+{
+  schema: "monitor.report/v1",
+  type: "report",
+  host: .host,
+  time: .time,
+  level: .level,
+  counts: .counts,
+  system: .system,
+  containers: .containers,
+  cycle_ms: .cycle_ms,
+  problems: [.checks[] | select(.level != "INFO") | {id, level, status, message, details}]
+}
+JQ
+
+# Wandelt Event-, Bericht- oder Test-JSON in Discord-Embeds innerhalb der Discord-Grenzen um
+read -r -d '' JQ_DISCORD <<'JQ'
+def color: {"INFO": 3066993, "WARNING": 15844367, "ERROR": 15105570, "CRITICAL": 15158332}[.] // 9807270;
+def icon:  {"INFO": "🟢", "WARNING": "🟡", "ERROR": "🟠", "CRITICAL": "🔴"}[.] // "⚪";
+def cut($n): tostring | if length > $n then .[0:($n - 1)] + "…" else . end;
+def val: if type == "string" then . elif type == "array" then map(tostring) | join(", ") else tojson end;
+def fields($d; $n):
+  [$d | to_entries[] | select(.value != null and .value != "" and .value != [])
+   | {name: .key, value: (.value | val | cut(150)), inline: ((.value | val | length) < 30)}] | .[0:$n];
+
+. as $m
+| if $m.type == "report" then
+    {
+      username: "Monitor \($m.host)",
+      embeds: [{
+        title: ("\($m.level | icon) Bericht \($m.host): \($m.level)" | cut(200)),
+        color: ($m.level | color),
+        timestamp: $m.time,
+        fields: ([
+          {name: "CPU",       value: "\($m.system.cpu_percent) %", inline: true},
+          {name: "RAM",       value: "\($m.system.mem_percent) % von \($m.system.mem_total_mb) MB", inline: true},
+          {name: "Load",      value: "\($m.system.load1) / \($m.system.load5) / \($m.system.load15) (\($m.system.cores) Kerne)", inline: true},
+          {name: "Uptime",    value: "\($m.system.uptime)", inline: true},
+          {name: "Container", value: "\($m.containers.running) von \($m.containers.total) laufen, \($m.containers.problems) mit Problem", inline: true},
+          {name: "Prüfungen", value: "INFO \($m.counts.INFO) · WARNING \($m.counts.WARNING) · ERROR \($m.counts.ERROR) · CRITICAL \($m.counts.CRITICAL)", inline: false},
+          {name: "Platten",   value: ([$m.system.disks[] | "\(.mount): \(.used_percent) % (\(.free_mb) MB frei)"] | join("\n") | if . == "" then "–" else . end | cut(1000)), inline: false}
+        ] + (if ($m.problems | length) > 0 then
+              [{name: "Offene Probleme", inline: false,
+                value: ([$m.problems[] | "\(.level | icon) \(.message)"] | join("\n") | cut(1000))}]
+             else [] end)),
+        footer: {text: "monitor · Durchlauf \($m.cycle_ms) ms"}
+      }]
+    }
+  elif $m.type == "test" then
+    {username: "Monitor \($m.host)",
+     embeds: [{title: "🔔 Testmeldung von \($m.host)", description: $m.message, color: 3447003, timestamp: $m.time}]}
+  else
+    $m.events as $ev
+    | {
+        username: "Monitor \($m.host)",
+        content: (if $m.level == "INFO" then "Entwarnung auf **\($m.host)**"
+                  else "\($m.level | icon) **\($m.level)** auf **\($m.host)**" end),
+        embeds: (
+          [ $ev[0:3][] | {
+              title: ("\(.level | icon) \(.level) · \(.id)" | cut(200)),
+              description: ((.message
+                + "\nvorher \(.previous_level), jetzt \(.level)"
+                + (if .suppressed_changes > 0 then "\n\(.suppressed_changes) Wechsel dazwischen unterdrückt (Spam-Schutz)" else "" end))
+                | cut(400)),
+              color: (.level | color),
+              fields: fields(.details; 7),
+              timestamp: $m.time,
+              footer: {text: "\($m.host) · \(.kind) · \(.status)"}
+            } ]
+          + (if ($ev | length) > 3 then
+              [{ title: "Weitere \(($ev | length) - 3) Änderungen",
+                 color: ($m.level | color),
+                 description: ([$ev[3:][] | "\(.level | icon) \(.message)"] | join("\n") | cut(1200)) }]
+             else [] end)
+        )
+      }
+  end
+JQ
+
+build_event()  { jq -c --argjson changes "$2" "$JQ_EVENT" "$1"; }
+build_report() { jq -c "$JQ_REPORT" "$1"; }
+
+# Filtert eine Meldung je Webhook nach Event-Typ/Mindeststufe und startet den Versand im Hintergrund
+notify() {
+  local doc=$1 type count i hook name htype url min ok_ev headers payload file
+  type=$(jq -r '.type' <<<"$doc")
+  count=$(jq 'length' <<<"$WEBHOOKS" 2>/dev/null) || { log ERROR "WEBHOOKS ist kein gültiges JSON"; return 1; }
+  for (( i = 0; i < count; i++ )); do
+    hook=$(jq -c ".[$i]" <<<"$WEBHOOKS")
+    {
+      IFS= read -r name; IFS= read -r htype; IFS= read -r url
+      IFS= read -r min; IFS= read -r ok_ev; IFS= read -r headers
+    } < <(jq -r --arg t "$type" '
+      (.name // "webhook-\(.type)"), (.type // "json"), (.url // ""), (.min_level // "WARNING"),
+      (if $t == "test" or ((.events // ["change","report"]) | index($t) != null) then "1" else "0" end),
+      ((.headers // {}) | tojson)' <<<"$hook")
+
+    [[ -n $url ]] || { log WARNING "Webhook $name hat keine url"; continue; }
+    [[ $ok_ev == 1 ]] || continue
+
+    if [[ $type == change ]]; then
+      payload=$(jq -c --argjson m "${LEVEL_NUM[$min]:-0}" '
+        def lnum: {"INFO":0,"WARNING":1,"ERROR":2,"CRITICAL":3}[.] // 0;
+        def lname: ["INFO","WARNING","ERROR","CRITICAL"][.];
+        .events |= map(select(([(.level | lnum), (.previous_level | lnum)] | max) >= $m))
+        | .level = ([.events[].level | lnum] | max // 0 | lname)' <<<"$doc")
+      [[ $(jq '.events | length' <<<"$payload") -gt 0 ]] || continue
+    else
+      payload=$doc
+    fi
+
+    case $htype in
+      discord) payload=$(jq -c "$JQ_DISCORD" <<<"$payload") ;;
+      json)    ;;
+      *)       log WARNING "Webhook $name: unbekannter Typ $htype, sende JSON" ;;
+    esac
+
+    file=$(mktemp -p "$RUN_DIR/outbox" "msg.XXXXXX") || continue
+    printf '%s' "$payload" >"$file"
+    deliver "$name" "$url" "$headers" "$file" "$type" &
+  done
+}
+
+# Stellt eine Meldung per HTTP-POST mit exponentiellem Backoff zu
+deliver() {
+  local name=$1 url=$2 headers=$3 file=$4 type=$5 h try code wait=2
+  local -a args=(-sS -o /dev/null -w '%{http_code}' -m 10 -X POST
+                 -H 'Content-Type: application/json' --data-binary "@$file")
+  while IFS= read -r h; do [[ -n $h ]] && args+=(-H "$h"); done \
+    < <(jq -r 'to_entries[] | "\(.key): \(.value)"' <<<"$headers")
+
+  for (( try = 1; try <= DELIVERY_RETRIES; try++ )); do
+    code=$(curl "${args[@]}" "$url" 2>/dev/null)
+    if [[ $code == 2* ]]; then
+      log INFO "Meldung ($type) an $name zugestellt (HTTP $code, Versuch $try)"
+      rm -f "$file"; return 0
+    fi
+    [[ $code == 429 ]] && wait=$(( wait * 3 ))
+    (( try < DELIVERY_RETRIES )) && sleep "$wait"
+    wait=$(( wait * 2 ))
+  done
+  log ERROR "Meldung ($type) an $name nicht zugestellt (zuletzt HTTP ${code:-keine Antwort}, $DELIVERY_RETRIES Versuche)"
+  rm -f "$file"; return 1
+}
+
+# === 9. Betriebsbefehle (run, status, check, report, test-webhook, validate) ===
+
+# Hauptschleife des systemd-Dienstes: prüft im Takt, meldet Änderungen und sendet Berichte
+cmd_run() {
+  (( EUID == 0 )) || log WARNING "läuft ohne root, Docker-Socket und Dienste evtl. nicht lesbar"
+  ensure_dirs
+  rm -f "$RUN_DIR"/outbox/msg.* 2>/dev/null
+  trap 'log INFO "monitor beendet"; exit 0' TERM INT
+  log INFO "monitor $VERSION gestartet: alle $INTERVAL s, Module: $CHECKS, $(jq length <<<"$WEBHOOKS") Webhook(s)"
+
+  local last_report=0 first=1 t0 elapsed doc
+  while true; do
+    t0=$(date +%s)
+    if run_cycle "$STATUS_FILE"; then
+      decide_changes "$STATUS_FILE"
+      if [[ $CHANGES != '[]' ]]; then
+        doc=$(build_event "$STATUS_FILE" "$CHANGES")
+        jq -r '.events[] | "\(.level)\t\(.id): \(.message) (vorher \(.previous_level))"' <<<"$doc" |
+          while IFS=$'\t' read -r lvl text; do log "$lvl" "$text"; done
+        notify "$doc"
+      fi
+      if (( REPORT_INTERVAL > 0 )); then
+        if (( (first && REPORT_ON_START) || (!first && t0 - last_report >= REPORT_INTERVAL) )); then
+          notify "$(build_report "$STATUS_FILE")"; last_report=$t0
+        fi
+        (( first && !REPORT_ON_START )) && last_report=$t0
+      fi
+      first=0
+    else
+      log ERROR "Durchlauf fehlgeschlagen"
+    fi
+    elapsed=$(( $(date +%s) - t0 ))
+    if (( elapsed < INTERVAL )); then
+      sleep $(( INTERVAL - elapsed )) &
+      wait $! 2>/dev/null
+    fi
+  done
+}
+
+# Zeigt den letzten Zustand als Tabelle oder JSON; Exit-Code = höchste Stufe (0..3, 4 = veraltet/aus)
+cmd_status() {
+  local mode=table epoch level age
+  case ${1:-} in
+    --json) mode=json ;; --problems) mode=problems ;; "") ;;
+    *) die "unbekannte Option: $1" ;;
+  esac
+  if [[ ! -s $STATUS_FILE ]]; then
+    echo "Kein Zustand in $STATUS_FILE. Läuft der Dienst? systemctl status monitor" >&2
+    exit 4
+  fi
+  read -r epoch level < <(jq -r '[.epoch, .level] | @tsv' "$STATUS_FILE")
+  age=$(( $(date +%s) - epoch ))
+  if [[ $mode == json ]]; then jq --argjson age "$age" '. + {age_seconds: $age}' "$STATUS_FILE"
+  else print_table "$STATUS_FILE" "$mode" "$age"; fi
+  if (( age > 3 * INTERVAL + COLLECT_TIMEOUT )); then
+    echo "ACHTUNG: Zustand ist $age s alt, der Dienst prüft nicht mehr. systemctl status monitor" >&2
+    exit 4
+  fi
+  exit "${LEVEL_NUM[$level]:-0}"
+}
+
+# Führt sofort genau eine Prüfung ohne Meldungen aus (nützlich beim Testen der Konfiguration)
+cmd_check() {
+  local mode=table level
+  [[ ${1:-} == --json ]] && mode=json
+  WORK_DIR=$(mktemp -d -p /dev/shm monitor-check.XXXXXX) || die "kein Platz in /dev/shm"
+  trap 'rm -rf "$WORK_DIR"' EXIT
+  run_cycle "$WORK_DIR/status.json" || die "Prüfung fehlgeschlagen"
+  if [[ $mode == json ]]; then jq . "$WORK_DIR/status.json"
+  else print_table "$WORK_DIR/status.json" table 0; fi
+  level=$(jq -r .level "$WORK_DIR/status.json")
+  exit "${LEVEL_NUM[$level]:-0}"
+}
+
+# Sendet sofort einen Statusbericht an alle passenden Webhooks
+cmd_report() {
+  ensure_dirs
+  [[ -s $STATUS_FILE ]] || run_cycle "$STATUS_FILE"
+  notify "$(build_report "$STATUS_FILE")"
+  wait
+}
+
+# Sendet eine Testmeldung an alle oder einen benannten Webhook
+cmd_test_webhook() {
+  ensure_dirs
+  local only=${1:-}
+  if [[ -n $only ]]; then
+    WEBHOOKS=$(jq -c --arg n "$only" 'map(select(.name == $n))' <<<"$WEBHOOKS")
+    [[ $(jq length <<<"$WEBHOOKS") -gt 0 ]] || die "Webhook $only nicht gefunden"
+  fi
+  LOG_LEVEL=INFO
+  notify "$(jq -nc --arg h "$(hostname)" --arg t "$(date -Iseconds)" \
+    '{schema:"monitor.event/v1", type:"test", host:$h, time:$t, level:"INFO",
+      message:"Testmeldung: Der Webhook ist richtig eingerichtet.", events:[]}')"
+  wait
+}
+
+# Prüft Werkzeuge, JSON-Syntax, Pflichtfelder, Zugangsdaten-Warnung und Docker-Socket
+cmd_validate() {
+  local ok=0 c
+  for c in bash curl jq awk df ps timeout systemctl; do
+    command -v "$c" >/dev/null || { echo "FEHLT: $c"; ok=1; }
+  done
+  jq -e 'type == "array"' <<<"$WEBHOOKS" >/dev/null 2>&1 || { echo "FEHLER: WEBHOOKS ist keine JSON-Liste"; ok=1; }
+  jq -e 'type == "array"' <<<"$ENDPOINTS" >/dev/null 2>&1 || { echo "FEHLER: ENDPOINTS ist keine JSON-Liste"; ok=1; }
+  jq -e 'all(.[]; (.type // "json") as $t | ["json","discord"] | index($t) != null) and all(.[]; .url != null)' \
+    <<<"$WEBHOOKS" >/dev/null 2>&1 || { echo "FEHLER: jeder Webhook braucht url und type json oder discord"; ok=1; }
+  jq -e 'all(.[]; (.type // (if has("port") then "tcp" else "http" end)) as $t
+           | ($t == "http" and .url != null)
+             or (($t | IN("tcp", "postgres", "smtp", "imap")) and .port != null))' <<<"$ENDPOINTS" >/dev/null 2>&1 ||
+    { echo "FEHLER: jeder Endpoint braucht url (http) oder port (tcp, postgres, smtp, imap)"; ok=1; }
+  if grep -qiE 'passw|pgpass|apikey|token|secret' <<<"$ENDPOINTS"; then
+    echo "HINWEIS: ENDPOINTS scheint Zugangsdaten zu enthalten. monitor braucht keine, siehe SKILL.md"
+  fi
+  for c in $CHECKS; do
+    [[ " $MODULES " == *" $c "* ]] || { echo "FEHLER: unbekanntes Prüfmodul $c (vorhanden: $MODULES)"; ok=1; }
+  done
+  if [[ " $CHECKS " == *" docker "* ]]; then
+    [[ -S $DOCKER_SOCKET ]] && echo "OK: Docker-Socket $DOCKER_SOCKET" || echo "HINWEIS: Docker-Socket $DOCKER_SOCKET fehlt"
+  fi
+  echo "Webhooks: $(jq -r 'map("\(.name // "?") (\(.type // "json"))") | join(", ")' <<<"$WEBHOOKS" 2>/dev/null)"
+  echo "Endpoints: $(jq -r 'map(.name // .url) | join(", ")' <<<"$ENDPOINTS" 2>/dev/null)"
+  (( ok == 0 )) && echo "Konfiguration in Ordnung."
+  return "$ok"
+}
+
+# Formatiert status.json als farbige Übersichtstabelle für das Terminal
+print_table() {
+  local file=$1 mode=$2 age=$3 c_reset="" c_lvl tty=0 lvl id st msg
+  [[ -t 1 ]] && tty=1 && c_reset=$'\e[0m'
+  jq -r --argjson age "$age" '
+    "Monitor auf \(.host) · Gesamt: \(.level) · Stand vor \($age) s · Durchlauf \(.cycle_ms) ms",
+    "CPU \(.system.cpu_percent) % · RAM \(.system.mem_percent) % · Load \(.system.load1) \(.system.load5) \(.system.load15) (\(.system.cores) Kerne) · Uptime \(.system.uptime)",
+    "Container: \(.containers.running) von \(.containers.total) laufen · INFO \(.counts.INFO) · WARNING \(.counts.WARNING) · ERROR \(.counts.ERROR) · CRITICAL \(.counts.CRITICAL)",
+    ""' "$file"
+  printf '%-9s %-36s %-14s %s\n' STUFE PRÜFUNG ZUSTAND MELDUNG
+  while IFS=$'\t' read -r lvl id st msg; do
+    c_lvl=""
+    if (( tty )); then
+      case $lvl in WARNING) c_lvl=$'\e[33m' ;; ERROR) c_lvl=$'\e[31m' ;; CRITICAL) c_lvl=$'\e[1;31m' ;; *) c_lvl=$'\e[32m' ;; esac
+    fi
+    printf '%s%-9s%s %-36s %-14s %s\n' "$c_lvl" "$lvl" "$c_reset" "${id:0:36}" "${st:0:14}" "$msg"
+  done < <(jq -r --arg mode "$mode" \
+             '.checks[] | select($mode != "problems" or .level != "INFO") | [.level, .id, .status, .message] | @tsv' "$file")
+}
+
+# === 10. Einrichtung & Verwaltung (idempotent, nur als root) ===
+
+say()       { printf '  %s\n' "$*"; }
+need_root() { (( EUID == 0 )) || die "bitte als root ausführen (sudo)"; }
+
+# Liest alle erlaubten Konfigurationsnamen direkt aus dem Kopf dieses Skripts
+known_keys() {
+  sed -n '/^#  KONFIGURATION/,/^#  Ab hier keine Konfiguration/p' "$SELF" |
+    sed -n 's/^\([A-Z_][A-Z0-9_]*\)=.*/\1/p'
+}
+is_known_key() { known_keys | grep -qx "$1"; }
+
+# Schreibt oder ersetzt einen Konfigurationswert atomar (auch bei mehrzeiligem JSON)
+set_value() {
+  local key=$1 value=$2 quoted tmp
+  [[ $key =~ ^[A-Z_][A-Z0-9_]*$ ]] || die "ungültiger Name: $key"
+  is_known_key "$key" || die "unbekannte Option: $key"
+  quoted="'${value//\'/\'\\\'\'}'"
+  install -d -m 0700 "${MONITOR_CONF%/*}"
+  [[ -e $MONITOR_CONF ]] || install -m 0600 /dev/null "$MONITOR_CONF"
+  tmp=$(mktemp "$MONITOR_CONF.XXXXXX")
+  awk -v k="$key" -v line="$key=$quoted" '
+    BEGIN { done = 0 }
+    $0 ~ "^" k "=" { if (!done) { print line; done = 1 }; skip = ($0 ~ /^[A-Z0-9_]+='\''[^'\'']*$/); next }
+    skip { if ($0 ~ /'\''$/) skip = 0; next }
+    { print }
+    END { if (!done) print line }' "$MONITOR_CONF" >"$tmp"
+  chmod 0600 "$tmp"; mv -f "$tmp" "$MONITOR_CONF"
+  printf -v "$key" '%s' "$value"
+  say "$key gesetzt"
+}
+
+# Erzeugt die gehärtete systemd-Unit (schreibgeschütztes System, nur /run/monitor im RAM)
+write_unit() {
+  cat >"$UNIT_FILE" <<EOF
+[Unit]
+Description=Monitoring für Container, Dienste, Ressourcen und Schnittstellen (#14)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=$INSTALL_BIN run
+Environment=MONITOR_CONF=$MONITOR_CONF
+Restart=always
+RestartSec=5
+RuntimeDirectory=monitor
+RuntimeDirectoryMode=0755
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=yes
+NoNewPrivileges=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+Nice=5
+MemoryMax=256M
+CPUQuota=100%
+
+[Install]
+WantedBy=multi-user.target
+EOF
+  chmod 0644 "$UNIT_FILE"
+}
+
+# Installiert Skript, Konfiguration und systemd-Dienst idempotent
+cmd_install() {
+  need_root
+  local config="" start=1 missing=() p
+  while (( $# )); do
+    case $1 in
+      --config) config=${2:?Datei fehlt}; shift 2 ;;
+      --no-start) start=0; shift ;;
+      *) die "unbekannte Option: $1" ;;
+    esac
+  done
+
+  echo "Monitoring installieren"
+  for p in curl jq; do command -v "$p" >/dev/null || missing+=("$p"); done
+  if (( ${#missing[@]} )); then
+    say "installiere Pakete: ${missing[*]}"
+    DEBIAN_FRONTEND=noninteractive apt-get install -y -qq "${missing[@]}" >/dev/null || die "apt-get fehlgeschlagen"
+  fi
+  if [[ $SELF != "$INSTALL_BIN" ]]; then
+    say "Programm nach $INSTALL_BIN"
+    rm -f "$INSTALL_BIN"
+    install -m 0755 -o root -g root "$SELF" "$INSTALL_BIN"
+  fi
+  install -d -m 0700 "${MONITOR_CONF%/*}"
+  if [[ -n $config ]]; then
+    say "Konfiguration aus $config"
+    if [[ $(readlink -f "$config") == "$(readlink -f "$MONITOR_CONF")" ]]; then
+      chown root:root "$MONITOR_CONF" && chmod 0600 "$MONITOR_CONF"
+    else
+      install -m 0600 -o root -g root "$config" "$MONITOR_CONF"
+    fi
+  elif [[ ! -e $MONITOR_CONF ]]; then
+    say "leere Konfiguration $MONITOR_CONF (Standardwerte aus dem Skript)"
+    install -m 0600 -o root -g root /dev/null "$MONITOR_CONF"
+  else
+    say "vorhandene Konfiguration bleibt: $MONITOR_CONF"
+  fi
+
+  say "systemd-Unit $UNIT_FILE"
+  write_unit
+  systemctl daemon-reload
+  echo "Konfiguration prüfen"
+  MONITOR_CONF=$MONITOR_CONF "$INSTALL_BIN" validate | sed 's/^/  /'
+  if (( start )); then
+    systemctl enable --quiet monitor.service
+    systemctl restart monitor.service
+    say "monitor.service: $(systemctl is-active monitor.service)"
+  fi
+  echo "Fertig. Zustand ansehen: monitor status"
+}
+
+# Startet den Dienst nur neu, wenn er bereits läuft
+restart_if_running() {
+  if systemctl is-active --quiet monitor.service 2>/dev/null; then
+    systemctl restart monitor.service
+    say "monitor.service neu gestartet"
+  fi
+}
+
+# Ändert eine oder mehrere Optionen in monitor.conf
+cmd_set() {
+  need_root
+  (( $# )) || die "Aufruf: monitor set NAME=WERT ..."
+  local kv
+  for kv in "$@"; do
+    [[ $kv == *=* ]] || die "erwartet NAME=WERT, bekommen: $kv"
+    set_value "${kv%%=*}" "${kv#*=}"
+  done
+  restart_if_running
+}
+
+# Fügt einen Discord- oder JSON-Webhook hinzu (oder ersetzt ihn anhand des Namens)
+cmd_webhook_add() {
+  need_root
+  local name=${1:?Name fehlt} type=${2:?Typ fehlt (discord oder json)} url=${3:?URL fehlt}
+  local events=${4:-change,report} min=${5:-WARNING}
+  [[ $type == discord || $type == json ]] || die "Typ muss discord oder json sein"
+  jq -e 'type == "array"' <<<"$WEBHOOKS" >/dev/null 2>&1 || die "WEBHOOKS ist keine JSON-Liste"
+  set_value WEBHOOKS "$(jq -c --arg n "$name" --arg t "$type" --arg u "$url" --arg e "$events" --arg m "$min" \
+    'map(select(.name != $n)) + [{name:$n, type:$t, url:$u, events:($e | split(",")), min_level:$m}]' <<<"$WEBHOOKS")"
+  restart_if_running
+}
+
+# Entfernt einen Webhook anhand seines Namens
+cmd_webhook_remove() {
+  need_root
+  set_value WEBHOOKS "$(jq -c --arg n "${1:?Name fehlt}" 'map(select(.name != $n))' <<<"$WEBHOOKS")"
+  restart_if_running
+}
+
+# Zeigt die aktive Konfiguration mit gekürzten Webhook-URLs und Headern an
+cmd_show() {
+  need_root
+  local key
+  while IFS= read -r key; do
+    case $key in
+      WEBHOOKS)  printf 'WEBHOOKS=%s\n' "$(jq -c 'map(.url |= (.[0:30] + "…"))' <<<"$WEBHOOKS")" ;;
+      ENDPOINTS) printf 'ENDPOINTS=%s\n' "$(jq -c 'map(if .headers then .headers |= map_values(.[0:8] + "…") else . end)' <<<"$ENDPOINTS")" ;;
+      *)         printf '%s=%s\n' "$key" "${!key}" ;;
+    esac
+  done < <(known_keys)
+}
+
+# Entfernt Dienst, Programm und Laufzeitordner (mit --purge auch die Konfiguration)
+cmd_uninstall() {
+  need_root
+  systemctl disable --now monitor.service 2>/dev/null || true
+  rm -f "$UNIT_FILE" "$INSTALL_BIN"
+  systemctl daemon-reload
+  rm -rf "$RUN_DIR"
+  if [[ ${1:-} == --purge ]]; then rm -rf "${MONITOR_CONF%/*}"; say "Konfiguration gelöscht"
+  else say "Konfiguration bleibt in ${MONITOR_CONF%/*} (löschen mit --purge)"; fi
+  echo "Monitoring entfernt."
+}
+
+# === 11. CLI-Hilfe und Einstiegspunkt ===
+
+# Gibt die Befehlsübersicht aus
+usage() {
+  cat <<EOF
+monitor $VERSION – Monitoring für Container, Dienste, Ressourcen und Schnittstellen
+
+Betrieb:
+  status [--json|--problems]   Zustand aus dem laufenden Dienst anzeigen
+  check  [--json]              jetzt einmal prüfen und anzeigen, ohne Meldungen
+  run                          Dauerbetrieb (startet systemd: monitor.service)
+  report                       Bericht jetzt an die Webhooks senden
+  test-webhook [NAME]          Testmeldung an alle oder einen Webhook senden
+  validate                     Konfiguration und Voraussetzungen prüfen
+
+Einrichtung (als root, beliebig oft ausführbar):
+  install [--config DATEI] [--no-start]     installieren, Dienst starten
+  set NAME=WERT ...                         Wert in der Konfiguration setzen
+  webhook-add NAME TYP URL [EVENTS] [STUFE] Webhook (discord|json) hinzufügen
+  webhook-remove NAME
+  show                                      Konfiguration anzeigen (Geheimnisse gekürzt)
+  uninstall [--purge]                       entfernen (--purge: auch Konfiguration)
+
+Rückgabewert von status und check: 0 INFO, 1 WARNING, 2 ERROR, 3 CRITICAL,
+4 kein aktueller Zustand (Dienst läuft nicht).
+
+Konfiguration: $MONITOR_CONF   Laufzeitdaten (RAM): $RUN_DIR
+EOF
+}
+
+# Verteilt den Unterbefehl an die zuständige Funktion
+main() {
+  local cmd=${1:-help}
+  shift || true
+  case $cmd in
+    run)                  cmd_run "$@" ;;
+    status)               cmd_status "$@" ;;
+    check)                cmd_check "$@" ;;
+    report)               cmd_report "$@" ;;
+    test-webhook)         cmd_test_webhook "$@" ;;
+    validate)             cmd_validate "$@" ;;
+    install)              cmd_install "$@" ;;
+    set)                  cmd_set "$@" ;;
+    webhook-add)          cmd_webhook_add "$@" ;;
+    webhook-remove)       cmd_webhook_remove "$@" ;;
+    show)                 cmd_show "$@" ;;
+    uninstall)            cmd_uninstall "$@" ;;
+    _collect)             collect "$@" ;;
+    version|-v|--version) echo "monitor $VERSION" ;;
+    help|-h|--help)       usage ;;
+    *)                    usage >&2; exit 64 ;;
+  esac
+}
+
+main "$@"

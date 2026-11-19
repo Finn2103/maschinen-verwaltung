@@ -6,6 +6,14 @@
 - **Betrifft:** [#14](https://github.com/Finn2103/maschinen-verwaltung/issues/14) · [#11](https://github.com/Finn2103/maschinen-verwaltung/issues/11) · [#12](https://github.com/Finn2103/maschinen-verwaltung/issues/12) · [#13](https://github.com/Finn2103/maschinen-verwaltung/issues/13)
 - **Quelle:** Recherche, Stand 09.10.2026. Entwurf mit KI-Unterstützung, Entscheidung am
   13.10.2026.
+- **Umsetzung:** [`infra/monitoring`](../../infra/monitoring), in einer Test-VM nachgewiesen
+  am 06.11.2026, siehe [Umsetzung und Nachweis](#umsetzung-und-nachweis).
+
+## In einem Satz
+
+Ein eigenes Bash-Skript direkt auf dem Server (Nutzwert 4,40, Prometheus und Netdata je
+3,80), weil es ohne Docker, ohne offenen Port und ohne Schreiben auf die Platte auch dann
+noch meldet, wenn die Platte voll ist oder Docker ausfällt.
 
 ## Kontext
 
@@ -124,6 +132,34 @@ Ziele, belegt werden sie durch den Test aus [#14](https://github.com/Finn2103/ma
 - Bei Bedarf stellt es die Werte zusätzlich als JSON- oder Textdatei in `/run` bereit, damit
   andere Programme sie lesen können. `/run` liegt im Arbeitsspeicher und funktioniert auch
   bei voller Platte.
+
+## Umsetzung und Nachweis
+
+Stand 06.11.2026. Umgesetzt in [`infra/monitoring`](../../infra/monitoring): ein Skript
+(`monitor`), eine Konfiguration (`monitor.conf`), eine Anleitung für einen Agenten
+(`SKILL.md`) und eine Installationsanleitung (`INSTALL.md`). Aufbau, Tests und Belege:
+[`docs/monitoring`](../monitoring/README.md).
+
+Abweichungen von der Beschreibung oben:
+
+- **systemd-Dienst statt Timer.** Das Skript läuft dauerhaft und prüft alle 10 Sekunden.
+  Der Spam-Schutz merkt sich im laufenden Prozess, was schon gemeldet wurde. Ein Timer
+  würde jede Minute von vorn anfangen.
+- **Keine Anmeldung, keine Zugangsdaten** (Stand 06.11.2026). Statt sich bei Supabase
+  anzumelden, prüft das Skript den PostgreSQL-Handshake wie `pg_isready`: fordert der Server
+  eine Anmeldung an, nimmt er Verbindungen an. SMTP und IMAP prüft es an der Begrüßung. Die
+  Ports liest es selbst aus der Docker-API, die internen Supabase-Dienste über ihre
+  Docker-Healthchecks. Einziges Geheimnis ist die Webhook-Adresse.
+- **Werte nur als JSON** in `/run/monitor/status.json`. Text liefert `monitor status`.
+
+Nachweis in einer Test-VM (VMPal, Debian 13) mit PostgreSQL 17 und einem echten
+docker-mailserver: Datenbank aus, Mailserver aus, Platte voll, Arbeitsspeicher voll und
+Docker aus wurden künstlich herbeigeführt, die Meldungen und die Entwarnungen sind
+angekommen. Die Punkte des Skripts in der Tabelle sind damit für die Test-VM belegt. Auf
+der Strato-VM steht der Test aus, bis [#11](https://github.com/Finn2103/maschinen-verwaltung/issues/11), [#13](https://github.com/Finn2103/maschinen-verwaltung/issues/13) und [#5](https://github.com/Finn2103/maschinen-verwaltung/issues/5) fertig sind.
+
+Prompt und Bewertung: [`docs/ki/prompts/Nico-Laeser.md`](../ki/prompts/Nico-Laeser.md),
+Fälle 5 bis 18.
 
 ## Konsequenzen
 

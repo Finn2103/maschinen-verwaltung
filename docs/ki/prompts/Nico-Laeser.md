@@ -195,3 +195,385 @@ Die Entscheidung für das Skript steht in PR [#81](https://github.com/Finn2103/m
 
 Kurz gehalten sind Zabbix und Gatus, journald und das Debian-Paket von Prometheus. Sie
 ändern die Entscheidung nicht.
+
+---
+
+## 2026-11-05
+
+Umsetzung des Skripts aus [ADR 0012](../../adr/0012-monitoring.md) für
+[#14](https://github.com/Finn2103/maschinen-verwaltung/issues/14). Die Prompts stehen im
+Wortlaut aus meinen Notizen. Committet habe ich an beiden Tagen nichts: dazwischen hing
+niemand von dem Stand ab.
+
+Das Skript ist Stück für Stück entstanden: Prompt, Gegenlesen, Korrektur, wieder Prompt.
+Nicht jede Änderung am Code ist hier festgehalten, das fertige Skript hat 1493 Zeilen.
+Dokumentiert sind die Fälle, an denen eine Entscheidung hing. Genau Wortlaut der Antworten
+der KI gibt es nicht: Die Sitzungen hatten teilweise sehr große Kontextfenster, mit
+Werkzeugaufrufen und langen Antworten hätte ich nach jeder Nachricht endlos lange Passagen
+einführen müssen. Je Fall steht das Ergebnis in einem Satz. Der vollständige Chatverlauf
+jeder Sitzung liegt, wie in der [README](README.md) beschrieben, lokal auf dem
+Arbeitsgerät und ist auf Nachfrage vorzeigbar.
+
+---
+
+### 5. Grundgerüst des Skripts
+
+**Aufgabe**
+Das in ADR 0012 beschriebene Skript bauen: Container und Dienste überwachen, Ressourcen
+erfassen, Änderungen per Webhook melden, Konfiguration oben im Skript.
+
+**Prompt** (Wortlaut, zwei Eingaben)
+
+> Bitte entwickle ein Bash Script, welches auf einem Debian 13 Server ausgeführt werden kann, um mehrere Schritte zu erledigen:
+>
+> Das Monitoring von Docker Containern und theoretisch auch System Services soll möglich sein, dafür soll der Docker Socken genutzt werden und die Ressourcen vom System erfasst werden.
+>
+> Alle paar Sekunden wird gemonitored und an eine Webhook Reported wenn aktiviert. Die Webhook und config Options hat man ganz oben im Skript zum konfigurieren
+
+> Bei Statusänderungen sollen nun bitte noch folgende Typen ausgelöst werden können (gerne auch aus einer JSON Liste oder anderem Format parsebar machen, so dass es mehrere Geben kann: „Discord für eine Discord Webhook“ oder einfach nur Json Webhook zu einem Endpoint
+
+**Ergebnis**
+Bash-Skript mit einem Konfigurationsblock oben. Docker wird nur über den Socket abgefragt
+(`curl --unix-socket`), Dienste über `systemctl`, Ressourcen aus `/proc`. Webhooks als
+JSON-Liste, je Eintrag Typ `discord` oder `json`.
+
+**Bewertung**
+Teilweise übernommen. Aufbau und Webhook-Liste passten. Die Container-Zustände waren nicht
+vollständig (Fall 6 und 10). „Alle paar Sekunden“ weicht vom systemd-Timer aus ADR 0012 ab.
+Das war gewollt und steht als Abweichung im ADR.
+
+---
+
+### 6. Container-Zustände unvollständig
+
+**Aufgabe**
+Fehler aus der eigenen Prüfung des ersten Ergebnisses beheben.
+
+**Prompt** (Wortlaut)
+
+> Das Skript ignoriert teilweise die States der Container und erkennt noch nicht die container alle automatisch richtig
+
+**Ergebnis**
+Alle Container kommen jetzt aus `/containers/json?all=1`, also auch gestoppte und nie
+gestartete. Inspect und Statistik je Container werden gleichzeitig geholt.
+
+**Bewertung**
+Korrektur. Das erste Ergebnis hatte Container übersehen. Behoben war damit aber nur die
+Erkennung, nicht die Bewertung der Zustände: am 06.11. musste ich noch einmal nachschärfen
+(Fall 10). Der Prompt war zu allgemein, er nannte keinen einzigen Zustand.
+
+---
+
+### 7. Pfade und Kennzahlen in den Meldungen, nichts auf die Platte
+
+**Aufgabe**
+Meldungen sollen zeigen, wo das Problem liegt. Das Monitoring darf selbst keinen
+Speicherplatz belegen (ADR 0012, Fall „Volle Platte“).
+
+**Prompt** (Wortlaut, zwei Eingaben)
+
+> Ich würde gerne Pfade und Statistiken in den Status Meldungen mit senden, falls man die Potenziell verbinden möchte mit dem Problem
+
+> Das Skript muss im RAM laufen damit der Speicherplatz nicht belegt wird und nicht irgendwo die Daten hinschreiben
+
+**Ergebnis**
+Jede Prüfung hat ein Feld `details`: bei Containern Compose-Ordner, Mounts, Log-Datei,
+CPU, RAM; bei Platten die größten Ordner; bei Diensten die Unit-Datei. Laufzeitdaten nur in
+`/run/monitor` (tmpfs), die systemd-Unit macht das Dateisystem für den Dienst
+schreibgeschützt.
+
+**Bewertung**
+Übernommen. Belegt im Test vom 06.11.: bei voller Platte nennt die Meldung die größten
+Ordner, das Monitoring prüft weiter, und ein Schreibversuch aus dem Dienst heraus scheitert
+([Tests](../../monitoring/tests/README.md)).
+
+---
+
+### 8. Testinstanz, Statusbefehl, Einrichtung per IaC
+
+**Aufgabe**
+Die Fälle aus #14 in einer Test-VM auslösen, den Zustand per Shell abfragen und das
+Monitoring aus dem Repository einrichten können.
+
+**Prompt** (Wortlaut, drei Eingaben)
+
+> Können wir eine VMLAB Test Instanz nutzen und beide Fälle einmal simulieren und auslösen und in einem Testdokument belegen?
+
+> Ein Monitor Status command wäre auch geil damit man per Shell den aktuellen State checken kann
+
+> Können wir ein separates Konfiguration Script bauen mit dem man das per Iac konfigurieren kann oder sowas?
+
+**Ergebnis**
+Ein Testskript für die VM, `monitor status` als Tabelle und als JSON, und ein eigenes
+Skript `monitor-setup` für Installation und Konfiguration.
+
+**Bewertung**
+Übernommen. `monitor-setup` ist am 06.11. in `monitor` aufgegangen (Fall 15), weil ich am
+Ende nur ein Skript und eine Konfigurationsdatei haben wollte.
+
+---
+
+## 2026-11-06
+
+---
+
+### 9. Modular und für andere Software nutzbar
+
+**Aufgabe**
+Einheitliche Meldungen und eine Schnittstelle, die andere Programme lesen können.
+
+**Prompt** (Wortlaut, zwei Eingaben)
+
+> Können wir das Skript Modularer Bauen und standardisieren was die Fehlermeldungen und Report Meldungen angeht?
+
+> Können wir dafür sorgen, dass dieses Skript zukünftig auch von anderer Software genutzt werden kann?
+
+**Ergebnis**
+Prüfmodule `system`, `docker`, `services`, `endpoints`. Jede Prüfung liefert dasselbe
+Format (`id`, `kind`, `name`, `level`, `status`, `message`, `details`). Feste Schemata für
+Zustand (`monitor.status/v1`), Änderung (`monitor.event/v1`) und Bericht
+(`monitor.report/v1`), Exit-Codes je Stufe.
+
+**Bewertung**
+Übernommen. Im Test geprüft (Schritt 13).
+
+---
+
+### 10. Zustände noch einmal falsch
+
+**Aufgabe**
+Die Zuordnung Zustand zu Stufe vollständig machen.
+
+**Prompt** (Wortlaut)
+
+> Das Skript erkennt noch folgende Sachen falsch:
+> Created, running, paused, restarting, exited und healthy, unhealthy starting wird nicht berücksichtigt.
+
+**Ergebnis**
+Eine Tabelle im Skript ordnet jeden Docker-Zustand einer Stufe zu, auch `dead`, `removing`
+und den OOM-Killer. Container, die laufen sollen (Restart-Policy), sind gestoppt ERROR,
+einmalige Jobs mit Exit-Code 0 sind INFO.
+
+**Bewertung**
+Zweite Korrektur zum selben Thema wie Fall 6. Erst mit der Liste der Zustände im Prompt war
+das Ergebnis vollständig. Im Test vom 06.11. sind alle 13 Fälle richtig (Schritt 02 mit
+echten Containern, 02b mit nachgestellten Antworten für `dead` und `removing`).
+
+---
+
+### 11. Ressourcen, Load Average und Uptime
+
+**Aufgabe**
+Platte, RAM und CPU bewerten, im regelmäßigen Bericht zusätzlich Load und Uptime.
+
+**Prompt** (Wortlaut, zwei Eingaben)
+
+> Das Skript soll am besten auch die Festplatte und RAM und CPU Auslastung erkennen.
+
+> In der Regelmäßigen Webhook wäre noch die Load Average und Uptime gut mit zu senden.
+
+**Ergebnis**
+Schwellwerte je Stufe für CPU, RAM, Platte und Inodes, bei CPU und RAM die drei größten
+Prozesse. Bericht mit CPU, RAM, Load 1/5/15, Uptime, Platten und offenen Problemen.
+
+**Bewertung**
+Übernommen. Belegt im Test: Platte voll und RAM voll lösen eine Meldung aus, der Bericht
+enthält Load und Uptime.
+
+---
+
+### 12. Volltest: nicht parallel, Prioritäten, Spam
+
+**Aufgabe**
+Einen vollständigen Test in einer neuen Debian-13-VM machen und die Befunde daraus beheben.
+
+**Prompt** (Wortlaut, drei Eingaben)
+
+> Bitte Spawn eine VMLAB Debian 13 Maschine per MCP und sorg dafür, dass wir einmal einen vollen Test umsetzen .
+
+> Ich habe gerade in dem Test festgestellt, dass die Sachen teilweise nicht parallel laufen. Wir müssen parallel arbeiten.
+> Unterschiedliche Prioritäten während auch nice: INFO, WARNING, ERROR und CRTICIAL;
+
+> Doppelte Benachrichtigungen und Spam soll bei Restarts / Loops verhindert werden.
+
+**Ergebnis**
+VMPal-VM „Monitoring-Test Debian 13“. Alle Module laufen gleichzeitig, jede Prüfung hat
+eine der vier Stufen, das Journal bekommt die passende Priorität. Spam-Schutz: Bestätigung
+über zwei Durchläufe, höchstens zwei Meldungen je Prüfung im Zeitfenster. Erster
+vollständiger Testlauf am 06.11.2026: 68 von 68 bestanden.
+
+**Bewertung**
+Übernommen. Dass die Prüfungen nacheinander liefen, habe ich im Test gesehen, nicht beim
+Lesen des Codes. Der Spam-Schutz hatte einen Fehler, der erst in den Testläufen aufgefallen
+ist (Fall 16).
+
+---
+
+### 13. Schnittstellen aus einer Liste, Beispiel VIES
+
+**Aufgabe**
+Beliebige HTTP-Schnittstellen mit Methode und erwartetem Statuscode überwachen, zum
+Beispiel die VIES-Schnittstelle für die USt-IdNr.-Prüfung aus #7.
+
+**Prompt** (Wortlaut)
+
+> Mach das so dass wir gerne auch noch optionale API Punkte Monitoren können mit GET, POST, etc aus einer Liste definierbar und dann einen Statuscode erwarten können. Beispielsweise wenn wir für die UstId Prüfung die VIES Schnittstelle checken wollen.
+
+**Ergebnis**
+`ENDPOINTS` als JSON-Liste mit `url`, `method`, `headers`, `body`, `expect`, `timeout`,
+`level`. In der Konfiguration stehen der Status von VIES und der offizielle Testdienst
+(POST, DE / 100), beide mit Stufe WARNING.
+
+**Bewertung**
+Übernommen. Im Test antwortet VIES mit 200, eine Test-API mit falschem Code löst ERROR mit
+Statuscode und Antworttext aus.
+
+---
+
+## 2026-11-06 · Nachmittag
+
+---
+
+### 14. Abgleich mit ADR 0012
+
+**Aufgabe**
+Den Stand mit VMPal testen, gegen ADR 0012 abgleichen und passend zu meinen Notizen
+dokumentieren.
+
+**Prompt** (Auszug, Wortlaut; dazwischen standen meine Notizen mit den Prompts oben)
+
+> das muss ich noch alles erledigen. nutze vm pal und simuliere die entwicklung eines bash scriptes für das monitoring wie hier beschrieben https://github.com/issues/assigned?issue=Finn2103%7Cmaschinen-verwaltung%7C14&issue_global_id=I_kwDOUOAbS88AAAABQzHw-g und nutze vmpal; die ergebnisse müssen dokumentiert werden in einer txt und zu unserem chat passen:
+
+**Ergebnis**
+Der Abgleich
+mit ADR 0012 ergab eine Lücke: „Prüft Supabase mit echter Anmeldung, docker-mailserver über
+SMTP und IMAP“ fehlte, das Skript konnte nur HTTP. Neu: Prüfungstyp `tcp` (Port und erste
+Zeile, SMTP „220“, IMAP „* OK“) und `command` (z. B. `psql` mit echter Anmeldung, Passwort
+in `env`).
+
+**Bewertung**
+Übernommen. Die Lücke stand in meiner eigenen Bewertung vom 09.10. (Fall 4: „deshalb prüft
+das Skript SMTP und IMAP selbst“), in den Prompts vom 05. und 06.11. habe ich sie aber nicht
+verlangt. Getestet wurde deshalb gegen einen echten docker-mailserver statt gegen einen
+Platzhalter.
+
+---
+
+### 15. Ein Skript, eine Konfiguration, eine SKILL.md
+
+**Aufgabe**
+Die Abgabe klein und erklärbar halten.
+
+**Prompt** (Wortlaut, vier Eingaben, die dritte als Auszug)
+
+> ich brauche am ende maximal ein script und eine config fikle
+
+> please reduce the config to only being config. i only want script (bash), config and a SKILL.md for some agent helping with setting up / creating a config
+
+> no unecessary comments …
+
+> alle scripts die nur für testlauf sind, bitte so protokolieren und unnötige kommentarew auch da entfernen
+
+**Ergebnis**
+[`infra/monitoring/`](../../../infra/monitoring) enthält genau drei Dateien: `monitor`
+(Prüfen, Melden, Anzeigen und Einrichten mit `install`, `set`, `webhook-add` …),
+`monitor.conf` (nur Werte) und `SKILL.md` (Erklärung aller Optionen für einen Agenten).
+Aus rund 20 Dateien vom 05.11. wurde eine. Das Testskript ist als „nur für den Testlauf“
+gekennzeichnet und liegt bei den Belegen.
+
+**Bewertung**
+Übernommen. Die Erklärungen stehen jetzt an einer Stelle (SKILL.md) statt verteilt in
+Skript und Konfiguration.
+
+---
+
+### 16. Testläufe finden drei Fehler im erzeugten Code
+
+**Aufgabe**
+Den zusammengeführten Stand in der VM vollständig testen.
+
+**Prompt**
+Teil des Auftrags aus Fall 14.
+
+**Ergebnis**
+Sechs Testläufe, einer davon nach wenigen Sekunden abgebrochen, weil Docker vom vorigen
+Abbruch noch gestoppt war. Befunde:
+- **Docker-Netz der Test-VM:** systemd-networkd hatte die Schnittstellen der Container
+  übernommen, SMTP, IMAP und `psql` kamen über 127.0.0.1 nicht an. Ursache in der VM, nicht
+  im Skript.
+- **Entwarnung zurückgehalten:** Beim Neustart des Mailservers kamen CRITICAL (gestoppt)
+  und WARNING (startet) als zwei Meldungen, danach hielt der Spam-Schutz die Entwarnung
+  120 s zurück, im Betrieb wären es bis zu 10 Minuten gewesen. Jetzt geht die Entwarnung
+  nach einem gemeldeten Problem immer raus.
+- **`set` und `webhook-add` zerstörten die Konfiguration**, wenn ein Wert über mehrere
+  Zeilen ging (Fehler vom 05.11.).
+- **Das Testskript zählte falsch:** 408 unterdrückte Wechsel, weil es das ganze Journal las,
+  auch den alten Dienst. Richtig waren 3.
+- **RAM voll nur als WARNING:** Mit Swap lagert der Kernel andere Prozesse aus, die
+  Belegung blieb bei 92,7 %. Der Test schaltet Swap für diesen Schritt jetzt ab.
+
+**Bewertung**
+Drei der Befunde betreffen KI-erzeugten Code und sind erst im Test aufgefallen, nicht
+beim Lesen. Die zurückgehaltene Entwarnung war in einem Lauf sogar „bestanden“, weil der
+Test nur prüfte, ob sie ankommt, nicht wann. Der Test prüft das jetzt. Die Zahl 408 sah
+plausibel aus und war falsch.
+
+---
+
+### 17. Ist #14 vollständig?
+
+**Aufgabe**
+Prüfen, ob alles aus #14 abgedeckt ist, und die Dokumentation von TXT nach Markdown
+umstellen.
+
+**Prompt** (Wortlaut)
+
+> stell sicher dass das gesamte Issue14 abgedeckt ist und dass die dokumentation noch in markdown migriert wird
+
+**Ergebnis**
+Abgleich mit Issue, ADR 0012, Definition of Done und den Regeln in `docs/ki/prompts`.
+Ergänzt: Test „Arbeitsspeicher voll“ (AK 2 und 3 sprechen von „Speicher voll“, getestet war
+nur die Platte), diese Einträge (ADR 0012 verlangt Prompt und Bewertung hier), in ADR 0012
+„In einem Satz“ und „Umsetzung und Nachweis“, die Dokumentation als
+[`docs/monitoring/README.md`](../../monitoring/README.md).
+
+**Bewertung**
+Übernommen. Offen bleiben DoD Punkt 3 (läuft auf der Strato-VM) und die echte Zustellung an
+einen Kanal des Teams. Beides geht erst, wenn #11, #13 und #5 stehen und der Kanal
+entschieden ist.
+
+---
+
+### 18. Ohne Passwörter, jede Anforderung mit Server-Log belegt
+
+**Aufgabe**
+Das Monitoring soll ohne Zugangsdaten auskommen. Jede Funktion wird noch einmal getestet und
+je Test in einer Markdown-Datei mit den Original-Ausgaben belegt. Dazu eine
+Installationsanleitung aus meiner Sicht.
+
+**Prompt** (Wortlaut)
+
+> entwickle das so dass wir möglichst keinerlei Passwörter an das Monitoring skripot geben müssen oder so am besten keins, so dass er das unabhängig hin kriegt. dann bau das wie folgt: SKILL.md entwickelst du, das script auch und dann testest du einmal alle funktionen die jetzt so gehen und machst dafür je eine .MD wo du die server logs rein pastest. das heißt wir dokumentieren auhc die funktionalität aller anforderungen. dann machst du ein kleines INSTALL.md wo du aus meiner SIcht die Installation beschreibst. Sprich Agent skill für config, Install tutorial und dann eine MD wo Speichervoll und diverse Tests gemacht wurden im Container mit original Output etc. Schreib dazu getestet auf einem VMPAl auf meinem MacBook
+
+**Ergebnis**
+Das Skript braucht keine Zugangsdaten mehr. Es liest die veröffentlichten Ports der Container
+selbst aus der Docker-API und prüft sie ohne Anmeldung: PostgreSQL über den Handshake wie
+`pg_isready` (der Server fordert eine Anmeldung an, angemeldet wird nie), SMTP und IMAP über
+ihre Begrüßung, Webports über HTTP. Fällt Docker aus, prüft es die zuletzt bekannten Ports
+weiter. Das Feld `env` für Passwörter aus Fall 14 ist entfallen. Neu sind
+[`SKILL.md`](../../../infra/monitoring/SKILL.md) und
+[`INSTALL.md`](../../../infra/monitoring/INSTALL.md), dazu 22 Tests, je Test eine
+Markdown-Datei mit Befehlen, Original-Ausgabe, Server-Log und den angekommenen Meldungen
+([`docs/monitoring/tests`](../../monitoring/tests/README.md)): 128 von 128 Prüfungen in 21
+automatischen Tests bestanden, dazu ein Neustart der VM von Hand.
+
+**Bewertung**
+Übernommen. Am deutlichsten zeigt Test 11 den Nutzen: Postfix war aus, Docker meldete den
+Mailserver trotzdem als „running, healthy“, erst die Port-Prüfung hat den Ausfall gemeldet.
+Das bestätigt den Hinweis aus ADR 0012, dass der Healthcheck von docker-mailserver nur
+Prozesse prüft.
+
+Der Preis für „keine Passwörter“: Der Handshake zeigt, dass die Datenbank Verbindungen
+annimmt, nicht, dass eine Anmeldung klappt. Die „echte Anmeldung“ aus ADR 0012 entfällt
+deshalb, das steht dort als Abweichung. Gemessen wurde auch, was im ADR nur Ziel war: rund
+10 % eines Kerns und 26 MB Arbeitsspeicher bei einer Prüfung alle 5 s, kein offener Port.
