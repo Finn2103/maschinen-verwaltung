@@ -1,66 +1,62 @@
-In diesem Dokument schreibe ich auf, was ich zum Protokollieren von Änderungen gefunden habe. Der Entwickler soll die Möglichkeiten sehen und danach die Empfehlung.
+In diesem Dokument schreibe ich auf, was ich zum Protokollieren von Änderungen gefunden habe, und wie #7 auf dem Protokoll aus #99 aufbaut.
 
 Aufgabe: Jede Änderung wird mit Zeitpunkt, Benutzer, Feld, altem und neuem Wert protokolliert.
 
 Die GoBD lassen offen, wie man das technisch macht. Genannt werden Sperren, eine Festschreibung, ein Löschmerkmal, eine automatische Protokollierung oder eine Versionierung. Auch über Zugriffsrechte geht es. Ein normaler Ordner, in dem man Dateien einfach überschreibt, reicht nicht. Steht so in den GoBD, Randziffer 110. Spätere Änderungen müssen den alten Inhalt sichtbar lassen, und die Historie selbst darf hinterher nicht mehr verändert werden (Randziffer 111).
 
-## Was in einer Zeile üblich ist
+## Was es schon gibt
 
-In den Beispielen, die ich gesehen habe, steht pro geändertem Feld eine Zeile:
+Seit #99 gibt es die Tabelle `protokoll` mit einem Trigger (`docs/datenmodell/relational.md`, 4.10). Am Kunden hängt er schon, er heißt `kunde_protokollieren`. Er schreibt in derselben Transaktion wie die Änderung. Bricht die Änderung ab, gibt es auch keinen Eintrag.
 
-- Zeitpunkt
-- Benutzer
-- Feld
-- alter Wert
-- neuer Wert
+Pro geändertem Feld steht eine Zeile da:
 
-Dazu ein Typ der Änderung. Die Namen, die ich dafür gefunden habe, sind `row_created`, `row_edited` und `row_deleted`.
+- Zeitpunkt, `zeitpunkt`. Setzt die Datenbank.
+- Benutzer, `benutzer_id`. Leer heißt, es war niemand angemeldet.
+- Feld, `feld`. Das ist der Spaltenname. Die Oberfläche zeigt dafür den Namen aus dem Formular.
+- alter Wert, `alt`
+- neuer Wert, `neu`
+- dazu `objekt` mit dem Wert `kunde` und `objekt_id` mit der Kundennummer
 
-- `row_created`: der Datensatz wird angelegt, der alte Wert ist leer
-- `row_edited`: ein Feld ändert sich
-- `row_deleted`: der Datensatz wird gelöscht oder, bei uns, der Status geht auf `DELETED`
+Damit ist alles aus der Aufgabe abgedeckt.
 
-`updatedAt` taucht in solchen Protokollen als Problem auf. Das Feld ändert sich bei jedem Speichern mit, dann bekommt man zu jeder echten Änderung eine zweite Zeile nur für die Uhrzeit. Dieselbe Falle ist `createdAt`, der Zeitpunkt steht ja schon an der Protokollzeile.
+Den Typ der Änderung habe ich in Beispielen als `row_created`, `row_edited` und `row_deleted` gefunden. Bei uns steht er schon im Schema:
 
-So ungefähr sieht so eine Zeile aus:
+- Anlegen: eine Zeile mit `feld = 'Datensatz angelegt'`
+- Ändern: eine Zeile je geändertem Feld, mit `alt` und `neu`
+- Löschen: eine Zeile mit `feld = 'Datensatz gelöscht'`, der alte Datensatz steht in `alt`. Ein Kunde wird aber nicht hart gelöscht (Pflichtfelder.md). Bei uns ist das eine Änderung von `status` auf `geloescht`.
 
-```json
-{
-  "customerId": "K017",
-  "changedAt": "2026-11-18T10:32:00Z",
-  "userId": "u42",
-  "userName": "Nico Laeser",
-  "changeType": "row_edited",
-  "field": "address.BILLING.street",
-  "oldValue": "Musterstraße 12",
-  "newValue": "Musterstraße 12a"
-}
-```
+So sieht eine Zeile aus, wenn bei K017 die Straße geändert wird:
 
-## Wohin die Zeile geht
+| `zeitpunkt` | `benutzer_id` | `objekt` | `objekt_id` | `feld` | `alt` | `neu` |
+| --- | --- | --- | --- | --- | --- | --- |
+| 2026-11-18 10:32:00+01 | ID des Mitarbeiters | `kunde` | `17` | `strasse` | Musterstraße 12 | Musterstraße 12a |
 
-Zwei Stellen, dieselbe Zeile.
+Den Verlauf eines Kunden sieht das Personal, also wer `protokoll.datensatz` hat. Der Kunde sieht ihn nicht (`docs/rollen-und-rechte.md`).
 
-**Protokolltabelle.** Die Anwendung schreibt die Zeile beim Speichern in eine eigene Tabelle. Darauf nur Anlegen, kein Ändern und kein Löschen. Darüber sieht man die Historie am Kunden. Wer den Datenbankzugang hat, kommt an diese Tabelle trotzdem heran. Deshalb ist sie die Anzeige, nicht der Speicher, auf den man sich bei einer Prüfung verlässt.
+**Unveränderbar.** Ein Trigger lehnt Ändern und Löschen auf `protokoll` ab, wie bei den Rechnungen. Wer neue Zeilen schreiben darf, regeln die Datenbank-Rechte. Die sind noch offen (F15, #8).
 
-**Dieselbe Zeile als Datei auf S3.** Pro Feld eine Datei, der Name bleibt für dieses Feld immer gleich. Beispiel: `audit/K017-address.BILLING.street.json`. Jede Änderung an genau diesem Feld schreibt diese Datei neu. Die Versionen sind die Historie dieser einen Zeile. Straße und Ort landen nicht in derselben Datei. Zwei Änderungen an demselben Feld in derselben Sekunde brauchen keinen Extra-Namen, die Version-Id von S3 unterscheidet sie.
+## Was für #7 dazukommt
 
-Am Bucket zwei Schalter, die zusammengehören:
+**Neue Spalten am Kunden.** Der Trigger vergleicht alle Spalten. Was aus Pflichtfelder.md an `kunde` dazukommt, landet also von selbst im Protokoll.
 
-- **Versionierung.** Object Lock geht nur mit Versionierung. Dieselbe Datei noch einmal zu schreiben legt eine neue Version an. Die alte bleibt liegen und wird nicht überschrieben. Ohne denselben Namen hätte jede Änderung eine eigene Datei mit nur einer Version, dann bringt die Versionierung nichts.
-- **Object Lock, Modus Compliance.** Jede Version ist bis zum Ende der Frist gesperrt. Niemand kann sie vorher löschen oder aufheben, auch nicht der Konto-Inhaber. Die Sperrfrist sind 8 Jahre, wie bei den Rechnungen.
+**Neue Relationen.** Liegen Adressen und Mails in eigenen Relationen (`kundenadresse`, `kundenmail`), braucht jede denselben Trigger. Außerdem muss `protokoll.objekt` sie zulassen. Heute erlaubt es nur `maschine`, `ausleihe`, `kunde`, `rechnung` und `bestellung`. Sonst fehlt eine Adressänderung im Protokoll. Offen ist, was dann in `objekt_id` steht, zum Beispiel die Kundennummer.
 
-Der Server darf nur eine neue Version dieser Datei schreiben, keine Version löschen. Klappt das Schreiben nicht, wird der Kunde nicht gespeichert. Sonst gibt es eine Änderung ohne Protokoll.
+**`geaendert_am`.** Das Feld ändert sich bei jedem Speichern mit. Steht es am Kunden, schreibt der Trigger zu jeder echten Änderung eine zweite Zeile, nur für die Uhrzeit. Möglichkeiten: der Trigger lässt die Spalte aus, oder die Spalte fällt weg und man liest den Zeitpunkt aus dem Protokoll. Das gehört zum Schema und ist offen. `angelegt_am` ändert sich nach dem Anlegen nicht mehr, das macht keine zweite Zeile.
+
+## Unveränderbarer Speicher außerhalb der Datenbank
+
+~~Jede Zeile zusätzlich als Datei auf Amazon S3 mit Object Lock ablegen.~~ Das passt nicht zu ADR 0006. Dort läuft alles auf der eigenen Strato-VM, nicht bei einem fremden Dienst.
+
+Ob es so einen Speicher überhaupt braucht und wo er liegt, ist eine Architekturfrage. Dafür braucht es ein eigenes ADR. Für #7 baue ich auf der Tabelle `protokoll` auf.
 
 ## Empfehlung an den Entwickler
 
-Die Zeile wie oben, eine pro Feld. `changeType` mit `row_created`, `row_edited`, `row_deleted`. `updatedAt` und `createdAt` beim Vergleich auslassen.
+Kein eigenes Protokoll für Kunden bauen. `kunde_protokollieren` schreibt schon jede Änderung am Kunden. Kommen Relationen für Adresse und Mail dazu, an jede denselben Trigger hängen und `protokoll.objekt` erweitern.
 
-Beides schreiben: die Protokolltabelle zum Ansehen am Kunden, und die Datei auf S3. S3 mit Versionierung und Object Lock im Modus Compliance, 8 Jahre. Erst wenn die Datei angenommen ist, gilt die Änderung am Kunden. Die Tabellenzeile und die Datei tragen denselben Inhalt.
-
-Die Kopie auf einer schon gestellten Rechnung ist ein anderes Thema, die bleibt auf der Rechnung. Wird aus einem Privatkunden eine Firma, bleibt das alte Protokoll am alten Account.
+Die Kopie auf einer schon gestellten Rechnung ist ein anderes Thema, die bleibt auf der Rechnung. Wird aus einem Privatkunden ein Unternehmen und es gibt dafür einen neuen Account, bleibt das alte Protokoll am alten Account.
 
 ## Quellen
 
 - [GoBD, Fassung vom 28.11.2019, geändert am 11.03.2024 und 14.07.2025](https://ao.bundesfinanzministerium.de/ao/2025/Anhaenge/BMF-Schreiben-und-gleichlautende-Laendererlasse/Anhang-33/inhalt.html), Randziffer 108 bis 111
-- [Amazon S3 Object Lock](https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html), Compliance, und [Versionierung](https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html)
+- [`docs/datenmodell/relational.md`](../datenmodell/relational.md), 4.8 und 4.10, und [`schema.sql`](../datenmodell/schema.sql), Tabelle `protokoll`
+- [ADR 0006: Datenhaltung](../adr/0006-datenhaltung.md)

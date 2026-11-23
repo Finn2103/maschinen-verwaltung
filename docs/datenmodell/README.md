@@ -2,8 +2,6 @@
 
 Reihenfolge: fachliches Bild zuerst, Tabellen danach.
 
-Die Festlegung zu den Kunden steht in [`../kundenstammdaten/`](../kundenstammdaten/). Das Schema dazu ist hier noch nicht nachgezogen.
-
 | Datei | Inhalt | Status |
 | --- | --- | --- |
 | `ERD-Maschinenverwaltung.drawio` | ERD in Chen-Notation (drawio-Quelle) | Entwurf vom 10.11., vorläufig abgenommen (siehe unten); ergänzt am 16.11. um #99 |

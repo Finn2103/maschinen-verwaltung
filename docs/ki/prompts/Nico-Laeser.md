@@ -1,7 +1,9 @@
 # Prompts Nico Laeser
 
 Genutzte Prompts aus meinen Kommentaren in den Issues, im Wortlaut. Sortiert nach
-Issue-Nummer. Steht ein Prompt unter mehreren Issues, ist er nur einmal aufgeführt.
+Issue-Nummer, mit dem Datum an jedem Eintrag. Das Datum ist das Datum des Kommentars, ohne
+Kommentar der Tag des Prompts. Steht ein Prompt unter mehreren Issues, ist er nur einmal
+aufgeführt.
 
 Je Fall vier Angaben, wie in der [Vorlage](vorlage.md): **Aufgabe**, **Prompt**,
 **Ergebnis**, **Bewertung**. Beim Ergebnis stehen die erzeugten Dokumente mit Link auf den
@@ -12,6 +14,8 @@ Commit.
 ## [#7](https://github.com/Finn2103/maschinen-verwaltung/issues/7) Kundenstammdaten
 
 ### 5. Notizen zu Markdown und Pull Request
+
+**Datum:** 2026-11-18
 
 **Aufgabe**
 Die Notizen zu [#7](https://github.com/Finn2103/maschinen-verwaltung/issues/7) von TXT nach Markdown bringen, Struktur und Grammatik korrigieren, und dafür einen Pull Request öffnen, im Ablauf der bisherigen Dokumentations-PRs.
@@ -31,6 +35,8 @@ Fünf Dateien unter [`docs/kundenstammdaten/`](https://github.com/Finn2103/masch
 ## [#14](https://github.com/Finn2103/maschinen-verwaltung/issues/14) Monitoring
 
 ### 4. Nutzwertanalyse Monitoring
+
+**Datum:** 2026-10-09
 
 **Aufgabe**
 Für [#14](https://github.com/Finn2103/maschinen-verwaltung/issues/14) Prometheus mit Grafana, Netdata, Uptime Kuma und ein eigenes Skript
@@ -101,6 +107,8 @@ Kurz gehalten sind Zabbix und Gatus, journald und das Debian-Paket von Prometheu
 
 ### 1. Fehlende Issue-Texte für #35 und #36
 
+**Datum:** 2026-10-01
+
 **Aufgabe**
 Die Issues [#35](https://github.com/Finn2103/maschinen-verwaltung/issues/35) (Auswahl der Container-Software) und [#36](https://github.com/Finn2103/maschinen-verwaltung/issues/36) (Aufsetzen der
 Container-Software) hatten noch keinen Text. Sie sollten im Aufbau der übrigen Issues
@@ -127,6 +135,8 @@ nur gegen die Struktur.
 ---
 
 ### 2. Nutzwertanalyse Container-Software
+
+**Datum:** 2026-10-01
 
 **Aufgabe**
 Für [#35](https://github.com/Finn2103/maschinen-verwaltung/issues/35) Docker, Podman und Kubernetes vergleichen und die Wahl als ADR festhalten.
@@ -174,6 +184,8 @@ Der Prompt zu den Issue-Texten steht bei [#35](https://github.com/Finn2103/masch
 ## [#42](https://github.com/Finn2103/maschinen-verwaltung/issues/42) Reverse Proxy
 
 ### 3. Nutzwertanalyse Reverse Proxy
+
+**Datum:** 2026-10-01
 
 **Aufgabe**
 Für [#42](https://github.com/Finn2103/maschinen-verwaltung/issues/42) apache2, nginx, Caddy und Traefik vergleichen.

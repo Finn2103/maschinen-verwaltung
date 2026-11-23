@@ -1,6 +1,6 @@
 # Kundenstammdaten
 
-Festlegung für das Anlegen, Ändern und Suchen von Kunden (#7).
+Vorschlag zu #7: Anlegen, Ändern und Suchen von Kunden.
 
 | Datei | Inhalt |
 | --- | --- |
