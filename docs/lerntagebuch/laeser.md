@@ -482,6 +482,9 @@ Erster Schultag von Sprint 5.
   für Ausleihe und Bestellung, die Formate der EU-USt-IdNr.).
 - #7 war von Finn nach der Besprechung wieder aufgemacht worden, bis der Vorschlag
   eingebaut ist. Der PR blieb offen.
+- #9 angefangen: die `protokoll`-Tabelle aus #99 gelesen und überlegt, wie ein Auftrag
+  darauf aufbaut — Auftrag als eigener Datensatz, jede Änderung als neuer Eintrag mit
+  Bezug, Storno als Eintrag statt Löschung. Noch ohne Code.
 
 **Problem**
 
@@ -519,6 +522,10 @@ Erster Schultag von Sprint 5.
   abgegrenzt: Versionierung am Speicher wäre eine eigene ADR-Frage, nicht Teil von #7.
 - Feldnamen auf die Schema-Konvention geprüft (deutsch, klein, Einzahl) und den
   Beispielkunden auf Max Mustermann umgestellt.
+- Für #9 die ersten Felder notiert: `auftrag` mit fortlaufender Nummer, Kunde, Maschine
+  und Zeitraum aus der bestätigten Reservierung, dazu `auftragsaenderung` als Eintrag mit
+  Zeitpunkt, Benutzer, Feld, altem und neuem Wert — dasselbe Muster wie das
+  Änderungsprotokoll aus #7, nur auf den Auftrag bezogen.
 - Eingearbeitet habe ich die Punkte danach und Finn unter dem PR geantwortet
   (alle sieben, zum Mergen freigegeben).
 
