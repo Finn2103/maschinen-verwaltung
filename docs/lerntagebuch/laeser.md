@@ -385,3 +385,158 @@ Letzter Schultag von Sprint 2.
   ändern die Entscheidung nicht.
 - Wer von den Ergebnissen anderer abhängt, schreibt ihnen das ans Ticket und nicht in
   den eigenen ADR.
+
+---
+
+## 2026-11-12 · Donnerstag
+
+Erster Schultag von Sprint 5.
+
+**Tätigkeit**
+
+- In #7 das Thema USt-IdNr., OSS und Reverse-Charge in Worte gefasst (Kommentar unter
+  [#7](https://github.com/Finn2103/maschinen-verwaltung/issues/7)): der Unterschied zwischen
+  Steuernummer (vergibt das Finanzamt, national) und USt-IdNr. (EU-Geschäftsverkehr), der
+  One-Stop-Shop bei Ausleihe über die Grenze und die Prüfung der USt-IdNr. über VIES.
+  Festgehalten in `Rechnung-und-Steuer.md`, mit Empfehlung an den Entwickler.
+- Für #9 die Details geplant (Kommentar unter #9): fortlaufende und lückenlose
+  Auftragsnummern, kein Überschreiben, Storno-Eintrag mit Bezug auf den Auftrag,
+  Protokollierung von Statusänderungen.
+- Unter #14 angekündigt, dass der Push mit den Logs der VMPal-VM kommt.
+
+**Problem**
+
+- OSS und Reverse-Charge hängen an der Rechnungsstellung, für die es noch kein Issue gibt.
+  Was gehört in #7 und was nicht?
+- #9 ist mit XL mein größtes Issue. Ich wusste noch nicht, wo ich anfangen soll.
+
+**Lösung**
+
+- #7 bleibt bei den Stammdaten: USt-IdNr. erfassen und formal prüfen (VIES als
+  Schnittstelle). Steuersätze und OSS-Regeln sind dort nur vorbereitet, die Abrechnung ist
+  als offen markiert.
+- Für #9 zuerst die Akzeptanzkriterien auseinander genommen: Nummern, Protokoll, Storno.
+  Erst die Datenbasis (die `protokoll`-Tabelle aus #99), dann die Logik.
+
+**Lessons Learned**
+
+- Rechnung, Steuersatz und USt-IdNr. sind drei Themen: Zuordnung (Steuernummer), EU-Handel
+  (USt-IdNr., OSS) und Abrechnung (Steuersatz je Vorgang). In die Stammdaten gehören nur die
+  ersten beiden.
+- Bei einem XL-Issue zuerst die Kriterien auseinandernehmen und die Datenbasis suchen.
+  „Mehr als 16 Std." heißt nicht, dass man alles gleichzeitig anfassen muss.
+
+---
+
+## 2026-11-13 · Freitag
+
+**Tätigkeit**
+
+- Die übrigen Themen aus #7 in Worte gefasst: Pflichtfelder (Telefon Pflicht, Adresse
+  freiwillig, getrennte Rechnungs- und Lieferadresse), Dublettenerkennung (gleicher Name,
+  gleiche Adresse), Kundensuche (Name, Kundennummer, Ort) und das Änderungsprotokoll
+  (Zeitpunkt, Benutzer, Feld, alter und neuer Wert). Festgehalten in `Pflichtfelder.md`,
+  `Dublettenerkennung.md`, `Kundensuche.md` und `Aenderungsprotokoll.md`.
+- Beim Änderungsprotokoll die GoBD gelesen: Randziffer 110 nennt die Möglichkeiten
+  (Festschreibung, Löschmerkmal, Protokollierung, Versionierung), Randziffer 111
+  verlangt, dass die Historie nachher nicht mehr veränderbar ist.
+- Die Details für #9 notiert: fortlaufende Nummern, Storno statt Löschen, jede Änderung
+  als neuer Eintrag.
+- Abgegeben habe ich an dem Tag nichts: Die Dokumente wollte ich erst gegen das Datenmodell
+  (#99) und ADR 0006 abgleichen. Committet habe ich sie in der Nacht zum 18.11. — nachts
+  ist mein Commit-Fenster.
+
+**Problem**
+
+- Das Änderungsprotokoll ließ sich auf zwei Wegen bauen: die `protokoll`-Tabelle aus #99
+  oder eine S3-Versionierung am Objekt. Beides hat Vor- und Nachteile bei GoBD und Aufwand.
+- Telefon oder Adresse als Pflichtfeld? #1 (Reservieren) verlangt etwas anderes als #7.
+
+**Lösung**
+
+- Entscheidung vorbereitet, nicht getroffen: Die offenen Fragen stehen in
+  `Pflichtfelder.md`, die Festlegung kam mit dem Review.
+- Fürs Protokoll: die bestehende `protokoll`-Tabelle aus #99 verwenden statt eine zweite
+  Lösung daneben zu bauen.
+
+**Lessons Learned**
+
+- Die GoBD nennen kein Werkzeug, sondern Anforderungen: unveränderbare Historie, alter
+  Inhalt bleibt sichtbar. Die technische Wahl bleibt bei uns — die Begründung muss ins
+  Dokument.
+- Offene Punkte schreibe ich als Fragen in die Doku, statt sie stillschweigend zu
+  entscheiden. Finns Review hat sie dann beantwortet.
+
+---
+
+## 2026-11-19 · Donnerstag
+
+**Tätigkeit**
+
+- Das Review von Finn zu meinem PR #127 (Kundenstammdaten) gelesen: sieben Punkte,
+  unter anderem das README als „Vorschlag" kennzeichnen, die Pflichtfelder Telefon und
+  Adresse, das Änderungsprotokoll ohne S3, Dubletten und Suche nur für Personal
+  (`kunde.suchen`), Steuertabellen und Feldnamen-Konvention.
+- Die Punkte sortiert: was reine Form ist (README, Feldnamen, Beispielkunde), was am
+  Datenmodell hängt (`protokoll` aus #99 statt S3), was fachlich neu ist (Steuertabellen
+  für Ausleihe und Bestellung, die Formate der EU-USt-IdNr.).
+- #7 war von Finn nach der Besprechung wieder aufgemacht worden, bis der Vorschlag
+  eingebaut ist. Der PR blieb offen.
+
+**Problem**
+
+- Zwei der sieben Punkte waren fachlich neu statt nur Form: die Steuersätze für Ausleihe
+  und Bestellung und die Formate der EU-USt-IdNr. je Land. Da musste ich nachschlagen,
+  statt umzuformulieren.
+- Ein Punkt betraf die Rechte: Dubletten-Hinweis und Suche sollten nur das Personal sehen.
+  Das hängt an `kunde.suchen` aus #99.
+
+**Lösung**
+
+- Die Recherche für die beiden fachlichen Punkte vertagt auf den Freitag, die Form-Punkte
+  waren schnell. So konnte ich danach in einem Zug einarbeiten.
+- Dubletten und Suche auf `kunde.suchen` beschränkt: wer nicht suchen darf, sieht auch
+  keine Dubletten-Warnung.
+
+**Lessons Learned**
+
+- Ein Review kann fachliche Fragen aufwerfen, die im eigenen Entwurf noch nicht entschieden
+  waren. Sortieren nach Form, Datenmodell und Fachlichkeit zeigt, was wirklich Arbeit ist.
+- Punkte, die an Rechten hängen, sind keine Form. Wer die Dublette sieht, entscheidet
+  das Berechtigungskonzept, nicht der Zufall.
+
+---
+
+## 2026-11-20 · Freitag
+
+**Tätigkeit**
+
+- Die Grundlagen für die beiden fachlichen Review-Punkte gelegt: Steuertabellen für
+  Ausleihe und Bestellung (19 % Inland; 0 % mit USt-IdNr. im EU-B2B-Verkehr mit
+  Reverse-Charge-Hinweis in der Rechnung) und die Formate der EU-USt-IdNr. je Land, zum
+  Beispiel DE mit neun Ziffern, AT mit `U` und acht Ziffern.
+- Das Änderungsprotokoll auf die `protokoll`-Tabelle (#99) umgestellt und S3 dagegen
+  abgegrenzt: Versionierung am Speicher wäre eine eigene ADR-Frage, nicht Teil von #7.
+- Feldnamen auf die Schema-Konvention geprüft (deutsch, klein, Einzahl) und den
+  Beispielkunden auf Max Mustermann umgestellt.
+- Eingearbeitet habe ich die Punkte danach und Finn unter dem PR geantwortet
+  (alle sieben, zum Mergen freigegeben).
+
+**Problem**
+
+- Bei den Steuertabellen musste auseinandergehalten werden, was die Ausleihe (Verkauf von
+  Leistung, umsatzsteuerbar) und was die Bestellung von Verbrauchsmaterial ist. Für beide
+  gilt der Steuersatz, aber die Vorgänge sind getrennt.
+
+**Lösung**
+
+- Zwei getrennte Tabellen in `Rechnung-und-Steuer.md`: eine für die Ausleihe, eine für die
+  Bestellung, mit denselben Regeln (Inland 19 %, EU-B2B 0 % mit Reverse-Charge). Die
+  Abrechnung bleibt als offen markiert, weil dafür noch kein Issue existiert.
+
+**Lessons Learned**
+
+- Recherche an einem Tag, Einarbeiten am nächsten: Die sieben Punkte am Stück zu machen,
+  wäre an den beiden fachlichen hängen geblieben.
+- Dasselbe Steuerrecht, zwei Vorgänge: Ausleihe und Materialbestellung brauchen getrennte
+  Tabellen, auch wenn die Regeln gleich sind.
