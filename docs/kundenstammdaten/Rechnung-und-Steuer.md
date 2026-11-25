@@ -16,9 +16,9 @@ Die USt-Id wird vom BZSt vergeben. Für Deutschland ist der Standard `DE` und 9 
 
 Als Kleinunternehmer weist man keine Umsatzsteuer aus. Auf der Rechnung ist der Betrag netto gleich brutto, mit dem Hinweis auf § 19 UStG. Das ist für den Anfang einfacher und oft der Weg, wenn man sich nebenberuflich selbstständig macht.
 
-~~Ab dem Umsatz von 25.000 € muss man auf die Regelbesteuerung wechseln.~~ Seit 2025 gilt die Kleinunternehmerregelung, wenn der Gesamtumsatz im Vorjahr 25.000 € nicht übersteigt und im laufenden Jahr 100.000 € nicht überschreitet (§ 19 UStG).
+Seit 2025 gilt die Kleinunternehmerregelung, wenn der Gesamtumsatz im Vorjahr 25.000 € nicht übersteigt und im laufenden Jahr 100.000 € nicht überschreitet (§ 19 UStG).
 
-~~Bei der Soll-Versteuerung schätzt das Finanzamt, und man muss vorauszahlen.~~ Soll heißt: die Steuer entsteht für den Zeitraum, in dem ausgeliehen oder geliefert wurde, egal wann der Kunde zahlt. Ist heißt: sie entsteht für den Zeitraum, in dem das Geld kommt (§ 13 UStG). Ist muss man beim Finanzamt beantragen (§ 20 UStG). Für den Prozentsatz auf der Rechnung ist das egal.
+Soll heißt: die Steuer entsteht für den Zeitraum, in dem ausgeliehen oder geliefert wurde, egal wann der Kunde zahlt. Ist heißt: sie entsteht für den Zeitraum, in dem das Geld kommt (§ 13 UStG). Ist muss man beim Finanzamt beantragen (§ 20 UStG). Für den Prozentsatz auf der Rechnung ist das egal.
 
 Bei der Regelbesteuerung ist der normale Satz 19 %. Endkunden nennen das oft MwSt. Welcher Satz wirklich auf eine Rechnung kommt, hängt vom Kunden ab, siehe die Tabellen unten.
 
@@ -26,28 +26,9 @@ Ich gehe für dieses Projekt von einem Unternehmen aus, das regelbesteuert ist u
 
 ## Was wir abrechnen
 
-Eine Rechnungsposition berechnet eine Ausleihe oder eine Bestellung (`docs/datenmodell/relational.md`, 4.4). Eine Wartung wird nicht berechnet. Die Tabelle zur Wartung war mein erster Schritt. Für unsere Rechnungen gelten die Tabellen zur Ausleihe und zur Bestellung.
+Eine Rechnungsposition berechnet eine Ausleihe oder eine Bestellung (`docs/datenmodell/relational.md`, 4.4). Eine Wartung wird nicht berechnet. Für unsere Rechnungen gelten die Tabellen zur Ausleihe und zur Bestellung.
 
 Rechnung und Zahlung haben noch keine User Story (`docs/rollen-und-rechte.md`, Offene Punkte). Wie die Steuer auf die Rechnung kommt, gehört zur Abrechnung und ist offen. Für #7 heißt das nur: Kundentyp, Land der Rechnungsadresse, USt-Id und Land der Lieferadresse müssen sich erfassen lassen. Davon hängt die Steuer ab.
-
-## Steuersätze für die Wartung in Deutschland
-
-~~EU-Privatkunde: Satz des Landes (bei NL zum Beispiel 21 %).~~
-
-~~EU-Geschäftskunde ohne USt-Id oder mit ungültiger USt-Id: Satz des Landes.~~
-
-~~Privatkunde außerhalb der EU: 0 %.~~
-
-| Kunde | Steuer |
-| --- | --- |
-| Deutschland, privat oder Geschäft | 19 % |
-| EU, privat | 19 % |
-| EU, Geschäft, USt-Id fehlt oder ist ungültig | 19 % |
-| EU, Geschäft, USt-Id gültig und bestätigt | in Deutschland nicht steuerbar, der Kunde führt die Steuer selbst ab |
-| Privatkunde außerhalb der EU | 19 % |
-| Geschäftskunde außerhalb der EU | in Deutschland nicht steuerbar |
-
-„Nicht steuerbar“ ist kein Steuersatz von 0 % auf der Rechnung. Die deutsche Umsatzsteuer fällt nicht an.
 
 ## Steuer für die Ausleihe
 
@@ -64,7 +45,7 @@ Baumaschinen zählen dabei nicht als Beförderungsmittel. Im Umsatzsteuer-Anwend
 | Privatkunde außerhalb der EU | in Deutschland nicht steuerbar |
 | Geschäftskunde außerhalb der EU | in Deutschland nicht steuerbar |
 
-Anders als bei der Wartung fällt beim Privatkunden außerhalb der EU keine deutsche Steuer an. Bei der Vermietung zählt hier sein Wohnsitz.
+Beim Privatkunden außerhalb der EU fällt keine deutsche Steuer an: Bei der Vermietung zählt sein Wohnsitz.
 
 Beim EU-Geschäftskunden mit gültiger USt-Id steht auf der Rechnung, dass der Kunde die Steuer schuldet. Dazu kommen beide USt-Ids auf die Rechnung, und der Umsatz kommt in die Zusammenfassende Meldung.
 
@@ -99,6 +80,8 @@ Empfehlung für dieses Issue: nur die Form prüfen, nichts zurechtschneiden. Lee
 - Griechenland ist `EL`, nicht `GR`.
 - `UK` gibt es nicht. England, Schottland und Wales haben kein eigenes Kürzel. Der ISO-Code des Vereinigten Königreichs ist `GB`, nicht `UK`. `GB` ist seit dem Brexit keine EU-USt-Id mehr und kommt in dieser Prüfung nicht durch.
 - Nordirland ist `XI`, nicht `GB` und nicht `UK`.
+
+Offene Frage: Die USt-Id ist global eindeutig. Mehrere Kundenkonten derselben Firma (zum Beispiel Niederlassungen) würden abgelehnt, wenn das Schema die USt-Id eindeutig setzt. Ob das so sein soll, entscheidet das Team.
 
 ### Aufbau in allen EU-Ländern
 
@@ -141,22 +124,22 @@ Drei Stellen sind in den Quellen nicht ganz gleich:
 - Belgien: Seit September 2023 gibt es Nummern mit 1 vorne. Das BZSt nennt nur 10 Ziffern.
 - Irland und Schweden: Die Buchstaben bei Irland und das `01` bei Schweden stehen nur beim BZSt.
 
-Die Prüfung liegt auf dem Server, beim Anlegen und beim Bearbeiten. Empfehlung für die Formularprüfung im ganzen Produkt: Zod (https://zod.dev). Der Fehler darf im Formular früher erscheinen. Maßgeblich ist der Server.
+Die Prüfung liegt auf dem Server, beim Anlegen und beim Bearbeiten. Der Fehler darf im Formular früher erscheinen, Maßgeblich ist der Server. Welche Bibliothek die Formularprüfung nutzt, entscheidet das Team (potenziell eigenes ADR).
 
-~~Der Regex wartet 300 ms, ob der Nutzer weiter tippt.~~ Ein lokaler Regex braucht kein Debounce.
+Ein lokaler Regex braucht kein Debounce.
 
-~~Damit der Server nicht rate-limited wird, prüft das Frontend direkt gegen VIES.~~ VIES ist keine Formatprüfung und wird nicht aus dem Browser aufgerufen.
+VIES ist keine Formatprüfung und wird nicht aus dem Browser aufgerufen.
 
 Empfehlung: die Bestätigung der USt-Id ist VIES, auf dem Server. Deutsch heißt das MIAS. VIES sagt, ob die Nummer gültig ist. Für die Zeile „gültig und bestätigt“ ist diese Bestätigung gemeint. Den Beleg der Abfrage aufbewahren. Name und Anschrift gleicht man mit ab, wenn VIES sie mitliefert. Liefert ein Land sie nicht, bestätigt die Behörde nur, ob Name und Anschrift zu der Nummer gehören. In Deutschland ist das die qualifizierte Bestätigung beim BZSt nach § 18e UStG. Das ist das spätere Issue, nicht die Formatprüfung.
 
-~~Zusätzlich baue ich aus Browsersprache, IP-Land und einer Wahrscheinlichkeit, ob die USt-Id plausibel ist.~~ Gemeint ist der Abgleich, ob USt-Id, Name und Anschrift zusammenpassen. Den soll man machen. Die Bestätigung der Nummer ist VIES. Artikel 18 verlangt dazu die Bestätigung von Nummer, Name und Anschrift. Browsersprache und IP-Land sind kein Abgleich. Unterstützend können sie sein: passen sie zum Land der USt-Id oder zur Rechnungsadresse nicht, ist das ein Hinweis zum Nachsehen. Die Steuer entscheidet das nicht, und eine eigene Wahrscheinlichkeit, ob die Nummer plausibel ist, auch nicht.
+Gemeint ist der Abgleich, ob USt-Id, Name und Anschrift zusammenpassen. Den soll man machen. Die Bestätigung der Nummer ist VIES. Artikel 18 verlangt dazu die Bestätigung von Nummer, Name und Anschrift. Browsersprache und IP-Land sind kein Abgleich. Unterstützend können sie sein: passen sie zum Land der USt-Id oder zur Rechnungsadresse nicht, ist das ein Hinweis zum Nachsehen. Die Steuer entscheidet das nicht, und eine eigene Wahrscheinlichkeit, ob die Nummer plausibel ist, auch nicht.
 
 ## Quellen
 
 Abgerufen am 18.11.2026. Keine Rechtsberatung.
 
 - [§ 3 UStG](https://www.gesetze-im-internet.de/ustg_1980/__3.html), Ort der Lieferung in Abs. 6
-- [§ 3a UStG](https://www.gesetze-im-internet.de/ustg_1980/__3a.html), Ort der Leistung, Wartung in Abs. 3 Nr. 3a Buchst. b, Geschäftskunde in Abs. 2, Beförderungsmittel in Abs. 3 Nr. 2, Vermietung an Privatkunden außerhalb der EU in Abs. 4 Satz 2 Nr. 10, digitale Dienste in Abs. 5
+- [§ 3a UStG](https://www.gesetze-im-internet.de/ustg_1980/__3a.html), Ort der Leistung, Geschäftskunde in Abs. 2, Beförderungsmittel in Abs. 3 Nr. 2, Vermietung an Privatkunden außerhalb der EU in Abs. 4 Satz 2 Nr. 10, digitale Dienste in Abs. 5
 - [§ 3c UStG](https://www.gesetze-im-internet.de/ustg_1980/__3c.html), 10.000-Euro-Grenze für Fernverkäufe und die in § 3a Abs. 5 genannten Dienste
 - [§ 4 UStG](https://www.gesetze-im-internet.de/ustg_1980/__4.html), Nr. 1 Buchst. a und b, mit [§ 6](https://www.gesetze-im-internet.de/ustg_1980/__6.html) (Ausfuhr, Abholung durch den Kunden in Abs. 1 Nr. 2, Reisegepäck in Abs. 3a) und [§ 6a](https://www.gesetze-im-internet.de/ustg_1980/__6a.html) (innergemeinschaftliche Lieferung)
 - [§ 13 UStG](https://www.gesetze-im-internet.de/ustg_1980/__13.html), wann die Steuer entsteht

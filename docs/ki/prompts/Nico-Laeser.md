@@ -608,12 +608,14 @@ Drei Annahmen aus der SaaS-Erfahrung waren falsch und stehen in
   Plausibilitäts-Wahrscheinlichkeit für die USt-Id.
 
 **Bewertung**
-Übernommen. Die durchgestrichenen Zeilen bleiben drin: Sie zeigen, wo die Erfahrung aus
+Übernommen. Die durchgestrichenen Zeilen haben zunächst gezeigt, wo die Erfahrung aus
 SaaS nicht passte und was stattdessen für die Vermietung gilt. SaaS und Vermietung sind
 beide sonstige Leistungen, aber bei SaaS an Privatkunden zählt das Land des Kunden, bei der
 Vermietung der Sitz des Verleihs. Bei Geschäftskunden ist es bei beiden Reverse-Charge
 (§ 3a Abs. 2 UStG). Nachgerechnet habe ich das an § 3a UStG und dem
-Umsatzsteuer-Anwendungserlass, die Quellen stehen in der Datei.
+Umsatzsteuer-Anwendungserlass, die Quellen stehen in der Datei. Vor dem Merge habe ich die
+Streichungen aufgeräumt, die alte Fassung steht in der Git-Historie; die Wartungs-Tabelle
+ist gleich mit raus, eine Wartung wird nicht berechnet.
 
 ---
 

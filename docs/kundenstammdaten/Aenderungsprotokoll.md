@@ -45,7 +45,7 @@ Den Verlauf eines Kunden sieht das Personal, also wer `protokoll.datensatz` hat.
 
 ## Unveränderbarer Speicher außerhalb der Datenbank
 
-~~Jede Zeile zusätzlich als Datei auf Amazon S3 mit Object Lock ablegen.~~ Das passt nicht zu ADR 0006. Dort läuft alles auf der eigenen Strato-VM, nicht bei einem fremden Dienst.
+**Amazon S3 mit Object Lock.** Passt nicht zu ADR 0006: Dort läuft alles auf der eigenen Strato-VM, nicht bei einem fremden Dienst.
 
 Ob es so einen Speicher überhaupt braucht und wo er liegt, ist eine Architekturfrage. Dafür braucht es ein eigenes ADR. Für #7 baue ich auf der Tabelle `protokoll` auf.
 
