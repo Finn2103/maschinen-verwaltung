@@ -1,0 +1,3 @@
+bbk-it-11.de, www.bbk-it-11.de {
+    reverse_proxy placeholder:80
+}

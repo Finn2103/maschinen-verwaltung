@@ -1,0 +1,41 @@
+
+---
+- name: Paketlisten aktualisieren
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Automatische Sicherheitsupdates installieren
+  ansible.builtin.apt:
+    name:
+      - unattended-upgrades
+      - apt-listchanges
+    state: present
+
+- name: Automatische Sicherheitsupdates konfigurieren
+  ansible.builtin.copy:
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      APT::Periodic::Update-Package-Lists "1";
+      APT::Periodic::Unattended-Upgrade "1";
+
+- name: Normale Debian-Updates deaktivieren
+  ansible.builtin.replace:
+    path: /etc/apt/apt.conf.d/50unattended-upgrades
+    regexp: '^\s*"origin=Debian,codename=\$\{distro_codename\},label=Debian";$'
+    replace: '        // "origin=Debian,codename=${distro_codename},label=Debian";'
+
+- name: Alte zusätzliche Sicherheitskonfiguration entfernen
+  ansible.builtin.file:
+    path: /etc/apt/apt.conf.d/52unattended-upgrades-security
+    state: absent
+
+- name: Automatische Updates aktivieren
+  ansible.builtin.service:
+    name: unattended-upgrades
+    state: started
+    enabled: true
+

@@ -1,0 +1,18 @@
+
+---
+- name: Debian Paketlisten aktualisieren
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Grundlegende Systempakete installieren
+  ansible.builtin.apt:
+    name:
+      - ca-certificates
+      - curl
+      - gnupg
+      - git
+      - sudo
+      - python3
+      - openssh-server
+    state: present

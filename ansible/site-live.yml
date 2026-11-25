@@ -1,0 +1,15 @@
+---
+- name: Live-Server einrichten
+  hosts: live
+  become: true
+
+  vars:
+    compose_file: "{{ playbook_dir }}/../live/docker-compose.yml"
+    caddy_file: "{{ playbook_dir }}/../live/Caddyfile"
+    website_file: "{{ playbook_dir }}/../live/site/index.html"
+
+  roles:
+    - system_base
+    - security_updates
+    - container_runtime
+    - application

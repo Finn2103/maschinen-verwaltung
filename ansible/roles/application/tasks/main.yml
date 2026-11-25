@@ -1,3 +1,4 @@
+
 ---
 - name: Projektverzeichnis auf dem Server erstellen
   ansible.builtin.file:
@@ -5,16 +6,28 @@
     state: directory
     mode: '0755'
 
+- name: Website-Verzeichnis auf dem Server erstellen
+  ansible.builtin.file:
+    path: /opt/schulprojekt/site
+    state: directory
+    mode: '0755'
+
 - name: Docker Compose Datei auf den Server kopieren
   ansible.builtin.copy:
-    src: ../../../../docker-compose.yml
+    src: "{{ compose_file }}"
     dest: /opt/schulprojekt/docker-compose.yml
     mode: '0644'
 
 - name: Caddy-Konfiguration auf den Server kopieren
   ansible.builtin.copy:
-    src: "{{ playbook_dir }}/../Caddyfile"
+    src: "{{ caddy_file }}"
     dest: /opt/schulprojekt/Caddyfile
+    mode: '0644'
+
+- name: BBK-IT-Startseite auf den Server kopieren
+  ansible.builtin.copy:
+    src: "{{ website_file }}"
+    dest: /opt/schulprojekt/site/index.html
     mode: '0644'
 
 - name: Docker-Container starten

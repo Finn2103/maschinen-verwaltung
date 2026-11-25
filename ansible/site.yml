@@ -3,6 +3,13 @@
   hosts: webserver
   become: true
 
+  vars:
+    compose_file: "{{ playbook_dir }}/../docker-compose.yml"
+    caddy_file: "{{ playbook_dir }}/../Caddyfile"
+    website_file: "{{ playbook_dir }}/../live/site/index.html"
+
   roles:
+    - system_base
+    - security_updates
     - container_runtime
     - application
