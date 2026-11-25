@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fachgespräch · Nico Laeser</title>
+<style>
+  :root {
+    --paper: #f3efe6;
+    --ink: #1a1814;
+    --muted: #5e584e;
+    --line: #d8d0c2;
+    --done: #1d6b48;
+    --open: #8a4b10;
+    --acc: #2b4d8c;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font: 19px/1.5 "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 2.6rem 1.2rem 6rem; }
+  .kicker {
+    margin: 0 0 0.5rem;
+    font: 600 13px/1.2 ui-sans-serif, "Helvetica Neue", sans-serif;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  h1 { margin: 0 0 0.4rem; font-size: clamp(1.7rem, 4vw, 2.6rem); font-weight: 600; line-height: 1.1; }
+  .lead { margin: 0 0 1.6rem; color: var(--muted); font-size: 1.1rem; max-width: 42rem; }
+  .toolbar {
+    display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center;
+    margin: 0 0 1.8rem; padding: 0.7rem 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    font: 14px/1 ui-sans-serif, "Helvetica Neue", sans-serif;
+  }
+  .toolbar .count { margin-left: auto; color: var(--muted); }
+  button {
+    appearance: none; border: 1px solid var(--line); background: #fffdf8; color: var(--ink);
+    border-radius: 999px; padding: 0.45rem 0.95rem; font: 14px/1 ui-sans-serif, "Helvetica Neue", sans-serif;
+    cursor: pointer;
+  }
+  button:hover { border-color: #b7ad9d; }
+  button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  h2 {
+    margin: 2.2rem 0 0.2rem;
+    font: 600 14px/1.2 ui-sans-serif, "Helvetica Neue", sans-serif;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--acc);
+  }
+  h2 .n { color: var(--muted); }
+  .hint { color: var(--muted); font-size: 0.95rem; margin: 0 0 0.6rem; }
+  details {
+    margin: 0.55rem 0;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fffdf8;
+    overflow: hidden;
+  }
+  details[open] { border-color: #b7ad9d; }
+  summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 0.85rem 1rem 0.85rem 2.6rem;
+    position: relative;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::before {
+    content: "?";
+    position: absolute; left: 0.95rem; top: 0.78rem;
+    width: 1.25rem; height: 1.25rem;
+    display: grid; place-items: center;
+    border-radius: 999px;
+    background: var(--acc); color: #fff;
+    font: 700 12px/1 ui-sans-serif, "Helvetica Neue", sans-serif;
+  }
+  details[open] summary::before { content: "!"; background: var(--done); }
+  .a {
+    display: none;
+    padding: 0.1rem 1rem 0.95rem 2.6rem;
+    border-top: 1px dashed var(--line);
+    margin: 0 0 0;
+  }
+  details[open] .a { display: block; }
+  .a p { margin: 0.7rem 0 0; }
+  .a code, .hint code {
+    font: 0.86em/1.4 ui-monospace, "SF Mono", Menlo, monospace;
+    background: #efe9dc; border: 1px solid var(--line); border-radius: 4px; padding: 0 4px;
+  }
+  .a .src { color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+  .merk {
+    margin-top: 2.6rem; padding: 1rem 1.2rem;
+    border-left: 3px solid var(--done); background: rgba(29,107,72,.07);
+    border-radius: 0 10px 10px 0;
+  }
+  .merk b { font-weight: 600; }
+  @media print {
+    .toolbar { display: none; }
+    details { break-inside: avoid; }
+    summary::before { content: "!"; background: var(--done); }
+    .a { display: block !important; border-top: 1px dashed var(--line); }
+    details { border-color: var(--line); }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="kicker">Vorbereitung Fachgespräch · Review 26. November 2026</p>
+  <h1>Fragen, die kommen könnten.</h1>
+  <p class="lead">Karte anklicken für die Antwort. Erst selbst antworten, dann aufdecken — das ist die Übung. Alle Antworten stehen so oder ähnlich in ADR 0012, docs/monitoring, docs/kundenstammdaten und der Prompt-Liste.</p>
+
+  <div class="toolbar">
+    <button type="button" id="all">Alle aufdecken</button>
+    <button type="button" id="none">Alle zuklappen</button>
+    <span class="count" id="count"></span>
+  </div>
+
+  <h2>Monitoring · #14</h2>
+  <p class="hint">Ausschlaggebend sind die Nutzwertanalyse, die Abweichungen in ADR 0012 und die Befunde aus den Tests.</p>
+
+  <details>
+    <summary>Warum ein eigenes Skript statt Prometheus oder Netdata?</summary>
+    <div class="a"><p>Nutzwertanalyse in ADR 0012: Skript 4,40, Prometheus und Netdata je 3,80, Uptime Kuma 2,80. Ausschlaggebend: Prometheus schreibt seine Messwerte laufend auf die Platte und geht bei voller Platte kaputt — genau den Fall müssen wir überleben. Viele Tools laufen in Docker; wenn Docker durch ein Update ausfällt, überwacht nichts mehr. Und eine Webseite brauchen wir nicht, <code>monitor status</code> per SSH reicht.</p>
+    <p class="src">Gegenprobe ohne meine zwei Zusatzkriterien (volle Platte, Docker-Ausfall): 3,50 gegen 3,20 — das Skript bleibt vorn. Die Entscheidung ist also nicht von den Zusatzkriterien abhängig.</p></div>
+  </details>
+
+  <details>
+    <summary>Warum ein systemd-Dienst statt des Timers aus dem Entwurf?</summary>
+    <div class="a"><p>Prüfung alle 10 Sekunden statt jede Minute, weil ein Ausfall so schnell gemeldet wird, wie es AK 3 verlangt. Wichtiger: Der Spam-Schutz merkt sich im laufenden Prozess, was schon gemeldet wurde — ein Timer finge bei jedem Lauf bei null an. Steht als Abweichung in ADR 0012.</p></div>
+  </details>
+
+  <details>
+    <summary>Wie prüft das Skript die Datenbank ohne Passwort?</summary>
+    <div class="a"><p>PostgreSQL-Handshake wie <code>pg_isready</code>: Das Startpaket ist 0x29, also 41 Bytes. Fordert der Server eine Anmeldung an, nimmt er Verbindungen an — das reicht als Nachweis, dass die Datenbank lebt. Angemeldet wird nie, deshalb stehen keine Zugangsdaten in der Konfiguration. Die „echte Anmeldung" aus dem Entwurf ist als Abweichung dokumentiert.</p></div>
+  </details>
+
+  <details>
+    <summary>Wie funktioniert der Spam-Schutz genau?</summary>
+    <div class="a"><p>Drei Regeln: Eine neue Stufe muss über <code>CONFIRM_CYCLES</code>, also zwei Durchläufe, stabil anliegen, bevor sie gemeldet wird. Pro Prüfung gehen höchstens zwei Meldungen in zehn Minuten raus (<code>NOTIFY_MAX</code>, <code>NOTIFY_WINDOW</code>). Verschlechterungen und die Entwarnung werden nie unterdrückt — die Entwarnung wird aber wie jeder Wechsel bestätigt, nicht sofort gemeldet.</p></div>
+  </details>
+
+  <details>
+    <summary>Was war der Bug mit der Entwarnung?</summary>
+    <div class="a"><p>Zwei Stück. Der Spam-Schutz hielt die Entwarnung nach einem gemeldeten Problem bis zu zehn Minuten zurück — der Test prüfte nur, <em>ob</em> sie ankommt, nicht <em>wann</em>. Jetzt prüft der Test das mit. Und beim Gegenlesen vor dem Commit (Fall 21) fiel auf, dass weggefallene Prüfungen (<code>gone</code>) die Bestätigung umgingen und sofort Entwarnung meldeten — ein einzelner Modul-Timeout hätte einen bestehenden Fehler „weggeblinkt". Auch das ist behoben.</p></div>
+  </details>
+
+  <details>
+    <summary>Docker meldet den Mailserver „running, healthy" — warum trotzdem CRITICAL?</summary>
+    <div class="a"><p>Der Healthcheck von docker-mailserver zählt nur, ob die Prozesse laufen (steht so in <code>dms-healthcheck</code>, TODO dort: Ports prüfen). Test 11: Postfix im laufenden Container gestoppt — Docker meldet weiter healthy, die SMTP-Ports 25 und 587 sind tot. Deshalb prüft das Skript die Ports selbst, am Protokoll: SMTP-Begrüßung 220, IMAP <code>* OK</code>.</p></div>
+  </details>
+
+  <details>
+    <summary>Warum war VIES in der Konfiguration und ist jetzt raus?</summary>
+    <div class="a"><p>Die zwei VIES-Endpoints liefen bei jedem Durchlauf mit — bei 10 Sekunden Takt über 17.000 Anfragen pro Tag an eine EU-Behörden-API, dafür droht eine Sperre. #7 nutzt VIES aber noch gar nicht. Gefunden beim Gegenlesen vor dem Commit (Fall 21); raus aus der Standardkonfiguration, das Beispiel steht auskommentiert in <code>monitor.conf</code>.</p></div>
+  </details>
+
+  <details>
+    <summary>Was passiert bei voller Platte — überlebt das Monitoring das?</summary>
+    <div class="a"><p>Ja, dreifach abgesichert: Laufzeitdaten liegen nur in <code>/run/monitor</code>, einem tmpfs im Arbeitsspeicher. Die systemd-Unit setzt <code>ProtectSystem=strict</code>, das Dateisystem ist für den Dienst schreibgeschützt (Test 16: Schreibversuch schlägt fehl). Und systemd-journald hält selbst Platz frei (<code>SystemKeepFree</code>). Test 09: Bei 100 % belegter Platte prüft das Monitoring weiter und meldet die größten Ordner.</p></div>
+  </details>
+
+  <details>
+    <summary>Was ist am Monitoring noch offen?</summary>
+    <div class="a"><p>Drei Punkte, alle im Issue dokumentiert: Der Test auf der Strato-VM geht erst, wenn #11 (Datenbank), #13 (Mailserver) und #5 (IaC) stehen. Der Meldekanal ist nicht offiziell festgelegt — wichtig: nicht unser eigener Mailserver. Und falls #4 auf Rootless-Docker entscheidet, muss <code>DOCKER_SOCKET=/run/user/&lt;uid&gt;/docker.sock</code> gesetzt werden.</p></div>
+  </details>
+
+  <h2>Kundenstammdaten · #7</h2>
+  <p class="hint">Hier zählen UStG, GoBD und die Rechte aus #99 — und die offenen Fragen ans Team.</p>
+
+  <details>
+    <summary>Was ist der Unterschied zwischen Steuernummer und USt-IdNr.?</summary>
+    <div class="a"><p>Die Steuernummer vergibt das Finanzamt, dient der Zuordnung und gilt national. Die USt-IdNr. vergibt das BZSt für den EU-Geschäftsverkehr und ist über VIES prüfbar. Format für Deutschland: DE plus neun Ziffern. Sonderfälle: Griechenland ist <code>EL</code> nicht <code>GR</code>, Nordirland <code>XI</code>, und <code>UK</code> existiert nicht — der ISO-Code ist <code>GB</code>, seit dem Brexit keine EU-USt-Id mehr.</p></div>
+  </details>
+
+  <details>
+    <summary>Wann fällt bei der Ausleihe welche Steuer an?</summary>
+    <div class="a"><p>Privatkunde in Deutschland oder EU: 19 % am Sitz des Verleihs (§ 3a Abs. 1 UStG). EU-Geschäftskunde mit gültiger, bestätigter USt-Id: in Deutschland nicht steuerbar, der Kunde führt die Steuer selbst ab (Reverse-Charge, § 3a Abs. 2) — beide USt-Ids auf die Rechnung, Umsatz in die Zusammenfassende Meldung. Privatkunde außerhalb der EU: nicht steuerbar, sein Wohnsitz zählt (§ 3a Abs. 4 Nr. 10). Baumaschinen sind keine Beförderungsmittel — steht ausdrücklich im Umsatzsteuer-Anwendungserlass („Keine Beförderungsmittel sind z. B. Bagger, Planierraupen").</p></div>
+  </details>
+
+  <details>
+    <summary>Was war dein Fehler mit der SaaS-Erfahrung?</summary>
+    <div class="a"><p>Ich hatte die Steuerregeln aus meiner SaaS-Erfahrung übernommen. SaaS an EU-Privatkunden ist ein digitaler Dienst und zählt beim Land des Kunden (§ 3a Abs. 5) — deshalb OSS. Vermietung ist eine andere Leistung: Beim Privatkunden zählt der Sitz des Verleihs, also 19 % in Deutschland. Bei Geschäftskunden ist es bei beiden Reverse-Charge. Die KI hat die falschen Annahmen gefunden (Fall 19), ich habe an § 3a und dem Anwendungserlass nachgerechnet — die Quellen stehen in <code>Rechnung-und-Steuer.md</code>.</p></div>
+  </details>
+
+  <details>
+    <summary>Wie funktioniert die Dublettenerkennung, und wer sieht sie?</summary>
+    <div class="a"><p>Beim Anlegen wird auf denselben Namen mit derselben Adresse geprüft und hingewiesen — blockiert wird nicht. Sichtbar ist der Hinweis nur für Personal mit dem Recht <code>kunde.suchen</code>: Wer nicht suchen darf, sieht auch keine Dubletten-Warnung. Das ist eine Rechtefrage, kein Zufall.</p></div>
+  </details>
+
+  <details>
+    <summary>Wie ist das Änderungsprotokoll GoBD-konform?</summary>
+    <div class="a"><p>Aufbauend auf der <code>protokoll</code>-Tabelle aus #99 mit dem Trigger <code>kunde_protokollieren</code>: Zeitpunkt, Benutzer, Feld, alter und neuer Wert. Die GoBD (Randziffer 110) nennen die Möglichkeiten — Festschreibung, Löschmerkmal, Protokollierung, Versionierung — und verlangen (Randziffer 111), dass die Historie nachträglich nicht mehr veränderbar ist. Ein normaler Ordner reicht nicht. S3-Versionierung wäre eine eigene ADR-Frage, ist sauber abgegrenzt.</p></div>
+  </details>
+
+  <details>
+    <summary>Was passiert mit gelöschten Kunden (DSGVO)?</summary>
+    <div class="a"><p>Das ist eine offene Frage im Issue: Kunden mit Status <code>geloescht</code> behalten ihre Daten. Die Aufbewahrung von acht Jahren (§ 147 AO / GoBD) gilt für die Rechnung — und die hat ohnehin eine eigene Kopie der Adresse. Irgendwann braucht es Löschung oder Anonymisierung, ab wann und wie, entscheidet das Team. Dazu die zweite offene Frage: Die USt-Id ist global eindeutig — mehrere Konten derselben Firma (Niederlassungen) würden abgelehnt.</p></div>
+  </details>
+
+  <h2>Auftrag mit Audit-Trail · #9</h2>
+  <p class="hint">Angefangen am 19./20.11. — Felder stehen, Code kommt noch.</p>
+
+  <details>
+    <summary>Wie soll der Auftrag aufgebaut sein?</summary>
+    <div class="a"><p><code>auftrag</code> mit fortlaufender, lückenloser Nummer, Kunde, Maschine und Zeitraum aus der bestätigten Reservierung. Jede Änderung entsteht als neuer Eintrag (<code>auftragsaenderung</code> mit Zeitpunkt, Benutzer, Feld, altem und neuem Wert) — der bestehende Datensatz wird nie überschrieben. Ein Storno löscht nichts, sondern erzeugt einen Storno-Eintrag mit Bezug auf den Auftrag. Basis ist die <code>protokoll</code>-Tabelle aus #99, dasselbe Muster wie beim Änderungsprotokoll aus #7.</p></div>
+  </details>
+
+  <details>
+    <summary>Warum fortlaufende Nummern und kein Löschen?</summary>
+    <div class="a"><p>GoBD: Belegnummern fortlaufend und lückenlos, stilles Ändern gebuchter Belege verboten. Der Auftrag ist die Grundlage der späteren Rechnung — deshalb dieselben Regeln wie dort: Storno statt Löschung, Historie unveränderbar.</p></div>
+  </details>
+
+  <h2>KI-Nutzung</h2>
+  <p class="hint">Die Projektregeln sagen: Prompt Engineering wird bewertet. Der Nachweis ist docs/ki/prompts/Nico-Laeser.md.</p>
+
+  <details>
+    <summary>Wie bewertest du die Ergebnisse der KI?</summary>
+    <div class="a"><p>22 Fälle, jeder mit Aufgabe, Wortlaut des Prompts, Ergebnis in einem Satz und Bewertung — übernommen, geändert oder verworfen, mit Begründung. Beispiele: Fall 19 — meine SaaS-Erfahrung als Ausgangspunkt, KI prüft, ich rechne an § 3a nach. Fall 16 — das Testskript meldete 408 unterdrückte Wechsel; die Zahl sah plausibel aus und war falsch, richtig waren 3, sichtbar erst mit dem Befehl, der sie erzeugt.</p></div>
+  </details>
+
+  <details>
+    <summary>Wann hast du die KI korrigiert?</summary>
+    <div class="a"><p>Fälle 6 und 10: Container-Zustände unvollständig — erst der Prompt mit der aufgezählten Liste brachte das vollständige Ergebnis. Fall 16: drei Fehler im erzeugten Code fielen erst im Test auf, nicht beim Lesen. Fall 21, das Gegenlesen vor dem Commit: VIES-Überlastung, Sofort-Entwarnung bei <code>gone</code>, Doku wider den Code — gefunden, bevor es committet wurde.</p></div>
+  </details>
+
+  <details>
+    <summary>Wo stehen die vollständigen Gespräche?</summary>
+    <div class="a"><p>In der Dokumentation stehen die Prompts im Wortlaut und das Ergebnis je Fall in einem Satz. Die vollständigen Chatverläufe liegen lokal auf dem Arbeitsgerät unter <code>~/.claude/projects/…/*.jsonl</code> und sind auf Nachfrage vorzeigbar.</p></div>
+  </details>
+
+  <div class="merk">
+    <b>Wenn eine Frage kommt, auf die du die Antwort nicht weißt:</b> sag, wo sie steht — „Das steht in befunde.md, Abschnitt Gegenlesen vor dem Commit" ist eine bessere Antwort als Halbwissen. Der Nachweis ist dein Vorteil: Fast jede Antwort in dieser Liste verweist auf ein Dokument im Repository.
+  </div>
+</div>
+<script>
+  const items = Array.from(document.querySelectorAll("details"));
+  const count = document.getElementById("count");
+  function update() {
+    const open = items.filter(d => d.open).length;
+    count.textContent = open + " von " + items.length + " aufgedeckt";
+  }
+  document.getElementById("all").addEventListener("click", () => { items.forEach(d => d.open = true); update(); });
+  document.getElementById("none").addEventListener("click", () => { items.forEach(d => d.open = false); update(); });
+  items.forEach(d => d.addEventListener("toggle", update));
+  update();
+</script>
+</body>
+</html>

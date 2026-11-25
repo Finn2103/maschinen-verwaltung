@@ -535,7 +535,7 @@ Erster Schultag von Sprint 5.
 - Die Dokumentation nachgezogen: die Prompt-Liste ergänzt (Fälle 19 bis 22) und die
   Präsentation für das Review am 26.11. gebaut,
   [`2611-Laeser-Review.html`](2611-Laeser-Review.html), im Aufbau der Folien vom 15.10.
-  Dazu eine Fragen-und-Antworten-Liste fürs Fachgespräch vorbereitet: Monitoring
+  Dazu eine Fragen-und-Antworten-Liste fürs Fachgespräch vorbereitet ([`2611-Fragen-Antworten.html`](2611-Fragen-Antworten.html)): Monitoring
   (Dienst statt Timer, Spam-Schutz, PostgreSQL-Handshake ohne Passwort, healthy versus
   erreichbar), Steuern (SaaS gegen Vermietung, § 3a UStG), Audit-Trail und KI-Bewertung.
 - Eingearbeitet habe ich die Punkte danach und Finn unter dem PR geantwortet
