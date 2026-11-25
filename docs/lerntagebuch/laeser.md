@@ -385,3 +385,237 @@ Letzter Schultag von Sprint 2.
   ändern die Entscheidung nicht.
 - Wer von den Ergebnissen anderer abhängt, schreibt ihnen das ans Ticket und nicht in
   den eigenen ADR.
+
+---
+
+## 2026-10-15 · Donnerstag
+
+Review von Sprint 2 in Präsenz, danach Planning für Sprint 3.
+
+**Tätigkeit**
+
+- Vor dem Review die Vorstellung vorbereitet, Folien gebaut und gemergt (PR #90,
+  [`1510-Laeser-Review.html`](1510-Laeser-Review.html)): Tickets fertig und offen,
+  Entscheidungen, Gelerntes, Probleme, KI-Nutzung offengelegt, Vorhaben für den nächsten
+  Sprint. Die Folien habe ich mit Grok gebaut (Co-Autor im Commit), die Inhalte stammen
+  aus dem Lerntagebuch und den Issues.
+- Lerntagebuch hochgeladen (PR #91).
+- Vorgestellt: fertig sind #35 (Docker, ADR 0002), #42 (Caddy, ADR 0003) und #36
+  (Docker-Anleitung, auf meiner Test-VM ausgeführt). Nicht fertig: #14 Monitoring —
+  Werkzeug entschieden (eigenes Skript, ADR 0012 vom 13.10.), aber nicht gebaut und
+  nicht getestet. #9 gelesen und recherchiert, nichts umgesetzt.
+- Überlegt, welche Issues ich als Nächstes bearbeite: #14, weil die Analyse fertig ist
+  und nur noch die Umsetzung fehlt. #9 danach, es ist mit XL das größere.
+
+**Problem**
+
+- Zeigbares war wenig: zu #14 stand nur die Entscheidung im ADR, kein Code. Was zeigt man
+  im Review, wenn das Ergebnis eine Entscheidung ist?
+- Beide offenen Tickets hängen an Arbeit der anderen: #9 an den Reservierungen aus #1,
+  #14 an #11 (Datenbank) und #13 (Mailserver).
+
+**Lösung**
+
+- Vorgestellt, was da war: drei abgeschlossene Entscheidungen mit ADR, eine Anleitung, die
+  ich selbst ausgeführt hatte, und #14 als offenes Ticket mit geplantem nächsten Schritt.
+- Nächste Arbeit festgelegt: #14. Erst das Skript nach ADR 0012 bauen, #9 danach.
+
+**Lessons Learned**
+
+- Ein Review zeigt den Stand, nicht nur fertige Funktionen. Die Entscheidung mit
+  Begründung war zeigbar, der fehlende Code ehrlich benannt.
+- Was als Nächstes drankommt, hängt daran, was schon liegt: die Analyse für #14 war
+  fertig, also war die Umsetzung der nächste Schritt. Die Planung dafür habe ich am
+  16.10. gemacht.
+
+---
+
+## 2026-10-16 · Freitag
+
+Zweiter Schultag von Sprint 3. ADR 0012 war am 13.10. entschieden: eigenes Skript statt
+Prometheus, Netdata oder Uptime Kuma. Bevor Code entsteht, wollte ich wissen, aus welchen
+Bausteinen das Skript überhaupt besteht und was jeder Baustein liefert.
+
+**Tätigkeit**
+
+- Das Skript aus ADR 0012 in Bausteine zerlegt: Container über den Docker-Socket, Dienste
+  über `systemctl`, Ressourcen aus `/proc` und `df`, Meldungen per Webhook mit `curl`.
+- Die Bausteine einzeln auf meiner Proxmox-Test-VM (vom 02.10.) ausprobiert:
+  - `curl --unix-socket /var/run/docker.sock 'http://localhost/containers/json?all=1'`:
+    welche Felder die Docker-API liefert, zum Beispiel `State`, `Status`, `RestartCount`
+    und die Pfade.
+  - `systemctl is-active` für Dienste und die Prioritäten von `journalctl -p warning` und
+    `-p crit` fürs Journal.
+  - `df` mit Inodes und `/proc/meminfo` für RAM und CPU.
+  - eine Testmeldung an einen Discord-Webhook geschickt, um das Format hinzubekommen
+    (Embed, Zeichenzahl, Längen-Grenzen von Discord).
+- Notiert, welche Zustände Docker kennt: `created`, `running`, `paused`, `restarting`,
+  `exited`, `dead`, `removing`. Die Zuordnung zu Fehler oder normal habe ich offen
+  gelassen.
+- Aus den Notizen die Prompts vorbereitet, die am 05.11. liefen. Code an diesem Tag
+  noch keinen.
+
+**Problem**
+
+- Auf dem echten Server war nichts zu überwachen: #11 (Datenbank) und #13 (Mailserver)
+  standen noch aus, deployt wird über #5. Ein Test dort ging nicht.
+- Die Zustandsliste von Docker war länger als ich im Kopf hatte. Welche Zustände ein
+  Fehler sind und welche normal, war auf den ersten Blick nicht zu entscheiden.
+- Der Docker-Socket war nur als root lesbar.
+
+**Lösung**
+
+- Kleine Tests statt ganzem Skript: für die Container reicht ein Docker mit ein paar
+  losen Containern, Supabase braucht es dafür nicht. Jeden Baustein einzeln geprüft und
+  das Ergebnis in die Notizen gesetzt.
+- Die Zustände notiert, aber nicht bewertet. Die Zuordnung kam am 05. und 06.11. in
+  zwei Schritten (Fall 6 und Fall 10 in der Prompt-Liste).
+- Zum Socket: das passt zu ADR 0012, das Monitoring läuft direkt auf dem Server und nicht
+  im Container. Ob Docker rootless läuft, entscheidet #4. Notiert: der Socket muss
+  konfigurierbar bleiben.
+
+**Lessons Learned**
+
+- Die Docker-API liefert am Socket alles als JSON und ohne Passwort. Wer sie lesen darf,
+  hat die volle Kontrolle über Docker. Die Frage aus #4 (rootless) ist damit wichtiger,
+  als ich dachte.
+- Bevor ich Zustände bewerte, brauche ich die vollständige Liste. Was ich nicht kenne,
+  kann ich nicht einordnen: `paused` und `dead` hätte ich übersehen.
+- Bausteine einzeln zu testen war schneller, als das ganze Skript zu bauen und dann zu
+  suchen, was nicht geht. Der Fehler lag so immer in genau einem Baustein.
+
+---
+
+## Herbstferien · 17. bis 31.10.2026
+
+Ferien in NRW, kein Projektunterricht. Am Projekt gearbeitet habe ich nicht.
+
+---
+
+## 2026-11-05 · Donnerstag
+
+Erster Schultag nach den Herbstferien (17. bis 31.10. in NRW), Sprint 4. Erster Tag mit
+Code für #14: die Prompts aus den Notizen vom 16.10. liefen an diesem Tag. Vom Tag gibt es
+keinen Commit: dazwischen hing niemand von dem Stand ab, committet habe ich
+üblicherweise abends, wenn der Tag rum ist.
+
+**Tätigkeit**
+
+- Mit Claude die erste Version des Skripts gebaut (Fall 5 in der Prompt-Liste): Bash für
+  Debian 13, Docker über den Socket, Dienste über `systemctl`, Ressourcen aus dem System,
+  Prüfung alle paar Sekunden, Meldung per Webhook, Konfiguration oben im Skript.
+- Die Webhooks als Liste erweitert (Fall 5): je Eintrag der Typ `discord` oder `json`,
+  damit es mehrere Empfänger geben kann.
+- Beim Gegenlesen aufgefallen: Das Skript hat Container übersehen und Zustände ignoriert.
+  Korrekturprompt losgeschickt (Fall 6). Danach kamen alle Container aus
+  `/containers/json?all=1`, auch gestoppte und nie gestartete.
+- Pfade und Kennzahlen in jede Meldung verlangt (Fall 7): jede Prüfung bekam ein Feld
+  `details`. Und das Skript soll im RAM laufen, Laufzeitdaten nur in `/run/monitor`
+  (tmpfs), nichts auf die Platte.
+- Testinstanz und Befehle angefragt (Fall 8): eine Test-VM, um beide Fälle aus #14
+  einmal auszulösen, `monitor status` für den Zustand per Shell und ein eigenes Skript für
+  die Einrichtung per IaC.
+
+**Problem**
+
+- Die erste Version hatte Fehler, die erst beim eigenen Gegenlesen auffielen: Container
+  wurden nicht alle erkannt, Zustände ignoriert. Der Korrekturprompt (Fall 6) war zu
+  allgemein, er nannte keinen einzigen Zustand.
+- „Alle paar Sekunden“ passt nicht zum systemd-Timer aus ADR 0012. Eine Prüfung pro
+  Minute ist für einen Ausfall zu langsam, und der Spam-Schutz müsste seinen Zustand bei
+  jedem Lauf neu aufbauen.
+- Den echten Server gab es noch nicht. Testen ging nur in einer eigenen VM.
+- Beim Konfigurieren: `set` und `webhook-add` zerstörten mehrzeilige Werte in der
+  `monitor.conf` ([Befunde](../../monitoring/befunde.md)), behoben am Folgetag.
+
+**Lösung**
+
+- KI-erzeugten Code selbst gelesen, Zeile für Zeile, statt ihn nur laufen zu lassen. Den
+  Fehler mit den Container-Zuständen habe ich im Gegenlesen gefunden und mit einem
+  Korrekturprompt behoben (Fall 6). Die vollständige Zuordnung aller Zustände folgte am
+  06.11. (Fall 10).
+- Zur Taktzeit: erst so gelassen wie im Prompt („alle paar Sekunden“). Die Abweichung
+  vom Timer steht als solche in ADR 0012: systemd-Dienst statt Timer, Prüfung alle
+  10 Sekunden.
+- Die Prompts im Wortlaut in die Notizen gesetzt. Sie stehen jetzt in
+  `docs/ki/prompts/Nico-Laeser.md`, Fälle 5 bis 8, mit Ergebnis und Bewertung.
+
+**Lessons Learned**
+
+- Der Prompt bestimmt das Ergebnis: „erkennt die Container nicht richtig“ ohne Zustandsliste
+  war zu allgemein, die Korrektur half nur zum Teil. Erst der Prompt mit der aufgezählten
+  Liste (Fall 10, am 06.11.) brachte das vollständige Ergebnis.
+- Erzeugten Code lese ich selbst. Die Fehler vom 05.11. fielen beim Lesen auf. Eine VM
+  allein prüft nichts, sie führt nur aus.
+- Nicht jeder Stand muss sofort ins Repository. Solange niemand davon abhängt, reicht der
+  Stand in der VM; der Commit ist Feinschliff für abends.
+
+---
+
+## 2026-11-06 · Freitag
+
+Zweiter Schultag nach den Ferien (7:55 bis 12:55), danach zuhause weiter. Die Tests liefen
+am Nachmittag von 15:30 bis 15:42.
+
+**Tätigkeit**
+
+- Das Skript ausgebaut (Fälle 9 bis 13 in der Prompt-Liste): Prüfmodule `system`, `docker`,
+  `services`, `endpoints` mit einem einheitlichen Meldungsformat, feste Schemata
+  (`monitor.status/v1`, `monitor.event/v1`, `monitor.report/v1`) und Exit-Codes, damit auch
+  andere Software es nutzen kann (Fall 9).
+- Zweite Korrektur der Container-Zustände, diesmal mit der vollständigen Liste im Prompt
+  (Fall 10): `created`, `running`, `paused`, `restarting`, `exited`, `healthy`,
+  `unhealthy`, `starting`. Eine Tabelle im Skript ordnet jetzt jeden Docker-Zustand einer
+  Stufe zu, auch `dead`, `removing` und den OOM-Killer.
+- Schwellwerte für CPU, RAM, Platte und Inodes, bei CPU und RAM die drei größten Prozesse;
+  im regelmäßigen Bericht Load 1/5/15 und Uptime (Fall 11).
+- Erster vollständiger Testlauf in der VMPal-VM: 68 von 68 bestanden (Fall 12). Im Test
+  gesehen, nicht beim Lesen: die Prüfungen liefen nacheinander — jetzt parallel, jede
+  Prüfung mit einer der vier Stufen INFO bis CRITICAL, der Spam-Schutz mit Bestätigung
+  über zwei Durchläufe und höchstens zwei Meldungen je Prüfung im Zeitfenster.
+- Schnittstellen aus einer Liste, mit Methode und erwartetem Statuscode (Fall 13), für
+  die VIES-Prüfung der USt-IdNr. aus #7.
+- Nachmittags den Stand gegen ADR 0012 abgeglichen (Fall 14): Lücke gefunden, SMTP und
+  IMAP fehlten. Neu der Prüfungstyp `tcp` (erste Zeile, SMTP „220“, IMAP „* OK“).
+- Aufgeräumt (Fall 15): aus rund 20 Dateien vom Vortag wurden drei — `monitor`,
+  `monitor.conf`, `SKILL.md`. Das separate `monitor-setup` ist in `monitor` aufgegangen.
+- Die Testläufe fanden drei Fehler im erzeugten Code (Fall 16, [befunde](../../monitoring/befunde.md)):
+  die Entwarnung wurde vom Spam-Schutz zurückgehalten, das Testskript zählte unterdrückte
+  Wechsel falsch, RAM voll löste wegen Swap nur WARNING aus.
+- Dokumentation von TXT nach Markdown (Fall 17) und das Skript ohne Passwörter umgebaut
+  (Fall 18): Die Ports liest `monitor` selbst aus der Docker-API und prüft sie ohne
+  Anmeldung, PostgreSQL über den Handshake, SMTP und IMAP über ihre Begrüßung. Am Ende
+  die 22 Tests, je eine Datei mit Befehlen, Original-Ausgabe, Server-Log und den
+  angekommenen Meldungen: **128 von 128 Prüfungen bestanden**, dazu ein Neustart der VM von
+  Hand.
+
+**Problem**
+
+- Die Entwarnung kam nach einem gemeldeten Problem an, wurde aber vom Spam-Schutz bis zu
+  10 Minuten zurückgehalten. In einem Lauf stand sie sogar als „bestanden“, weil der Test
+  nur prüfte, ob sie ankommt — nicht wann.
+- Das Testskript meldete 408 unterdrückte Wechsel. Die Zahl sah plausibel aus und war
+  falsch: es las das ganze Journal, auch den alten Dienst vom Vortag.
+- RAM voll blieb bei 92,7 % hängen (WARNING), weil der Kernel mit Swap auslagerte.
+- Die Container der Test-VM waren über `127.0.0.1` nicht erreichbar.
+
+**Lösung**
+
+- Die Entwarnung geht nach einem gemeldeten Problem jetzt immer raus, und der Test prüft
+  auch, wann sie ankommt.
+- Die Journal-Abfragen filtern seitdem den Dienst: richtig waren 3, nicht 408.
+- Der RAM-Test schaltet Swap für diesen Schritt ab.
+- Das Netz-Problem war die VM, nicht das Skript: systemd-networkd hatte die
+  `veth`-Schnittstellen der Container übernommen. Ausnahme für `docker0`, `veth*`,
+  `br-*`, danach waren die Container erreichbar.
+
+**Lessons Learned**
+
+- Drei Fehler im KI-erzeugten Code fielen erst im Test auf, nicht beim Gegenlesen. Ein
+  Test muss prüfen, was gefordert ist: „Entwarnung kommt“ ist schwächer als „Entwarnung
+  kommt rechtzeitig“.
+- Eine Zahl, die plausibel aussieht, ist kein Beleg. 408 unterdrückte Wechsel — richtig
+  waren 3, nachvollziehbar erst mit dem Befehl, der sie erzeugt.
+- Docker und der Port sind zwei Prüfungen: Test 11 zeigt Postfix aus, Docker meldet den
+  Mailserver trotzdem als „running, healthy“. Der Healthcheck von docker-mailserver zählt
+  nur Prozesse.

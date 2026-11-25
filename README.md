@@ -37,6 +37,7 @@ am **Donnerstag, 17.09.2026,
 | [docs/adr](docs/adr) | Architekturentscheidungen, Nutzwertanalysen |
 | [docs/scrum](docs/scrum) | Definition of Done, Entscheidungslog, Backlog-Neufassung, Reviews und Retrospektiven |
 | [docs/ki](docs/ki) | **KI-Nutzung**: Ablage und Nachweis. Prompt Engineering wird laut Projektregeln bewertet |
+| [docs/monitoring](docs/monitoring) | Monitoring für Datenbank- und Mailserver (#14): Aufbau, Testlauf, Nachweis der Akzeptanzkriterien |
 
 
 ## Vorgehen
