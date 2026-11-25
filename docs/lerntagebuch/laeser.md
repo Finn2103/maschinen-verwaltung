@@ -485,6 +485,12 @@ Erster Schultag von Sprint 5.
 - #9 angefangen: die `protokoll`-Tabelle aus #99 gelesen und überlegt, wie ein Auftrag
   darauf aufbaut — Auftrag als eigener Datensatz, jede Änderung als neuer Eintrag mit
   Bezug, Storno als Eintrag statt Löschung. Noch ohne Code.
+- Abends vor dem Commit das Monitoring-Skript noch einmal mit Claude gegengelesen (PR #134).
+  Drei Fehlerquellen gefunden und behoben: die VIES-Endpoints in der
+  Standardkonfiguration (bei 10 s Takt über 17.000 Anfragen pro Tag an die EU-API,
+  Sperrgefahr), weggefallene Prüfungen, die ohne Bestätigung sofort Entwarnung meldeten,
+  und ein Widerspruch zwischen Doku und Code zur Entwarnung. Festgehalten in
+  [befunde.md](../../monitoring/befunde.md), Abschnitt „Gegenlesen vor dem Commit".
 
 **Problem**
 
