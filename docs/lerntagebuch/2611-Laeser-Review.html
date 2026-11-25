@@ -124,24 +124,24 @@
 <body>
 <main>
   <section class="slide active" data-title="Anfang">
-    <p class="kicker">Review · 26. November 2026 · Gruppe 11</p>
+    <p class="kicker">Review · 26. November 2026 · Gruppe 11 · Sprint 5</p>
     <h1>Nico Laeser, Systemintegration</h1>
-    <p class="lead">Das Monitoring läuft und ist mit 128 von 128 Prüfungen belegt, die Kundenstammdaten stehen als Vorschlag, der Audit-Trail ist angefangen. Fünf Minuten.</p>
+    <p class="lead">Das Monitoring ist gebaut und belegt, die Kundenstammdaten stehen als Vorschlag, der Audit-Trail ist angefangen. Acht Folien, fünf Minuten.</p>
   </section>
 
   <section class="slide" data-title="Tickets">
-    <p class="kicker">Welche Tickets habe ich erledigt oder bearbeitet?</p>
+    <p class="kicker">Was habe ich erledigt, was bearbeitet?</p>
     <h1>Tickets</h1>
     <h2 class="done">Fertig</h2>
     <ul>
-      <li><span class="id">#14</span> Monitoring: eigenes Skript, ohne Zugangsdaten. 22 Tests, 128 von 128 Prüfungen bestanden, Meldungen im Team-Kanal angekommen. PR #134 im Review.
-        <span class="sub" style="display:block;color:var(--muted);font-size:.95rem">Der Test auf der Strato-VM hängt an #11, #13 und #5 und ist als offener Punkt im Issue notiert.</span></li>
+      <li><span class="id">#14</span> Monitoring: eigenes Skript, ohne Zugangsdaten. 22 Tests, 128 von 128 Prüfungen bestanden. PR #134 im Review.
+        <span class="sub">Ausfälle künstlich herbeigeführt, Meldungen im Team-Kanal angekommen. Strato-Test hängt an #11, #13 und #5.</span></li>
     </ul>
     <h2 class="open">Bearbeitet, nicht fertig</h2>
     <ul>
-      <li><span class="id">#7</span> Kundenstammdaten: Vorschlag mit fünf Dokumenten — Pflichtfelder, Rechnung und Steuer, Dubletten, Suche, Änderungsprotokoll. PR #127 im Review, Finns sieben Punkte sind eingearbeitet. Umsetzung offen.
-        <span class="sub" style="display:block;color:var(--muted);font-size:.95rem">Warum offen: Die fünf Akzeptanzkriterien verlangen den Code der Anwendung — Anlegen mit Pflichtfeldern, USt-Id-Prüfung, Suche, Protokoll. Der PR liefert die Fachvorgabe dafür, nicht den Code. Den habe ich zeitlich nicht geschafft: Die Vorgabe stand erst nach zwei Review-Runden fest (Finns sieben Punkte am 18.11., eingearbeitet am 23.11.). Der Code ist der nächste Schritt, das Issue bleibt offen, bis er steht.</span></li>
-      <li><span class="id">#9</span> Auftrag mit Audit-Trail: angefangen. Die protokoll-Tabelle aus #99 gelesen, Felder für auftrag und auftragsaenderung notiert. Noch kein Code.</li>
+      <li><span class="id">#7</span> Kundenstammdaten: Fachvorgabe in fünf Dokumenten. PR #127 im Review, Finns sieben Punkte eingearbeitet.
+        <span class="sub">Warum offen: Die fünf Kriterien verlangen den Code der Anwendung — Anlegen, USt-Id-Prüfung, Suche, Protokoll. Der PR liefert die Vorgabe. Den Code habe ich zeitlich nicht geschafft, die Vorgabe stand erst nach zwei Review-Runden fest (18. und 23.11.). Nächster Schritt.</span></li>
+      <li><span class="id">#9</span> Auftrag mit Audit-Trail: angefangen. protokoll-Tabelle aus #99 gelesen, Felder notiert. Noch kein Code.</li>
     </ul>
   </section>
 
@@ -150,33 +150,33 @@
     <h1>Entscheidungen</h1>
     <div class="rows">
       <div class="row">
-        <b>Skript umgesetzt</b>
-        <div>ADR 0012 (4,40 vor Prometheus und Netdata, je 3,80) ist Code: ein Bash-Skript, 11 Blöcke, läuft direkt auf dem Server.
-          <span class="sub">Ohne Zugangsdaten: PostgreSQL über den Handshake, SMTP und IMAP über die Begrüßung, Ports aus der Docker-API.</span>
+        <b>Skript gebaut</b>
+        <div>ADR 0012 ist Code: ein Bash-Skript, direkt auf dem Server.
+          <span class="sub">Ohne Zugangsdaten. PostgreSQL über den Handshake, SMTP und IMAP über die Begrüßung, Ports aus der Docker-API.</span>
         </div>
       </div>
       <div class="row">
         <b>Dienst statt Timer</b>
-        <div>systemd-Dienst, Prüfung alle 10 Sekunden. Als Abweichung in ADR 0012 dokumentiert.
-          <span class="sub">Der Spam-Schutz hält seinen Zustand im laufenden Prozess. Ein Timer finge jede Minute bei null an.</span>
+        <div>systemd-Dienst, Prüfung alle 10 Sekunden. Abweichung in ADR 0012.
+          <span class="sub">Der Spam-Schutz hält seinen Zustand im Prozess. Ein Timer finge jede Minute bei null an.</span>
         </div>
       </div>
       <div class="row">
         <b>Spam-Schutz</b>
-        <div>Neue Stufe zwei Durchläufe stabil, höchstens zwei Meldungen je Prüfung in zehn Minuten.
-          <span class="sub">Die Entwarnung wird nicht unterdrückt, aber wie jeder Wechsel bestätigt. Weggefallene Prüfungen ebenfalls.</span>
+        <div>Zwei Durchläufe Bestätigung, höchstens zwei Meldungen in zehn Minuten.
+          <span class="sub">Entwarnung wird nie unterdrückt, aber wie jeder Wechsel bestätigt.</span>
         </div>
       </div>
       <div class="row">
         <b>VIES raus</b>
-        <div>Die zwei VIES-Endpoints sind aus der Standardkonfiguration raus.
-          <span class="sub">Bei jedem Durchlauf wären es über 17.000 Anfragen pro Tag an die EU-API. #7 nutzt VIES noch nicht, das Beispiel steht auskommentiert.</span>
+        <div>Beide Endpoints aus der Standardkonfiguration.
+          <span class="sub">Bei jedem Durchlauf über 17.000 Anfragen pro Tag an die EU-API. #7 nutzt VIES noch nicht.</span>
         </div>
       </div>
       <div class="row">
         <b>Steuer korrigiert</b>
-        <div>Vermietung ist nicht SaaS: Bei EU-Privatkunden zählt der Sitz des Verleihs, nicht das Land des Kunden.
-          <span class="sub">Bei Geschäftskunden in beiden Fällen Reverse-Charge (§ 3a Abs. 2 UStG). Nachgerechnet an § 3a und dem Umsatzsteuer-Anwendungserlass.</span>
+        <div>Vermietung ist nicht SaaS. EU-Privatkunde: Sitz des Verleihs, nicht Land des Kunden.
+          <span class="sub">Geschäftskunden: bei beiden Reverse-Charge, § 3a Abs. 2 UStG. Nachgerechnet an § 3a und dem Anwendungserlass.</span>
         </div>
       </div>
     </div>
@@ -187,20 +187,20 @@
     <h1>Gelernt</h1>
     <div class="rows">
       <div class="row">
-        <b>Healthy ≠ erreichbar</b>
-        <div>Der Healthcheck von docker-mailserver zählt nur Prozesse. Postfix aus, Docker meldet „running, healthy", die SMTP-Ports sind tot. Test 11 belegt es.</div>
+        <b>Healthy ≠ da</b>
+        <div>Der Docker-Healthcheck zählt Prozesse. Postfix aus, Docker meldet „running, healthy", die SMTP-Ports sind tot. Deshalb prüfen wir die Ports selbst.</div>
       </div>
       <div class="row">
         <b>Zahlen prüfen</b>
-        <div>Das Testskript meldete 408 unterdrückte Wechsel. Plausibel aussehend, falsch: Es las das ganze Journal. Richtig waren 3, nachvollziehbar erst mit dem Befehl.</div>
+        <div>Das Testskript meldete 408 unterdrückte Wechsel. Sah plausibel aus, war falsch: Es las das ganze Journal. Richtig waren 3.</div>
       </div>
       <div class="row">
         <b>GoBD</b>
-        <div>Die GoBD nennen kein Werkzeug, sondern Anforderungen: unveränderbare Historie, alter Inhalt bleibt sichtbar (Randziffer 110 und 111). Die technische Wahl bleibt bei uns.</div>
+        <div>Die GoBD nennen kein Werkzeug, sondern Anforderungen: unveränderbare Historie, alter Inhalt bleibt sichtbar. Die technische Wahl bleibt bei uns.</div>
       </div>
       <div class="row">
-        <b>SaaS ≠ Vermietung</b>
-        <div>Beides sonstige Leistungen, aber digitale Dienste an EU-Privatkunden zählen beim Land des Kunden (§ 3a Abs. 5), Vermietung beim Sitz des Verleihs. Meine Erfahrung aus SaaS war der Ausgangspunkt, nicht die Antwort.</div>
+        <b>Erfahrung ≠ Antwort</b>
+        <div>Meine SaaS-Erfahrung war Ausgangspunkt und Fehlerquelle zugleich. Digitale Dienste zählen beim Land des Kunden, Vermietung beim Sitz des Verleihs.</div>
       </div>
     </div>
   </section>
@@ -209,20 +209,20 @@
     <p class="kicker">Welche Probleme gab es, und wie sind sie gelöst?</p>
     <h1>Probleme</h1>
     <div class="pair">
-      <span class="tag">Strato hängt an anderen</span>
-      #11 (Datenbank), #13 (Mailserver) und #5 (IaC) stehen noch. Deshalb der Nachweis in einer Test-VM mit Containern der echten Software: PostgreSQL 17, docker-mailserver 17.0.0. Ausfälle künstlich herbeigeführt, Meldungen angekommen.
+      <span class="tag">Strato wartet</span>
+      #11, #13 und #5 stehen nicht. Nachweis deshalb in einer Test-VM mit der echten Software: PostgreSQL 17, docker-mailserver. Ausfälle ausgelöst, Meldungen angekommen.
     </div>
     <div class="pair">
       <span class="tag">Fehler erst im Test</span>
-      Drei Fehler im erzeugten Code fielen erst beim Testen auf, nicht beim Lesen: die zurückgehaltene Entwarnung, das falsch zählende Testskript, RAM voll wegen Swap nur als WARNING. Alles in befunde.md mit Log-Auszügen.
+      Drei Fehler im erzeugten Code fielen im Test auf, nicht beim Lesen: zurückgehaltene Entwarnung, falsch zählendes Testskript, Swap bei RAM voll. Alles in befunde.md mit Log-Auszügen.
     </div>
     <div class="pair">
       <span class="tag">Gegenlesen vor dem Commit</span>
-      Noch einmal mit Claude gegengelesen: VIES bei jedem Durchlauf, weggefallene Prüfungen meldeten sofort Entwarnung, Doku widersprach dem Code. Drei Fixes, festgehalten in befunde.md.
+      Noch einmal mit Claude gegengelesen: VIES bei jedem Durchlauf, Sofort-Entwarnung bei weggefallenen Prüfungen, Doku wider den Code. Drei Fixes vor dem Commit.
     </div>
     <div class="pair">
-      <span class="tag">#7 Umsetzung offen</span>
-      Die Spezifikation ist fertig, der Code fehlt. Zwischen erster Fassung (12./13.11.) und heute lagen Finns sieben Review-Punkte (18.11.) und deren Nacharbeit (23.11.).
+      <span class="tag">#7 ohne Code</span>
+      Die Vorgabe ist fertig, der Code fehlt. Zwischen erster Fassung und heute lagen zwei Review-Runden. Umsetzung ist der nächste Schritt.
     </div>
   </section>
 
@@ -232,43 +232,43 @@
     <div class="rows">
       <div class="row">
         <b>Wofür</b>
-        <div>Nutzwertanalyse (Fall 4), Skript-Bau und -Korrektur (Fälle 5 bis 18), Steuer-Recherche (Fall 19), Gegenlesen vor dem Commit (Fall 21), diese Folien (Fall 22).</div>
+        <div>Nutzwertanalyse, Skript-Bau und -Korrektur, Steuer-Recherche, Gegenlesen vor dem Commit, diese Folien.</div>
       </div>
       <div class="row">
         <b>Protokoll</b>
-        <div>22 Fälle, je mit Aufgabe, Wortlaut, Ergebnis und Bewertung. <span class="id">docs/ki/prompts/Nico-Laeser.md</span>. Der vollständige Chatverlauf liegt lokal und ist auf Nachfrage vorzeigbar.</div>
+        <div>22 Fälle, je mit Wortlaut, Ergebnis und Bewertung. <span class="id">docs/ki/prompts/Nico-Laeser.md</span>. Chatverläufe liegen lokal, auf Nachfrage vorzeigbar.</div>
       </div>
       <div class="row">
-        <b>Beispiel Korrektur</b>
-        <div>Fall 19: Meine SaaS-Erfahrung als Ausgangspunkt, die KI prüft, ich rechne an § 3a UStG nach. Die falschen Annahmen standen durchgestrichen in der Datei, die alte Fassung liegt in der Git-Historie.</div>
+        <b>Korrektur-Beispiel</b>
+        <div>Fall 19: Meine SaaS-Erfahrung rein, die KI prüft, ich rechne an § 3a UStG nach. Die falschen Annahmen standen durchgestrichen in der Datei, die alte Fassung liegt in der Git-Historie.</div>
       </div>
       <div class="row">
         <b>Zurückgenommen</b>
-        <div>Die Zahl 408 unterdrückter Wechsel (Fehler des Testskripts), VIES in der Standardkonfiguration, die Zod-Empfehlung — Formularprüfung gehört ins Team, nicht in eine Doku-Datei.</div>
+        <div>Die Zahl 408 (Fehler des Testskripts), VIES in der Standardkonfiguration, die Zod-Empfehlung — Formularprüfung gehört ins Team.</div>
       </div>
     </div>
   </section>
 
   <section class="slide" data-title="Nächster Sprint">
-    <p class="kicker">Was ich als Nächstes bearbeite</p>
+    <p class="kicker">Was ist für den nächsten Sprint vereinbart?</p>
     <h1>Nächster Sprint</h1>
     <div class="rows">
       <div class="row">
         <b>#9 Audit-Trail</b>
-        <div>Umsetzen: auftrag mit fortlaufender Nummer, jede Änderung als neuer Eintrag, Storno mit Bezug statt Löschung.
-          <span class="sub">Aufbauend auf der protokoll-Tabelle aus #99. Die Felder stehen seit dem 20.11. Abgabe ist der 11.12.</span>
+        <div>Umsetzen: auftrag mit fortlaufender Nummer, Änderung als Eintrag, Storno mit Bezug.
+          <span class="sub">Aufbauend auf der protokoll-Tabelle aus #99, Felder stehen seit dem 20.11. Abgabe: 11.12.</span>
         </div>
       </div>
       <div class="row">
         <b>#14 Strato</b>
-        <div>Nachtest auf der Strato-VM, sobald #11, #13 und #5 stehen, und den Meldekanal offiziell festlegen.
-          <span class="sub">Nicht über unseren eigenen Mailserver. Danach monitor webhook-add und monitor test-webhook.</span>
+        <div>Nachtest, sobald #11, #13 und #5 stehen. Meldekanal festlegen.
+          <span class="sub">Nicht über unseren eigenen Mailserver. Danach monitor webhook-add und test-webhook.</span>
         </div>
       </div>
       <div class="row">
         <b>#7 Umsetzung</b>
-        <div>Schema und Formular nach dem Vorschlag aus PR #127.
-          <span class="sub">Offene Fragen ans Team: DSGVO-Löschung für gelöschte Kunden, USt-Id global eindeutig bei Niederlassungen, Formularprüfung (Zod, potenziell ADR).</span>
+        <div>Schema und Formular nach der Vorgabe aus PR #127.
+          <span class="sub">Offene Fragen ans Team: DSGVO-Löschung, USt-Id bei Niederlassungen, Formularprüfung.</span>
         </div>
       </div>
     </div>
@@ -293,7 +293,7 @@
   function show(n) {
     i = Math.max(0, Math.min(slides.length - 1, n));
     slides.forEach((s, k) => s.classList.toggle("active", k === i));
-    count.textContent = (i + 1) + " / " + slides.length;
+    count.textContent = (i + 1) + " / " + slides.length + " · ≈ 5 min gesamt";
     history.replaceState(null, "", "#" + (i + 1));
   }
   document.getElementById("prev").addEventListener("click", () => show(i - 1));
