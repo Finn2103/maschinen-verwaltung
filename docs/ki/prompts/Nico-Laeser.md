@@ -635,3 +635,61 @@ Fünf Dateien unter [`docs/kundenstammdaten/`](https://github.com/Finn2103/masch
 
 **Bewertung**
 Übernommen. Die Dateien sind Markdown, der Pull Request ist offen zum Review. In der Checkliste standen Schema-SQL und Oberfläche als offene Punkte. Das ist nicht meine Aufgabe in diesem PR, beides habe ich streichen lassen. Gemergt ist noch nichts.
+
+---
+
+## 2026-11-19
+
+Abends vor dem Commit des Monitoring-PRs (#134). Der Stand war fertig und getestet, dieser
+Prompt war das Gegenlesen wie ein Reviewer.
+
+### 21. Gegenlesen vor dem Commit
+
+**Aufgabe**
+Das fertige, getestete Skript vor dem Commit noch einmal wie ein Reviewer durchgehen lassen
+und nach Fehlerquellen suchen, die beim Testen und Gegenlesen nicht aufgefallen sind.
+
+**Prompt** (Wortlaut)
+
+> Ich will den monitoring PR jetzt endlich committen und pushen. Lies dir das Skript bitte nochmal komplett durch wie ein Reviewer und such nach Fehlerquellen die mir entgangen sein könnten: dinge die bei jedem durchlauf mitlaufen obwohl sie selten sind, meldungen die zu früh oder zu spät kommen und stellen wo doku und code auseinander laufen. Der VIES check zum Beispiel läuft glaub ich bei jedem durchlauf mit, das sind ja tausende anfragen pro tag an die EU behörde. Gib mir eine liste mit fundstellen und sag jeweils wie du das fixen würdest, committen will ich erst danach.
+
+**Ergebnis**
+Drei Fundstellen, alle behoben (Commit 9895810, [befunde.md](../../monitoring/befunde.md), Abschnitt „Gegenlesen vor dem Commit"):
+- Die zwei VIES-Endpoints standen in der Standardkonfiguration und liefen alle 10 s mit —
+  über 17.000 Anfragen pro Tag an die EU-API. Raus aus der Standardkonfiguration, Beispiel
+  auskommentiert.
+- Weggefallene Prüfungen (`gone`) umgingen die Bestätigung und meldeten sofort Entwarnung.
+  Jetzt über `CONFIRM_CYCLES` bestätigt wie jeder Wechsel (`decide_changes`).
+- Doku und Code widersprachen sich zur Entwarnung, ADR 0012 war teils veraltet (Test mit
+  Containern der echten Software statt „erst wenn #11 und #13 fertig").
+
+**Bewertung**
+Übernommen. Alle drei Punkte waren echt: Der VIES-Fall wäre auf dem Server spätestens bei
+der Sperrung aufgefallen, die Sofort-Entwarnung bei einem Modul-Timeout. Das Gegenlesen
+hat gefunden, was 22 Tests und mein Lesen nicht gefunden hatten — getestet ist damit nur
+der Code vor den Fixes im Detail belegt, die Fixes betreffen Konfiguration, einen Randfall
+und die Doku. Reihenfolge bleibt im Protokoll: erst testen, dann gegenlesen, dann
+committen.
+
+---
+
+## 2026-11-20
+
+### 22. Dokumentation nachziehen und Präsentation bauen
+
+**Aufgabe**
+Die Prompt-Liste nachziehen und die Präsentation für das Review am 26.11. bauen, im
+Aufbau der Folien vom 15.10.
+
+**Prompt** (Wortlaut)
+
+> mach mir die folien für das review am donnerstag wie beim letzten mal, gleiche struktur: tickets fertig und offen, entscheidungen, gelernt, probleme, ki offengelegt, nächster sprint, fragen am ende. diesmal: monitoring fertig mit 128 von 128 prüfungen und die meldungen sind im team kanal angekommen, kundenstammdaten als vorschlag mit steuern und GoBD, #9 hab ich angefangen mit der protokoll tabelle. bei entscheidungen: dienst statt timer, spam schutz mit zwei durchläufen, vies raus weil zu viele anfragen, saas korrektur bei den steuern. bei ki: die 22 fälle und das gegenlesen vor dem commit, und das beispiel mit der 408. die datei heisst 2611-Laeser-Review.html wie letztes mal
+
+**Ergebnis**
+[`2611-Laeser-Review.html`](../lerntagebuch/2611-Laeser-Review.html): acht Folien im Schema vom 15.10. (PR #90), Pfeiltasten-Navigation. Dazu die
+Fragen-und-Antworten-Liste fürs Fachgespräch (Monitoring, Steuern, Audit-Trail, KI).
+
+**Bewertung**
+Übernommen. Die Folienstruktur vom 15.10. hat sich bewährt, deshalb unverändert. Was ich
+geändert habe: Bei #7 steht die Begründung dabei, warum die Umsetzung offen ist — das gehört
+in ein ehrliches Review, nicht nur die Erfolgsmeldung.

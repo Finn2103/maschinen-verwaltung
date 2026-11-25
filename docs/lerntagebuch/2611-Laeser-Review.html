@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Review · Nico Laeser</title>
+<style>
+  :root {
+    --paper: #f3efe6;
+    --ink: #1a1814;
+    --muted: #5e584e;
+    --line: #d8d0c2;
+    --done: #1d6b48;
+    --open: #8a4b10;
+    --away: #6a645c;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font: 21px/1.38 "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+  }
+  .slide {
+    display: none;
+    min-height: 100vh;
+    padding: 3.2rem 7vw 6.2rem;
+  }
+  .slide.active { display: block; }
+  .kicker {
+    margin: 0 0 0.7rem;
+    font: 600 13px/1.2 ui-sans-serif, "Helvetica Neue", sans-serif;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  h1 {
+    margin: 0 0 1.4rem;
+    font-size: clamp(2.1rem, 4.4vw, 3.5rem);
+    font-weight: 600;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    max-width: 18ch;
+  }
+  .lead {
+    margin: 0;
+    max-width: 36rem;
+    font-size: 1.35rem;
+    color: var(--muted);
+  }
+  h2 {
+    margin: 1.5rem 0 0.45rem;
+    font: 600 13px/1.2 ui-sans-serif, "Helvetica Neue", sans-serif;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  h2.done { color: var(--done); }
+  h2.open { color: var(--open); }
+  h2.away { color: var(--away); }
+  ul { margin: 0; padding: 0; list-style: none; max-width: 46rem; }
+  li { margin: 0.45rem 0; padding-left: 0; }
+  .id {
+    font: 600 0.92rem/1 ui-sans-serif, "Helvetica Neue", sans-serif;
+    letter-spacing: 0.01em;
+  }
+  .rows { max-width: 52rem; }
+  .row {
+    display: grid;
+    grid-template-columns: 11.5rem 1fr;
+    gap: 0.4rem 1.4rem;
+    padding: 0.85rem 0;
+    border-top: 1px solid var(--line);
+  }
+  .row:last-child { border-bottom: 1px solid var(--line); }
+  .row b { font-weight: 600; }
+  .sub { display: block; margin-top: 0.2rem; color: var(--muted); font-size: 0.95rem; }
+  .pair { max-width: 46rem; padding: 0.75rem 0; border-top: 1px solid var(--line); }
+  .pair:last-child { border-bottom: 1px solid var(--line); }
+  .tag {
+    display: block;
+    margin-bottom: 0.15rem;
+    font: 600 12px/1.2 ui-sans-serif, "Helvetica Neue", sans-serif;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .nav {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.75rem 7vw 0.9rem;
+    background: linear-gradient(to top, var(--paper) 70%, transparent);
+    font: 14px/1 ui-sans-serif, "Helvetica Neue", sans-serif;
+  }
+  button {
+    appearance: none;
+    border: 1px solid var(--line);
+    background: #fffdf8;
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 0.45rem 0.9rem;
+    font: inherit;
+    cursor: pointer;
+  }
+  button:hover { border-color: #b7ad9d; }
+  button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .count { margin-left: auto; color: var(--muted); }
+  .hint { color: var(--muted); }
+  @media (max-width: 720px) {
+    body { font-size: 18px; }
+    .slide { padding: 1.6rem 1.1rem 5.5rem; }
+    .row { grid-template-columns: 1fr; gap: 0.15rem; }
+    .nav { padding: 0.7rem 1.1rem 0.85rem; }
+    .hint { display: none; }
+  }
+  @media print {
+    .slide { display: block; min-height: auto; page-break-after: always; padding: 1.2rem 0 2rem; }
+    .nav { display: none; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <section class="slide active" data-title="Anfang">
+    <p class="kicker">Review · 26. November 2026 · Gruppe 11</p>
+    <h1>Nico Laeser, Systemintegration</h1>
+    <p class="lead">Das Monitoring läuft und ist mit 128 von 128 Prüfungen belegt, die Kundenstammdaten stehen als Vorschlag, der Audit-Trail ist angefangen. Fünf Minuten.</p>
+  </section>
+
+  <section class="slide" data-title="Tickets">
+    <p class="kicker">Welche Tickets habe ich erledigt oder bearbeitet?</p>
+    <h1>Tickets</h1>
+    <h2 class="done">Fertig</h2>
+    <ul>
+      <li><span class="id">#14</span> Monitoring: eigenes Skript, ohne Zugangsdaten. 22 Tests, 128 von 128 Prüfungen bestanden, Meldungen im Team-Kanal angekommen. PR #134 im Review.
+        <span class="sub" style="display:block;color:var(--muted);font-size:.95rem">Der Test auf der Strato-VM hängt an #11, #13 und #5 und ist als offener Punkt im Issue notiert.</span></li>
+    </ul>
+    <h2 class="open">Bearbeitet, nicht fertig</h2>
+    <ul>
+      <li><span class="id">#7</span> Kundenstammdaten: Vorschlag mit fünf Dokumenten — Pflichtfelder, Rechnung und Steuer, Dubletten, Suche, Änderungsprotokoll. PR #127 im Review, Finns sieben Punkte sind eingearbeitet. Umsetzung offen.
+        <span class="sub" style="display:block;color:var(--muted);font-size:.95rem">Alle fünf Akzeptanzkriterien sind Code. Zeitlich nicht geschafft: Nach der ersten Fassung kamen die Review-Runden am 18. und 23.11. dazwischen.</span></li>
+      <li><span class="id">#9</span> Auftrag mit Audit-Trail: angefangen. Die protokoll-Tabelle aus #99 gelesen, Felder für auftrag und auftragsaenderung notiert. Noch kein Code.</li>
+    </ul>
+  </section>
+
+  <section class="slide" data-title="Entscheidungen">
+    <p class="kicker">Was im Sprint entschieden und umgesetzt wurde</p>
+    <h1>Entscheidungen</h1>
+    <div class="rows">
+      <div class="row">
+        <b>Skript umgesetzt</b>
+        <div>ADR 0012 (4,40 vor Prometheus und Netdata, je 3,80) ist Code: ein Bash-Skript, 11 Blöcke, läuft direkt auf dem Server.
+          <span class="sub">Ohne Zugangsdaten: PostgreSQL über den Handshake, SMTP und IMAP über die Begrüßung, Ports aus der Docker-API.</span>
+        </div>
+      </div>
+      <div class="row">
+        <b>Dienst statt Timer</b>
+        <div>systemd-Dienst, Prüfung alle 10 Sekunden. Als Abweichung in ADR 0012 dokumentiert.
+          <span class="sub">Der Spam-Schutz hält seinen Zustand im laufenden Prozess. Ein Timer finge jede Minute bei null an.</span>
+        </div>
+      </div>
+      <div class="row">
+        <b>Spam-Schutz</b>
+        <div>Neue Stufe zwei Durchläufe stabil, höchstens zwei Meldungen je Prüfung in zehn Minuten.
+          <span class="sub">Die Entwarnung wird nicht unterdrückt, aber wie jeder Wechsel bestätigt. Weggefallene Prüfungen ebenfalls.</span>
+        </div>
+      </div>
+      <div class="row">
+        <b>VIES raus</b>
+        <div>Die zwei VIES-Endpoints sind aus der Standardkonfiguration raus.
+          <span class="sub">Bei jedem Durchlauf wären es über 17.000 Anfragen pro Tag an die EU-API. #7 nutzt VIES noch nicht, das Beispiel steht auskommentiert.</span>
+        </div>
+      </div>
+      <div class="row">
+        <b>Steuer korrigiert</b>
+        <div>Vermietung ist nicht SaaS: Bei EU-Privatkunden zählt der Sitz des Verleihs, nicht das Land des Kunden.
+          <span class="sub">Bei Geschäftskunden in beiden Fällen Reverse-Charge (§ 3a Abs. 2 UStG). Nachgerechnet an § 3a und dem Umsatzsteuer-Anwendungserlass.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="Gelernt">
+    <p class="kicker">Was habe ich dabei gelernt?</p>
+    <h1>Gelernt</h1>
+    <div class="rows">
+      <div class="row">
+        <b>Healthy ≠ erreichbar</b>
+        <div>Der Healthcheck von docker-mailserver zählt nur Prozesse. Postfix aus, Docker meldet „running, healthy", die SMTP-Ports sind tot. Test 11 belegt es.</div>
+      </div>
+      <div class="row">
+        <b>Zahlen prüfen</b>
+        <div>Das Testskript meldete 408 unterdrückte Wechsel. Plausibel aussehend, falsch: Es las das ganze Journal. Richtig waren 3, nachvollziehbar erst mit dem Befehl.</div>
+      </div>
+      <div class="row">
+        <b>GoBD</b>
+        <div>Die GoBD nennen kein Werkzeug, sondern Anforderungen: unveränderbare Historie, alter Inhalt bleibt sichtbar (Randziffer 110 und 111). Die technische Wahl bleibt bei uns.</div>
+      </div>
+      <div class="row">
+        <b>SaaS ≠ Vermietung</b>
+        <div>Beides sonstige Leistungen, aber digitale Dienste an EU-Privatkunden zählen beim Land des Kunden (§ 3a Abs. 5), Vermietung beim Sitz des Verleihs. Meine Erfahrung aus SaaS war der Ausgangspunkt, nicht die Antwort.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="Probleme">
+    <p class="kicker">Welche Probleme gab es, und wie sind sie gelöst?</p>
+    <h1>Probleme</h1>
+    <div class="pair">
+      <span class="tag">Strato hängt an anderen</span>
+      #11 (Datenbank), #13 (Mailserver) und #5 (IaC) stehen noch. Deshalb der Nachweis in einer Test-VM mit Containern der echten Software: PostgreSQL 17, docker-mailserver 17.0.0. Ausfälle künstlich herbeigeführt, Meldungen angekommen.
+    </div>
+    <div class="pair">
+      <span class="tag">Fehler erst im Test</span>
+      Drei Fehler im erzeugten Code fielen erst beim Testen auf, nicht beim Lesen: die zurückgehaltene Entwarnung, das falsch zählende Testskript, RAM voll wegen Swap nur als WARNING. Alles in befunde.md mit Log-Auszügen.
+    </div>
+    <div class="pair">
+      <span class="tag">Gegenlesen vor dem Commit</span>
+      Noch einmal mit Claude gegengelesen: VIES bei jedem Durchlauf, weggefallene Prüfungen meldeten sofort Entwarnung, Doku widersprach dem Code. Drei Fixes, festgehalten in befunde.md.
+    </div>
+    <div class="pair">
+      <span class="tag">#7 Umsetzung offen</span>
+      Die Spezifikation ist fertig, der Code fehlt. Zwischen erster Fassung (12./13.11.) und heute lagen Finns sieben Review-Punkte (18.11.) und deren Nacharbeit (23.11.).
+    </div>
+  </section>
+
+  <section class="slide" data-title="KI">
+    <p class="kicker">Wo und wofür habe ich KI eingesetzt?</p>
+    <h1>KI, offengelegt</h1>
+    <div class="rows">
+      <div class="row">
+        <b>Wofür</b>
+        <div>Nutzwertanalyse (Fall 4), Skript-Bau und -Korrektur (Fälle 5 bis 18), Steuer-Recherche (Fall 19), Gegenlesen vor dem Commit (Fall 21), diese Folien (Fall 22).</div>
+      </div>
+      <div class="row">
+        <b>Protokoll</b>
+        <div>22 Fälle, je mit Aufgabe, Wortlaut, Ergebnis und Bewertung. <span class="id">docs/ki/prompts/Nico-Laeser.md</span>. Der vollständige Chatverlauf liegt lokal und ist auf Nachfrage vorzeigbar.</div>
+      </div>
+      <div class="row">
+        <b>Beispiel Korrektur</b>
+        <div>Fall 19: Meine SaaS-Erfahrung als Ausgangspunkt, die KI prüft, ich rechne an § 3a UStG nach. Die falschen Annahmen standen durchgestrichen in der Datei, die alte Fassung liegt in der Git-Historie.</div>
+      </div>
+      <div class="row">
+        <b>Zurückgenommen</b>
+        <div>Die Zahl 408 unterdrückter Wechsel (Fehler des Testskripts), VIES in der Standardkonfiguration, die Zod-Empfehlung — Formularprüfung gehört ins Team, nicht in eine Doku-Datei.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="Nächster Sprint">
+    <p class="kicker">Was ich als Nächstes bearbeite</p>
+    <h1>Nächster Sprint</h1>
+    <div class="rows">
+      <div class="row">
+        <b>#9 Audit-Trail</b>
+        <div>Umsetzen: auftrag mit fortlaufender Nummer, jede Änderung als neuer Eintrag, Storno mit Bezug statt Löschung.
+          <span class="sub">Aufbauend auf der protokoll-Tabelle aus #99. Die Felder stehen seit dem 20.11. Abgabe ist der 11.12.</span>
+        </div>
+      </div>
+      <div class="row">
+        <b>#14 Strato</b>
+        <div>Nachtest auf der Strato-VM, sobald #11, #13 und #5 stehen, und den Meldekanal offiziell festlegen.
+          <span class="sub">Nicht über unseren eigenen Mailserver. Danach monitor webhook-add und monitor test-webhook.</span>
+        </div>
+      </div>
+      <div class="row">
+        <b>#7 Umsetzung</b>
+        <div>Schema und Formular nach dem Vorschlag aus PR #127.
+          <span class="sub">Offene Fragen ans Team: DSGVO-Löschung für gelöschte Kunden, USt-Id global eindeutig bei Niederlassungen, Formularprüfung (Zod, potenziell ADR).</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-title="Schluss">
+    <p class="kicker">Stand heute</p>
+    <h1>Fragen.</h1>
+    <p class="lead">Fertig ist das Monitoring mit Nachweisen. Offen sind die Umsetzung der Kundenstammdaten und der Audit-Trail. Beide PRs warten auf das Review.</p>
+  </section>
+</main>
+<nav class="nav">
+  <button type="button" id="prev">Zurück</button>
+  <button type="button" id="next">Weiter</button>
+  <span class="hint">Pfeiltasten</span>
+  <span class="count" id="count"></span>
+</nav>
+<script>
+  const slides = Array.from(document.querySelectorAll(".slide"));
+  const count = document.getElementById("count");
+  let i = 0;
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle("active", k === i));
+    count.textContent = (i + 1) + " / " + slides.length;
+    history.replaceState(null, "", "#" + (i + 1));
+  }
+  document.getElementById("prev").addEventListener("click", () => show(i - 1));
+  document.getElementById("next").addEventListener("click", () => show(i + 1));
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") {
+      e.preventDefault();
+      show(i + 1);
+    } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+      e.preventDefault();
+      show(i - 1);
+    } else if (e.key === "Home") {
+      show(0);
+    } else if (e.key === "End") {
+      show(slides.length - 1);
+    }
+  });
+  const fromHash = Number((location.hash || "").slice(1));
+  show(Number.isInteger(fromHash) && fromHash >= 1 ? fromHash - 1 : 0);
+</script>
+</body>
+</html>

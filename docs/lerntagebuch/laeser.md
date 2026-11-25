@@ -485,9 +485,9 @@ Erster Schultag von Sprint 5.
 - #9 angefangen: die `protokoll`-Tabelle aus #99 gelesen und überlegt, wie ein Auftrag
   darauf aufbaut — Auftrag als eigener Datensatz, jede Änderung als neuer Eintrag mit
   Bezug, Storno als Eintrag statt Löschung. Noch ohne Code.
-- Abends vor dem Commit das Monitoring-Skript noch einmal mit Claude gegengelesen (PR #134).
-  Drei Fehlerquellen gefunden und behoben: die VIES-Endpoints in der
-  Standardkonfiguration (bei 10 s Takt über 17.000 Anfragen pro Tag an die EU-API,
+- Abends vor dem Commit das Monitoring-Skript noch einmal mit Claude gegengelesen (PR #134,
+  Fall 21 in der Prompt-Liste). Drei Fehlerquellen gefunden und behoben: die VIES-Endpoints
+  in der Standardkonfiguration (bei 10 s Takt über 17.000 Anfragen pro Tag an die EU-API,
   Sperrgefahr), weggefallene Prüfungen, die ohne Bestätigung sofort Entwarnung meldeten,
   und ein Widerspruch zwischen Doku und Code zur Entwarnung. Festgehalten in
   [befunde.md](../../monitoring/befunde.md), Abschnitt „Gegenlesen vor dem Commit".
@@ -532,6 +532,12 @@ Erster Schultag von Sprint 5.
   und Zeitraum aus der bestätigten Reservierung, dazu `auftragsaenderung` als Eintrag mit
   Zeitpunkt, Benutzer, Feld, altem und neuem Wert — dasselbe Muster wie das
   Änderungsprotokoll aus #7, nur auf den Auftrag bezogen.
+- Die Dokumentation nachgezogen: die Prompt-Liste ergänzt (Fälle 19 bis 22) und die
+  Präsentation für das Review am 26.11. gebaut,
+  [`2611-Laeser-Review.html`](2611-Laeser-Review.html), im Aufbau der Folien vom 15.10.
+  Dazu eine Fragen-und-Antworten-Liste fürs Fachgespräch vorbereitet: Monitoring
+  (Dienst statt Timer, Spam-Schutz, PostgreSQL-Handshake ohne Passwort, healthy versus
+  erreichbar), Steuern (SaaS gegen Vermietung, § 3a UStG), Audit-Trail und KI-Bewertung.
 - Eingearbeitet habe ich die Punkte danach und Finn unter dem PR geantwortet
   (alle sieben, zum Mergen freigegeben).
 
