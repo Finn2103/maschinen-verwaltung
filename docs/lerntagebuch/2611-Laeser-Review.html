@@ -258,7 +258,7 @@
       <h3>So erklärst du es</h3>
       <ul>
         <li>Postfix = das Programm im Mailserver, das Mails annimmt (SMTP, Port 25 und 587). Das Skript erwartet dort die Begrüßung „220“.</li>
-        <li>408 → 3: Seitdem liest das Testskript das Log erst ab Testbeginn. Steht in <code>befunde.md</code>.</li>
+        <li>408 → 3: Der Dienst lief schon seit dem 05.11. und schreibt alles in sein Journal (das Log von systemd). Das Testskript zählte „vom Spam-Schutz zurückgehaltene Meldungen“ – aber im ganzen Journal, also inklusive der Hunderten vom Vortag. Der Testzeitraum selbst hatte nur 3. Plausibel sah die Zahl aus, weil ein Tag mit 8.000 Durchläufen und ein paar hundert zurückgehaltene Wechsel zusammenzupassen scheint. Fix: Die Abfragen filtern jetzt strikt ab Testbeginn. Gefunden habe ich es, indem ich den Befehl nachgebaut habe, der die Zahl erzeugt. Steht in <code>befunde.md</code>.</li>
       </ul>
       <h3>Steuer, einfach</h3>
       <ul>
