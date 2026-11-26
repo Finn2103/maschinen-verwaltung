@@ -293,8 +293,8 @@
         <span class="sub">Datenbank, Mailserver und Server-Einrichtung aus dem Team stehen noch nicht. Deshalb habe ich in einer eigenen Test-VM getestet: gleiches Debian, gleiche Software, PostgreSQL und docker-mailserver. Die Ausfälle habe ich von Hand ausgelöst, die Meldungen sind im Team-Kanal angekommen.</span>
       </div>
       <div class="row">
-        <b>Vier Fehler fielen erst im Test auf</b>
-        <span class="sub">Beim Lesen sah der Code richtig aus. Der Spam-Schutz hielt die Entwarnung fest. Das Testskript zählte 408 statt 3. Volles RAM blieb wegen Swap nur eine Warnung. Und ohne sudo zeigte der Statusbefehl keinen Zustand.</span>
+        <b>Drei Fehler fielen erst im Test auf</b>
+        <span class="sub">Beim Lesen sah der Code richtig aus. Der Spam-Schutz hielt die Entwarnung fest. Volles RAM blieb wegen Swap nur eine Warnung. Und ohne sudo zeigte der Statusbefehl keinen Zustand.</span>
       </div>
       <div class="row">
         <b>Drei Punkte fielen erst im Gegenlesen auf</b>
@@ -310,11 +310,10 @@
       </ul>
       <h3>Wenn gefragt</h3>
       <dl>
-        <dt>Welche vier Fehler waren es?</dt>
+        <dt>Welche drei Fehler waren es?</dt>
         <dd>① Der Spam-Schutz hielt die Entwarnung fest: Beim Mailserver-Neustart kamen erst CRITICAL und WARNING, damit war das Limit (2 Meldungen / 10 Min) voll, die eigentliche Entwarnung hing bis zum Ablauf des Fensters. Der Test prüfte nur <em>ob</em> sie ankommt, nicht <em>wann</em> — das prüft er jetzt.
-        <br>② Das Testskript zählte 408 statt 3 zurückgehaltene Meldungen: Es las das Journal des Dienstes, der schon seit dem Vortag lief. Jetzt filtern die Abfragen strikt ab Testbeginn.
-        <br>③ Volles RAM blieb nur WARNING: Der Kernel lagert mit Swap aus, die Belegung blieb unter der 95-%-Schwelle. Der Test schaltet Swap für diesen Schritt kurz ab, die Meldung zeigt die Swap-Nutzung in den Details.
-        <br>④ <code>monitor status</code> ohne sudo zeigte „Kein Zustand“: Die Pfad-Prüfung verlangte ein beschreibbares Verzeichnis, obwohl die Datei für alle lesbar war. Jetzt prüft sie zuerst lesbar.</dd>
+        <br>② Volles RAM blieb nur WARNING: Der Kernel lagert mit Swap aus, die Belegung blieb unter der 95-%-Schwelle. Der Test schaltet Swap für diesen Schritt kurz ab, die Meldung zeigt die Swap-Nutzung in den Details.
+        <br>③ <code>monitor status</code> ohne sudo zeigte „Kein Zustand“: Die Pfad-Prüfung verlangte ein beschreibbares Verzeichnis, obwohl die Datei für alle lesbar war. Jetzt prüft sie zuerst lesbar.</dd>
         <dt>Was ist VIES?</dt>
         <dd>Der Dienst der EU zum Prüfen von USt-Ids. Das Skript hätte ihn bei jeder Runde (alle 10 s) abgefragt. Deshalb ist er raus aus der Standard-Konfiguration, und #7 braucht ihn noch nicht.</dd>
         <dt>Was war die falsche Entwarnung?</dt>
@@ -342,7 +341,7 @@
       </div>
       <div class="row">
         <b>Wo ich korrigiert habe</b>
-        <span class="sub">Die Container-Zustände waren erst unvollständig, die Zahl 408 war falsch, und die Steuerregeln habe ich am Gesetz nachgeprüft.</span>
+        <span class="sub">Die Container-Zustände waren erst unvollständig, eine gemeldete Zahl stimmte nicht, und die Steuerregeln habe ich am Gesetz nachgeprüft.</span>
       </div>
     </div>
     <div class="note">
