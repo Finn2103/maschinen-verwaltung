@@ -158,15 +158,15 @@
     <div class="rows">
       <div class="row">
         <b>Skript statt Prometheus</b>
-        <span class="sub">Läuft direkt auf dem Server, ohne Zugangsdaten. Nutzwert 4,40 gegen 3,80.</span>
+        <span class="sub">Prometheus sammelt Messwerte und schreibt sie auf die Platte. Bei voller Platte stirbt das Tool, das den Ausfall melden soll. Unser Skript läuft direkt auf dem Server, ohne Zugangsdaten, Nutzwert 4,40 gegen 3,80.</span>
       </div>
       <div class="row">
         <b>Dienst statt Timer</b>
-        <span class="sub">Alle 10 Sekunden, Spam-Schutz im Prozess. Steht als Abweichung in ADR 0012.</span>
+        <span class="sub">Das Skript läuft dauerhaft, statt einmal pro Minute zu starten und sich zu beenden. Nur so merkt es sich, was schon gemeldet wurde. Und es prüft alle 10 statt alle 60 Sekunden. Abweichung in ADR 0012.</span>
       </div>
       <div class="row">
         <b>VIES raus</b>
-        <span class="sub">Sonst über 17.000 Anfragen pro Tag an die EU.</span>
+        <span class="sub">VIES ist das EU-Prüfverfahren für Umsatzsteuer-Nummern. Bei jeder Prüfung mitgelaufen wären das über 17.000 Anfragen pro Tag an eine Behörde. #7 nutzt es noch gar nicht.</span>
       </div>
     </div>
   </section>
@@ -177,15 +177,15 @@
     <div class="rows">
       <div class="row">
         <b>Healthy heißt nicht erreichbar</b>
-        <span class="sub">Docker zählt Prozesse. Deshalb prüfen wir die Ports selbst.</span>
+        <span class="sub">Docker meldet „healthy", solange die Prozesse laufen. Das Postfix-Programm kann trotzdem tot sein, der Port ist zu. Deshalb prüfen wir die Ports selbst.</span>
       </div>
       <div class="row">
         <b>Zahlen nachprüfen</b>
-        <span class="sub">408 unterdrückte Wechsel gemeldet, richtig waren 3.</span>
+        <span class="sub">Das Testskript meldete 408 unterdrückte Wechsel. Sah plausibel aus, war falsch: Es las das ganze Journal statt nur den Testzeitraum. Richtig waren 3.</span>
       </div>
       <div class="row">
         <b>Vermietung ist nicht SaaS</b>
-        <span class="sub">Privatkunde: Sitz des Verleihs. Geschäftskunde: Reverse-Charge, § 3a Abs. 2.</span>
+        <span class="sub">Meine Erfahrung aus Software-Abo: Der Kunde zahlt Steuern in seinem Land. Bei Vermietung ist es umgekehrt, Privatkunde zahlt bei uns. Geschäftskunde: Reverse-Charge, § 3a Abs. 2 UStG.</span>
       </div>
     </div>
   </section>

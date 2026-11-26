@@ -66,7 +66,7 @@
   <div class="qa"><div class="q">Warum kein Prometheus/Netdata?</div>
     <div class="a">Nutzwertanalyse ADR 0012: Skript 4,40 · Prometheus 3,80 · Netdata 3,80 · Uptime Kuma 2,80. Prometheus schreibt auf Platte, kaputt bei voller Platte. Docker-Abhängigkeit bei vielen Tools. Webseite unnötig, <code>monitor status</code> per SSH reicht. Ohne meine zwei Zusatzkriterien: 3,50 zu 3,20, bleibt vorn.</div></div>
   <div class="qa"><div class="q">systemd-Dienst statt Timer?</div>
-    <div class="a">Alle 10 s statt 60 s (AK 3). Spam-Schutz braucht Prozessgedächtnis, Timer startet bei null. Abweichung in ADR 0012.</div></div>
+    <div class="a">Timer = Wecker: startet Programm einmal pro Minute, Programm beendet sich, Gedächtnis weg. Dienst = läuft dauerhaft im Speicher, behält Gedächtnis (Spam-Schutz braucht das: „schon gemeldet" merken). Alle 10 s statt 60 s (AK 3). Abweichung in ADR 0012. <span class="k">Bild: Timer = Bote mit leerem Notizbuch, Dienst = Wachmann am Tor.</span></div></div>
   <div class="qa"><div class="q">DB ohne Passwort?</div>
     <div class="a">PostgreSQL-Handshake wie <code>pg_isready</code>, Startpaket 0x29 = 41 Bytes. Server verlangt Anmeldung = DB lebt. Abweichung dokumentiert.</div></div>
   <div class="qa"><div class="q">Spam-Schutz?</div>
