@@ -361,11 +361,7 @@
     <div class="rows">
       <div class="row">
         <b><span class="id">#9</span> Audit-Trail umsetzen</b>
-        <span class="sub">Auftrag mit fortlaufender Nummer. Jede Änderung wird ein neuer Eintrag, und Storno heißt nicht löschen. Baut auf der Protokoll-Tabelle aus #99 auf. Abgabe 11.12.</span>
-      </div>
-      <div class="row">
-        <b><span class="id">#7</span> Kundenstammdaten umsetzen</b>
-        <span class="sub">Tabellen als SQL und das Formular nach der Vorgabe, nachdem das Team die offenen Fragen geklärt hat.</span>
+        <span class="sub">Auftrag mit fortlaufender Nummer. Jede Änderung wird ein neuer Eintrag, und Storno heißt nicht löschen. Baut auf der Protokoll-Tabelle aus #99 auf. Abgabe 11.12. Das Ticket ist XL, auf 16 Stunden geschätzt — zusammen mit dem Monitoring-Nachtest ist mein Sprint mehr als voll.</span>
       </div>
       <div class="row">
         <b><span class="id">#14</span> Test auf dem echten Server</b>
@@ -377,8 +373,10 @@
       <dl>
         <dt>Warum fortlaufende Nummern und kein Löschen?</dt>
         <dd>GoBD: Belege sind fortlaufend nummeriert und werden nicht still geändert. Der Auftrag ist die Grundlage der späteren Rechnung, deshalb gelten dieselben Regeln.</dd>
-        <dt>Welche Fragen sind bei #7 offen?</dt>
-        <dd>Unter anderem: Werden Vorname, Nachname und Kundentyp Pflicht? Liegt die Adresse in einer eigenen Tabelle? Wann werden gelöschte Kunden anonymisiert (DSGVO)? Darf eine USt-Id mehrfach vorkommen, etwa bei Niederlassungen?</dd>
+        <dt>Und #7, machst du das nicht?</dt>
+        <dd>Die Umsetzung hat das Team jemand anderem zugedacht, meine Aufgabe war die Vorgabe. Die offenen Fragen daraus (Pflichtfelder, Adresse als eigene Tabelle, DSGVO-Anonymisierung, USt-Id bei Niederlassungen) stehen im Issue — wer umsetzt, braucht sie zuerst geklärt.</dd>
+        <dt>Reichen die 16 Stunden für #9?</dt>
+        <dd>Knapp. Die Tabelle und die Nummer sind der kleine Teil. Der Aufwand sitzt in den Fällen drumherum: Storno mit Bezug, Änderung als eigener Eintrag, Protokoll unveränderbar. Genau deshalb ist es XL und nicht L. Wenn der Nachtest vom Monitoring dazukommt, ist der Sprint voll.</dd>
       </dl>
     </div>
   </section>
