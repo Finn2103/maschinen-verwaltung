@@ -246,12 +246,16 @@
         <span class="sub">Docker prüft beim Mailserver nur, ob die Prozesse laufen. Im Test habe ich nur Postfix gestoppt: Docker meldete weiter „healthy“, aber Port 25 war tot. Deshalb prüft das Skript die Ports selbst.</span>
       </div>
       <div class="row">
-        <b>Zahlen nachprüfen</b>
-        <span class="sub">Das Testskript meldete 408 zurückgehaltene Meldungen. Es hatte aber auch das Log vom Vortag mitgezählt. Richtig waren 3.</span>
+        <b>Eine Zahl ist erst eine Antwort, wenn man ihre Frage kennt</b>
+        <span class="sub">Ein Test meldete 408 zurückgehaltene Meldungen. Plausibel, aber falsch: Der Dienst schreibt sein eigenes Log, und das Skript zählte das vom Vortag mit, der Testzeitraum hatte nur 3. Seitdem frage ich bei jeder Zahl zuerst: Was zählt sie, und ab wann?</span>
       </div>
       <div class="row">
         <b>Vermietung ist steuerlich kein Software-Abo</b>
         <span class="sub">Beim Software-Abo zahlt ein EU-Privatkunde die Steuer seines Landes. Bei der Vermietung zahlt er deutsche Steuer, 19 %. Nur beim EU-Geschäftskunden mit geprüfter USt-Id gilt Reverse-Charge.</span>
+      </div>
+      <div class="row">
+        <b>GoBD schreiben Wirkungen vor, keine Werkzeuge</b>
+        <span class="sub">Für das Änderungsprotokoll verlangen sie eine unveränderbare Historie, in der der alte Wert sichtbar bleibt. Ob das eine Tabelle mit Trigger oder etwas anderes ist, entscheide ich mit Begründung selbst.</span>
       </div>
     </div>
     <div class="note">
@@ -259,6 +263,7 @@
       <ul>
         <li>Postfix = das Programm im Mailserver, das Mails annimmt (SMTP, Port 25 und 587). Das Skript erwartet dort die Begrüßung „220“.</li>
         <li>408 → 3: Der Dienst lief schon seit dem 05.11. und schreibt alles in sein Journal (das Log von systemd). Das Testskript zählte „vom Spam-Schutz zurückgehaltene Meldungen“ – aber im ganzen Journal, also inklusive der Hunderten vom Vortag. Der Testzeitraum selbst hatte nur 3. Plausibel sah die Zahl aus, weil ein Tag mit 8.000 Durchläufen und ein paar hundert zurückgehaltene Wechsel zusammenzupassen scheint. Fix: Die Abfragen filtern jetzt strikt ab Testbeginn. Gefunden habe ich es, indem ich den Befehl nachgebaut habe, der die Zahl erzeugt. Steht in <code>befunde.md</code>.</li>
+        <li>GoBD: Das sind die Grundsätze zur ordnungsmäßigen Führung und Aufbewahrung von Büchern. Randziffer 110 listet Möglichkeiten für Historie, Randziffer 111 verlangt, dass sie nachträglich nicht mehr veränderbar ist. Unsere Wahl: die bestehende <code>protokoll</code>-Tabelle aus #99 mit einem Trigger. Begründung steht in <code>Kundenstammdaten.md</code>.</li>
       </ul>
       <h3>Steuer, einfach</h3>
       <ul>
