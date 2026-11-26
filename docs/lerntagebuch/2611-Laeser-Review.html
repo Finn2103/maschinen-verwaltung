@@ -165,7 +165,7 @@
     <div class="rows">
       <div class="row">
         <b><span class="id">#14</span> Monitoring: läuft und ist getestet, aber nur in meiner Test-VM.</b>
-        <span class="sub">22 Tests am 06.11., 128 von 128 Prüfungen bestanden. Eine Prüfung ist eine erwartete Einzelaussage, zum Beispiel „CRITICAL ist angekommen“. Der Test auf dem echten Server wartet auf Datenbank (#11), Mailserver (#13) und Server-Einrichtung (#5).</span>
+        <span class="sub">22 Tests am 06.11., 128 von 128 Prüfungen bestanden. Solche Prüfungen sind zum Beispiel: „CRITICAL kommt im Team-Kanal an“, „bei voller Platte nennt die Meldung die größten Ordner“, „nach zehn Neustarts sind es höchstens zwei Meldungen“. Der Test auf dem echten Server wartet auf Datenbank (#11), Mailserver (#13) und Server-Einrichtung (#5).</span>
       </div>
     </div>
     <h2 class="open">Nicht fertig</h2>
@@ -188,7 +188,7 @@
       <h3>Wenn gefragt</h3>
       <dl>
         <dt>Was heißt „128 von 128“?</dt>
-        <dd>21 Tests liefen automatisch mit <code>vm-test.sh</code> und hatten zusammen 128 einzelne Prüfungen. Test 22, der Neustart, lief von Hand. Eine Prüfung ist dabei eine erwartete Einzelaussage wie „CRITICAL gemeldet“, „Meldung nennt die größten Ordner“, „Entwarnung kommt an“ — eine Testdatei enthält davon fünf bis zehn. Bestanden heißt: jede einzelne davon stimmt.</dd>
+        <dd>21 Tests liefen automatisch mit <code>vm-test.sh</code>, Test 22 (der Neustart) von Hand. Eine Prüfung ist eine erwartete Einzelaussage. Beispiele: „Postfix gestoppt, Docker meldet healthy, aber das Skript sagt CRITICAL“ · „Platte zu 100 %, das Skript läuft weiter und meldet die größten Ordner“ · „Mailserver zehnmal neu gestartet, im Kanal stehen höchstens zwei Meldungen“ · „Entwarnung kommt nach dem Neustart an“ · „kill -9: der Dienst ist nach spätestens fünf Sekunden wieder da“. Eine Testdatei enthält fünf bis zehn solcher Aussagen, bestanden heißt: jede einzelne stimmt.</dd>
         <dt>Warum hat #7 keinen Code?</dt>
         <dd>Erst sollten Felder und Regeln geklärt sein. Dazu gab es zwei Review-Runden mit Finn. Offene Fragen ans Team stehen in <code>Pflichtfelder.md</code>.</dd>
       </dl>
