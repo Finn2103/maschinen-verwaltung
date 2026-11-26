@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spickzettel · Fachgespräch 26.11.</title>
+<style>
+  :root {
+    --paper: #fffdf8;
+    --ink: #1a1814;
+    --muted: #5e584e;
+    --line: #d8d0c2;
+    --done: #1d6b48;
+    --open: #8a4b10;
+    --acc: #2b4d8c;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font: 13px/1.4 "Iowan Old Style", Palatino, Georgia, serif;
+  }
+  .page { max-width: 190mm; margin: 0 auto; padding: 10mm 8mm; }
+  h1 { margin: 0 0 0.2rem; font-size: 1.3rem; font-weight: 600; }
+  .sub { color: var(--muted); margin: 0 0 0.8rem; font-size: 0.85rem; }
+  h2 {
+    margin: 0.9rem 0 0.35rem; font: 600 10px/1.2 ui-sans-serif, "Helvetica Neue", sans-serif;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--acc);
+    border-bottom: 1px solid var(--line); padding-bottom: 0.15rem;
+  }
+  .qa { padding: 0.28rem 0; border-bottom: 1px dotted var(--line); break-inside: avoid; }
+  .q { font-weight: 600; }
+  .a { color: var(--ink); margin: 0.1rem 0 0 1rem; }
+  .a ul { margin: 0; padding-left: 1rem; }
+  .a li { margin: 0; }
+  .k { color: var(--muted); }
+  code {
+    font: 0.86em/1.3 ui-monospace, "SF Mono", Menlo, monospace;
+    background: #efe9dc; border: 1px solid var(--line); border-radius: 3px; padding: 0 3px;
+  }
+  .lvl { margin: 0.15rem 0 0.15rem 1rem; padding: 0.3rem 0.5rem; border-left: 3px solid var(--acc); background: rgba(43,77,140,.06); break-inside: avoid; }
+  .lvl b { font-weight: 600; }
+  .merk {
+    margin-top: 0.9rem; padding: 0.5rem 0.7rem;
+    border-left: 3px solid var(--done); background: rgba(29,107,72,.07);
+  }
+  .merk b { font-weight: 600; }
+  @media print { body { font-size: 11.5px; } .page { padding: 0; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>Fachgespräch 26.11. — Spickzettel</h1>
+  <p class="sub">Stichworte, keine Sätze. Wer mehr sagt, bekommt mehr Nachfragen.</p>
+
+  <h2>Die Zahl: 22 Tests / 128 Prüfungen</h2>
+  <div class="qa">
+    <div class="lvl"><b>Ebene 1:</b> 22 Testdateien. 21 automatisch, zusammen 128 einzelne Prüfungen, alle bestanden. Nr. 22: Neustart der VM von Hand. Jede Datei: Anforderung, Befehle, Original-Ausgabe, Server-Log, angekommene Meldungen.</div>
+    <div class="lvl"><b>Ebene 2 (was?):</b> ① Issue-Fälle: DB aus, Mailserver aus, nur Postfix im Container gestoppt, Docker ganz aus, Platte voll, RAM voll. ② Verhalten: 13 Docker-Zustände, Spam-Schutz bei Neustart-Schleifen, Parallelität, Bericht. ③ Robustheit: nur RAM + Schreibschutz, 9 % eines Kerns / 26 MB, kaputtes JSON, kill -9. ④ Schnittstellen: JSON-Schema, Exit-Codes, Installation. <span class="k">Bestes Beispiel: „Test 11, Postfix".</span></div>
+    <div class="lvl"><b>Ebene 3 (was schief?):</b> 6 Befunde in befunde.md. 3 Fehler erst im Test: Entwarnung zurückgehalten, Testskript zählte 408 statt 3, RAM voll blieb WARNING (Swap). 3 beim Gegenlesen: VIES, Sofort-Entwarnung bei <code>gone</code>, Doku wider Code.</div>
+    <div class="lvl"><b>Kernsatz:</b> „128 Prüfungen sind Einzelaussagen wie ‚CRITICAL gemeldet' — eine Datei hat davon fünf bis zehn. Bestanden heißt: jede einzelne stimmt."</div>
+  </div>
+
+  <h2>#14 Monitoring</h2>
+  <div class="qa"><div class="q">Warum kein Prometheus/Netdata?</div>
+    <div class="a">Nutzwertanalyse ADR 0012: Skript 4,40 · Prometheus 3,80 · Netdata 3,80 · Uptime Kuma 2,80. Prometheus schreibt auf Platte, kaputt bei voller Platte. Docker-Abhängigkeit bei vielen Tools. Webseite unnötig, <code>monitor status</code> per SSH reicht. Ohne meine zwei Zusatzkriterien: 3,50 zu 3,20, bleibt vorn.</div></div>
+  <div class="qa"><div class="q">systemd-Dienst statt Timer?</div>
+    <div class="a">Alle 10 s statt 60 s (AK 3). Spam-Schutz braucht Prozessgedächtnis, Timer startet bei null. Abweichung in ADR 0012.</div></div>
+  <div class="qa"><div class="q">DB ohne Passwort?</div>
+    <div class="a">PostgreSQL-Handshake wie <code>pg_isready</code>, Startpaket 0x29 = 41 Bytes. Server verlangt Anmeldung = DB lebt. Abweichung dokumentiert.</div></div>
+  <div class="qa"><div class="q">Spam-Schutz?</div>
+    <div class="a">Stufe stabil über <code>CONFIRM_CYCLES</code> (2 Durchläufe). Max 2 Meldungen / 10 Min (<code>NOTIFY_MAX</code>, <code>NOTIFY_WINDOW</code>). Verschlechterung + Entwarnung nie unterdrückt, Entwarnung wird bestätigt wie jeder Wechsel.</div></div>
+  <div class="qa"><div class="q">Bug Entwarnung?</div>
+    <div class="a">① Spam-Schutz hielt Entwarnung bis 10 Min zurück, Test prüfte nur ob, nicht wann. ② <code>gone</code>-Prüfungen umgingen Bestätigung ⇒ ein Timeout „blinkte" Fehler weg (Fall 21). Beides behoben.</div></div>
+  <div class="qa"><div class="q">Docker healthy, aber CRITICAL?</div>
+    <div class="a">dms-healthcheck zählt nur Prozesse (TODO dort: Ports). Test 11: Postfix gestoppt, Docker healthy, Ports 25/587 tot. Deshalb prüfen wir selbst: SMTP 220, IMAP <code>* OK</code>.</div></div>
+  <div class="qa"><div class="q">VIES raus?</div>
+    <div class="a">17.000+ Anfragen/Tag an EU-API bei 10-s-Takt, Sperre droht. #7 nutzt VIES noch nicht. Beispiel auskommentiert in <code>monitor.conf</code>. Gefunden im Gegenlesen (Fall 21).</div></div>
+  <div class="qa"><div class="q">Volle Platte?</div>
+    <div class="a">Laufzeitdaten nur <code>/run/monitor</code> (tmpfs). <code>ProtectSystem=strict</code>, FS schreibgeschützt (Test 16). journald <code>SystemKeepFree</code>. Test 09: bei 100 % läuft weiter, meldet größte Ordner.</div></div>
+  <div class="qa"><div class="q">Noch offen?</div>
+    <div class="a">Strato-VM wartet auf #11, #13, #5. Meldekanal nicht offiziell (nicht eigener Mailserver). Rootless-Docker: <code>DOCKER_SOCKET=/run/user/&lt;uid&gt;/docker.sock</code>.</div></div>
+
+  <h2>#7 Kundenstammdaten</h2>
+  <div class="qa"><div class="q">Steuernummer vs. USt-IdNr.?</div>
+    <div class="a">Steuernummer: Finanzamt, national, Zuordnung. USt-Id: BZSt, EU-Verkehr, VIES-prüfbar. DE + 9 Ziffern. Griechenland <code>EL</code>, Nordirland <code>XI</code>, kein <code>UK</code> — ISO ist <code>GB</code>.</div></div>
+  <div class="qa"><div class="q">Welche Steuer bei Ausleihe?</div>
+    <div class="a">Privat DE/EU: 19 % am Sitz des Verleihs (§ 3a Abs. 1). EU-Geschäftskunde mit USt-Id: Reverse-Charge (§ 3a Abs. 2), beide USt-Ids auf Rechnung, ZM. Privat außerhalb EU: nicht steuerbar (§ 3a Abs. 4 Nr. 10). Bagger = kein Beförderungsmittel (USt-AE).</div></div>
+  <div class="qa"><div class="q">SaaS-Fehler?</div>
+    <div class="a">SaaS an EU-Privatkunden = digitaler Dienst, Land des Kunden (§ 3a Abs. 5, OSS). Vermietung: Sitz des Verleihs. Geschäftskunden: bei beiden Reverse-Charge. KI fand es (Fall 19), ich rechnete an § 3a nach. Quellen: <code>Rechnung-und-Steuer.md</code>.</div></div>
+  <div class="qa"><div class="q">Dubletten?</div>
+    <div class="a">Gleicher Name + gleiche Adresse ⇒ Hinweis, kein Block. Sichtbar nur mit Recht <code>kunde.suchen</code>. Rechtefrage, kein Zufall.</div></div>
+  <div class="qa"><div class="q">GoBD?</div>
+    <div class="a"><code>protokoll</code>-Tabelle aus #99 + Trigger <code>kunde_protokollieren</code>: Zeitpunkt, Benutzer, Feld, alt, neu. GoBD Rz. 110 nennt Möglichkeiten, Rz. 111: Historie nachträglich unveränderbar. Ordner reicht nicht. S3-Versionierung = eigene ADR-Frage.</div></div>
+  <div class="qa"><div class="q">DSGVO / offene Fragen?</div>
+    <div class="a">Status <code>geloescht</code> behält Daten; 8 Jahre § 147 AO gelten für Rechnung (eigene Adresskopie). Ab wann löschen/anonymisieren: Team-Entscheidung. USt-Id global eindeutig ⇒ Niederlassungen würden abgelehnt.</div></div>
+
+  <h2>#9 Audit-Trail</h2>
+  <div class="qa"><div class="q">Aufbau?</div>
+    <div class="a"><code>auftrag</code>: fortlaufende lückenlose Nr., Kunde, Maschine, Zeitraum aus Reservierung. Änderung = neuer Eintrag (<code>auftragsaenderung</code>: Zeitpunkt, Benutzer, Feld, alt, neu). Nie überschreiben. Storno = Eintrag mit Bezug. Basis: <code>protokoll</code> aus #99, Muster wie #7.</div></div>
+  <div class="qa"><div class="q">Warum so?</div>
+    <div class="a">GoBD: Belegnummern fortlaufend lückenlos, stilles Ändern gebuchter Belege verboten. Auftrag = Basis der Rechnung ⇒ dieselben Regeln.</div></div>
+
+  <h2>KI</h2>
+  <div class="qa"><div class="q">Wie bewertet?</div>
+    <div class="a">22 Fälle: Aufgabe, Prompt im Wortlaut, Ergebnis ein Satz, Bewertung mit Begründung. <code>docs/ki/prompts/Nico-Laeser.md</code>.</div></div>
+  <div class="qa"><div class="q">Wann korrigiert?</div>
+    <div class="a">Fälle 6, 10: unvollständige Container-Zustände. Fall 16: 3 Fehler erst im Test (408 statt 3). Fall 21: VIES, Sofort-Entwarnung, Doku wider Code — vor dem Commit gefunden.</div></div>
+  <div class="qa"><div class="q">Chatverläufe?</div>
+    <div class="a">Lokal <code>~/.claude/projects/…/*.jsonl</code>, auf Nachfrage vorzeigbar.</div></div>
+
+  <div class="merk"><b>Nicht gewusst?</b> Sag, wo es steht: „befunde.md, Abschnitt Gegenlesen", „ADR 0012", „Rechnung-und-Steuer.md". Verweis ist besser als Halbwissen.</div>
+</div>
+</body>
+</html>
