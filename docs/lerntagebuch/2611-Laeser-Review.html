@@ -142,7 +142,7 @@
     <h2 class="done">Fertig</h2>
     <ul>
       <li><span class="id">#14</span> Monitoring. Eigenes Skript, 128 von 128 Prüfungen bestanden, dazu ein Neustart von Hand.
-        <span class="item">PR #134 liegt zum Review. Strato hängt an #11, #13 und #5.</span></li>
+        <span class="item">Der Pull-Request liegt zum Review. Der Test auf dem gemieteten Server wartet noch auf drei Tickets aus dem Team: Datenbank, Mailserver und Server-Einrichtung.</span></li>
     </ul>
     <h2 class="open">Nicht fertig</h2>
     <ul>
@@ -162,7 +162,7 @@
       </div>
       <div class="row">
         <b>Dienst statt Timer</b>
-        <span class="sub">Das Skript läuft dauerhaft, statt einmal pro Minute zu starten und sich zu beenden. Nur so merkt es sich, was schon gemeldet wurde. Und es prüft alle 10 statt alle 60 Sekunden. Abweichung in ADR 0012.</span>
+        <span class="sub">Das Skript läuft dauerhaft, statt einmal pro Minute zu starten und sich zu beenden. Nur so merkt es sich, was schon gemeldet wurde. Und es prüft alle 10 statt alle 60 Sekunden. Steht als Abweichung in unserer Entscheidungsdokumentation.</span>
       </div>
       <div class="row">
         <b>VIES raus</b>
@@ -195,7 +195,7 @@
     <h1>Probleme</h1>
     <div class="pair">
       <span class="tag">Strato wartet</span>
-      #11, #13 und #5 stehen nicht. Nachweis deshalb in der Test-VM, mit PostgreSQL 17 und docker-mailserver.
+      Datenbank, Mailserver und Server-Einrichtung aus dem Team stehen noch nicht. Nachweis deshalb in der Test-VM, mit der echten Software: PostgreSQL und docker-mailserver.
     </div>
     <div class="pair">
       <span class="tag">Fehler erst im Test</span>
@@ -228,7 +228,7 @@
     <div class="rows">
       <div class="row">
         <b>#9 Audit-Trail</b>
-        <span class="sub">Umsetzen auf der protokoll-Tabelle aus #99. Abgabe 11.12.</span>
+        <span class="sub">Umsetzen auf der Protokoll-Tabelle, die im Projekt schon existiert. Abgabe 11.12.</span>
       </div>
       <div class="row">
         <b>#7 Umsetzung</b>
