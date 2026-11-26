@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Review · Nico Laeser</title>
+<style>
+  :root {
+    --paper: #f3efe6;
+    --ink: #1a1814;
+    --muted: #5e584e;
+    --line: #d8d0c2;
+    --done: #1d6b48;
+    --open: #8a4b10;
+    --note-bg: #fffdf8;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font: 24px/1.42 "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+  }
+  .slide {
+    display: none;
+    min-height: 100vh;
+    padding: 3.5rem 8vw 7rem;
+  }
+  .slide.active { display: block; }
+  .kicker {
+    margin: 0 0 0.8rem;
+    font: 600 14px/1.2 ui-sans-serif, "Helvetica Neue", sans-serif;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  h1 {
+    margin: 0 0 1.3rem;
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    font-weight: 600;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    max-width: 18ch;
+  }
+  .lead {
+    margin: 0;
+    max-width: 38rem;
+    font-size: 1.3rem;
+    color: var(--muted);
+  }
+  h2 {
+    margin: 1.4rem 0 0.4rem;
+    font: 600 14px/1.2 ui-sans-serif, "Helvetica Neue", sans-serif;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  h2.done { color: var(--done); }
+  h2.open { color: var(--open); }
+  .id {
+    font: 600 0.95rem/1 ui-sans-serif, "Helvetica Neue", sans-serif;
+  }
+  .rows { max-width: 50rem; }
+  .row {
+    padding: 0.9rem 0;
+    border-top: 1px solid var(--line);
+  }
+  .row:last-child { border-bottom: 1px solid var(--line); }
+  .row b { font-weight: 600; display: block; margin-bottom: 0.15rem; }
+  .sub { display: block; margin-top: 0.2rem; color: var(--muted); font-size: 1.02rem; }
+  code {
+    font: 0.85em ui-monospace, "SF Mono", Menlo, monospace;
+    background: rgba(0, 0, 0, 0.05);
+    padding: 0.05em 0.3em;
+    border-radius: 4px;
+  }
+
+  /* Spickzettel: nur sichtbar nach Taste N oder im Druck */
+  .note {
+    display: none;
+    max-width: 50rem;
+    margin-top: 1.6rem;
+    padding: 1rem 1.2rem;
+    background: var(--note-bg);
+    border: 1px dashed #b7ad9d;
+    border-radius: 10px;
+    font: 15px/1.5 ui-sans-serif, "Helvetica Neue", sans-serif;
+    color: var(--ink);
+  }
+  body.notes .note { display: block; }
+  .note h3 {
+    margin: 0 0 0.4rem;
+    font: 600 12px/1.2 ui-sans-serif, "Helvetica Neue", sans-serif;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .note h3:not(:first-child) { margin-top: 0.9rem; }
+  .note ul { margin: 0; padding-left: 1.1rem; }
+  .note li { margin: 0.2rem 0; }
+  .note dl { margin: 0; }
+  .note dt { font-weight: 600; margin-top: 0.45rem; }
+  .note dd { margin: 0.1rem 0 0 0; color: #3a352d; }
+
+  .nav {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.75rem 8vw 0.9rem;
+    background: linear-gradient(to top, var(--paper) 70%, transparent);
+    font: 14px/1 ui-sans-serif, "Helvetica Neue", sans-serif;
+  }
+  button {
+    appearance: none;
+    border: 1px solid var(--line);
+    background: #fffdf8;
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 0.45rem 0.9rem;
+    font: inherit;
+    cursor: pointer;
+  }
+  button:hover { border-color: #b7ad9d; }
+  button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .count { margin-left: auto; color: var(--muted); }
+  .hint { color: var(--muted); }
+  @media (max-width: 720px) {
+    body { font-size: 20px; }
+    .slide { padding: 2rem 1rem 6rem; }
+    .nav { padding: 0.7rem 1rem 0.85rem; }
+    .hint { display: none; }
+  }
+  @media print {
+    .slide { display: block; min-height: auto; page-break-after: always; padding: 1.2rem 0 2rem; }
+    .note { display: block; }
+    .nav { display: none; }
+  }
+</style>
+</head>
+<body>
+<main>
+
+  <!-- 1 -->
+  <section class="slide active" data-title="Anfang">
+    <p class="kicker">Review · 26. November 2026 · Gruppe 11 · Sprint 5</p>
+    <h1>Nico Laeser, Systemintegration</h1>
+    <p class="lead">Drei Tickets: Das Monitoring läuft und ist in einer Test-VM belegt. Die Kundenstammdaten sind als Vorgabe beschrieben. Der Audit-Trail ist angefangen.</p>
+    <div class="note">
+      <h3>Ablauf</h3>
+      <ul>
+        <li>Tickets → Entscheidungen → Gelernt → Probleme → KI → Nächster Sprint → Fragen</li>
+        <li>Etwa 30–40 Sekunden pro Folie, zusammen ungefähr 5 Minuten</li>
+        <li>Pro Zeile reicht der fette Satz. Den grauen Satz sagst du nur, wenn Zeit ist oder jemand nachfragt.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section class="slide" data-title="Tickets">
+    <p class="kicker">Was habe ich erledigt oder bearbeitet?</p>
+    <h1>Tickets</h1>
+    <h2 class="done">Fast fertig</h2>
+    <div class="rows">
+      <div class="row">
+        <b><span class="id">#14</span> Monitoring: läuft und ist getestet, aber nur in meiner Test-VM.</b>
+        <span class="sub">22 Tests am 06.11., alle bestanden. Solche Prüfungen sind zum Beispiel: „CRITICAL kommt im Team-Kanal an“, „bei voller Platte nennt die Meldung die größten Ordner“, „nach zehn Neustarts sind es höchstens zwei Meldungen“. Der Test auf dem echten Server wartet auf Datenbank (#11), Mailserver (#13) und Server-Einrichtung (#5).</span>
+      </div>
+    </div>
+    <h2 class="open">Nicht fertig</h2>
+    <div class="rows">
+      <div class="row">
+        <b><span class="id">#7</span> Kundenstammdaten: Vorgabe geschrieben, noch kein Code.</b>
+        <span class="sub">Beschrieben sind Felder, Dubletten-Hinweis, Suche, Änderungsprotokoll und die Prüfung der USt-Id. Alle fünf Akzeptanzkriterien brauchen aber die fertige Anwendung.</span>
+      </div>
+      <div class="row">
+        <b><span class="id">#9</span> Audit-Trail: Felder notiert, noch kein Code.</b>
+      </div>
+    </div>
+    <div class="note">
+      <h3>So erklärst du es</h3>
+      <ul>
+        <li>„Fertig“ heißt bei uns: Definition of Done erfüllt. Punkt 3 (läuft auf dem Strato-Server) fehlt noch, deshalb „fast fertig“.</li>
+        <li>PR #134 gehört zu #14, PR #127 zu #7. Beide warten auf ein Review.</li>
+        <li>„Test-VM“ = eine Debian-13-VM auf meinem MacBook mit der echten Software: PostgreSQL 17 und docker-mailserver.</li>
+      </ul>
+      <h3>Wenn gefragt</h3>
+      <dl>
+        <dt>Was heißt „128 von 128“?</dt>
+        <dd>21 Tests liefen automatisch mit <code>vm-test.sh</code>, Test 22 (der Neustart) von Hand. Eine Prüfung ist eine erwartete Einzelaussage. Beispiele: „Postfix gestoppt, Docker meldet healthy, aber das Skript sagt CRITICAL“ · „Platte zu 100 %, das Skript läuft weiter und meldet die größten Ordner“ · „Mailserver zehnmal neu gestartet, im Kanal stehen höchstens zwei Meldungen“ · „Entwarnung kommt nach dem Neustart an“ · „kill -9: der Dienst ist nach spätestens fünf Sekunden wieder da“. Eine Testdatei enthält fünf bis zehn solcher Aussagen, bestanden heißt: jede einzelne stimmt.</dd>
+        <dt>Warum hat #7 keinen Code?</dt>
+        <dd>Erst sollten Felder und Regeln geklärt sein. Dazu gab es zwei Review-Runden mit Finn. Offene Fragen ans Team stehen in <code>Pflichtfelder.md</code>.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section class="slide" data-title="Entscheidungen">
+    <p class="kicker">Was habe ich entschieden?</p>
+    <h1>Entscheidungen</h1>
+    <div class="rows">
+      <div class="row">
+        <b>Eigenes Skript statt Prometheus</b>
+        <span class="sub">Das Monitoring muss auch melden, wenn die Platte voll ist oder Docker ausfällt. Prometheus schreibt laufend auf die Platte. Das Skript schreibt nur in den Arbeitsspeicher und läuft außerhalb von Docker. Nutzwert 4,40 gegen 3,80.</span>
+      </div>
+      <div class="row">
+        <b>Dauerdienst statt Timer</b>
+        <span class="sub">Das Skript läuft ständig und prüft alle 10 Sekunden. Nur so merkt es sich, was es schon gemeldet hat, und schickt nicht dieselbe Warnung immer wieder.</span>
+      </div>
+      <div class="row">
+        <b>Prüfen ohne Passwörter</b>
+        <span class="sub">Das Skript klopft bei der Datenbank nur an. Verlangt sie ein Passwort, dann läuft sie. Beim Mailserver wartet es auf die Begrüßung. So steht kein Passwort in der Konfiguration.</span>
+      </div>
+    </div>
+    <div class="note">
+      <h3>So erklärst du es</h3>
+      <ul>
+        <li>Nutzwertanalyse in ADR 0012: Skript 4,40, Prometheus und Netdata je 3,80, Uptime Kuma 2,80.</li>
+        <li>Dienst statt Timer und Prüfen ohne Passwörter weichen vom ersten Entwurf ab. Beides steht in ADR 0012 unter „Abweichungen“.</li>
+        <li>„Anklopfen“ = das PostgreSQL-Startpaket ohne Passwort, wie <code>pg_isready</code>. Antwortet der Server mit „bitte anmelden“, nimmt er Verbindungen an.</li>
+      </ul>
+      <h3>Wenn gefragt</h3>
+      <dl>
+        <dt>Hängt das Ergebnis an deinen zwei Robustheits-Kriterien?</dt>
+        <dd>Nein. Ohne „volle Platte“ und „Docker-Ausfall“ steht es 3,50 zu 3,20, das Skript bleibt vorn.</dd>
+        <dt>Warum nicht Uptime Kuma?</dt>
+        <dd>Es misst keine Ressourcen wie Platte oder RAM und hat keine Konfigurationsdatei fürs Repository.</dd>
+        <dt>Was ist, wenn der ganze Server ausfällt?</dt>
+        <dd>Dann meldet ein Monitoring auf demselben Server nichts mehr. Diese Grenze steht in ADR 0012.</dd>
+        <dt>Widerspricht das „alles in Docker“ (ADR 0002)?</dt>
+        <dd>Nein. Das Monitoring überwacht Docker und darf deshalb nicht davon abhängen. Installiert wird es trotzdem per Skript aus dem Repository.</dd>
+        <dt>Wie kommt die Meldung an?</dt>
+        <dd>Per Webhook, also eine HTTP-Nachricht an einen Chat wie Discord. Bewusst nicht über unseren eigenen Mailserver, denn der kann ja gerade ausgefallen sein.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="slide" data-title="Gelernt">
+    <p class="kicker">Was habe ich gelernt?</p>
+    <h1>Gelernt</h1>
+    <div class="rows">
+      <div class="row">
+        <b>„healthy“ heißt nicht „erreichbar“</b>
+        <span class="sub">Docker prüft beim Mailserver nur, ob die Prozesse laufen. Im Test habe ich nur Postfix gestoppt: Docker meldete weiter „healthy“, aber Port 25 war tot. Deshalb prüft das Skript die Ports selbst.</span>
+      </div>
+      <div class="row">
+        <b>Erreichbarkeit prüfen, ohne sich anzumelden</b>
+        <span class="sub">Für die Datenbank reicht der Anmeldedialog: Fordert der Server eine Anmeldung an, nimmt er Verbindungen an — das Skript meldet sich nie an. Deshalb stehen keine Zugangsdaten im Monitoring, und nichts kann geleakt werden.</span>
+      </div>
+      <div class="row">
+        <b>Vermietung ist steuerlich kein Software-Abo</b>
+        <span class="sub">Beim Software-Abo zahlt ein EU-Privatkunde die Steuer seines Landes. Bei der Vermietung zahlt er deutsche Steuer, 19 %. Nur beim EU-Geschäftskunden mit geprüfter USt-Id gilt Reverse-Charge.</span>
+      </div>
+      <div class="row">
+        <b>GoBD schreiben Wirkungen vor, keine Werkzeuge</b>
+        <span class="sub">Für das Änderungsprotokoll verlangen sie eine unveränderbare Historie, in der der alte Wert sichtbar bleibt. Ob das eine Tabelle mit Trigger oder etwas anderes ist, entscheidet man mit Begründung selbst.</span>
+      </div>
+    </div>
+    <div class="note">
+      <h3>So erklärst du es</h3>
+      <ul>
+        <li>Postfix = das Programm im Mailserver, das Mails annimmt (SMTP, Port 25 und 587). Das Skript erwartet dort die Begrüßung „220“.</li>
+        <li>Datenbank: Das Skript öffnet die Verbindung und schickt das Startpaket (41 Bytes, wie <code>pg_isready</code>). Fordert der Server eine Anmeldung an, lebt die Datenbank — mehr muss das Monitoring nicht wissen. Steht als Abweichung in ADR 0012, weil der Entwurf noch „echte Anmeldung“ verlangte.</li>
+        <li>GoBD: Das sind die Grundsätze zur ordnungsmäßigen Führung und Aufbewahrung von Büchern. Randziffer 110 listet Möglichkeiten für Historie, Randziffer 111 verlangt, dass sie nachträglich nicht mehr veränderbar ist. Unsere Wahl: die bestehende <code>protokoll</code>-Tabelle aus #99 mit einem Trigger. Begründung steht in <code>Kundenstammdaten.md</code>.</li>
+      </ul>
+      <h3>Steuer, einfach</h3>
+      <ul>
+        <li><b>Privatkunde</b> (Deutschland oder EU): Ort ist unser Sitz → 19 % (§ 3a Abs. 1 UStG).</li>
+        <li><b>Geschäftskunde</b>: Ort ist der Sitz des Kunden (§ 3a Abs. 2).
+          <br>Deutscher Geschäftskunde → ganz normal 19 %.
+          <br>EU-Geschäftskunde mit geprüfter USt-Id → Reverse-Charge.</li>
+        <li><b>Software-Abo</b> an EU-Privatkunden ist ein digitaler Dienst → Steuer im Land des Kunden (§ 3a Abs. 5). Da kam mein Denkfehler her.</li>
+      </ul>
+      <h3>Wenn gefragt</h3>
+      <dl>
+        <dt>Was ist Reverse-Charge?</dt>
+        <dd>Die Steuerschuld geht auf den Kunden über. Wir schreiben die Rechnung ohne deutsche Umsatzsteuer mit Hinweis darauf. Beide USt-Ids stehen auf der Rechnung, und der Umsatz kommt in die Zusammenfassende Meldung.</dd>
+        <dt>Und ein Privatkunde außerhalb der EU?</dt>
+        <dd>Bei Vermietung in Deutschland nicht steuerbar, weil sein Wohnsitz zählt (§ 3a Abs. 4 Nr. 10). Baumaschinen zählen dabei nicht als Beförderungsmittel, das steht so im Umsatzsteuer-Anwendungserlass.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section class="slide" data-title="Probleme">
+    <p class="kicker">Was war schwierig?</p>
+    <h1>Probleme</h1>
+    <div class="rows">
+      <div class="row">
+        <b>Der echte Server fehlt noch</b>
+        <span class="sub">Datenbank, Mailserver und Server-Einrichtung aus dem Team stehen noch nicht. Deshalb habe ich in einer eigenen Test-VM getestet: gleiches Debian, gleiche Software, PostgreSQL und docker-mailserver. Die Ausfälle habe ich von Hand ausgelöst, die Meldungen sind im Team-Kanal angekommen.</span>
+      </div>
+      <div class="row">
+        <b>Drei Fehler fielen erst im Test auf</b>
+        <span class="sub">Beim Lesen sah der Code richtig aus. Der Spam-Schutz hielt die Entwarnung fest. Volles RAM blieb wegen Swap nur eine Warnung. Und ohne sudo zeigte der Statusbefehl keinen Zustand.</span>
+      </div>
+      <div class="row">
+        <b>Drei Punkte fielen erst im Gegenlesen auf</b>
+        <span class="sub">Vor dem Commit noch einmal mit der KI gegengelesen: Die EU-Schnittstelle VIES wäre über 17.000-mal am Tag abgefragt worden — obwohl sie nachts abgeschaltet ist und im Monat zu 30 bis 40 Prozent nicht verfügbar. Bei einem Ausfall konnte eine falsche Entwarnung kommen. Und die Doku beschrieb Zustände, die der Code so nicht mehr hatte. Alles behoben, bevor es im Repository war.</span>
+      </div>
+    </div>
+    <div class="note">
+      <h3>So erklärst du es</h3>
+      <ul>
+        <li>Alle Fehler stehen mit Log-Auszug in <code>docs/monitoring/befunde.md</code>.</li>
+        <li>Supabase komplett war zu groß für die Test-VM. Deshalb lief PostgreSQL 17 einzeln, Supabase nutzt ebenfalls PostgreSQL.</li>
+        <li>„Erst im Test“ heißt: Code lesen und verstehen hat den Fehler nicht gefunden, der echte Ablauf schon. Deshalb teste ich seitdem jedes Verhalten, nicht nur das Funktionieren.</li>
+      </ul>
+      <h3>Wenn gefragt</h3>
+      <dl>
+        <dt>Welche drei Fehler waren es?</dt>
+        <dd>① Der Spam-Schutz hielt die Entwarnung fest: Beim Mailserver-Neustart kamen erst CRITICAL und WARNING, damit war das Limit (2 Meldungen / 10 Min) voll, die eigentliche Entwarnung hing bis zum Ablauf des Fensters. Der Test prüfte nur <em>ob</em> sie ankommt, nicht <em>wann</em> — das prüft er jetzt.
+        <br>② Volles RAM blieb nur WARNING: Der Kernel lagert mit Swap aus, die Belegung blieb unter der 95-%-Schwelle. Der Test schaltet Swap für diesen Schritt kurz ab, die Meldung zeigt die Swap-Nutzung in den Details.
+        <br>③ <code>monitor status</code> ohne sudo zeigte „Kein Zustand“: Die Pfad-Prüfung verlangte ein beschreibbares Verzeichnis, obwohl die Datei für alle lesbar war. Jetzt prüft sie zuerst lesbar.</dd>
+        <dt>Was ist VIES?</dt>
+        <dd>Der Dienst der EU zum Prüfen von USt-Ids. Das Skript hätte ihn bei jeder Runde (alle 10 s) abgefragt. Deshalb ist er raus aus der Standard-Konfiguration, und #7 braucht ihn noch nicht. Dazu kommt: VIES ist nachts abgeschaltet und im Monat zu 30 bis 40 Prozent nicht verfügbar — ein Dienst, der ständig prüft, hätte die Ausfälle ständig gemeldet. #7 ruft VIES deshalb nur bei Bedarf auf, beim Anlegen oder Bearbeiten eines Kunden.</dd>
+        <dt>Was war die falsche Entwarnung?</dt>
+        <dd>Wenn ein Prüfteil einmal zu lange brauchte, fehlten seine Ergebnisse, und das Skript meldete sofort „alles wieder gut“. Jetzt muss das wie jeder Wechsel zwei Runden lang bestätigt sein.</dd>
+        <dt>Was hieß „Doku wider Code“?</dt>
+        <dd>Zwei Stellen in der Anleitung beschrieben Verhalten, das der Code zwischenzeitlich verloren hatte, unter anderem die echten Anmeldedaten für die Datenbank. Beim Gegenlesen ist das aufgefallen, beide sind jetzt wieder deckungsgleich.</dd>
+        <dt>Wie funktioniert der Spam-Schutz?</dt>
+        <dd>Ein neuer Zustand muss zwei Runden stabil sein. Pro Prüfung gehen höchstens zwei Meldungen in zehn Minuten raus. Nicht zurückgehalten werden die Entwarnung und eine Verschlechterung über das schon Gemeldete hinaus.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- 6 -->
+  <section class="slide" data-title="KI">
+    <p class="kicker">Wo habe ich KI eingesetzt?</p>
+    <h1>KI, offengelegt</h1>
+    <div class="rows">
+      <div class="row">
+        <b>Wofür</b>
+        <span class="sub">Recherche, Skript bauen, Steuerregeln prüfen, das Gegenlesen und diese Folien.</span>
+      </div>
+      <div class="row">
+        <b>Wie nachgewiesen</b>
+        <span class="sub">22 Fälle, jeweils mit dem Prompt im Wortlaut und meiner Bewertung, in <code>docs/ki/prompts/Nico-Laeser.md</code>.</span>
+      </div>
+      <div class="row">
+        <b>Wo ich korrigiert habe</b>
+        <span class="sub">Die Container-Zustände waren erst unvollständig, eine gemeldete Zahl stimmte nicht, und die Steuerregeln habe ich am Gesetz nachgeprüft.</span>
+      </div>
+    </div>
+    <div class="note">
+      <h3>So erklärst du es</h3>
+      <ul>
+        <li>Die KI liefert einen Entwurf. Geprüft wird durch Tests in der VM und durch Nachlesen im Gesetz.</li>
+        <li>Fälle 6 und 10: Erst ein Prompt mit allen Docker-Zuständen als Liste brachte ein vollständiges Ergebnis.</li>
+        <li>Fall 19: Steuer. Meine Software-Abo-Annahme war falsch, nachgerechnet an § 3a UStG.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 7 -->
+  <section class="slide" data-title="Nächster Sprint">
+    <p class="kicker">Was ist vereinbart?</p>
+    <h1>Nächster Sprint</h1>
+    <div class="rows">
+      <div class="row">
+        <b><span class="id">#9</span> Audit-Trail umsetzen</b>
+        <span class="sub">Auftrag mit fortlaufender Nummer. Jede Änderung wird ein neuer Eintrag, und Storno heißt nicht löschen. Baut auf der Protokoll-Tabelle aus #99 auf. Das Ticket ist XL, auf 16 Stunden geschätzt — zusammen mit dem Monitoring-Nachtest ist mein Sprint mehr als voll.</span>
+      </div>
+      <div class="row">
+        <b><span class="id">#14</span> Test auf dem echten Server</b>
+        <span class="sub">Sobald #11, #13 und #5 stehen. Das Team legt fest, wohin die Meldungen gehen.</span>
+      </div>
+    </div>
+    <div class="note">
+      <h3>Wenn gefragt</h3>
+      <dl>
+        <dt>Warum fortlaufende Nummern und kein Löschen?</dt>
+        <dd>GoBD: Belege sind fortlaufend nummeriert und werden nicht still geändert. Der Auftrag ist die Grundlage der späteren Rechnung, deshalb gelten dieselben Regeln.</dd>
+        <dt>Und #7, machst du das nicht?</dt>
+        <dd>Die Umsetzung hat das Team jemand anderem zugedacht, meine Aufgabe war die Vorgabe. Die offenen Fragen daraus (Pflichtfelder, Adresse als eigene Tabelle, DSGVO-Anonymisierung, USt-Id bei Niederlassungen) stehen im Issue — wer umsetzt, braucht sie zuerst geklärt.</dd>
+        <dt>Reichen die 16 Stunden für #9?</dt>
+        <dd>Knapp. Die Tabelle und die Nummer sind der kleine Teil. Der Aufwand sitzt in den Fällen drumherum: Storno mit Bezug, Änderung als eigener Eintrag, Protokoll unveränderbar. Genau deshalb ist es XL und nicht L. Wenn der Nachtest vom Monitoring dazukommt, ist der Sprint voll.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section class="slide" data-title="Schluss">
+    <p class="kicker">Stand heute</p>
+    <h1>Fragen?</h1>
+    <p class="lead">Das Monitoring läuft und ist in der Test-VM belegt, der echte Server fehlt noch. #7 und #9 sind offen, mit Plan. Beide Pull-Requests warten auf ein Review.</p>
+    <div class="note">
+      <h3>Wenn du etwas nicht weißt</h3>
+      <ul>
+        <li>Sag, wo es steht. Das ist besser als zu raten.</li>
+        <li>Monitoring: <code>docs/adr/0012-monitoring.md</code>, <code>docs/monitoring/README.md</code>, <code>befunde.md</code>, <code>tests/</code></li>
+        <li>Kunden: <code>docs/kundenstammdaten/</code> (Pflichtfelder, Dubletten, Suche, Protokoll, Steuer)</li>
+        <li>KI: <code>docs/ki/prompts/Nico-Laeser.md</code></li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+<nav class="nav">
+  <button type="button" id="prev">Zurück</button>
+  <button type="button" id="next">Weiter</button>
+  <button type="button" id="notes" aria-pressed="false" title="Spickzettel ein/aus (Taste N)">Notizen</button>
+  <span class="hint">Pfeiltasten · N = Notizen</span>
+  <span class="count" id="count"></span>
+</nav>
+<script>
+  const slides = Array.from(document.querySelectorAll(".slide"));
+  const count = document.getElementById("count");
+  const notesBtn = document.getElementById("notes");
+  let i = 0;
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle("active", k === i));
+    count.textContent = (i + 1) + " / " + slides.length;
+    history.replaceState(null, "", "#" + (i + 1));
+  }
+  function toggleNotes() {
+    const on = document.body.classList.toggle("notes");
+    notesBtn.setAttribute("aria-pressed", String(on));
+  }
+  document.getElementById("prev").addEventListener("click", () => show(i - 1));
+  document.getElementById("next").addEventListener("click", () => show(i + 1));
+  notesBtn.addEventListener("click", toggleNotes);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") { e.preventDefault(); show(i + 1); }
+    else if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); show(i - 1); }
+    else if (e.key === "Home") show(0);
+    else if (e.key === "End") show(slides.length - 1);
+    else if (e.key === "n" || e.key === "N") toggleNotes();
+  });
+  const fromHash = Number((location.hash || "").slice(1));
+  show(Number.isInteger(fromHash) && fromHash >= 1 ? fromHash - 1 : 0);
+</script>
+</body>
+</html>
