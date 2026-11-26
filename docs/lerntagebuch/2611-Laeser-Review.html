@@ -298,7 +298,7 @@
       </div>
       <div class="row">
         <b>Drei Punkte fielen erst im Gegenlesen auf</b>
-        <span class="sub">Vor dem Commit noch einmal mit der KI gegengelesen: Die EU-Schnittstelle VIES wäre über 17.000-mal am Tag abgefragt worden. Bei einem Ausfall konnte eine falsche Entwarnung kommen. Und die Doku beschrieb Zustände, die der Code so nicht mehr hatte. Alles behoben, bevor es im Repository war.</span>
+        <span class="sub">Vor dem Commit noch einmal mit der KI gegengelesen: Die EU-Schnittstelle VIES wäre über 17.000-mal am Tag abgefragt worden — obwohl sie nachts abgeschaltet ist und im Monat zu 30 bis 40 Prozent nicht verfügbar. Bei einem Ausfall konnte eine falsche Entwarnung kommen. Und die Doku beschrieb Zustände, die der Code so nicht mehr hatte. Alles behoben, bevor es im Repository war.</span>
       </div>
     </div>
     <div class="note">
@@ -315,7 +315,7 @@
         <br>② Volles RAM blieb nur WARNING: Der Kernel lagert mit Swap aus, die Belegung blieb unter der 95-%-Schwelle. Der Test schaltet Swap für diesen Schritt kurz ab, die Meldung zeigt die Swap-Nutzung in den Details.
         <br>③ <code>monitor status</code> ohne sudo zeigte „Kein Zustand“: Die Pfad-Prüfung verlangte ein beschreibbares Verzeichnis, obwohl die Datei für alle lesbar war. Jetzt prüft sie zuerst lesbar.</dd>
         <dt>Was ist VIES?</dt>
-        <dd>Der Dienst der EU zum Prüfen von USt-Ids. Das Skript hätte ihn bei jeder Runde (alle 10 s) abgefragt. Deshalb ist er raus aus der Standard-Konfiguration, und #7 braucht ihn noch nicht.</dd>
+        <dd>Der Dienst der EU zum Prüfen von USt-Ids. Das Skript hätte ihn bei jeder Runde (alle 10 s) abgefragt. Deshalb ist er raus aus der Standard-Konfiguration, und #7 braucht ihn noch nicht. Dazu kommt: VIES ist nachts abgeschaltet und im Monat zu 30 bis 40 Prozent nicht verfügbar — ein Dienst, der ständig prüft, hätte die Ausfälle ständig gemeldet. #7 ruft VIES deshalb nur bei Bedarf auf, beim Anlegen oder Bearbeiten eines Kunden.</dd>
         <dt>Was war die falsche Entwarnung?</dt>
         <dd>Wenn ein Prüfteil einmal zu lange brauchte, fehlten seine Ergebnisse, und das Skript meldete sofort „alles wieder gut“. Jetzt muss das wie jeder Wechsel zwei Runden lang bestätigt sein.</dd>
         <dt>Was hieß „Doku wider Code“?</dt>
