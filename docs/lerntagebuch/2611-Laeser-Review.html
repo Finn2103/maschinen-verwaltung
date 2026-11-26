@@ -84,6 +84,14 @@
     text-transform: uppercase;
     color: var(--muted);
   }
+  .check { list-style: none; max-width: 46rem; }
+  .check li { padding: 0.55rem 0 0.55rem 2rem; position: relative; border-top: 1px solid var(--line); }
+  .check li:first-child { border-top: none; }
+  .check li::before {
+    content: "☐";
+    position: absolute; left: 0; top: 0.45rem;
+    font-size: 1.1rem; color: var(--muted);
+  }
   .nav {
     position: fixed;
     left: 0; right: 0; bottom: 0;
@@ -126,57 +134,57 @@
   <section class="slide active" data-title="Anfang">
     <p class="kicker">Review · 26. November 2026 · Gruppe 11 · Sprint 5</p>
     <h1>Nico Laeser, Systemintegration</h1>
-    <p class="lead">Das Monitoring ist gebaut und belegt, die Kundenstammdaten stehen als Vorschlag, der Audit-Trail ist angefangen. Acht Folien, fünf Minuten.</p>
+    <p class="lead">Das Monitoring steht, mit 128 von 128 Prüfungen belegt. Die Kundenstammdaten sind als Vorschlag fertig, der Audit-Trail ist angefangen. Acht Folien, fünf Minuten.</p>
   </section>
 
   <section class="slide" data-title="Tickets">
-    <p class="kicker">Was habe ich erledigt, was bearbeitet?</p>
+    <p class="kicker">Welche Tickets habe ich erledigt oder bearbeitet?</p>
     <h1>Tickets</h1>
     <h2 class="done">Fertig</h2>
     <ul>
-      <li><span class="id">#14</span> Monitoring: eigenes Skript, ohne Zugangsdaten. 22 Tests, 128 von 128 Prüfungen bestanden. PR #134 im Review.
-        <span class="sub">Ausfälle künstlich herbeigeführt, Meldungen im Team-Kanal angekommen. Strato-Test hängt an #11, #13 und #5.</span></li>
+      <li><span class="id">#14</span> Monitoring: eigenes Skript, ohne Zugangsdaten. 22 Tests, 128 von 128 Prüfungen bestanden. PR #134 liegt zum Review.
+        <span class="sub">Die Ausfälle habe ich künstlich ausgelöst, die Meldungen sind im Team-Kanal angekommen. Der Test auf der Strato-VM hängt noch an #11, #13 und #5.</span></li>
     </ul>
     <h2 class="open">Bearbeitet, nicht fertig</h2>
     <ul>
-      <li><span class="id">#7</span> Kundenstammdaten: Fachvorgabe in fünf Dokumenten. PR #127 im Review, Finns sieben Punkte eingearbeitet.
-        <span class="sub">Warum offen: Die fünf Kriterien verlangen den Code der Anwendung — Anlegen, USt-Id-Prüfung, Suche, Protokoll. Der PR liefert die Vorgabe. Den Code habe ich zeitlich nicht geschafft, die Vorgabe stand erst nach zwei Review-Runden fest (18. und 23.11.). Nächster Schritt.</span></li>
+      <li><span class="id">#7</span> Kundenstammdaten: Vorgabe in fünf Dokumenten. PR #127, Finns sieben Punkte sind drin.
+        <span class="sub">Warum offen: Die fünf Kriterien verlangen den Code der Anwendung, also Anlegen, Prüfung, Suche, Protokoll. Der PR liefert die Vorgabe. Den Code habe ich zeitlich nicht geschafft, die Vorgabe stand erst nach zwei Review-Runden fest. Der Code kommt als Nächstes.</span></li>
       <li><span class="id">#9</span> Auftrag mit Audit-Trail: angefangen. protokoll-Tabelle aus #99 gelesen, Felder notiert. Noch kein Code.</li>
     </ul>
   </section>
 
   <section class="slide" data-title="Entscheidungen">
-    <p class="kicker">Was im Sprint entschieden und umgesetzt wurde</p>
+    <p class="kicker">Was habe ich im Sprint entschieden und umgesetzt?</p>
     <h1>Entscheidungen</h1>
     <div class="rows">
       <div class="row">
         <b>Skript gebaut</b>
-        <div>ADR 0012 ist Code: ein Bash-Skript, direkt auf dem Server.
-          <span class="sub">Ohne Zugangsdaten. PostgreSQL über den Handshake, SMTP und IMAP über die Begrüßung, Ports aus der Docker-API.</span>
+        <div>ADR 0012 ist jetzt Code. Ein Bash-Skript, direkt auf dem Server.
+          <span class="sub">Ohne Zugangsdaten. PostgreSQL über den Handshake, SMTP und IMAP über die Begrüßung. Die Ports liest es selbst aus Docker.</span>
         </div>
       </div>
       <div class="row">
         <b>Dienst statt Timer</b>
-        <div>systemd-Dienst, Prüfung alle 10 Sekunden. Abweichung in ADR 0012.
-          <span class="sub">Der Spam-Schutz hält seinen Zustand im Prozess. Ein Timer finge jede Minute bei null an.</span>
+        <div>systemd-Dienst, Prüfung alle 10 Sekunden. Steht als Abweichung in ADR 0012.
+          <span class="sub">Der Spam-Schutz muss sich merken, was schon gemeldet wurde. Ein Timer finge jede Minute bei null an.</span>
         </div>
       </div>
       <div class="row">
         <b>Spam-Schutz</b>
         <div>Zwei Durchläufe Bestätigung, höchstens zwei Meldungen in zehn Minuten.
-          <span class="sub">Entwarnung wird nie unterdrückt, aber wie jeder Wechsel bestätigt.</span>
+          <span class="sub">Die Entwarnung wird nie unterdrückt. Aber bestätigt wird sie wie jeder Wechsel.</span>
         </div>
       </div>
       <div class="row">
         <b>VIES raus</b>
-        <div>Beide Endpoints aus der Standardkonfiguration.
-          <span class="sub">Bei jedem Durchlauf über 17.000 Anfragen pro Tag an die EU-API. #7 nutzt VIES noch nicht.</span>
+        <div>Beide Endpoints sind raus aus der Standardkonfiguration.
+          <span class="sub">Bei jedem Durchlauf wären es über 17.000 Anfragen pro Tag an die EU. #7 nutzt VIES noch nicht.</span>
         </div>
       </div>
       <div class="row">
         <b>Steuer korrigiert</b>
-        <div>Vermietung ist nicht SaaS. EU-Privatkunde: Sitz des Verleihs, nicht Land des Kunden.
-          <span class="sub">Geschäftskunden: bei beiden Reverse-Charge, § 3a Abs. 2 UStG. Nachgerechnet an § 3a und dem Anwendungserlass.</span>
+        <div>Vermietung ist nicht SaaS.
+          <span class="sub">Beim EU-Privatkunden zählt der Sitz des Verleihs, nicht das Land des Kunden. Bei Geschäftskunden Reverse-Charge, § 3a Abs. 2 UStG. Nachgerechnet an § 3a und dem Anwendungserlass.</span>
         </div>
       </div>
     </div>
@@ -187,30 +195,30 @@
     <h1>Gelernt</h1>
     <div class="rows">
       <div class="row">
-        <b>Healthy ≠ da</b>
-        <div>Der Docker-Healthcheck zählt Prozesse. Postfix aus, Docker meldet „running, healthy", die SMTP-Ports sind tot. Deshalb prüfen wir die Ports selbst.</div>
+        <b>Healthy heißt nicht da</b>
+        <div>Der Docker-Healthcheck zählt nur Prozesse. Postfix aus, Docker meldet trotzdem healthy. Deshalb prüfen wir die Ports selbst.</div>
       </div>
       <div class="row">
-        <b>Zahlen prüfen</b>
-        <div>Das Testskript meldete 408 unterdrückte Wechsel. Sah plausibel aus, war falsch: Es las das ganze Journal. Richtig waren 3.</div>
+        <b>Zahlen nachprüfen</b>
+        <div>Das Testskript meldete 408 unterdrückte Wechsel. Sah plausibel aus, war aber falsch: Es las das ganze Journal. Richtig waren 3.</div>
       </div>
       <div class="row">
         <b>GoBD</b>
-        <div>Die GoBD nennen kein Werkzeug, sondern Anforderungen: unveränderbare Historie, alter Inhalt bleibt sichtbar. Die technische Wahl bleibt bei uns.</div>
+        <div>Die GoBD schreiben kein Werkzeug vor, sondern Anforderungen: unveränderbare Historie, alter Inhalt bleibt sichtbar. Die Wahl bleibt bei uns, mit Begründung.</div>
       </div>
       <div class="row">
-        <b>Erfahrung ≠ Antwort</b>
-        <div>Meine SaaS-Erfahrung war Ausgangspunkt und Fehlerquelle zugleich. Digitale Dienste zählen beim Land des Kunden, Vermietung beim Sitz des Verleihs.</div>
+        <b>Erfahrung ist nicht die Antwort</b>
+        <div>Meine SaaS-Erfahrung war Ausgangspunkt und Fehlerquelle in einem. Digitale Dienste zählen beim Land des Kunden, Vermietung beim Sitz des Verleihs.</div>
       </div>
     </div>
   </section>
 
   <section class="slide" data-title="Probleme">
-    <p class="kicker">Welche Probleme gab es, und wie sind sie gelöst?</p>
+    <p class="kicker">Welche Probleme gab es, und wie habe ich sie gelöst?</p>
     <h1>Probleme</h1>
     <div class="pair">
       <span class="tag">Strato wartet</span>
-      #11, #13 und #5 stehen nicht. Nachweis deshalb in einer Test-VM mit der echten Software: PostgreSQL 17, docker-mailserver. Ausfälle ausgelöst, Meldungen angekommen.
+      #11, #13 und #5 stehen noch. Deshalb der Nachweis in einer Test-VM mit der echten Software: PostgreSQL 17, docker-mailserver. Ausfälle ausgelöst, Meldungen angekommen.
     </div>
     <div class="pair">
       <span class="tag">Fehler erst im Test</span>
@@ -218,11 +226,11 @@
     </div>
     <div class="pair">
       <span class="tag">Gegenlesen vor dem Commit</span>
-      Noch einmal mit Claude gegengelesen: VIES bei jedem Durchlauf, Sofort-Entwarnung bei weggefallenen Prüfungen, Doku wider den Code. Drei Fixes vor dem Commit.
+      Vor dem Commit habe ich noch einmal mit Claude gegengelesen. Drei Punkte: VIES bei jedem Durchlauf, Sofort-Entwarnung bei weggefallenen Prüfungen, Doku wider den Code. Behoben, bevor es im Repository war.
     </div>
     <div class="pair">
       <span class="tag">#7 ohne Code</span>
-      Die Vorgabe ist fertig, der Code fehlt. Zwischen erster Fassung und heute lagen zwei Review-Runden. Umsetzung ist der nächste Schritt.
+      Die Vorgabe steht, der Code fehlt. Dazwischen lagen zwei Review-Runden. Umsetzung ist der nächste Schritt.
     </div>
   </section>
 
@@ -232,19 +240,19 @@
     <div class="rows">
       <div class="row">
         <b>Wofür</b>
-        <div>Nutzwertanalyse, Skript-Bau und -Korrektur, Steuer-Recherche, Gegenlesen vor dem Commit, diese Folien.</div>
+        <div>Nutzwertanalyse, Skript-Bau und Korrektur, Steuer-Recherche, das Gegenlesen vor dem Commit, diese Folien.</div>
       </div>
       <div class="row">
         <b>Protokoll</b>
-        <div>22 Fälle, je mit Wortlaut, Ergebnis und Bewertung. <span class="id">docs/ki/prompts/Nico-Laeser.md</span>. Chatverläufe liegen lokal, auf Nachfrage vorzeigbar.</div>
+        <div>22 Fälle, je mit Wortlaut, Ergebnis und Bewertung. <span class="id">docs/ki/prompts/Nico-Laeser.md</span>. Die Chatverläufe liegen lokal und sind vorzeigbar.</div>
       </div>
       <div class="row">
-        <b>Korrektur-Beispiel</b>
-        <div>Fall 19: Meine SaaS-Erfahrung rein, die KI prüft, ich rechne an § 3a UStG nach. Die falschen Annahmen standen durchgestrichen in der Datei, die alte Fassung liegt in der Git-Historie.</div>
+        <b>Beispiel</b>
+        <div>Fall 19: Meine SaaS-Erfahrung rein, die KI prüft, ich rechne an § 3a nach. Die alten Annahmen standen durchgestrichen in der Datei, die erste Fassung liegt in der Git-Historie.</div>
       </div>
       <div class="row">
         <b>Zurückgenommen</b>
-        <div>Die Zahl 408 (Fehler des Testskripts), VIES in der Standardkonfiguration, die Zod-Empfehlung — Formularprüfung gehört ins Team.</div>
+        <div>Die 408 (Fehler des Testskripts), VIES in der Standardkonfiguration, die Zod-Empfehlung. Formularprüfung gehört ins Team.</div>
       </div>
     </div>
   </section>
@@ -256,19 +264,19 @@
       <div class="row">
         <b>#9 Audit-Trail</b>
         <div>Umsetzen: auftrag mit fortlaufender Nummer, Änderung als Eintrag, Storno mit Bezug.
-          <span class="sub">Aufbauend auf der protokoll-Tabelle aus #99, Felder stehen seit dem 20.11. Abgabe: 11.12.</span>
+          <span class="sub">Aufbauend auf der protokoll-Tabelle aus #99. Die Felder stehen seit dem 20.11. Abgabe: 11.12.</span>
         </div>
       </div>
       <div class="row">
         <b>#14 Strato</b>
-        <div>Nachtest, sobald #11, #13 und #5 stehen. Meldekanal festlegen.
-          <span class="sub">Nicht über unseren eigenen Mailserver. Danach monitor webhook-add und test-webhook.</span>
+        <div>Nachtest, sobald #11, #13 und #5 stehen. Und den Meldekanal festlegen.
+          <span class="sub">Nicht über unseren eigenen Mailserver. Danach webhook-add und test-webhook.</span>
         </div>
       </div>
       <div class="row">
         <b>#7 Umsetzung</b>
         <div>Schema und Formular nach der Vorgabe aus PR #127.
-          <span class="sub">Offene Fragen ans Team: DSGVO-Löschung, USt-Id bei Niederlassungen, Formularprüfung.</span>
+          <span class="sub">Offen im Team: DSGVO-Löschung, USt-Id bei Niederlassungen, Formularprüfung.</span>
         </div>
       </div>
     </div>
@@ -277,7 +285,21 @@
   <section class="slide" data-title="Schluss">
     <p class="kicker">Stand heute</p>
     <h1>Fragen.</h1>
-    <p class="lead">Fertig ist das Monitoring mit Nachweisen. Offen sind die Umsetzung der Kundenstammdaten und der Audit-Trail. Beide PRs warten auf das Review.</p>
+    <p class="lead">Fertig ist das Monitoring, mit Nachweisen. Offen sind die Umsetzung der Kundenstammdaten und der Audit-Trail. Beide PRs warten auf das Review.</p>
+  </section>
+
+  <section class="slide" data-title="Checkup">
+    <p class="kicker">Nicht fürs Publikum · vor dem Vortrag durchgehen</p>
+    <h1>Checkup.</h1>
+    <ul class="check">
+      <li>Board: #14 und #7 auf Testing, Milestone von #14 von Sprint 2 auf Sprint 5</li>
+      <li>Screenshots: keine echte Sendezeit sichtbar („heute um …")</li>
+      <li>Alte Discord-Nachrichten mit den Git-Bildern aus dem Kanal gelöscht</li>
+      <li>Finn Bescheid gegeben, beide PRs liegen bereit</li>
+      <li>Eine Quiz-Runde gelaufen, „Nicht gewusst" auf 0</li>
+      <li>Einmal laut gesprochen, Timer: 5 Minuten</li>
+      <li>Frage, die du nicht weißt: sag, wo sie steht</li>
+    </ul>
   </section>
 </main>
 <nav class="nav">
@@ -293,7 +315,7 @@
   function show(n) {
     i = Math.max(0, Math.min(slides.length - 1, n));
     slides.forEach((s, k) => s.classList.toggle("active", k === i));
-    count.textContent = (i + 1) + " / " + slides.length + " · ≈ 5 min gesamt";
+    count.textContent = (i + 1) + " / " + slides.length + " · ≈ 5 min";
     history.replaceState(null, "", "#" + (i + 1));
   }
   document.getElementById("prev").addEventListener("click", () => show(i - 1));
