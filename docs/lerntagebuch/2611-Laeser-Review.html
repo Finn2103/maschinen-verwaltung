@@ -285,15 +285,15 @@
     <div class="rows">
       <div class="row">
         <b>Der echte Server fehlt noch</b>
-        <span class="sub">Datenbank, Mailserver und Server-Einrichtung stehen noch nicht. Deshalb habe ich in einer eigenen Test-VM mit der echten Software getestet.</span>
+        <span class="sub">Datenbank, Mailserver und Server-Einrichtung aus dem Team stehen noch nicht. Deshalb habe ich in einer eigenen Test-VM getestet: gleiches Debian, gleiche Software, PostgreSQL und docker-mailserver. Die Ausfälle habe ich von Hand ausgelöst, die Meldungen sind im Team-Kanal angekommen.</span>
       </div>
       <div class="row">
         <b>Vier Fehler fielen erst im Test auf</b>
-        <span class="sub">Beim Lesen sah der Code richtig aus. Beispiel: Der Spam-Schutz hielt die Entwarnung bis zu zehn Minuten zurück. Erst der echte Test hat das gezeigt.</span>
+        <span class="sub">Beim Lesen sah der Code richtig aus. Der Spam-Schutz hielt die Entwarnung fest. Das Testskript zählte 408 statt 3. Volles RAM blieb wegen Swap nur eine Warnung. Und ohne sudo zeigte der Statusbefehl keinen Zustand.</span>
       </div>
       <div class="row">
-        <b>Drei Punkte fielen erst im Review auf</b>
-        <span class="sub">Beim Gegenlesen vor dem Commit: Die EU-Schnittstelle VIES wäre über 17.000-mal am Tag abgefragt worden. Bei einem Ausfall konnte eine falsche Entwarnung kommen. Und die Doku passte nicht zum Code. Alles behoben.</span>
+        <b>Drei Punkte fielen erst im Gegenlesen auf</b>
+        <span class="sub">Vor dem Commit noch einmal mit der KI gegengelesen: Die EU-Schnittstelle VIES wäre über 17.000-mal am Tag abgefragt worden. Bei einem Ausfall konnte eine falsche Entwarnung kommen. Und die Doku beschrieb Zustände, die der Code so nicht mehr hatte. Alles behoben, bevor es im Repository war.</span>
       </div>
     </div>
     <div class="note">
@@ -301,13 +301,21 @@
       <ul>
         <li>Alle Fehler stehen mit Log-Auszug in <code>docs/monitoring/befunde.md</code>.</li>
         <li>Supabase komplett war zu groß für die Test-VM. Deshalb lief PostgreSQL 17 einzeln, Supabase nutzt ebenfalls PostgreSQL.</li>
+        <li>„Erst im Test“ heißt: Code lesen und verstehen hat den Fehler nicht gefunden, der echte Ablauf schon. Deshalb teste ich seitdem jedes Verhalten, nicht nur das Funktionieren.</li>
       </ul>
       <h3>Wenn gefragt</h3>
       <dl>
+        <dt>Welche vier Fehler waren es?</dt>
+        <dd>① Der Spam-Schutz hielt die Entwarnung fest: Beim Mailserver-Neustart kamen erst CRITICAL und WARNING, damit war das Limit (2 Meldungen / 10 Min) voll, die eigentliche Entwarnung hing bis zum Ablauf des Fensters. Der Test prüfte nur <em>ob</em> sie ankommt, nicht <em>wann</em> — das prüft er jetzt.
+        <br>② Das Testskript zählte 408 statt 3 zurückgehaltene Meldungen: Es las das Journal des Dienstes, der schon seit dem Vortag lief. Jetzt filtern die Abfragen strikt ab Testbeginn.
+        <br>③ Volles RAM blieb nur WARNING: Der Kernel lagert mit Swap aus, die Belegung blieb unter der 95-%-Schwelle. Der Test schaltet Swap für diesen Schritt kurz ab, die Meldung zeigt die Swap-Nutzung in den Details.
+        <br>④ <code>monitor status</code> ohne sudo zeigte „Kein Zustand“: Die Pfad-Prüfung verlangte ein beschreibbares Verzeichnis, obwohl die Datei für alle lesbar war. Jetzt prüft sie zuerst lesbar.</dd>
         <dt>Was ist VIES?</dt>
         <dd>Der Dienst der EU zum Prüfen von USt-Ids. Das Skript hätte ihn bei jeder Runde (alle 10 s) abgefragt. Deshalb ist er raus aus der Standard-Konfiguration, und #7 braucht ihn noch nicht.</dd>
         <dt>Was war die falsche Entwarnung?</dt>
         <dd>Wenn ein Prüfteil einmal zu lange brauchte, fehlten seine Ergebnisse, und das Skript meldete sofort „alles wieder gut“. Jetzt muss das wie jeder Wechsel zwei Runden lang bestätigt sein.</dd>
+        <dt>Was hieß „Doku wider Code“?</dt>
+        <dd>Zwei Stellen in der Anleitung beschrieben Verhalten, das der Code zwischenzeitlich verloren hatte, unter anderem die echten Anmeldedaten für die Datenbank. Beim Gegenlesen ist das aufgefallen, beide sind jetzt wieder deckungsgleich.</dd>
         <dt>Wie funktioniert der Spam-Schutz?</dt>
         <dd>Ein neuer Zustand muss zwei Runden stabil sein. Pro Prüfung gehen höchstens zwei Meldungen in zehn Minuten raus. Nicht zurückgehalten werden die Entwarnung und eine Verschlechterung über das schon Gemeldete hinaus.</dd>
       </dl>
